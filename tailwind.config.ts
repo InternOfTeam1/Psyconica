@@ -25,6 +25,7 @@ const config: Config = {
       },
       fontFamily: {
         'balsamiq-sans': ['"Balsamiq Sans"', 'sans-serif'],
+        'unbounded': ['Unbounded', 'sans-serif'],
       },
       textVariantCaps: {
         'small-caps': { 'font-variant': 'small-caps' },

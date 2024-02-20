@@ -31,11 +31,11 @@ const SubjectsList: React.FC<{ position: 'left' | 'right' }> = ({ position }) =>
   const backgroundImageUrl = '/8924461.png'; 
 
   return (
-  <div className="grid grid-cols-1 gap-4 sm:p-6 md:gap-6 lg:gap-8 ">
+  <div className="grid grid-cols-1 gap-4 sm:p-6 md:gap-6 lg:gap-4 ">
 {subjectsToShow.map((subject) => (
   <div 
     key={subject.id} 
-    className="rounded-lg space-y-4 p-4  sm:p-6 md:space-y-3 lg:space-y-4 md:p-8 lg:p-8 flex flex-col justify-center items-start bg-cover bg-center"
+    className="rounded-lg space-y-4 p-4  sm:p-6 md:space-y-3 lg:space-y-4 md:p-4 lg:p-8 flex flex-col justify-center items-start bg-cover bg-center"
      style={{ backgroundImage: `url(${backgroundImageUrl})`, minWidth: '400px', minHeight: '150px' }}
   >
     <div className=" sm:pl-10 sm:pr-10 md:pl-5 md:pr-10 lg:pl-8 lg:pr-5  font-balsamiq-sans font-bold text-small-caps"> 
