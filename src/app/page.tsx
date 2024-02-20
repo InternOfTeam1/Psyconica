@@ -1,48 +1,21 @@
 "use client"
-import React, { useState, useEffect } from 'react';
-import { fetchDataFromCollection } from "@/lib/firebase/firebaseUtils";
+import React from 'react';
 import Image from 'next/image';
-
-interface Subject {
-  id: string;
-  title: string;
-  description?: string;
-}
+import SubjectsList from '@/components/SubjectsList';
 
 const Home: React.FC = () => {
-  const [subjects, setSubjects] = useState<Subject[]>([]);
-
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const data = await fetchDataFromCollection('subjects');
-        setSubjects(data as Subject[]);
-      } catch (error) {
-        console.error("Error getting data from Firestore: ", error);
-      }
-    };
-
-    getData();
-  }, []);
-
   return (
-    <div className="flex justify-center">
-      <div className="w-1/2">
-        <h1 className="text-center">Welcome to Psyconica!</h1>
-        <Image src="/mainPhoto.jpeg" alt="img" width={500} height={500} className="mx-auto block" />
-        {/* example code !!! */}
-        <div>
-          {subjects.map((subject) => (
-
-            <div key={subject.id}>
-              <h2>{subject.title}</h2>
-
-              {subject.description && <p>{subject.description}</p>}
-            </div>
-          ))}
-        </div>
-      </div>
+    <div className="flex flex-col items-center min-h-screen p-4">
+  <div className="flex flex-col md:flex-row items-center justify-center w-full">
+        <div className="z-10 mb-4 sm:mb-5 md:mb-5 md:ml-[-4rem] lg:ml-[-1rem]">
+          <SubjectsList position="left" />
     </div>
+    <Image src="/mainLogo.png" alt="Main logo" className="z-0 mx-0 my-4  sm:my-0 md:my-0" width={1000} height={900} />
+    <div className="z-10 mt-4 md:mt-0 sm:mt-0 sm:ml-0 md:ml-[-6rem] lg:mk-10">
+      <SubjectsList position="right" />
+    </div>      
+  </div>      
+</div>
   );
 };
 

@@ -1,3 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+@media (min-width: 640px) {
+
+    /* sm */
+    body {
+        font-size: 14px;
+    }
+}
+
+@media (min-width: 768px) {
+    .subject-min-height-md {
+        min-height: 220px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .subject-min-height-lg {
+        min-height: 260px;
+    }
+}
