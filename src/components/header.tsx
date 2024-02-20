@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Social from "@/app/social/page";
+import Social from "@/components/Social";
 
 
 const Header: React.FC = () => {
