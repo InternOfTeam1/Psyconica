@@ -1,5 +1,5 @@
+import { getDb } from '@/lib/firebase/firebaseConfig';
 import { collection, query, where, getDocs, addDoc } from 'firebase/firestore';
-import { getDb } from '../lib/firebase/firebaseConfig';
 
 interface Subject {
   title: string;
