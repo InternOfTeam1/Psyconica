@@ -9,15 +9,13 @@ const config: Config = {
   theme: {
     extend: {
       screens: {
-      'tablet': '640px',
-      // => @media (min-width: 640px) { ... }
-
-      'laptop': '1024px',
-      // => @media (min-width: 1024px) { ... }
-
-      'desktop': '1280px',
-      // => @media (min-width: 1280px) { ... }
-    },
+    'xs': '360px',
+    'sm': '640px',
+    'md': '768px',
+    'lg': '1024px',
+    'xl': '1200px',
+      },
+     
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
@@ -29,12 +27,6 @@ const config: Config = {
       },
       textVariantCaps: {
         'small-caps': { 'font-variant': 'small-caps' },
-      },
-      fontSize: {
-        sm: ['14px', '20px'],
-        base: ['16px', '24px'],
-        lg: ['18px', '28px'],
-        xl: ['20px', '32px'],
       },
     },
   },
