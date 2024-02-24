@@ -1,18 +1,19 @@
 "use client"
 import Link from "next/link";
 import Social from "@/components/Social";
+import { useRouter } from "next/navigation";
 import { signInWithGoogle } from "@/lib/firebase/firebaseConfig";
 
 
-
-
 const Header: React.FC = () => {
+  const router = useRouter();
 
   const handleLogin = async () => {
     try {
       const user = await signInWithGoogle();
       if (user) {
         console.log(user);
+        router.push('/account');
       }
     } catch (error) {
       console.error('Ошибка входа:', error);
