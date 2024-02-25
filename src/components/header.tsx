@@ -1,23 +1,39 @@
 "use client"
+import { useState, useEffect } from 'react';
 import Link from "next/link";
 import Social from "@/components/Social";
 import { useRouter } from "next/navigation";
-import { signInWithGoogle } from "@/lib/firebase/firebaseConfig";
+import { signInWithGoogle, signOutGoogle } from "@/lib/firebase/firebaseConfig";
+import { HOME_ROUTE, PROFILE_ROUTE } from "@/constants/routes";
 
 
 const Header: React.FC = () => {
   const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const user = localStorage.getItem('user');
+    setIsAuthenticated(!!user);
+  }, []);
 
   const handleLogin = async () => {
     try {
       const user = await signInWithGoogle();
       if (user) {
-        console.log(user);
-        router.push('/account');
+        localStorage.setItem('user', JSON.stringify(user));
+        setIsAuthenticated(true);
+        router.push(PROFILE_ROUTE);
       }
     } catch (error) {
       console.error('Ошибка входа:', error);
     }
+  };
+
+  const handleLogout = async () => {
+    await signOutGoogle();
+    localStorage.removeItem('user');
+    setIsAuthenticated(false);
+    router.push(HOME_ROUTE);
   };
 
   return (
@@ -28,10 +44,25 @@ const Header: React.FC = () => {
       </nav>
 
       <div className="ml-auto">
-        <button onClick={handleLogin} className="text-gray-400 hover:text-neutral-600 font-semibold border-solid border-2 border-gray-400 rounded-[20px] px-5 py-2">Log in</button>
+        <ul className="flex items-center gap-2 mb-4">
+          {!isAuthenticated ? (
+            <li onClick={handleLogin} className="cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold border-solid border-2 border-gray-400 rounded-[20px] px-5 py-2">Log in</li>
+          ) : (
+            <>
+              <Link href={PROFILE_ROUTE}>
+                <li className="cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold border-solid border-2 border-gray-400 rounded-[20px] px-5 py-2">
+                  Личный кабинет
+                </li>
+              </Link>
+              <li onClick={handleLogout} className="cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold border-solid border-2 border-gray-400 rounded-[20px] px-5 py-2">
+                Log out
+              </li>
+            </>
+          )}
+
+        </ul>
         <Social />
       </div>
-
     </header>
   );
 };

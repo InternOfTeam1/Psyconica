@@ -1,6 +1,6 @@
 import { initializeApp, getApp, getApps, FirebaseApp } from 'firebase/app';
 import { Firestore, getFirestore } from 'firebase/firestore';
-import { getAuth, GoogleAuthProvider, signInWithPopup, User } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, signInWithPopup, User, signOut } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCPP1vFH-j44dTveCE_YaClsPooUk38G90",
@@ -31,5 +31,17 @@ export const signInWithGoogle = async (): Promise<User | null> => {
   } catch (error) {
     console.error('Ошибка аутентификации:', error);
     return null;
+  }
+};
+
+
+
+
+export const signOutGoogle = async (): Promise<void> => {
+  try {
+    await signOut(auth);
+    console.log('Вы успешно вышли из системы');
+  } catch (error) {
+    console.error('Ошибка выхода из системы:', error);
   }
 };
