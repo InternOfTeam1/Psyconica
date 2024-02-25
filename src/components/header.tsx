@@ -12,9 +12,27 @@ const Header: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const user = localStorage.getItem('user');
-    setIsAuthenticated(!!user);
+    const handleAuthChange = () => {
+
+      const user = localStorage.getItem('user');
+      setIsAuthenticated(!!user);
+    };
+
+    window.addEventListener('storage', handleAuthChange);
+    window.addEventListener('authChange', handleAuthChange);
+
+    return () => {
+      window.removeEventListener('storage', handleAuthChange);
+      window.removeEventListener('authChange', handleAuthChange);
+    };
+
   }, []);
+
+
+  const emitAuthChangeEvent = () => {
+    window.dispatchEvent(new CustomEvent('authChange'));
+  };
+
 
   const handleLogin = async () => {
     try {
@@ -22,6 +40,7 @@ const Header: React.FC = () => {
       if (user) {
         localStorage.setItem('user', JSON.stringify(user));
         setIsAuthenticated(true);
+        emitAuthChangeEvent();
         router.push(PROFILE_ROUTE);
       }
     } catch (error) {
@@ -33,6 +52,7 @@ const Header: React.FC = () => {
     await signOutGoogle();
     localStorage.removeItem('user');
     setIsAuthenticated(false);
+    emitAuthChangeEvent();
     router.push(HOME_ROUTE);
   };
 
