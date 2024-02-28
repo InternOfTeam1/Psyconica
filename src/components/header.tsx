@@ -10,13 +10,20 @@ import { HOME_ROUTE, PROFILE_ROUTE } from "@/constants/routes";
 const Header: React.FC = () => {
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [UserPhoto, setUserPhoto] = useState('');
 
   useEffect(() => {
     const handleAuthChange = () => {
-
       const user = localStorage.getItem('user');
+      const userProfileString = localStorage.getItem('userPhoto');
       setIsAuthenticated(!!user);
+      console.log(userProfileString)
+      if (userProfileString) {
+        setUserPhoto(JSON.parse(userProfileString));
+      }
     };
+
+    handleAuthChange();
 
     window.addEventListener('storage', handleAuthChange);
     window.addEventListener('authChange', handleAuthChange);
@@ -25,7 +32,6 @@ const Header: React.FC = () => {
       window.removeEventListener('storage', handleAuthChange);
       window.removeEventListener('authChange', handleAuthChange);
     };
-
   }, []);
 
 
@@ -69,6 +75,7 @@ const Header: React.FC = () => {
             <li onClick={handleLogin} className="cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold border-solid border-2 border-gray-400 rounded-[20px] px-5 py-2">Log in</li>
           ) : (
             <>
+
               <Link href={PROFILE_ROUTE}>
                 <li className="cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold border-solid border-2 border-gray-400 rounded-[20px] px-5 py-2">
                   Личный кабинет
@@ -77,6 +84,13 @@ const Header: React.FC = () => {
               <li onClick={handleLogout} className="cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold border-solid border-2 border-gray-400 rounded-[20px] px-5 py-2">
                 Log out
               </li>
+              {isAuthenticated && (
+                <img
+                  src={UserPhoto}
+                  alt="User Profile"
+                  className="w-20 h-20 rounded-full border-2 border-gray-300 shadow-sm"
+                />
+              )}
             </>
           )}
 
