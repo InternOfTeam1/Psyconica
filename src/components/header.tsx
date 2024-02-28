@@ -11,14 +11,24 @@ import { HOME_ROUTE, PROFILE_ROUTE } from "@/constants/routes";
 const Header: React.FC = () => {
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+<<<<<<< HEAD
   const pathname = usePathname();
+=======
+  const [UserPhoto, setUserPhoto] = useState('');
+>>>>>>> 31ffb31169b79709cac0f2f3daba229ccbaea10a
 
   useEffect(() => {
     const handleAuthChange = () => {
-
       const user = localStorage.getItem('user');
+      const userProfileString = localStorage.getItem('userPhoto');
       setIsAuthenticated(!!user);
+      console.log(userProfileString)
+      if (userProfileString) {
+        setUserPhoto(JSON.parse(userProfileString));
+      }
     };
+
+    handleAuthChange();
 
     window.addEventListener('storage', handleAuthChange);
     window.addEventListener('authChange', handleAuthChange);
@@ -27,7 +37,6 @@ const Header: React.FC = () => {
       window.removeEventListener('storage', handleAuthChange);
       window.removeEventListener('authChange', handleAuthChange);
     };
-
   }, []);
 
 
@@ -73,6 +82,7 @@ const Header: React.FC = () => {
             <li onClick={handleLogin} className="flex cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 border-solid border-2 border-gray-400 whitespace-nowrap rounded-[20px] mt-5 px-5">Log in</li>
           ) : (
             <>
+
               <Link href={PROFILE_ROUTE}>
                 <li className="cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold border-solid border-2 border-gray-400 rounded-[20px] px-5 py-2">
                   Личный кабинет
@@ -81,6 +91,13 @@ const Header: React.FC = () => {
               <li onClick={handleLogout} className="cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold border-solid border-2 border-gray-400 rounded-[20px] px-5 py-2">
                 Log out
               </li>
+              {isAuthenticated && (
+                <img
+                  src={UserPhoto}
+                  alt="User Profile"
+                  className="w-20 h-20 rounded-full border-2 border-gray-300 shadow-sm"
+                />
+              )}
             </>
           )}
 
