@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import Link from "next/link";
 import Social from "@/components/Social";
 import { useRouter } from "next/navigation";
+import { usePathname } from 'next/navigation';
 import { signInWithGoogle, signOutGoogle } from "@/lib/firebase/firebaseConfig";
 import { HOME_ROUTE, PROFILE_ROUTE } from "@/constants/routes";
 
@@ -10,6 +11,7 @@ import { HOME_ROUTE, PROFILE_ROUTE } from "@/constants/routes";
 const Header: React.FC = () => {
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleAuthChange = () => {
@@ -57,16 +59,18 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="fixed top-0 z-[40] w-full h-[100px] flex bg-transparent justify-between items-center px-10 md:px-20 p-4">
-      <nav className="flex space-x-4 mt-2 gap-10">
-        <Link href="/questions" className="text-gray-400 hover:text-neutral-600 uppercase font-semibold">Вопросы</Link>
-        <Link href="/articles" className="text-gray-400 hover:text-neutral-600 uppercase font-semibold">Статьи</Link>
-      </nav>
+    <header className="flex flex-wrap bg-transparent justify-between items-center align-middle mt-5 px-10">
+      <h2 className="flex justify-center xs:order-first xs:w-full xs:text-lg xs:whitespace-nowrap sm:order-first sm:w-full sm:text-xl md:order-first md:w-full md:text-2xl lg:order-2 lg:w-auto lg:text-2xl xl:order-2 xl:text-3xl font-balsamiq-sans font-bold text-pink-600 px-12">Психология должна быть простой!</h2>
 
-      <div className="ml-auto">
-        <ul className="flex items-center gap-2 mb-4">
+      <nav className="flex gap-3 xs:order-2 sm:order-2 md:order-2 lg:order-1 xl:order-1">
+        <Link href="/questions" className={`text-gray-600 hover:text-neutral-600 hover:bg-neutral-600 hover:rounded-full hover:text-white uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-base px-3 ${pathname === '/questions' ? 'bg-neutral-600 rounded-full px-5 text-white': ''}`}>Вопросы</Link>
+        <Link href="/articles" className={`text-gray-600 hover:text-neutral-600 hover:bg-neutral-600 hover:rounded-full hover:text-white uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-base px-3 ${pathname === '/articles' ? 'bg-neutral-600 rounded-full px-5 text-white': ''}`}>Статьи</Link>
+      </nav>
+      
+      <div className="xs:order-2 xs:mr-0 sm:order-2 md:order-2 md:px-0 lg:order-3 xl:order-3">
+        <ul className="flex items-center gap-2 mb-4 align-middle">
           {!isAuthenticated ? (
-            <li onClick={handleLogin} className="cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold border-solid border-2 border-gray-400 rounded-[20px] px-5 py-2">Log in</li>
+            <li onClick={handleLogin} className="flex cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 border-solid border-2 border-gray-400 whitespace-nowrap rounded-[20px] mt-5 px-5">Log in</li>
           ) : (
             <>
               <Link href={PROFILE_ROUTE}>
@@ -81,6 +85,8 @@ const Header: React.FC = () => {
           )}
 
         </ul>
+      </div>
+      <div className="flex bg-transparent justify-between items-center xs:order-last xs:w-full xs:justify-center xs:align-center sm:order-last sm:w-full md:order-last md:w-full lg:order-last lg:w-full xl:order-last xl:w-full">
         <Social />
       </div>
     </header>
