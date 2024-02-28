@@ -1,5 +1,5 @@
 import { db } from './firebaseConfig';
-import { collection, addDoc, getDocs } from 'firebase/firestore';
+import { collection, setDoc, doc, getDocs } from 'firebase/firestore';
 
 
 interface Subject {
@@ -22,5 +22,21 @@ export const fetchDataFromCollection = async (collectionName: string): Promise<S
   } catch (e) {
     console.error("Error fetching documents: ", e);
     throw new Error("Failed to fetch data from collection");
+  }
+};
+
+
+export const addDocumentWithSlug = async <T extends { [key: string]: any }>(
+  collectionName: string,
+  slug: string,
+  data: T
+) => {
+  try {
+    console.log(`Attempting to add document to ${collectionName} with slug: ${slug} and data:`, data);
+    await setDoc(doc(db, collectionName, slug), data);
+    console.log(`${collectionName} document successfully added with slug: ${slug}`);
+  } catch (error) {
+    console.error("Error adding document to Firestore: ", error);
+    throw error;
   }
 };
