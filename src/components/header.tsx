@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import Link from "next/link";
 import Social from "@/components/Social";
 import { useRouter } from "next/navigation";
-import { usePathname } from 'next/navigation';
 import { signInWithGoogle, signOutGoogle } from "@/lib/firebase/firebaseConfig";
 import { HOME_ROUTE, PROFILE_ROUTE } from "@/constants/routes";
 
@@ -11,11 +10,7 @@ import { HOME_ROUTE, PROFILE_ROUTE } from "@/constants/routes";
 const Header: React.FC = () => {
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-<<<<<<< HEAD
-  const pathname = usePathname();
-=======
   const [UserPhoto, setUserPhoto] = useState('');
->>>>>>> 31ffb31169b79709cac0f2f3daba229ccbaea10a
 
   useEffect(() => {
     const handleAuthChange = () => {
@@ -72,8 +67,8 @@ const Header: React.FC = () => {
       <h2 className="flex justify-center xs:order-first xs:w-full xs:text-lg xs:whitespace-nowrap sm:order-first sm:w-full sm:text-xl md:order-first md:w-full md:text-2xl lg:order-2 lg:w-auto lg:text-2xl xl:order-2 xl:text-3xl font-balsamiq-sans font-bold text-pink-600 px-12">Психология должна быть простой!</h2>
 
       <nav className="flex gap-3 xs:order-2 sm:order-2 md:order-2 lg:order-1 xl:order-1">
-        <Link href="/questions" className={`text-gray-600 hover:text-neutral-600 hover:bg-neutral-600 hover:rounded-full hover:text-white uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-base px-3 ${pathname === '/questions' ? 'bg-neutral-600 rounded-full px-5 text-white': ''}`}>Вопросы</Link>
-        <Link href="/articles" className={`text-gray-600 hover:text-neutral-600 hover:bg-neutral-600 hover:rounded-full hover:text-white uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-base px-3 ${pathname === '/articles' ? 'bg-neutral-600 rounded-full px-5 text-white': ''}`}>Статьи</Link>
+        <Link href="/questions" className='text-gray-600 hover:text-neutral-600 hover:bg-neutral-600 hover:rounded-full hover:text-white uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-base px-3'>Вопросы</Link>
+        <Link href="/articles" className='text-gray-600 hover:text-neutral-600 hover:bg-neutral-600 hover:rounded-full hover:text-white uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-base px-3'>Статьи</Link>
       </nav>
       
       <div className="xs:order-2 xs:mr-0 sm:order-2 md:order-2 md:px-0 lg:order-3 xl:order-3">

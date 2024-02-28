@@ -7,8 +7,7 @@ import Header from '@/components/header';
 const Home: React.FC = () => {
   return (
     <div className="flex flex-col items-center min-h-screen p-4 mb-0">
-      <Header />
-      <h2 className="z-10 text-lg sm:text-xl md:text-3xl lg:text-4xl font-balsamiq-sans font-bold text-pink-600 mb-[-1rem] pl-12">Психология должна быть простой!</h2>
+      {/* <h2 className="z-10 text-lg sm:text-xl md:text-3xl lg:text-4xl font-balsamiq-sans font-bold text-pink-600 mb-[-1rem] pl-12">Психология должна быть простой!</h2> */}
       <div className="w-full flex flex-col items-center justify-center md:flex-col lg:flex-row">
         <div className="z-10 mb-4 sm:mb-5 md:mb-6 lg:mb-[-6rem] lg:ml-[-4rem] xl:ml-[-1rem]">
           <h2 className="z-10 text-lg sm:text-xl md:text-3xl lg:text-6xl font-unbounded font-black text-gray-600 mb-4 pl-12">Психология отношений</h2>
