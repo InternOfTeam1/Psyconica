@@ -8,12 +8,25 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      maxWidth: {
+        'custom': '1200px', 
+      },
+      minWidth: {
+        'custom': '360px', 
+      },
       screens: {
     'xs': '360px',
     'sm': '640px',
     'md': '768px',
     'lg': '1024px',
     'xl': '1200px',
+      },
+      fontSize: {
+        'custom': '22px',
+        'base': ['16px', '24px'], 
+        'sm': ['14px', '22px'], 
+        'lg': ['18px', '28px'], 
+        'xl': ['20px', '32px'],
       },
      
       backgroundImage: {
