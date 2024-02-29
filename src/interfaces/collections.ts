@@ -39,7 +39,7 @@ export interface User {
   mail?: string;
   name?: string;
   photo?: string;
-  role: 'user' | 'psy' | 'admin';
+  role: 'user' | 'psy';
   favourite?: any;
   desc?: string;
   video?: string[];
@@ -57,3 +57,28 @@ export interface Question {
   SEODesc: string;
   canonical?: string;
 }
+
+export interface Data {
+  id: string;
+  title: string;
+  description?: string;
+  slug?: string;
+  content?: string;
+  date?: string;
+  likes?: string[];
+  SEOTitle?: string;
+  SEODesc?: string;
+  canonical?: string;
+  questions?: string[];
+  articles?: string[];
+  video?: string[];
+  mail?: string;
+  name?: string;
+  photo?: string;
+  role?: 'user' | 'psy';
+  favourite?: any;
+  desc?: string;
+  comments?: Comment[];
+  answers?: string[];
+}
+
