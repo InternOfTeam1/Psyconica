@@ -1,13 +1,11 @@
 "use client"
 import React from 'react';
 import Image from 'next/image';
-import SubjectsList from '@/components/SubjectsList';
-import Header from '@/components/header';
+import { SubjectsList } from '@/components/SubjectsList';
 
 const Home: React.FC = () => {
   return (
-    <div className="flex flex-col items-center min-h-screen p-4 mb-0 mx-auto max-w-custom">
-      <Header />
+    <div className="flex flex-col items-center min-h-screen p-4 mb-0 mx-auto max-w-custom xs:mt-[-4rem] sm:mt-[-5rem]  md:mt-[-5rem] lg:mt-[-10rem] xl:mt-[-10rem]">
       <div className="w-full flex flex-col lg:flex-row items-center justify-center">
         <div className="flex flex-col mb-4 sm:mb-[-3rem] md:mb-[-3rem] lg:mb-[-6rem] lg:ml-[-4rem] xl:ml-[-1rem]">
           <h2 className=" lg:text-right  sm:text-xl md:text-md lg:text-5xl xl:text-6xl text-gray-600 mb-4 ">Психология отношений</h2>
