@@ -70,14 +70,20 @@ const Header: React.FC = () => {
         <Link href="/questions" className='text-gray-600 hover:text-neutral-600 hover:bg-neutral-600 hover:rounded-full hover:text-white uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-base px-3'>Вопросы</Link>
         <Link href="/articles" className='text-gray-600 hover:text-neutral-600 hover:bg-neutral-600 hover:rounded-full hover:text-white uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-base px-3'>Статьи</Link>
       </nav>
-      
+
       <div className="xs:order-2 xs:mr-10 sm:order-2 sm:mr-20 md:order-2 md:mr-30 lg:order-3 xl:order-3 xl:mr-20 mr-5">
         <ul className="flex items-center gap-2 mb-4 align-middle">
           {!isAuthenticated ? (
             <li onClick={handleLogin} className="flex cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 border-solid border-2 border-gray-400 whitespace-nowrap rounded-[20px] mt-5 px-5">Log in</li>
           ) : (
             <>
-
+              {isAuthenticated && (
+                <img
+                  src={UserPhoto}
+                  alt="User Profile"
+                  className="w-10 h-10 rounded-full border-2 border-gray-300 shadow-sm"
+                />
+              )}
               <Link href={PROFILE_ROUTE}>
                 <li className="cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold border-solid border-2 border-gray-400 rounded-[20px] px-5">
                   Личный кабинет
@@ -86,13 +92,7 @@ const Header: React.FC = () => {
               <li onClick={handleLogout} className="cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold border-solid border-2 border-gray-400 rounded-[20px] px-5">
                 Log out
               </li>
-              {isAuthenticated && (
-                <img
-                  src={UserPhoto}
-                  alt="User Profile"
-                  className="w-10 h-10 rounded-full border-2 border-gray-300 shadow-sm"
-                />
-              )}
+
             </>
           )}
 

@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react';
-import { fetchDataFromCollection } from '@/lib/firebase/firebaseUtils';
+import { fetchDataFromCollection } from '@/lib/firebase/firebaseGetDocs';
 import { Data } from '@/interfaces/collections'
 
 export const SubjectsList: React.FC<{ position: 'left' | 'right' }> = ({ position }) => {
@@ -38,7 +38,6 @@ export const SubjectsList: React.FC<{ position: 'left' | 'right' }> = ({ positio
           <div className="z-10 space-y-2 p-3 sm:p-4 md:space-y-2 md:p-4 lg:p-2 xl:p-2">
             <div className=" sm:pl-16 sm:pr-10 md:pl-5 md:pr-1 lg:pl-10 xl:pl-14 xl:pr-10 font-balsamiq-sans font-bold text-small-caps">
               <h2 className="text-sm sm:text-sm md:text-lg lg:text-ld xl:text-custom text-gray-600">{subject.title}</h2>
-              {/* <p className="text-xs sm:text-sm md:text-md lg:text-sm xl:text-xl">{subject.description}</p> */}
             </div>
           </div>
         </div>

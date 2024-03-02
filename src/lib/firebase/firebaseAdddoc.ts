@@ -1,40 +1,8 @@
-import { db } from './firebaseConfig';
-import { collection, setDoc, doc, getDocs } from 'firebase/firestore';
-import { Data, Topic, Comment, Video, Article, User, Question } from '@/interfaces/collections'
+
 import slugify from 'slugify';
-
-
-//adding document to firestore
-export const fetchDataFromCollection = async (collectionName: string): Promise<Data[]> => {
-  try {
-    console.log(`Fetching data from collection: ${collectionName}`);
-    const querySnapshot = await getDocs(collection(db, collectionName));
-    const data: Data[] = [];
-    querySnapshot.forEach((doc) => {
-      const docData = doc.data();
-      if (collectionName === 'users') {
-        data.push({
-          id: doc.id,
-          title: docData.name || "No Name",
-          description: docData.desc || "No Description",
-          mail: docData.mail,
-          role: docData.role,
-        });
-      } else {
-        data.push({
-          id: doc.id,
-          title: docData.title || "No Title",
-          description: docData.description || "No Description",
-        });
-      }
-    });
-    return data;
-  } catch (e) {
-    console.error("Error fetching documents: ", e);
-    throw new Error("Failed to fetch data from collection");
-  }
-};
-
+import { Topic, Comment, Video, Article, User, Question } from '@/interfaces/collections'
+import { setDoc, doc } from 'firebase/firestore';
+import { db } from './firebaseConfig';
 
 export const addDocumentWithSlug = async <T extends { [key: string]: any }>(
   collectionName: string,
@@ -140,23 +108,3 @@ addEntities().then(() => console.log("All entities added successfully.")).catch(
 
 
 
-// export const fetchDataFromCollection = async (collectionName: string): Promise<Data[]> => {
-//   try {
-//     const querySnapshot = await getDocs(collection(db, collectionName));
-//     const data: Data[] = [];
-//     querySnapshot.forEach((doc) => {
-//       const docData = doc.data();
-//       if (docData.title) {
-//         data.push({
-//           id: doc.id,
-//           title: docData.title,
-//           description: docData.description || '',
-//         });
-//       }
-//     });
-//     return data;
-//   } catch (e) {
-//     console.error("Error fetching documents: ", e);
-//     throw new Error("Failed to fetch data from collection");
-//   }
-// };
