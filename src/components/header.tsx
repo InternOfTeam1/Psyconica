@@ -63,15 +63,15 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="flex flex-wrap bg-transparent justify-between items-center align-middle mt-5 px-10">
+    <header className="flex flex-wrap mx-auto max-w-[1200px] bg-transparent justify-between items-center align-middle xs:mb-[80px] mt-5 mb-[100px]">
       <h2 className="flex justify-center xs:order-first xs:w-full xs:text-lg xs:whitespace-nowrap sm:order-first sm:w-full sm:text-xl md:order-first md:w-full md:text-2xl lg:order-2 lg:w-auto lg:text-2xl xl:order-2 xl:text-3xl font-balsamiq-sans font-bold text-pink-600 px-12">Психология должна быть простой!</h2>
 
-      <nav className="flex gap-3 xs:order-2 sm:order-2 md:order-2 lg:order-1 xl:order-1">
+      <nav className="flex gap-3 xs:order-2 xs:ml-10 sm:order-2 sm:ml-30 md:order-2 md:ml-20 lg:order-1 lg:ml-10 xl:order-1">
         <Link href="/questions" className='text-gray-600 hover:text-neutral-600 hover:bg-neutral-600 hover:rounded-full hover:text-white uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-base px-3'>Вопросы</Link>
         <Link href="/articles" className='text-gray-600 hover:text-neutral-600 hover:bg-neutral-600 hover:rounded-full hover:text-white uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-base px-3'>Статьи</Link>
       </nav>
       
-      <div className="xs:order-2 xs:mr-0 sm:order-2 md:order-2 md:px-0 lg:order-3 xl:order-3">
+      <div className="xs:order-2 xs:mr-10 sm:order-2 sm:mr-20 md:order-2 md:mr-30 lg:order-3 xl:order-3 xl:mr-20 mr-5">
         <ul className="flex items-center gap-2 mb-4 align-middle">
           {!isAuthenticated ? (
             <li onClick={handleLogin} className="flex cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 border-solid border-2 border-gray-400 whitespace-nowrap rounded-[20px] mt-5 px-5">Log in</li>
@@ -79,18 +79,18 @@ const Header: React.FC = () => {
             <>
 
               <Link href={PROFILE_ROUTE}>
-                <li className="cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold border-solid border-2 border-gray-400 rounded-[20px] px-5 py-2">
+                <li className="cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold border-solid border-2 border-gray-400 rounded-[20px] px-5">
                   Личный кабинет
                 </li>
               </Link>
-              <li onClick={handleLogout} className="cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold border-solid border-2 border-gray-400 rounded-[20px] px-5 py-2">
+              <li onClick={handleLogout} className="cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold border-solid border-2 border-gray-400 rounded-[20px] px-5">
                 Log out
               </li>
               {isAuthenticated && (
                 <img
                   src={UserPhoto}
                   alt="User Profile"
-                  className="w-20 h-20 rounded-full border-2 border-gray-300 shadow-sm"
+                  className="w-10 h-10 rounded-full border-2 border-gray-300 shadow-sm"
                 />
               )}
             </>
@@ -98,7 +98,7 @@ const Header: React.FC = () => {
 
         </ul>
       </div>
-      <div className="flex bg-transparent justify-between items-center xs:order-last xs:w-full xs:justify-center xs:align-center sm:order-last sm:w-full md:order-last md:w-full lg:order-last lg:w-full xl:order-last xl:w-full">
+      <div className="flex bg-transparent justify-between items-center xs:order-last xs:w-full xs:mr-10 xs:justify-center xs:align-center sm:order-last sm:mr-20 sm:w-full md:order-last md:w-full md:mr-20 lg:order-last lg:w-ful lg:mr-20 xl:order-last xl:w-full mt-5">
         <Social />
       </div>
     </header>

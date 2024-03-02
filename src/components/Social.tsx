@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 const Social: React.FC = () => {
     return (
-        <div className="flex w-full h-[70px] bg-transparent justify-end items-center">
+        <div className="flex w-full bg-transparent justify-end items-center mx-auto">
         <div className="flex flex-row gap-3 items-center">
             <Link href="https://instagram.com" className="flex gap-5 items-center bg-neutral-500 hover:bg-neutral-700 w-[36px] h-[36px] rounded-full relative justify-center">
                 <Image className="items-center" src="/instagram.svg" alt="Instagram" width={16} height={16}/>
