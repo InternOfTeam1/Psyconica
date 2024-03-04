@@ -20,7 +20,7 @@ export const addDocumentWithSlug = async <T extends { [key: string]: any }>(
   }
 };
 
-const topics = [
+export const topics = [
   { title: "Личностный рост: стань лучше каждый день" },
   { title: "Семейные узы: крепкие связи, счастливые отношения" },
   { title: "Управление эмоциями: крепкий дух, ясный разум" },
