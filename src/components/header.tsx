@@ -64,11 +64,11 @@ const Header: React.FC = () => {
 
   return (
     <header className="flex flex-wrap mx-auto max-w-[1200px] bg-transparent justify-between items-center align-middle xs:mb-[80px] mt-5 mb-[100px]">
-      <h2 className="flex justify-center xs:order-first xs:w-full xs:text-lg xs:whitespace-nowrap sm:order-first sm:w-full sm:text-xl md:order-first md:w-full md:text-2xl lg:order-2 lg:w-auto lg:text-2xl xl:order-2 xl:text-3xl font-balsamiq-sans font-bold text-pink-600 px-12">Психология должна быть простой!</h2>
+      <h2 className="flex justify-center xs:order-first xs:w-full xs:text-lg xs:whitespace-nowrap sm:order-first sm:w-full sm:text-xl md:order-first md:w-full md:text-2xl lg:order-2 lg:w-auto lg:text-2xl xl:order-2 xl:text-3xl font-balsamiq-sans font-bold text-pink-600 px-5">Психология должна быть простой!</h2>
 
       <nav className="flex gap-3 xs:order-2 xs:ml-10 sm:order-2 sm:ml-30 md:order-2 md:ml-20 lg:order-1 lg:ml-10 xl:order-1">
-        <Link href="/questions" className='text-gray-600 hover:text-neutral-600 hover:bg-neutral-600 hover:rounded-full hover:text-white uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-base px-3'>Вопросы</Link>
-        <Link href="/articles" className='text-gray-600 hover:text-neutral-600 hover:bg-neutral-600 hover:rounded-full hover:text-white uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-base px-3'>Статьи</Link>
+        <Link href="/questions" className='text-gray-600 hover:text-neutral-600 hover:bg-neutral-600 hover:rounded-full hover:text-white uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm xl:text-sm px-2'>Вопросы</Link>
+        <Link href="/articles" className='text-gray-600 hover:text-neutral-600 hover:bg-neutral-600 hover:rounded-full hover:text-white uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm xl:text-sm px-2'>Статьи</Link>
       </nav>
 
       <div className="xs:order-2 xs:mr-10 sm:order-2 sm:mr-20 md:order-2 md:mr-30 lg:order-3 xl:order-3 xl:mr-20 mr-5">
@@ -81,15 +81,15 @@ const Header: React.FC = () => {
                 <img
                   src={UserPhoto}
                   alt="User Profile"
-                  className="w-10 h-10 rounded-full border-2 border-gray-300 shadow-sm"
+                  className="w-8 h-8 rounded-full border-2 border-gray-300 shadow-sm xs:ml-10 sm:ml-0 md:ml-0 lg:ml-0  lg:w-7 lg:h-7 xl:ml-0 mt-3"
                 />
               )}
               <Link href={PROFILE_ROUTE}>
-                <li className="cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold border-solid border-2 border-gray-400 rounded-[20px] px-5">
+                <li className="cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold border-solid border-2 border-gray-400 rounded-[20px] xs:whitespace-nowrap xs:text-xs sm:text-sm lg:text-sm mt-3 px-3">
                   Личный кабинет
                 </li>
               </Link>
-              <li onClick={handleLogout} className="cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold border-solid border-2 border-gray-400 rounded-[20px] px-5">
+              <li onClick={handleLogout} className="cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold border-solid border-2 border-gray-400 rounded-[20px] xs:whitespace-nowrap xs:text-xs sm:text-sm lg:text-sm mt-3 px-3">
                 Log out
               </li>
 
