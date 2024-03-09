@@ -34,11 +34,11 @@ export interface Topic {
   canonical?: string;
 }
 
-export interface User {
-  slug: string;
-  mail?: string;
-  name?: string;
-  photo?: string;
+export interface Users {
+  slug: any;
+  mail?: any;
+  name?: any;
+  photo?: any;
   role: 'user' | 'psy';
   favourite?: any;
   desc?: string;
@@ -46,13 +46,18 @@ export interface User {
   articles?: string[];
 }
 
+interface Answers {
+  slug: string;
+  title: string,
+  likes: [],
+}
+
 export interface Question {
   slug: string;
   comments: Comment[];
-  answers: string[];
+  answers: Answers[];
   video: string[];
   title: string;
-  likes: string[];
   SEOTitle: string;
   SEODesc: string;
   canonical?: string;

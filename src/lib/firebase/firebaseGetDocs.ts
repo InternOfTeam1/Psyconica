@@ -17,6 +17,7 @@ export const fetchDataFromCollection = async (collectionName: string): Promise<D
           description: docData.desc || "No Description",
           mail: docData.mail,
           role: docData.role,
+          photo: docData.photo
         });
       } else if (collectionName === 'topics') {
         data.push({

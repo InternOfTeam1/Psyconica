@@ -1,6 +1,9 @@
 import { initializeApp, getApp, getApps, FirebaseApp } from 'firebase/app';
 import { Firestore, getFirestore } from 'firebase/firestore';
 import { getAuth, GoogleAuthProvider, signInWithPopup, User, signOut } from 'firebase/auth';
+import { Users } from '@/interfaces/collections';
+import { addDocumentWithSlug } from '@/lib/firebase/firebaseAdddoc';
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyCPP1vFH-j44dTveCE_YaClsPooUk38G90",
@@ -26,14 +29,17 @@ export const signInWithGoogle = async (): Promise<User | null> => {
     const user = result.user;
 
 
-    // const userProfile = {
-    //   uid: user.uid,
-    //   email: user.email,
-    //   displayName: user.displayName,
-    //   photoURL: user.photoURL
-    // };
+    const userData: Users = {
+      name: user.displayName,
+      mail: user.email,
+      photo: user.photoURL,
+      role: 'user',
+      slug: undefined
+    };
 
     localStorage.setItem('userPhoto', JSON.stringify(user.photoURL));
+
+    await addDocumentWithSlug('users', userData, 'name');
 
     console.log('Успешный вход:', user);
     return user;
