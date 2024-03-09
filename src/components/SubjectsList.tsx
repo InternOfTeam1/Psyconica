@@ -29,9 +29,8 @@ export const SubjectsList: React.FC<{ position: 'left' | 'right' }> = ({ positio
   return (
     <div className="max-w-custom min-w-custom mx-auto lg:pl-20  xl:pl-0 grid grid-cols-1 gap-2 p-4 sm:p-6 md:gap-3 lg:gap-3 xl:gap-4">
       {subjectsToShow.map((subject) => (
-        <Link href={`/topics`}>
+        <Link href={`/topics`} key={subject.id}>
           <div
-            key={subject.id}
             className="flex flex-col justify-center bg-cover bg-center rounded-lg"
             style={{
               backgroundImage: `url(${backgroundImageUrl})`,
