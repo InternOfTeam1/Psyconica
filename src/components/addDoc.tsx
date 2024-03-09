@@ -66,7 +66,7 @@ const Article: Article = {
   canonical: "https://example.com/articles/example-article"
 };
 
-const addEntities = async () => {
+export const addEntities = async () => {
 
   const modifiedQuestion = {
     ...Question,
@@ -86,15 +86,4 @@ const addEntities = async () => {
   await addDocumentWithSlug("articles", Article);
 };
 
-addEntities().then(() => console.log("All entities added successfully.")).catch((error) => console.error(error));
 
-
-const AddDocument: React.FC = () => {
-  return (
-    <>
-
-    </>
-  );
-};
-
-export default AddDocument;

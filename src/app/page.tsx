@@ -1,9 +1,16 @@
-"use client"
 import React from 'react';
 import Image from 'next/image';
 import { SubjectsList } from '@/components/SubjectsList';
+// import { addEntities } from '@/components/addDoc';
+// import { addDocumentWithSlug } from '@/lib/firebase/firebaseAdddoc';
+
+
 
 const Home: React.FC = () => {
+  // it's for adding data to firestore through code faster
+  // addEntities().then(() => console.log("All entities added successfully.")).catch((error) => console.error(error)); 
+  // it's forbidden uncomment addEntities function
+
   return (
     <div className="flex flex-col items-center min-h-screen p-4 mb-0 mx-auto max-w-custom xs:mt-[-4rem] sm:mt-[-5rem]  md:mt-[-5rem] lg:mt-[-10rem] xl:mt-[-10rem]">
       <div className="w-full flex flex-col lg:flex-row items-center justify-center">
