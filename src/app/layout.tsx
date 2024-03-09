@@ -1,5 +1,5 @@
 import "@/app/ui/globals.css"
-import Header from "@/components/Header";
+import Header from "@/components/header";
 import Providers from "@/redux/Provider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
