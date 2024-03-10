@@ -1,6 +1,6 @@
 import { initializeApp, getApp, getApps, FirebaseApp } from 'firebase/app';
 import { Firestore, getFirestore } from 'firebase/firestore';
-import { getAuth, GoogleAuthProvider, signInWithPopup, User, signOut } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup, User, signOut } from 'firebase/auth';
 import { Users } from '@/interfaces/collections';
 import { addDocumentWithSlug } from '@/lib/firebase/firebaseAdddoc';
 
@@ -50,14 +50,33 @@ export const signInWithGoogle = async (): Promise<User | null> => {
 };
 
 
-
-
-export const signOutGoogle = async (): Promise<void> => {
+export const signInWithFacebook = async (): Promise<User | null> => {
   try {
-    await signOut(auth);
-    console.log('Вы успешно вышли из системы');
+    const provider = new FacebookAuthProvider();
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+
+    const userData: Users = {
+      name: user.displayName,
+      mail: user.email,
+      photo: user.photoURL,
+      role: 'user',
+      slug: undefined
+    };
+    await addDocumentWithSlug('users', userData, 'name');
+    return user;
   } catch (error) {
-    console.error('Ошибка выхода из системы:', error);
+    console.error('Error with Facebook authentication:', error);
+    return null;
   }
 };
 
+
+export const signOutUser = async (): Promise<void> => {
+  try {
+    await signOut(auth);
+    console.log('Successfully signed out');
+  } catch (error) {
+    console.error('Error signing out:', error);
+  }
+};
