@@ -13,6 +13,49 @@ const topics = [
   { title: "Профессиональный рост: ключи к успеху на работе" }
 ];
 
+const questions = [
+  {
+    title: "Как научиться находить равновесие между работой и личной жизнью?",
+    topics: ["Управление временем и стрессом: баланс в жизни", "Профессиональный рост: ключи к успеху на работе"]
+  },
+  {
+    title: "Какие стратегии помогут укрепить семейные узы?",
+    topics: ["Семейные узы: крепкие связи, счастливые отношения"]
+  },
+  {
+    title: "Как справиться с эмоциональными всплесками в стрессовых ситуациях?",
+    topics: ["Управление эмоциями: крепкий дух, ясный разум"]
+  },
+  {
+    title: "Какие методы помогут преодолеть тревогу и депрессию?",
+    topics: ["Преодоление тревоги и депрессии: сила внутри нас"]
+  },
+  {
+    title: "Как развить личностный рост и стать лучше каждый день?",
+    topics: ["Личностный рост: стань лучше каждый день"]
+  },
+  {
+    title: "Как улучшить ментальное здоровье в повседневной жизни?",
+    topics: ["Ментальное здоровье: забота о себе, забота о будущем"]
+  },
+  {
+    title: "Какие техники помогут углубить и улучшить коммуникативные навыки?",
+    topics: ["Глубокие связи: искусство эффективного общения"]
+  },
+  {
+    title: "Как найти мотивацию и вдохновение для профессионального роста?",
+    topics: ["Профессиональный рост: ключи к успеху на работе"]
+  },
+  {
+    title: "Какие методы помогут лучше управлять своим временем?",
+    topics: ["Управление временем и стрессом: баланс в жизни"]
+  },
+  {
+    title: "Как построить и поддерживать глубокие связи с окружающими?",
+    topics: ["Глубокие связи: искусство эффективного общения", "Семейные узы: крепкие связи, счастливые отношения"]
+  }
+];
+
 const baseTopic: Topic = {
   slug: "",
   questions: [],
@@ -34,6 +77,7 @@ const Question: Question = {
     likes: [],
   }],
   video: [],
+  topics: [],
   title: "First Question",
   SEOTitle: "",
   SEODesc: "SEO description for the question",
@@ -68,22 +112,35 @@ const Article: Article = {
 
 export const addEntities = async () => {
 
-  const modifiedQuestion = {
-    ...Question,
-    answers: Question.answers.map(answer => ({
-      ...answer,
-      slug: slugify(answer.title, { lower: true, strict: true, remove: /[*+~.()'"!:@]/g })
-    }))
-  };
 
   for (const topic of topics) {
     await addDocumentWithSlug("topics", { ...baseTopic, title: topic.title });
   }
 
-  await addDocumentWithSlug("questions", modifiedQuestion);
-  await addDocumentWithSlug("comments", Comment);
-  await addDocumentWithSlug("videos", Video);
-  await addDocumentWithSlug("articles", Article);
+  for (const question of questions) {
+    const questionTopics = question.topics.map(topicTitle =>
+      topics.find(topic => topic.title === topicTitle) || { title: topicTitle }
+    );
+
+
+    const modifiedQuestion = {
+      ...Question,
+      title: question.title,
+      topics: questionTopics.map(t => t.title),
+      answers: Question.answers.map(answer => ({
+        ...answer,
+        slug: slugify(answer.title, { lower: true, strict: true, remove: /[*+~.()'"!:@]/g })
+      })),
+      slug: slugify(question.title, { lower: true, strict: true, remove: /[*+~.()'"!:@]/g })
+    };
+
+    // await addDocumentWithSlug("questions", modifiedQuestion);
+
+  }
+
+  // await addDocumentWithSlug("comments", Comment);
+  // await addDocumentWithSlug("videos", Video);
+  // await addDocumentWithSlug("articles", Article);
 };
 
 

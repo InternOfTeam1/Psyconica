@@ -1,14 +1,14 @@
 import React from 'react';
 import Image from 'next/image';
 import { SubjectsList } from '@/components/SubjectsList';
-// import { addEntities } from '@/components/addDoc';
-// import { addDocumentWithSlug } from '@/lib/firebase/firebaseAdddoc';
+import { addEntities } from '@/components/addDoc';
+import { addDocumentWithSlug } from '@/lib/firebase/firebaseAdddoc';
 
 
 
 const Home: React.FC = () => {
   // it's for adding data to firestore through code faster
-  // addEntities().then(() => console.log("All entities added successfully.")).catch((error) => console.error(error)); 
+  // addEntities().then(() => console.log("All entities added successfully.")).catch((error) => console.error(error));
   // it's forbidden uncomment addEntities function
 
   return (

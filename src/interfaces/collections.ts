@@ -58,6 +58,7 @@ export interface Question {
   answers: Answers[];
   video: string[];
   title: string;
+  topics: [];
   SEOTitle: string;
   SEODesc: string;
   canonical?: string;
