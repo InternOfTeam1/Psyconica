@@ -46,7 +46,7 @@ export interface Users {
   articles?: string[];
 }
 
-interface Answers {
+export interface Answers {
   slug: string;
   title: string,
   likes: [],

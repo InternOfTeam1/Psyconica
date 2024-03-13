@@ -1,7 +1,8 @@
 import { fetchDoc } from '@/lib/firebase/firebaseGetDocs';
-import { Question } from '@/interfaces/collections';
+import { Question, Answers } from '@/interfaces/collections';
 import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
+
 
 const QuestionDetail = async ({ params,
 
@@ -10,15 +11,15 @@ const QuestionDetail = async ({ params,
 }) => {
 
   const questionSlug = params.slug
-      
+
   const questionData: any = await fetchDoc('questions', questionSlug);
- 
-  
+
+
   return (
     <div className="container mx-auto px-4">
       <h2 className="text-xl font-semibold">{questionData.title}</h2>
 
-      {questionData.answers.map((answer, index) => (
+      {questionData.answers.map((answer: Answers, index: number) => (
         <div key={index} className="bg-white p-6 rounded-lg shadow-md">
           <h2>Ответ: {answer.title}</h2>
         </div>
