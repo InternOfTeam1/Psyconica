@@ -39,9 +39,12 @@ const QuestionsComponent: React.FC = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {questions.map((question, index) => (
-          <div key={index} className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-xl font-semibold">{question.title}</h2>
-          </div>
+          <Link key={index} href={`/questions/${question.slug || question.id}`}>
+            <div key={index} className="bg-white p-6 rounded-lg shadow-md">
+              <h2 className="text-xl font-semibold">{question.title}</h2>
+            </div>
+          </Link>
+
         ))}
       </div>
 

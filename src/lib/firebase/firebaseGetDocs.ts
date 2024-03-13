@@ -1,5 +1,5 @@
 import { db } from './firebaseConfig';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, getDoc, doc } from 'firebase/firestore';
 import { Data } from '@/interfaces/collections'
 
 
@@ -60,3 +60,24 @@ export const fetchDataFromCollection = async (collectionName: string): Promise<D
     throw new Error("Failed to fetch data from collection");
   }
 };
+
+
+export const fetchDoc = async (collectionName: string, slug: any) => {
+  try {
+    const docRef = doc(db, collectionName, slug);
+
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      return { id: docSnap.id, ...docSnap.data() };
+    } else {
+      console.log("No such document!");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching document:", error);
+    throw error;
+  }
+};
+
+
