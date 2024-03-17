@@ -14,7 +14,6 @@ const firebaseConfig = {
   appId: "1:874805733374:web:d676b7b7c56f1dfd1a42af"
 };
 
-
 const firebaseApp: FirebaseApp = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
 export const db: Firestore = getFirestore(firebaseApp);
@@ -34,7 +33,8 @@ export const signInWithGoogle = async (): Promise<User | null> => {
       mail: user.email,
       photo: user.photoURL,
       role: 'user',
-      slug: undefined
+      slug: user.displayName,
+      userId: user.uid
     };
 
     localStorage.setItem('userPhoto', JSON.stringify(user.photoURL));
@@ -61,8 +61,10 @@ export const signInWithFacebook = async (): Promise<User | null> => {
       mail: user.email,
       photo: user.photoURL,
       role: 'user',
-      slug: undefined
+      slug: user.displayName,
+      userId: user.uid
     };
+
     await addDocumentWithSlug('users', userData, 'name');
     return user;
   } catch (error) {

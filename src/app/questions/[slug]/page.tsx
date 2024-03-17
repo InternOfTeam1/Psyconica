@@ -1,28 +1,61 @@
+"use client";
 import { fetchDoc } from '@/lib/firebase/firebaseGetDocs';
-import { Question, Answers } from '@/interfaces/collections';
+import { useEffect, useState } from 'react';
+import { Answers } from '@/interfaces/collections';
 import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
+// import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
+// import { db } from '@/lib/firebase/firebaseConfig';
+// import { fetchDataFromCollection } from '@/lib/firebase/firebaseGetDocs';
 
 
-const QuestionDetail = async ({ params,
+const QuestionDetail = ({ params,
 
 }: {
   params: { slug: any };
 }) => {
-
+  const [questionData, setQuestionData] = useState<{ title: string; answers: Answers[] } | null>(null);
   const questionSlug = params.slug
 
-  const questionData: any = await fetchDoc('questions', questionSlug);
+  useEffect(() => {
+    const fetchData = async () => {
+      if (questionSlug) {
+        const data: any = await fetchDoc('questions', questionSlug);
+        setQuestionData(data);
+      }
+    };
 
+    fetchData();
+  }, [questionSlug]);
+
+  // const usersData = await fetchDoc('users', );
+
+  // const handleLike = async (answerSlug: string) => {
+  //   const questionRef = doc(db, 'questions', questionSlug);
+
+
+
+  //   await updateDoc(questionRef, {
+  //     [`answers.${answerSlug}.likes`]: arrayUnion("userId")
+  //   }).then(() => {
+  //     console.log('Like added');
+  //   }).catch((error) => {
+  //     console.error('Error adding like: ', error);
+  //   });
+  // };
 
   return (
     <div className="container mx-auto px-4">
-      <h2 className="text-xl font-semibold">{questionData.title}</h2>
 
-      {questionData.answers.map((answer: Answers, index: number) => (
-        <div key={index} className="bg-white p-6 rounded-lg shadow-md">
-          <h2>Ответ: {answer.title}</h2>
-        </div>
+
+      {questionData && questionData.answers.map((answer: Answers, index: number) => (
+        <>
+          <h2 className="text-xl font-semibold">{questionData.title}</h2>
+          <div key={index} className="bg-white p-6 rounded-lg shadow-md">
+            <h2>{answer.title}</h2>
+          </div>
+        </>
+
       ))}
 
       <Link href={HOME_ROUTE}>

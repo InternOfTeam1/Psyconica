@@ -2,52 +2,46 @@
 import { useState, useEffect } from 'react';
 import Link from "next/link";
 import Social from "@/components/Social";
-import { useRouter } from "next/navigation";
-import { signInWithGoogle, signInWithFacebook, signOutUser } from "@/lib/firebase/firebaseConfig";
 import { HOME_ROUTE, PROFILE_ROUTE } from "@/constants/routes";
-import { fetchDataFromCollection } from '@/lib/firebase/firebaseGetDocs';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/redux/store';
+import { login, logout } from '@/redux/slices/authSlice';
+import { useRouter } from 'next/navigation';
+import { setUserState } from "@/redux/slices/authSlice";
+
 
 const Header: React.FC = () => {
-  const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userPhoto, setUserPhoto] = useState('');
+  const dispatch: AppDispatch = useDispatch();
+  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+  const userPhoto = useSelector((state: RootState) => state.auth.user?.photo || '');
+  const user: any = useSelector((state: RootState) => state.auth.user || '');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // const [userName, setUserName] = useState('');
+  const router = useRouter();
 
-  const handleLogin = async (provider: 'google' | 'facebook', event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    try {
-      const user = provider === 'google' ? await signInWithGoogle() : await signInWithFacebook();
-      if (user) {
-        console.log('Authentication successful', user);
-        const usersData = await fetchDataFromCollection('users');
-        const loggedInUser = usersData.find(u => u.mail === user.email);
-        if (loggedInUser) {
-          localStorage.setItem('user', JSON.stringify({ name: loggedInUser.title, photo: loggedInUser.photo, email: loggedInUser.mail }));
-          setIsAuthenticated(true);
-          setIsModalOpen(false);
-          setUserPhoto(loggedInUser.photo || '');
-          // setUserName(loggedInUser.title || '');
-
-        }
-        router.push(PROFILE_ROUTE);
-      }
-    } catch (error) {
-      console.error('Ошибка входа:', error);
+  const handleLogin = async (provider: 'google' | 'facebook') => {
+    dispatch(login(provider));
+    if (isAuthenticated) {
+      router.push(PROFILE_ROUTE);
+      localStorage.setItem('user', JSON.stringify({ name: user.name, photo: user.photo, email: user.mail }));
     }
+    setIsModalOpen(false);
+
+  };
+
+
+  const handleLogout = async () => {
+    dispatch(logout());
+    router.push(HOME_ROUTE)
+
   };
 
   const checkUserLoginStatus = async () => {
     const user = localStorage.getItem('user');
     if (user) {
       const userData = JSON.parse(user);
-      setIsAuthenticated(true);
-      setUserPhoto(userData.photo || '');
-      // setUserName(userData.name || '');
+      dispatch(setUserState({ isAuthenticated: true, user: userData }));
     } else {
-      setIsAuthenticated(false);
-      setUserPhoto('');
-      // setUserName('');
+      dispatch(setUserState({ isAuthenticated: false }));
     }
   };
 
@@ -55,17 +49,6 @@ const Header: React.FC = () => {
     checkUserLoginStatus();
   }, []);
 
-
-
-
-  const handleLogout = async () => {
-    await signOutUser();
-    localStorage.removeItem('user');
-    setIsAuthenticated(false);
-    setUserPhoto('');
-    // setUserName('');
-    router.push(HOME_ROUTE);
-  };
 
 
   return (
@@ -128,13 +111,13 @@ const Header: React.FC = () => {
                     </div>
                     <div className="mt-4">
                       <button
-                        onClick={(e) => handleLogin('google', e)}
+                        onClick={() => handleLogin('google')}
                         className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm"
                       >
                         Log in with Google
                       </button>
                       <button
-                        onClick={(e) => handleLogin('facebook', e)}
+                        onClick={() => handleLogin('facebook')}
                         className="mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm"
                       >
                         Log in with Facebook

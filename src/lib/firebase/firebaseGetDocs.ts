@@ -13,11 +13,12 @@ export const fetchDataFromCollection = async (collectionName: string): Promise<D
       if (collectionName === 'users') {
         data.push({
           id: doc.id,
-          title: docData.name || "No Name",
+          name: docData.name || "No Name",
           description: docData.desc || "No Description",
           mail: docData.mail,
           role: docData.role,
-          photo: docData.photo
+          photo: docData.photo,
+          userId: docData.userId,
         });
       } else if (collectionName === 'topics') {
         data.push({
@@ -79,5 +80,3 @@ export const fetchDoc = async (collectionName: string, slug: any) => {
     throw error;
   }
 };
-
-

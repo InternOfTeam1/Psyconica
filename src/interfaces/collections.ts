@@ -44,6 +44,7 @@ export interface Users {
   desc?: string;
   video?: string[];
   articles?: string[];
+  userId: any
 }
 
 export interface Answers {
@@ -66,7 +67,7 @@ export interface Question {
 
 export interface Data {
   id: string;
-  title: string;
+  title?: string;
   description?: string;
   slug?: string;
   content?: string;
@@ -79,13 +80,12 @@ export interface Data {
   articles?: string[];
   video?: string[];
   mail?: string;
-  name?: string;
+  name?: any;
   photo?: string;
   role?: 'user' | 'psy';
   favourite?: any;
   desc?: string;
   comments?: Comment[];
   answers?: string[];
+  userId?: any;
 }
-
-
