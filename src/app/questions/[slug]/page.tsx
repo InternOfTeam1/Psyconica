@@ -8,9 +8,7 @@ import { HOME_ROUTE } from '@/constants/routes';
 // import { db } from '@/lib/firebase/firebaseConfig';
 // import { fetchDataFromCollection } from '@/lib/firebase/firebaseGetDocs';
 
-
 const QuestionDetail = ({ params,
-
 }: {
   params: { slug: any };
 }) => {
