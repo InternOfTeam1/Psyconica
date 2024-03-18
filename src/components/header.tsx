@@ -8,6 +8,7 @@ import { AppDispatch, RootState } from '@/redux/store';
 import { login, logout } from '@/redux/slices/authSlice';
 import { useRouter } from 'next/navigation';
 import { setUserState } from "@/redux/slices/authSlice";
+import Cookies from 'js-cookie';
 
 
 const Header: React.FC = () => {
@@ -18,30 +19,34 @@ const Header: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
 
+
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      const userData = { name: user.name, photo: user.photo, email: user.email };
+      Cookies.set('user', JSON.stringify(userData), { expires: 7 });
+      router.push(PROFILE_ROUTE);
+    }
+  }, [isAuthenticated, user, router]);
+
   const handleLogin = async (provider: 'google' | 'facebook') => {
     dispatch(login(provider));
-    if (isAuthenticated) {
-      router.push(PROFILE_ROUTE);
-      localStorage.setItem('user', JSON.stringify({ name: user.name, photo: user.photo, email: user.mail }));
-    }
     setIsModalOpen(false);
-
   };
-
 
   const handleLogout = async () => {
     dispatch(logout());
+    Cookies.remove('user');
     router.push(HOME_ROUTE)
 
   };
 
   const checkUserLoginStatus = async () => {
-    const user = localStorage.getItem('user');
-    if (user) {
-      const userData = JSON.parse(user);
+    const userCookie = Cookies.get('user');
+    if (userCookie) {
+      const userData = JSON.parse(userCookie);
       dispatch(setUserState({ isAuthenticated: true, user: userData }));
     } else {
-      dispatch(setUserState({ isAuthenticated: false }));
+      dispatch(setUserState({ isAuthenticated: false, user: null }));
     }
   };
 

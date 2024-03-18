@@ -9,6 +9,10 @@ import { useParams } from 'next/navigation';
 // import { db } from '@/lib/firebase/firebaseConfig';
 // import { fetchDataFromCollection } from '@/lib/firebase/firebaseGetDocs';
 
+function fetchQuestionData(slug: {}) {
+  return fetchDoc('questions', slug);
+}
+
 const QuestionDetail = () => {
   const [questionData, setQuestionData] = useState<{ title: string; answers: Answers[] } | null>(null);
   const params = useParams();
@@ -17,13 +21,14 @@ const QuestionDetail = () => {
   useEffect(() => {
     const fetchData = async () => {
       if (questionSlug) {
-        const data: any = await fetchDoc('questions', questionSlug);
+        const data: any = await fetchQuestionData(questionSlug);
         setQuestionData(data);
       }
     };
 
     fetchData();
   }, [questionSlug]);
+
 
   // const usersData = await fetchDoc('users', );
 
