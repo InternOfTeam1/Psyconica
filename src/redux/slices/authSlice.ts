@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { signInWithGoogle, signInWithFacebook, signOutUser } from "@/lib/firebase/firebaseConfig";
 import { fetchDataFromCollection } from '@/lib/firebase/firebaseGetDocs';
+import { updateUserDataInFirebase } from "@/lib/firebase/firebaseFunctions";
 
 export const login = createAsyncThunk(
   'auth/login',
@@ -32,13 +33,24 @@ const initialState: any = {
   error: null,
 };
 
+
+export const updateUserProfile = createAsyncThunk(
+  'auth/updateUserProfile',
+  async ({ userId, isPsychologist }: { userId: string; isPsychologist: boolean }, { dispatch }) => {
+    debugger
+    await updateUserDataInFirebase(userId, { role: isPsychologist ? 'psy' : 'user' });
+  }
+);
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
     setUserState(state, action) {
-      state.isAuthenticated = action.payload.isAuthenticated;
-      state.user = action.payload.user || null;
+      if (action.payload.user) {
+        state.user = { ...state.user, ...action.payload.user };
+      }
+      state.isAuthenticated = action.payload.isAuthenticated !== undefined ? action.payload.isAuthenticated : state.isAuthenticated;
     },
   },
   extraReducers: (builder) => {
@@ -59,8 +71,12 @@ const authSlice = createSlice({
         state.user = null;
         state.status = 'idle';
       });
+      builder
+      .addCase(updateUserProfile.fulfilled, (state, action) => {
+      });
   }
 });
+
 
 export default authSlice.reducer;
 export const { setUserState } = authSlice.actions;

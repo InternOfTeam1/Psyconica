@@ -9,7 +9,7 @@ import { login, logout } from '@/redux/slices/authSlice';
 import { useRouter } from 'next/navigation';
 import { setUserState } from "@/redux/slices/authSlice";
 import Cookies from 'js-cookie';
-
+import PsychologistModal from './PsychologistCheckbox';
 
 const Header: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -17,6 +17,7 @@ const Header: React.FC = () => {
   const userPhoto = useSelector((state: RootState) => state.auth.user?.photo || '');
   const user: any = useSelector((state: RootState) => state.auth.user || '');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpenPsy, setIsModalOpenPsy] = useState(false);
   const router = useRouter();
 
 
@@ -28,10 +29,15 @@ const Header: React.FC = () => {
     }
   }, [isAuthenticated, user, router]);
 
-  const handleLogin = async (provider: 'google' | 'facebook') => {
-    dispatch(login(provider));
+  const handleLogin = async (provider: 'google' | 'facebook') => { 
+    try {
+      await dispatch(login(provider));
+      setIsModalOpenPsy(true) 
+  } catch(error) {
+    console.error(error);
+  } finally{
     setIsModalOpen(false);
-  };
+  }};
 
   const handleLogout = async () => {
     dispatch(logout());
@@ -101,6 +107,13 @@ const Header: React.FC = () => {
 
 
       </header>
+      {isModalOpenPsy && (
+  <PsychologistModal 
+    isOpen={isModalOpenPsy} 
+    onClose={() => setIsModalOpenPsy(false)}
+  />
+)}
+
       {isModalOpen && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex items-center justify-center min-h-screen">
