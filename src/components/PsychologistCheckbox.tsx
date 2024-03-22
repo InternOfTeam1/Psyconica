@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { updateUserProfile } from '../redux/slices/authSlice';
 import { AppDispatch } from '../redux/store';
 import { useAppSelector } from '../redux/hooks';
+import Cookies from 'js-cookie';
 
 const PsychologistModal: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ isOpen, onClose }) => {
   const [isChecked, setIsChecked] = useState(false);
@@ -22,11 +23,23 @@ const PsychologistModal: React.FC<{ isOpen: boolean, onClose: () => void }> = ({
     }
     const newIsPsychologistValue = !isChecked;
     setIsChecked(newIsPsychologistValue);
+  
+    Cookies.set('isPsychologist', String(newIsPsychologistValue), { expires: 7 }); 
+  
     dispatch(updateUserProfile({ userId, isPsychologist: newIsPsychologistValue }));
     onClose(); 
   };
-
-  if (!isOpen) return null;
+  
+  useEffect(() => {
+    if (userId) {
+      const isPsychologistCookie = Cookies.get('isPsychologist');
+      if (isPsychologistCookie) {
+        setIsChecked(isPsychologistCookie === 'true'); 
+      } else {
+        setIsChecked(false);
+      }
+    }
+  }, [isOpen, userId]);
 
   return (
     <>
