@@ -1,4 +1,5 @@
 "use client";
+import PsychologistAnswerCard from './PsychologistAnswerCard';
 import { fetchDoc } from '@/lib/firebase/firebaseGetDocs';
 import { useEffect, useState } from 'react';
 import { Answers } from '@/interfaces/collections';
@@ -51,14 +52,8 @@ const QuestionDetail = () => {
 
 
       {questionData && questionData.answers.map((answer: Answers, index: number) => (
-        <>
-          <h2 className="font-semibold bg-amber-300 text-gray-600 px-7 py-3 rounded-2xl leading-6 text-center xs:text-sm xs:px-3 sm:text-sm sm:px-4 md:text-base md:px-5 lg:text-lg lg:px-6 xl:text-lg xl:px-7">{questionData.title}</h2>
-          <div key={index} className="bg-white p-6 rounded-lg">
-            <h2>{answer.title}</h2>
-          </div>
-        </>
-
-      ))} 
+         <PsychologistAnswerCard key={index} answer={answer} />
+         ))}
 
       <Link href={HOME_ROUTE}>
         <button className="inline-block mt-4 px-6 py-2 font-medium leading-6 text-center text-white uppercase transition bg-blue-500 rounded-full shadow ripple waves-light hover:shadow-lg focus:outline-none hover:bg-blue-600 xs:text-xs sm:text-xs md:text-xs lg:text-sm xl:text-sm">
