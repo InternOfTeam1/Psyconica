@@ -85,6 +85,7 @@ const Question: Question = {
     slug: "",
     title: 'Answer1',
     likes: [],
+    content: '',
   }],
   video: [],
   topics: [],
