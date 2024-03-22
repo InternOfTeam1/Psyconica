@@ -49,6 +49,7 @@ export interface Users {
 
 export interface Answers {
   slug: string;
+  content: string,
   title: string,
   likes: [],
 }
