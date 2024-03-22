@@ -83,9 +83,10 @@ const Question: Question = {
   comments: [],
   answers: [{
     slug: "",
-    title: 'Answer1',
+    title: 'Ответ',
     likes: [],
     content: '',
+    num: 1
   }],
   video: [],
   topics: [],
@@ -135,9 +136,10 @@ export const addEntities = async () => {
 
     const preparedAnswers = question.answers.split(';').map((answerText, index) => ({
       slug: slugify(answerText.trim(), { lower: true, strict: true, remove: /[*+~.()'"!:@]/g }).substring(0, 30),
-      title: answerText.trim(),
+      content: answerText.trim(),
+      title: answerText.trim().substring(0, 11),
       likes: [],
-
+      num: index + 1
     }));
 
     const modifiedQuestion = {

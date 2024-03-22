@@ -50,8 +50,9 @@ export interface Users {
 export interface Answers {
   slug: string;
   content: string,
+  num: number,
   title: string,
-  likes: [],
+  likes: string[],
 }
 
 export interface Question {

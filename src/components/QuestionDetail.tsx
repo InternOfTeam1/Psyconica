@@ -1,14 +1,14 @@
 "use client";
-import { FaThumbsUp } from 'react-icons/fa'; 
+import { FaThumbsUp } from 'react-icons/fa';
 import { fetchDoc } from '@/lib/firebase/firebaseGetDocs';
 import { useEffect, useState } from 'react';
 import { Answers } from '@/interfaces/collections';
 import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
 import { useParams } from 'next/navigation';
-// import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
-// import { db } from '@/lib/firebase/firebaseConfig';
-// import { fetchDataFromCollection } from '@/lib/firebase/firebaseGetDocs';
+import { useAppSelector } from '../redux/hooks';
+import { updateAnswerLikes } from '@/lib/firebase/firebaseFunctions';
+
 
 function fetchQuestionData(slug: {}) {
   return fetchDoc('questions', slug);
@@ -16,15 +16,37 @@ function fetchQuestionData(slug: {}) {
 
 const QuestionDetail = () => {
   const [questionData, setQuestionData] = useState<{ title: string; answers: Answers[] } | null>(null);
-  const [likedAnswers, setLikedAnswers] = useState<string[]>([]); 
+  // const [likedAnswers, setLikedAnswers] = useState<string[]>([]);
   const params = useParams();
-  const questionSlug = params.slug;
+  const questionSlug: any = params.slug;
+  const userId = useAppSelector((state) => state.auth.user?.id);
 
-  const handleLikeClick = (answerSlug: string) => {
-    if (likedAnswers.includes(answerSlug)) {
-      setLikedAnswers(prevLikedAnswers => prevLikedAnswers.filter(slug => slug !== answerSlug));
+  const handleLikeClick = async (answerNum: any, answerLikes: string[]) => {
+    if (!userId) {
+      console.error("User ID is undefined.");
+      return;
+    }
+    let updatedLikes;
+    const isLiked = answerLikes.includes(userId);
+    if (isLiked) {
+      updatedLikes = answerLikes.filter(id => id !== userId);
+      console.log(updatedLikes)
+
     } else {
-      setLikedAnswers(prevLikedAnswers => [...prevLikedAnswers, answerSlug]);
+      updatedLikes = [...answerLikes, userId];
+    }
+    try {
+      await updateAnswerLikes(answerNum, updatedLikes, questionSlug);
+      console.log("Likes updated successfully.");
+    } catch (error) {
+      console.error("Error updating likes", error);
+    }
+
+    const updatedQuestionData: any = { ...questionData };
+    const answerIndex = updatedQuestionData.answers.findIndex((answer: { num: any; }) => answer.num === answerNum);
+    if (answerIndex !== -1) {
+      updatedQuestionData.answers[answerIndex].likes = updatedLikes;
+      setQuestionData(updatedQuestionData);
     }
   };
 
@@ -39,23 +61,6 @@ const QuestionDetail = () => {
     fetchData();
   }, [questionSlug]);
 
-
-  // const usersData = await fetchDoc('users', );
-
-  // const handleLike = async (answerSlug: string) => {
-  //   const questionRef = doc(db, 'questions', questionSlug);
-
-
-
-  //   await updateDoc(questionRef, {
-  //     [`answers.${answerSlug}.likes`]: arrayUnion("userId")
-  //   }).then(() => {
-  //     console.log('Like added');
-  //   }).catch((error) => {
-  //     console.error('Error adding like: ', error);
-  //   });
-  // };
-
   return (
     <div className="container mx-auto px-4 py-4 max-w-xl bg-white shadow-xl rounded-2xl">
       {questionData && (
@@ -65,7 +70,7 @@ const QuestionDetail = () => {
             return (
               <div key={index}>
                 <div className="flex items-center mb-4">
-                    <p className="font-semibold text-gray-700">{index + 1}.</p>
+                  <p className="font-semibold text-gray-700">{answer.num}.</p>
                   <div>
                     <h3 className="font-semibold text-gray-600 px-7 pt-3 rounded-2xl leading-6">{answer.title}</h3>
                     <p className="text-gray-500 text-sm mt-2">{answer.content}</p>
@@ -73,9 +78,9 @@ const QuestionDetail = () => {
                 </div>
                 <div className="flex items-center">
                   <FaThumbsUp
-                    className={`text-green-500 mr-1 cursor-pointer ${likedAnswers.includes(answer.slug) ? 'text-green-700' : ''}`}
-                    onClick={() => handleLikeClick(answer.slug)} />
-                  <span className="text-gray-500">{likedAnswers.filter(slug => slug === answer.slug).length}</span>
+                    className={`text-green-500 mr-1 cursor-pointer ${answer.likes.includes(userId) ? 'text-green-700' : ''}`}
+                    onClick={() => handleLikeClick(answer.num, answer.likes)} />
+                  <span className="text-gray-500">{answer.likes.length}</span>
                 </div>
                 <hr className="my-4 border-gray-400" />
               </div>
