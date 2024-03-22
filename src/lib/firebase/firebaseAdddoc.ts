@@ -8,7 +8,7 @@ export const addDocumentWithSlug = async <T extends { [key: string]: any }>(
   data: T,
   slugField: string = 'title'
 ) => {
-  const slugValue = data[slugField] ? data[slugField] : (data['name'] ? data['name'] : 'default-slug');
+  const slugValue = data[slugField] ? data[slugField] : (Math.floor(Math.random() * 9000000) + 1000000).toString();
   const slug = slugify(slugValue, { lower: true, strict: true, remove: /[*+~.()'"!:@]/g });
   try {
     await setDoc(doc(db, collectionName, slug), { ...data, slug });

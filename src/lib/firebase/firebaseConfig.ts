@@ -39,7 +39,7 @@ export const signInWithGoogle = async (): Promise<User | null> => {
 
     localStorage.setItem('userPhoto', JSON.stringify(user.photoURL));
 
-    await addDocumentWithSlug('users', userData, 'name');
+    await addDocumentWithSlug('users', userData, 'userId');
 
     console.log('Успешный вход:', user);
     return user;
@@ -65,7 +65,7 @@ export const signInWithFacebook = async (): Promise<User | null> => {
       userId: user.uid
     };
 
-    await addDocumentWithSlug('users', userData, 'name');
+    await addDocumentWithSlug('users', userData, 'userId');
     return user;
   } catch (error) {
     console.error('Error with Facebook authentication:', error);
