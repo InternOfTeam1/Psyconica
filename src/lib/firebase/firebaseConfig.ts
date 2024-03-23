@@ -1,6 +1,6 @@
 import { initializeApp, getApp, getApps, FirebaseApp } from 'firebase/app';
 import { Firestore, getFirestore } from 'firebase/firestore';
-import { getAuth, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup, User, signOut } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup, User, signOut, TwitterAuthProvider } from 'firebase/auth';
 import { Users } from '@/interfaces/collections';
 import { addDocumentWithSlug } from '@/lib/firebase/firebaseAdddoc';
 
@@ -50,9 +50,9 @@ export const signInWithGoogle = async (): Promise<User | null> => {
 };
 
 
-export const signInWithFacebook = async (): Promise<User | null> => {
+export const signInWithTwitter = async (): Promise<User | null> => {
   try {
-    const provider = new FacebookAuthProvider();
+    const provider = new TwitterAuthProvider();
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
 

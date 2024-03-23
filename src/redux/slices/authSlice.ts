@@ -1,12 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { signInWithGoogle, signInWithFacebook, signOutUser } from "@/lib/firebase/firebaseConfig";
+import { signInWithGoogle, signInWithTwitter, signOutUser } from "@/lib/firebase/firebaseConfig";
 import { fetchDataFromCollection } from '@/lib/firebase/firebaseGetDocs';
 import { updateUserDataInFirebase } from "@/lib/firebase/firebaseFunctions";
 
 export const login = createAsyncThunk(
   'auth/login',
   async (provider: string) => {
-    const user = provider === 'google' ? await signInWithGoogle() : await signInWithFacebook();
+    const user = provider === 'google' ? await signInWithGoogle() : await signInWithTwitter();
     if (user) {
       const usersData = await fetchDataFromCollection('users');
       const loggedInUser = usersData.find(u => u.mail === user.email);
@@ -71,7 +71,7 @@ const authSlice = createSlice({
         state.user = null;
         state.status = 'idle';
       });
-      builder
+    builder
       .addCase(updateUserProfile.fulfilled, (state, action) => {
       });
   }

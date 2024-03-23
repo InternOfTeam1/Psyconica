@@ -29,15 +29,16 @@ const Header: React.FC = () => {
     }
   }, [isAuthenticated, user, router]);
 
-  const handleLogin = async (provider: 'google' | 'facebook') => { 
+  const handleLogin = async (provider: 'google' | 'facebook') => {
     try {
       await dispatch(login(provider));
-      setIsModalOpenPsy(true) 
-  } catch(error) {
-    console.error(error);
-  } finally{
-    setIsModalOpen(false);
-  }};
+      setIsModalOpenPsy(true)
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsModalOpen(false);
+    }
+  };
 
   const handleLogout = async () => {
     dispatch(logout());
@@ -108,11 +109,11 @@ const Header: React.FC = () => {
 
       </header>
       {isModalOpenPsy && (
-  <PsychologistModal 
-    isOpen={isModalOpenPsy} 
-    onClose={() => setIsModalOpenPsy(false)}
-  />
-)}
+        <PsychologistModal
+          isOpen={isModalOpenPsy}
+          onClose={() => setIsModalOpenPsy(false)}
+        />
+      )}
 
       {isModalOpen && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
@@ -138,7 +139,7 @@ const Header: React.FC = () => {
                         onClick={() => handleLogin('facebook')}
                         className="mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm"
                       >
-                        Log in with Facebook
+                        Log in with Twitter
                       </button>
                     </div>
                   </div>
