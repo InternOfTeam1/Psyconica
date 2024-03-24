@@ -68,11 +68,11 @@ const QuestionDetail = () => {
           <h2 className="font-semibold bg-amber-300 text-gray-600 px-7 py-3 rounded-2xl leading-6 text-center xs:text-sm xs:px-3 sm:text-sm sm:px-4 md:text-base md:px-5 lg:text-lg lg:px-6 xl:text-lg xl:px-7">{questionData.title}</h2>
           {questionData.answers.map((answer: Answers, index: number) => {
             return (
-              <div key={index}>
-                <div className="flex items-center mb-4">
-                  <p className="font-semibold text-gray-700">{answer.num}.</p>
+              <div key={index} className="mt-4">
+                <div className="flex items-start mb-4">
+                  <p className="font-semibold text-gray-600 mr-2">{answer.num}.</p>
                   <div>
-                    <h3 className="font-semibold text-gray-600 px-7 pt-3 rounded-2xl leading-6">{answer.title}</h3>
+                    <h3 className="font-semibold text-gray-600 leading-6">{answer.title}</h3>
                     <p className="text-gray-500 text-sm mt-2">{answer.content}</p>
                   </div>
                 </div>
