@@ -66,8 +66,6 @@ const Header: React.FC = () => {
   return (
     <>
       <header className="flex flex-wrap mx-auto max-w-[1200px] bg-transparent justify-between items-center align-middle xs:mb-[80px] mt-5 mb-[100px]">
-        <h2 className="flex justify-center xs:order-first xs:w-full xs:text-lg xs:whitespace-nowrap sm:order-first sm:w-full sm:text-xl md:order-first md:w-full md:text-2xl lg:order-2 lg:w-auto lg:text-2xl xl:order-2 xl:text-3xl font-balsamiq-sans font-bold text-pink-600">Психология должна быть простой! </h2>
-
 
         <nav className="flex gap-2 xs:order-2 xs:ml-20 sm:order-2 sm:ml-30 md:order-2 md:ml-10 lg:order-1 xl:order-1">
           <Link href="/questions" className='text-gray-600 hover:text-neutral-600 hover:bg-neutral-600 hover:rounded-full hover:text-white uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm px-2'>Вопросы</Link>
