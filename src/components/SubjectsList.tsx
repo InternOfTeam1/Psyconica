@@ -26,8 +26,10 @@ export const SubjectsList: React.FC<{ position: 'left' | 'right' }> = ({ positio
   const subjectsToShow =
     position === 'left' ? subjects.slice(0, half) : subjects.slice(half);
 
+  const containerClasses = `max-w-custom min-w-custom mx-auto ${position === 'left' ? 'mt-[70px]' : 'mt-0'} lg:pl-20  xl:pl-0 grid grid-cols-1 gap-2 p-4 sm:p-6 md:gap-3 lg:gap-3 xl:gap-4`
+
   return (
-    <div className="max-w-custom min-w-custom mx-auto lg:pl-20  xl:pl-0 grid grid-cols-1 gap-2 p-4 sm:p-6 md:gap-3 lg:gap-3 xl:gap-4">
+    <div className={containerClasses}>
       {subjectsToShow.map((subject) => (
         <Link href={`/topics`} key={subject.id}>
           <div
