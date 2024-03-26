@@ -9,26 +9,27 @@ const config: Config = {
   theme: {
     extend: {
       maxWidth: {
-        'custom': '1200px', 
+        'custom': '1200px',
       },
       minWidth: {
-        'custom': '360px', 
+        'custom': '360px',
       },
       screens: {
-    'xs': '360px',
-    'sm': '640px',
-    'md': '768px',
-    'lg': '1024px',
-    'xl': '1200px',
+        'xs': '360px',
+        'sm': '640px',
+        'md': '768px',
+        'lg': '1024px',
+        'xl': '1200px',
+        '2xl': '1536px'
       },
       fontSize: {
         'custom': '22px',
-        'base': ['16px', '24px'], 
-        'sm': ['12px', '16px'], 
-        'lg': ['18px', '28px'], 
+        'base': ['16px', '24px'],
+        'sm': ['12px', '16px'],
+        'lg': ['18px', '28px'],
         'xl': ['20px', '32px'],
       },
-     
+
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
@@ -44,7 +45,7 @@ const config: Config = {
     },
   },
   plugins: [
-    function({ addUtilities, theme }: { addUtilities: any; theme: any }) {
+    function ({ addUtilities, theme }: { addUtilities: any; theme: any }) {
       addUtilities({
         '.text-small-caps': { 'font-variant': 'small-caps' },
       });

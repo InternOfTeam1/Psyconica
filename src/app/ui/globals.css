@@ -4,3 +4,47 @@
 @import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap');
 
+/* .bg-custom-size {
+  background-size: 105%;  
+  background-position: right 15px top 43px;
+} */
+
+@media (min-width: 1200px) { 
+  .bg-custom-size {
+    background-size: 105%;  
+    background-position: right -10px top 49px;
+  }
+} 
+
+
+/* @media (min-width: 1024px) { 
+  .bg-custom-size {
+    background-position: right 15px top 43px;
+  }
+}
+
+
+
+
+/* 
+@media (min-width: 640px) { 
+  .bg-custom-size {
+    background-size: 60%;
+  }
+}
+
+@media (min-width: 768px) { 
+  .bg-custom-size {
+    background-size: 70%;
+  }
+}
+
+
+
+@media (min-width: 1200px) { 
+  .bg-custom-size {
+    background-size: 110%;
+  }
+} */
+
+
