@@ -2,6 +2,8 @@
 import { useState, useEffect } from 'react';
 import Link from "next/link";
 import Social from "@/components/Social";
+import Image from 'next/image';
+import LogoWebP from '/siteName.webp';
 import { HOME_ROUTE, PROFILE_ROUTE } from "@/constants/routes";
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store';
@@ -63,13 +65,22 @@ const Header: React.FC = () => {
 
   return (
     <>
-      <header className="flex flex-wrap mx-auto max-w-[1200px] bg-transparent justify-between items-center align-middle xs:mb-[50px] mt-5 mb-[100px]">
-
-        <nav className="flex gap-2 xs:order-2 xs:ml-20 sm:order-2 sm:ml-30 md:order-2 md:ml-10 lg:order-1 xl:order-1">
-          <Link href="/questions" className='text-gray-600 hover:text-neutral-600 hover:bg-neutral-600 hover:rounded-full hover:text-white uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm px-2'>Вопросы</Link>
-          <Link href="/articles" className='text-gray-600 hover:text-neutral-600 hover:bg-neutral-600 hover:rounded-full hover:text-white uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm px-2'>Статьи</Link>
-        </nav>
-
+  <header className="flex flex-wrap mx-auto max-w-[1200px] bg-transparent justify-between items-center align-middle xs:mb-[50px] mt-5 mb-[100px]">
+  <div className="flex items-center justify-center w-full">
+  <Link href={HOME_ROUTE}>
+    <Image
+      src="/siteName.webp"
+      alt="website name"
+      width={200}
+      height={100}
+      className="max-w-full h-full"
+    />
+  </Link>
+</div>
+    <nav className="flex gap-2 xs:order-2 xs:ml-20 sm:order-2 sm:ml-30 md:order-2 md:ml-10 lg:order-1 xl:order-1">
+      <Link href="/questions" className='text-gray-600 hover:text-neutral-600 hover:bg-neutral-600 hover:rounded-full hover:text-white uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm px-2'>Вопросы</Link>
+      <Link href="/articles" className='text-gray-600 hover:text-neutral-600 hover:bg-neutral-600 hover:rounded-full hover:text-white uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm px-2'>Статьи</Link>
+    </nav>
         <div className="xs:order-2 xs:mr-20 sm:order-2 sm:mr-20 md:order-2 md:mr-30 lg:order-3 xl:order-3 xl:mr-20 mr-5">
           <ul className="flex items-center gap-2 mb-4 align-middle">
             {!isAuthenticated ? (
