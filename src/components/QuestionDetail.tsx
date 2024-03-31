@@ -2,7 +2,7 @@
 import { FaThumbsUp } from 'react-icons/fa';
 import { MdClose } from 'react-icons/md';
 import { fetchDoc } from '@/lib/firebase/firebaseGetDocs';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { Answers } from '@/interfaces/collections';
 import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
@@ -27,7 +27,7 @@ function generateGuestId() {
 }
 
 const QuestionDetail = () => {
-  const [questionData, setQuestionData] = useState<{ title: string; answers: Answers[] } | null>(null);
+  const [questionData, setQuestionData] = useState<{ answers: Answers[] } | null>(null);
   const params = useParams();
   const questionSlug: any = params.slug;
   const userId = useAppSelector((state) => state.auth.user?.id);
@@ -79,7 +79,7 @@ const QuestionDetail = () => {
   }, [questionSlug]);
 
 
-  const onAnswerChange = (e, answerNumber, field = 'title') => {
+  const onAnswerChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>, answerNumber: number, field = 'title') => {
     const newValue = e.target.value;
 
     console.log(questionData)
@@ -93,9 +93,9 @@ const QuestionDetail = () => {
     })
   }
 
-  
+
   const onAnswerAdd = () => {
-    const answers = questionData?.answers;
+    const answers: any = questionData?.answers;
 
     setQuestionData({
       ...questionData,
@@ -113,10 +113,10 @@ const QuestionDetail = () => {
     await updateQuestion(questionSlug, questionData)
   }
 
-  const onAnswerDelete = (answerNum) => {
-    const answers = questionData?.answers;
+  const onAnswerDelete = (answerNum: number) => {
+    const answers: any = questionData?.answers;
 
-    const newAnswers = answers?.filter(answer => answer.num !== answerNum)
+    const newAnswers = answers?.filter((answer: { num: number; }) => answer.num !== answerNum)
 
     setQuestionData({
       ...questionData,
@@ -196,13 +196,13 @@ const QuestionDetail = () => {
       }
 
 
-    {userRole === 'psy' ? (
-      <>
-        <button className="inline-block mt-4 px-6 py-2 font-medium leading-6 text-center text-white uppercase transition bg-blue-500 rounded-full shadow ripple waves-light hover:shadow-lg focus:outline-none hover:bg-blue-600 xs:text-xs sm:text-xs md:text-xs lg:text-sm xl:text-sm"
-                onClick={onAnswerAdd}>Add Answer</button>
-        <button className="inline-block mt-4 px-6 py-2 font-medium leading-6 text-center text-white uppercase transition bg-blue-500 rounded-full shadow ripple waves-light hover:shadow-lg focus:outline-none hover:bg-blue-600 xs:text-xs sm:text-xs md:text-xs lg:text-sm xl:text-sm"
-                onClick={onSave}>Save </button>
-      </>
+      {userRole === 'psy' ? (
+        <>
+          <button className="inline-block mt-4 px-6 py-2 font-medium leading-6 text-center text-white uppercase transition bg-blue-500 rounded-full shadow ripple waves-light hover:shadow-lg focus:outline-none hover:bg-blue-600 xs:text-xs sm:text-xs md:text-xs lg:text-sm xl:text-sm"
+            onClick={onAnswerAdd}>Add Answer</button>
+          <button className="inline-block mt-4 px-6 py-2 font-medium leading-6 text-center text-white uppercase transition bg-blue-500 rounded-full shadow ripple waves-light hover:shadow-lg focus:outline-none hover:bg-blue-600 xs:text-xs sm:text-xs md:text-xs lg:text-sm xl:text-sm"
+            onClick={onSave}>Save </button>
+        </>
       ) : null}
 
       <br />
