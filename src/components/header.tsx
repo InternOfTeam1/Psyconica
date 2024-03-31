@@ -12,16 +12,26 @@ import { useRouter } from 'next/navigation';
 import { setUserState } from "@/redux/slices/authSlice";
 import Cookies from 'js-cookie';
 import PsychologistModal from './PsychologistCheckbox';
+import { openModal, closeModal } from '@/redux/slices/modalSlice';
+
 
 const Header: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
   const userPhoto = useSelector((state: RootState) => state.auth.user?.photo || '');
   const user: any = useSelector((state: RootState) => state.auth.user || '');
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
+  const isModalOpen = useSelector((state: any) => state.modal.isModalOpen);
   const [isModalOpenPsy, setIsModalOpenPsy] = useState(false);
   const router = useRouter();
 
+  const handleOpenModal = () => {
+    dispatch(openModal());
+  };
+
+  const handleCloseModal = () => {
+    dispatch(closeModal());
+  };
 
   useEffect(() => {
     if (isAuthenticated && user) {
@@ -38,7 +48,7 @@ const Header: React.FC = () => {
     } catch (error) {
       console.error(error);
     } finally {
-      setIsModalOpen(false);
+      handleCloseModal();
     }
   };
 
@@ -65,26 +75,26 @@ const Header: React.FC = () => {
 
   return (
     <>
-  <header className="flex flex-wrap mx-auto max-w-[1200px] bg-transparent justify-between items-center align-middle xs:mb-[50px] mt-5 mb-[100px]">
-  <div className="flex items-center justify-center w-full">
-  <Link href={HOME_ROUTE}>
-    <Image
-      src="/siteName.webp"
-      alt="website name"
-      width={200}
-      height={100}
-      className="max-w-full h-full"
-    />
-  </Link>
-</div>
-    <nav className="flex gap-2 xs:order-2 xs:ml-20 sm:order-2 sm:ml-30 md:order-2 md:ml-10 lg:order-1 xl:order-1">
-      <Link href="/questions" className='text-gray-600 hover:text-neutral-600 hover:bg-neutral-600 hover:rounded-full hover:text-white uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm px-2'>Вопросы</Link>
-      <Link href="/articles" className='text-gray-600 hover:text-neutral-600 hover:bg-neutral-600 hover:rounded-full hover:text-white uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm px-2'>Статьи</Link>
-    </nav>
+      <header className="flex flex-wrap mx-auto max-w-[1200px] bg-transparent justify-between items-center align-middle xs:mb-[50px] mt-5 mb-[100px]">
+        <div className="flex items-center justify-center w-full">
+          <Link href={HOME_ROUTE}>
+            <Image
+              src="/siteName.webp"
+              alt="website name"
+              width={200}
+              height={100}
+              className="max-w-full h-full"
+            />
+          </Link>
+        </div>
+        <nav className="flex gap-2 xs:order-2 xs:ml-20 sm:order-2 sm:ml-30 md:order-2 md:ml-10 lg:order-1 xl:order-1">
+          <Link href="/questions" className='text-gray-600 hover:text-neutral-600 hover:bg-neutral-600 hover:rounded-full hover:text-white uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm px-2'>Вопросы</Link>
+          <Link href="/articles" className='text-gray-600 hover:text-neutral-600 hover:bg-neutral-600 hover:rounded-full hover:text-white uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm px-2'>Статьи</Link>
+        </nav>
         <div className="xs:order-2 xs:mr-20 sm:order-2 sm:mr-20 md:order-2 md:mr-30 lg:order-3 xl:order-3 xl:mr-20 mr-5">
           <ul className="flex items-center gap-2 mb-4 align-middle">
             {!isAuthenticated ? (
-              <li onClick={() => setIsModalOpen(true)} className="flex cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 border-solid border-2 border-gray-400 whitespace-nowrap rounded-[20px] mt-5 px-5">Log in with social network</li>
+              <li onClick={handleOpenModal} className="flex cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 border-solid border-2 border-gray-400 whitespace-nowrap rounded-[20px] mt-5 px-5">Log in with social network</li>
             ) : (
               <>
                 <img
@@ -125,7 +135,7 @@ const Header: React.FC = () => {
       {isModalOpen && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex items-center justify-center min-h-screen">
-            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onClick={() => setIsModalOpen(false)}></div>
+            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onClick={handleCloseModal}></div>
 
             <div className="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full">
               <div className="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">

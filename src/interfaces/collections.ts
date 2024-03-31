@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export interface Comment {
   slug: string;
   content: string;
@@ -65,6 +67,12 @@ export interface Question {
   SEOTitle: string;
   SEODesc: string;
   canonical?: string;
+}
+
+
+export interface QuestionData {
+  title?: ReactNode;
+  answers: Answers[];
 }
 
 export interface Data {

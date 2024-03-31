@@ -3,54 +3,59 @@ import { FaThumbsUp } from 'react-icons/fa';
 import { MdClose } from 'react-icons/md';
 import { fetchDoc } from '@/lib/firebase/firebaseGetDocs';
 import { ChangeEvent, useEffect, useState } from 'react';
-import { Answers } from '@/interfaces/collections';
+import { Answers, QuestionData } from '@/interfaces/collections';
 import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useAppSelector } from '../redux/hooks';
 import { updateAnswerLikes, updateQuestion } from '@/lib/firebase/firebaseFunctions';
-import Cookies from 'js-cookie';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/redux/store';
+import { openModal, closeModal } from '@/redux/slices/modalSlice';
 import { nanoid } from '@reduxjs/toolkit';
-
 
 function fetchQuestionData(slug: {}) {
   return fetchDoc('questions', slug);
 }
 
-function generateGuestId() {
-  let guestId = Cookies.get('guestId');
-  if (!guestId) {
-    guestId = crypto.randomUUID();
-    Cookies.set('guestId', guestId, { expires: 3650 }); // Установка cookies на 10 лет
-  }
-  return guestId;
-}
 
 const QuestionDetail = () => {
-  const [questionData, setQuestionData] = useState<{ answers: Answers[] } | null>(null);
+  const [questionData, setQuestionData] = useState<QuestionData | null>(null);
   const params = useParams();
   const questionSlug: any = params.slug;
   const userId = useAppSelector((state) => state.auth.user?.id);
   const userRole = useAppSelector((state) => state.auth.user?.role);
   const MAX_LIKES = 100;
+  const router = useRouter();
+  const dispatch: AppDispatch = useDispatch();
+  const isModalOpen = useSelector((state: any) => state.modal.isModalOpen);
 
-  let userOrGuestId: any = userId || generateGuestId();
+  const handleOpenModal = () => {
+    dispatch(openModal());
+  };
+
+  // const handleCloseModal = () => {
+  //   dispatch(closeModal());
+  // };
 
   const handleLikeClick = async (answerNum: any, answerLikes: string[]) => {
-    const isLiked = answerLikes.includes(userOrGuestId);
+    const isLiked = answerLikes.includes(userId);
+
     let updatedLikes;
 
-    if (!userOrGuestId) {
+    if (!userId) {
+      handleOpenModal()
+
       console.error("User ID is undefined.");
       return;
     }
 
     if (isLiked) {
-      updatedLikes = answerLikes.filter(id => id !== userOrGuestId);
+      updatedLikes = answerLikes.filter(id => id !== userId);
       console.log(updatedLikes)
 
     } else {
-      updatedLikes = [...answerLikes, userOrGuestId];
+      updatedLikes = [...answerLikes, userId];
     }
     try {
       await updateAnswerLikes(answerNum, updatedLikes, questionSlug);
@@ -178,7 +183,7 @@ const QuestionDetail = () => {
 
                 <div className="flex items-center">
                   <FaThumbsUp
-                    className={`text-green-500 mr-1 cursor-pointer ${answer.likes.includes(userOrGuestId) ? 'text-green-700' : ''}`}
+                    className={`text-green-500 mr-1 cursor-pointer ${answer.likes.includes(userId) ? 'text-green-700' : ''}`}
                     onClick={() => handleLikeClick(answer.num, answer.likes)} />
                   <span className="text-gray-500">{answer.likes.length}</span>
                   <div className="flex-1 mx-2.5">
