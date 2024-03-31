@@ -31,3 +31,21 @@ export const updateAnswerLikes = async (answerNum: number, updatedLikes: string[
     console.log("Document does not exist!");
   }
 };
+
+
+export const updateQuestion = async (slug: string, data: any) => {
+  try {
+    const questionDocRef = doc(db, "questions", slug);
+
+    const questionData = await getDoc(questionDocRef);
+  
+    if (questionData.exists()) {
+      await updateDoc(questionDocRef, data);
+    } else {
+      console.log("Document does not exist!");
+    }
+  } catch (e) {
+    console.log(e)
+  }
+
+};

@@ -35,8 +35,8 @@ const QuestionsComponent: React.FC = () => {
 
   return (
     <div className="container mx-auto max-w-[1200px] px-4">
+      
       <h1 className="text-2xl font-bold text-center my-6">Вопросы</h1>
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {questions.map((question, index) => (
           <Link key={index} href={`/questions/${question.slug || question.id}`}>

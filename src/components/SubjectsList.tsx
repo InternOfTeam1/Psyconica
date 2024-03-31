@@ -26,7 +26,7 @@ export const SubjectsList: React.FC<{ position: 'left' | 'right' }> = ({ positio
   const subjectsToShow =
     position === 'left' ? subjects.slice(0, half) : subjects.slice(half);
 
-  const containerClasses = `max-w-custom min-w-custom mx-auto ${position === 'left' ? 'mt-[50px]' : 'mb-[13px]'} lg:pl-20  xl:pl-0  grid grid-cols-1 gap-2 p-4 sm:p-6 md:gap-3 lg:gap-3 xl:gap-4`
+  const containerClasses = `mx-auto ${position === 'left' ? 'mt-[50px]' : 'mb-[13px]'} xl:pl-0  grid grid-cols-1 gap-2 p-4 sm:p-6 md:gap-2 lg:gap-2 xl:gap-3`
 
   return (
     <div className={containerClasses}>
@@ -36,22 +36,20 @@ export const SubjectsList: React.FC<{ position: 'left' | 'right' }> = ({ positio
             className="flex flex-col justify-center bg-no-repeat bg-center rounded-lg"
             style={{
               backgroundImage: `url(${backgroundImageUrl})`,
-              backgroundSize: '107%',
+              backgroundSize: '120%',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',
             }}
           >
 
-            <div className="z-10 space-y-2 p-3 sm:p-4 md:space-y-2 md:p-4 lg:p-2 xl:p-2">
-              <div className=" sm:pl-16 sm:pr-10 md:pl-5 md:pr-1 lg:pl-10 xl:pl-14 xl:pr-10 font-balsamiq-sans font-bold text-small-caps">
+            <div className="z-10 space-y-2 p-3 sm:p-4 md:space-y-2 lg:p-4 xl:p-6 ">
+              <div className=" sm:pl-16 sm:pr-10 md:pl-5 md:pr-1  font-balsamiq-sans font-bold text-small-caps">
                 <h2 className="text-xs sm:text-sm md:text-base xl:text-lg text-gray-600">
                   {subject.title}
                 </h2>
               </div>
             </div>
           </div>
-
-
         </Link>
       ))}
     </div>
