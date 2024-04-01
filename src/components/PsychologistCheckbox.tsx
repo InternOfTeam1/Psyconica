@@ -11,9 +11,12 @@ const PsychologistModal: React.FC<{ isOpen: boolean, onClose: () => void }> = ({
   const userId = useAppSelector((state) => state.auth.user?.id);
 
   useEffect(() => {
-    if (userId) {
-      setIsChecked(false); 
+    const isPsychologistCookie = Cookies.get("isPsychologist");
+    if (userId && isPsychologistCookie) {
+      setIsChecked(isPsychologistCookie === "true");
+      return;
     }
+    setIsChecked(false);
   }, [isOpen, userId]);
 
   const handleChange = () => {
@@ -23,23 +26,13 @@ const PsychologistModal: React.FC<{ isOpen: boolean, onClose: () => void }> = ({
     }
     const newIsPsychologistValue = !isChecked;
     setIsChecked(newIsPsychologistValue);
-  
-    Cookies.set('isPsychologist', String(newIsPsychologistValue), { expires: 7 }); 
+
+    const expirationDays = 7;
+    Cookies.set('isPsychologist', String(newIsPsychologistValue), { expires: expirationDays });
   
     dispatch(updateUserProfile({ userId, isPsychologist: newIsPsychologistValue }));
     onClose(); 
   };
-  
-  useEffect(() => {
-    if (userId) {
-      const isPsychologistCookie = Cookies.get('isPsychologist');
-      if (isPsychologistCookie) {
-        setIsChecked(isPsychologistCookie === 'true'); 
-      } else {
-        setIsChecked(false);
-      }
-    }
-  }, [isOpen, userId]);
 
   return (
     <>

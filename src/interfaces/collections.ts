@@ -7,12 +7,15 @@ export interface Comment {
 }
 
 export interface Video {
-  slug: string;
-  title: string;
-  likes: string[];
-  SEOTitle: string;
-  SEODesc: string;
-  canonical?: string;
+  url: string[];
+  slug?: string; 
+  title?: string;
+  likes?: string[];
+  SEOTitle?: string;
+  SEODesc?: string;
+  canonical?: string; 
+  video: string[];
+  id: string;
 }
 
 export interface Article {
@@ -99,3 +102,4 @@ export interface Data {
   answers?: string[];
   userId?: any;
 }
+
