@@ -10,7 +10,7 @@ const Home: React.FC = () => {
         Психология должна быть простой!
       </h2>
 
-      <div className="flex flex-col items-center min-h-screen w-full p-4 mb-0 mx-auto  xs:mt-[-4rem] sm:mt-[-5rem]  md:mt-[-5rem] lg:mt-[-10rem] xl:mt-[-10rem]">
+      <div className="flex flex-col items-center w-full p-4 mb-0 mx-auto  xs:mt-[-4rem] sm:mt-[-5rem]  md:mt-[-5rem] lg:mt-[-10rem] xl:mt-[-10rem]">
         <div className="w-full flex flex-col lg:flex-row items-center justify-center ">
           <div className="flex flex-col mb-4 sm:mb-[-3rem] md:mb-[-3rem] lg:mb-[-122px] lg:mr-[-50px] ">
 
@@ -18,7 +18,7 @@ const Home: React.FC = () => {
           </div>
 
           <div
-            className="z-10 mx-auto bg-cover bg-no-repeat bg-custom-size min-h-screen w-full "
+            className="z-10 mx-auto bg-cover bg-no-repeat bg-custom-size w-full"
             style={{
               backgroundImage: `url('/mainLogo.png')`,
             }}>
