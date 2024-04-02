@@ -4,67 +4,38 @@
 @import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap');
 
-
 .bg-custom-size {
-  background-size: cover; 
-  min-height: 200px; 
+  background-size: 105%;
+  width: 100%;
+  padding-top: 56.25%;
+  margin-left: 2%;
 }
 
-@media (min-width: 200px) {
+
+@media (max-width: 1024px) {
   .bg-custom-size {
-    background-size: 60%;
-    background-position: 56% 2%;
-    height: 25vh;
+    background-size: 95%;
+    padding-top: 75%; 
+    margin-left: 7%;
+    margin-top: -14%;
   }
 }
 
 
 
-@media (min-width: 360px) {
+@media (max-width: 768px) {
   .bg-custom-size {
-    background-size: 60%;
-    background-position: 56% 2%;
-    height: 33vh;
+    background-size: 92%;
+    padding-top: 75%; 
+    margin-left: 4%;
   }
 }
 
-
-@media (min-width: 640px) {
+@media (max-width: 640px) {
   .bg-custom-size {
-    background-size: 55%;
-    background-position: 160px 25px;
-    height: 42vh;
-  }
-}
-
-@media (min-width: 768px) { 
-  .bg-custom-size {
-    background-size: 58%;
-    background-position: 220px 27px;
-    height: 58vh;
-  }
-}
-
-@media (min-width: 1024px) { 
-  .bg-custom-size {
-    background-size: 100%;
-    background-position: 20px 150px;
-    height: 80vh;
-  }
-}
-
-@media (min-width: 1200px) {
-  .bg-custom-size {
-    background-size: 90%;
-    background-position: 63px 129px ;
-    height: 90vh;
-  }
-}
-
-@media (min-width: 1536px) { 
-  .bg-custom-size {
-    background-size: 80%;
-    background-position: 8rem 4rem ;
-   
+    background-size: 92%;
+    padding-top: 75%; 
+    margin-left: 4%;
+    margin-top: -22%;
   }
 }

@@ -8,12 +8,12 @@ export interface Comment {
 
 export interface Video {
   url: string[];
-  slug?: string; 
+  slug?: string;
   title?: string;
   likes?: string[];
   SEOTitle?: string;
   SEODesc?: string;
-  canonical?: string; 
+  canonical?: string;
   video: string[];
   id: string;
 }
