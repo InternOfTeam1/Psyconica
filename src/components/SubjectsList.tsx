@@ -26,7 +26,7 @@ export const SubjectsList: React.FC<{ position: 'left' | 'right' }> = ({ positio
   const subjectsToShow =
     position === 'left' ? subjects.slice(0, half) : subjects.slice(half);
 
-  const containerClasses = `mx-auto ${position === 'left' ? 'mt-[50px]' : 'mb-[13px]'} xl:pl-0  grid grid-cols-1 gap-2 p-4 sm:p-6 md:gap-2 lg:gap-2 xl:gap-3`
+  const containerClasses = `mx-auto ${position === 'left' ? 'mb-[22%] ml-[7%]' : 'mb-[40%]'} xl:pl-0  grid grid-cols-1 gap-2 p-4 sm:p-6 md:gap-2 lg:gap-2 xl:gap-3`
 
   return (
     <div className={containerClasses}>

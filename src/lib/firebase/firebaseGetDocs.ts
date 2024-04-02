@@ -2,6 +2,10 @@ import { db } from './firebaseConfig';
 import { collection, getDocs, getDoc, doc } from 'firebase/firestore';
 import { Data } from '@/interfaces/collections'
 
+export interface Video {
+  url: string;
+}
+
 
 export const fetchDataFromCollection = async (collectionName: string): Promise<Data[]> => {
   try {
@@ -44,7 +48,8 @@ export const fetchDataFromCollection = async (collectionName: string): Promise<D
           canonical: docData.canonical || "No canonical",
           comments: docData.comments,
           likes: docData.likes,
-          answers: docData.answers
+          answers: docData.answers,
+          video: docData.video, 
         });
       } else {
         data.push({
@@ -75,6 +80,25 @@ export const fetchDoc = async (collectionName: string, slug: any) => {
       console.log("No such document!");
       return null;
     }
+  } catch (error) {
+    console.error("Error fetching document:", error);
+    throw error;
+  }
+};
+export const fetchVideosFromQuestion = async (docId: string): Promise<Video[]> => {
+  try {
+    const docRef = doc(db, 'questions', docId);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      const docData = docSnap.data();
+      if (docData.video && Array.isArray(docData.video)) {
+        return docData.video.map((url: string) => ({ url }));
+      }
+    } else {
+      console.log("No such document!");
+    }
+    return [];
   } catch (error) {
     console.error("Error fetching document:", error);
     throw error;

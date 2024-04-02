@@ -1,5 +1,6 @@
 import QuestionsComponent from '@/components/forQuestionsPage';
 
+
 const Questions: React.FC = () => {
   return (
     <div>

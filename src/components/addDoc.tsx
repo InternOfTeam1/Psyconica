@@ -108,7 +108,10 @@ const Video: Video = {
   likes: [],
   SEOTitle: "Video SEO Title",
   SEODesc: "SEO description for video",
-  canonical: "https://example.com/videos/example-video"
+  canonical: "https://example.com/videos/example-video",
+  url: [],
+  video: [],
+  id: ''
 };
 
 

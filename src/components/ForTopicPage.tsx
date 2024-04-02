@@ -4,6 +4,7 @@ import { fetchDataFromCollection } from '@/lib/firebase/firebaseGetDocs';
 import { Data } from '@/interfaces/collections';
 import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
+import VideosFetcher from './VideosFetcher';
 
 const Topics: React.FC = () => {
   const [topics, setTopics] = useState<Data[]>([]);
@@ -36,6 +37,9 @@ const Topics: React.FC = () => {
   return (
     <div className="container mx-auto px-4">
       <h1 className="text-2xl font-bold text-center my-6">Темы</h1>
+      <div className="w-full lg:w-1/4 px-1 mb-4 lg:mb-0"> 
+          <VideosFetcher />
+        </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {topics.map((topic, index) => (
