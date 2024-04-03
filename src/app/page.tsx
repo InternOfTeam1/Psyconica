@@ -28,13 +28,13 @@ const Home: React.FC = () => {
 
   return (
     <>
-      <h2 className="text-center text-xl  sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-balsamiq-sans font-bold text-pink-600 mb-36">
+      <h2 className="text-center text-xl  sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-balsamiq-sans font-bold text-pink-600 lg:mb-20 mb-36">
         Психология должна быть простой!
       </h2>
 
       <div className="z-30  flex flex-col items-center w-full p-4 mb-0 mx-auto  xs:mt-[-4rem] sm:mt-[-5rem]  md:mt-[-5rem] lg:mt-[-10rem] xl:mt-[-10rem]">
         <div className="z-30 w-full flex flex-col lg:flex-row items-center justify-center ">
-          <div className="z-30 flex flex-col mb-4 sm:mb-[-3rem] md:mb-[-3rem] lg:mb-[-122px] lg:mr-[-50px] ">
+          <div className="z-30 mb-4 sm:mb-[-3rem] md:mb-[-3rem] lg:mb-[-122px] lg:mr-[-50px] ">
 
             <SubjectsList position="left" />
           </div>
