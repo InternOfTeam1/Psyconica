@@ -28,26 +28,25 @@ const Home: React.FC = () => {
 
   return (
     <>
-      <h2 className="text-center text-xl  sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-balsamiq-sans font-bold text-pink-600 lg:mb-20 mb-36">
+      <h2 className="text-center  sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-balsamiq-sans font-bold text-pink-600 mb-2">
         Психология должна быть простой!
       </h2>
 
-      <div className="z-30  flex flex-col items-center w-full p-4 mb-0 mx-auto  xs:mt-[-4rem] sm:mt-[-5rem]  md:mt-[-5rem] lg:mt-[-10rem] xl:mt-[-10rem]">
-        <div className="z-30 w-full flex flex-col lg:flex-row items-center justify-center ">
-          <div className="z-30 mb-4 sm:mb-[-3rem] md:mb-[-3rem] lg:mb-[-122px] lg:mr-[-50px] ">
+      <div className="z-30 mx-auto flex flex-col items-center w-full ">
+        <div className="z-30 min-h-screen w-full flex flex-col lg:flex-row items-center justify-center ">
+          <div className="z-30 mt-[8%] lg:mr-[-50px] lg:mt-[-2%] xl:mt-[8%]">
 
             <SubjectsList position="left" />
           </div>
-
           <div
-            className="mx-auto bg-no-repeat bg-custom-size"
+            className="mx-auto min-h-screen  bg-no-repeat bg-custom-size"
             style={{
-              backgroundImage: `url('/mainLogo.png')`,
+              backgroundImage: `url('/mainLogo.png')`
             }}>
 
           </div>
 
-          <div className=" z-11 mt-2 md:mt-1 lg:mt-40 lg:ml-[-37px] xl:mt-[181px]  sm:mt-1 xl:mk-10 " >
+          <div className="z-30 mt-[-25%] xs:mt-[-16%] s:mt-0  sm:mt-0 md:mt-[2%] lg:ml-[-37px] lg:mt-[0] xl:mt-[10%]" >
             <SubjectsList position="right" />
           </div>
         </div>
@@ -58,8 +57,3 @@ const Home: React.FC = () => {
 };
 
 export default Home;
-
-// lg:ml-[-4rem] xl:ml-[-2rem]
-
-// it's for adding data to firestore through code faster
-// addEntities().then(() => console.log("All entities added successfully.")).catch((error) => console.error(error));
