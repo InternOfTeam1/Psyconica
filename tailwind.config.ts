@@ -25,9 +25,9 @@ const config: Config = {
       },
       fontSize: {
         'custom': '22px',
-        'base': ['16px', '24px'],
+        'base': ['16px', '20px'],
         'sm': ['12px', '16px'],
-        'lg': ['18px', '28px'],
+        'lg': ['17px', '24px'],
         'xl': ['20px', '32px'],
       },
 
