@@ -3,8 +3,12 @@ import { db } from "./firebaseConfig";
 
 export const updateUserDataInFirebase = async (userId: string, data: object) => {
   const userRef = doc(db, "users", userId);
-  console.log(data);
-  await updateDoc(userRef, data);
+  try {
+    await updateDoc(userRef, data);
+    console.log("Данные пользователя успешно обновлены.");
+  } catch (error) {
+    console.error("Ошибка при обновлении данных пользователя:", error);
+  }
 };
 
 

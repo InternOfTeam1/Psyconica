@@ -36,8 +36,8 @@ const initialState: any = {
 
 export const updateUserProfile = createAsyncThunk(
   'auth/updateUserProfile',
-  async ({ userId, isPsychologist }: { userId: string; isPsychologist: boolean }, { dispatch }) => {
-    debugger
+  async ({ userId, isPsychologist }: { userId: string; isPsychologist: boolean }, thunkAPI) => {
+    console.log(`Обновление профиля пользователя ${userId} на роль ${isPsychologist ? 'psy' : 'user'}`);
     await updateUserDataInFirebase(userId, { role: isPsychologist ? 'psy' : 'user' });
   }
 );

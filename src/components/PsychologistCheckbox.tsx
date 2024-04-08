@@ -4,6 +4,7 @@ import { updateUserProfile } from '../redux/slices/authSlice';
 import { AppDispatch } from '../redux/store';
 import { useAppSelector } from '../redux/hooks';
 import Cookies from 'js-cookie';
+import { updateUserDataInFirebase } from '../lib/firebase/firebaseFunctions'; 
 
 const PsychologistModal: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ isOpen, onClose }) => {
   const [isChecked, setIsChecked] = useState(false);
@@ -14,25 +15,24 @@ const PsychologistModal: React.FC<{ isOpen: boolean, onClose: () => void }> = ({
     const isPsychologistCookie = Cookies.get("isPsychologist");
     if (userId && isPsychologistCookie) {
       setIsChecked(isPsychologistCookie === "true");
-      return;
+    } else {
+      setIsChecked(false);
     }
-    setIsChecked(false);
   }, [isOpen, userId]);
 
-  const handleChange = () => {
+  const handleCheckboxChange = async () => {
     if (!userId) {
       console.error('ID пользователя не найден');
       return;
     }
     const newIsPsychologistValue = !isChecked;
     setIsChecked(newIsPsychologistValue);
-
     const expirationDays = 7;
     Cookies.set('isPsychologist', String(newIsPsychologistValue), { expires: expirationDays });
-  
+    await updateUserDataInFirebase(userId, { role: newIsPsychologistValue ? 'psy' : 'user' });
     dispatch(updateUserProfile({ userId, isPsychologist: newIsPsychologistValue }));
-    onClose(); 
   };
+
 
   return (
     <>
@@ -45,7 +45,7 @@ const PsychologistModal: React.FC<{ isOpen: boolean, onClose: () => void }> = ({
           
           <div className="mt-4">
             <label className="inline-flex items-center">
-              <input type="checkbox" className="form-checkbox text-indigo-600" checked={isChecked} onChange={handleChange}/>
+              <input type="checkbox" className="form-checkbox text-indigo-600" checked={isChecked} onChange={handleCheckboxChange}/>
               <span className="ml-2">Я психолог</span>
             </label>
           </div>
@@ -60,4 +60,3 @@ const PsychologistModal: React.FC<{ isOpen: boolean, onClose: () => void }> = ({
 };
 
 export default PsychologistModal;
-

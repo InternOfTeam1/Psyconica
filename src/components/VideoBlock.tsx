@@ -44,7 +44,7 @@ export const VideoBlock = ({ videos }: VideoBlockProps) => {
   <Dialog open={isOpen} onClose={() => setIsOpen(false)} className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center">
     <Dialog.Overlay className="fixed inset-0" />
     <Dialog.Panel className="m-4 bg-white  mx-auto">
-      {renderIframe(selectedVideoUrl, "100%", "300")}
+      {renderIframe(selectedVideoUrl, "200%", "400")}
       <div className="text-center mt-4">
         <a href={`https://www.youtube.com/watch?v=${selectedVideoUrl.split("/embed/")[1]}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
           Перейти в ютуб
