@@ -8,8 +8,8 @@ import { HOME_ROUTE } from '@/constants/routes';
 import { useParams } from 'next/navigation';
 import VideosFetcher from './VideosFetcher';
 
-function fetchQuestionData(slug: {}) {
-  return fetchDoc('topic', slug);
+function fetchTopicData(slug: {}) {
+  return fetchDoc('topics', slug);
 }
 
 const TopicDetail = () => {
@@ -20,7 +20,7 @@ const TopicDetail = () => {
   useEffect(() => {
     const fetchData = async () => {
       if (topicSlug) {
-        const data: any = await fetchQuestionData(topicSlug);
+        const data: any = await fetchTopicData(topicSlug);
         setTopicData(data);
       }
     };

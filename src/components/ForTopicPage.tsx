@@ -5,11 +5,14 @@ import { Data } from '@/interfaces/collections';
 import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
 import VideosFetcher from './VideosFetcher';
+import { useRouter } from 'next/navigation';
 
-const Topics: React.FC = () => {
+const TopicsComponent: React.FC = () => {
   const [topics, setTopics] = useState<Data[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchTopics = async () => {
@@ -33,17 +36,22 @@ const Topics: React.FC = () => {
   if (error) {
     return <div>Error: {error}</div>;
   }
+  const handleClick = async (url: any) => {
+    setIsLoading(true);
+    await router.push(url);
+    setIsLoading(false);
+  };
 
   return (
     <div className="container mx-auto px-4">
       <h1 className="text-2xl font-bold text-center my-6">Темы</h1>
-      <div className="w-full lg:w-1/4 px-1 mb-4 lg:mb-0"> 
-          <VideosFetcher />
-        </div>
+      <div className="w-full lg:w-1/4 px-1 mb-4 lg:mb-0">
+        <VideosFetcher />
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {topics.map((topic, index) => (
-          <div key={index} className="bg-white p-6 rounded-lg shadow-md">
+          <div key={index} onClick={() => handleClick(`/questions/${topic.slug || topic.id}`)} className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-xl font-semibold">{topic.title}</h2>
             <p className="text-xl font-semibold">{topic.description}</p>
           </div>
@@ -59,4 +67,4 @@ const Topics: React.FC = () => {
   );
 };
 
-export default Topics;
+export default TopicsComponent;

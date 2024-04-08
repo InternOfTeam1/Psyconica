@@ -1,10 +1,10 @@
 import React from 'react';
-import Topics from '@/components/ForTopicPage';
+import TopicsComponent from '@/components/ForTopicPage';
 
 const TopicsPage: React.FC = () => {
   return (
     <>
-      <Topics />
+      <TopicsComponent />
     </>
   );
 };
