@@ -1,7 +1,6 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { SubjectsList } from '@/components/SubjectsList';
-
+import TopicsComponent from '@/components/topics';
 
 const Home: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -36,7 +35,7 @@ const Home: React.FC = () => {
         <div className="z-30 flex flex-col lg:flex-row items-center justify-center ">
           <div className="z-30 mt-[8%] lg:mt-[-2%] xl:mt-[8%]">
 
-            <SubjectsList position="left" />
+            <TopicsComponent position="left" />
           </div>
           <div
             className="mx-auto w-full bg-no-repeat bg-custom-size"
@@ -47,7 +46,7 @@ const Home: React.FC = () => {
           </div>
 
           <div className="z-30 mt-[-25%] xs:mt-[-16%] s:mt-0 sm:mt-0 md:mt-[3%] lg:mt-[-2.3%] xl:mt-[8.5%]" >
-            <SubjectsList position="right" />
+            <TopicsComponent position="right" />
           </div>
         </div>
       </div>
