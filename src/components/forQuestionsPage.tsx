@@ -15,27 +15,29 @@ const QuestionsComponent: React.FC = () => {
   const [error, setError] = useState<string>('');
   const router = useRouter();
 
-  const handleClick = async (url: any) => {
-    setIsLoading(true);
-    await router.push(url);
-    setIsLoading(false);
-  };
-
-
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
         const questionsData = await fetchDataFromCollection('questions');
         setQuestions(questionsData);
+        setLoading(false);
       } catch (error) {
         console.error('Error loading topics: ', error);
         setError('Failed to load topics.');
-      } finally {
         setLoading(false);
       }
     };
     fetchQuestions();
   }, []);
+
+  const handleClick = async (url: string) => {
+    try {
+      await router.push(url);
+    } catch (error) {
+      console.error('Navigation error:', error);
+    }
+  };
+
 
   if (loading) {
     return <div className="flex justify-center items-center h-screen">Loading...</div>;
@@ -56,7 +58,11 @@ const QuestionsComponent: React.FC = () => {
         <div className="w-full lg:w-3/4 px-2">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {questions.map((question, index) => (
-              <div key={index} onClick={() => handleClick(`/questions/${question.slug || question.id}`)} className="cursor-pointer">
+              <div key={index} onClick={() => handleClick(`/questions/${question.slug || question.id}`)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => e.key === 'Enter' && handleClick(`/questions/${question.slug || question.id}`)}
+                className="cursor-pointer">
                 <div className="bg-white p-6 rounded-lg shadow-md cursor-pointer hover:bg-gray-100 focus:bg-gray-100">
                   <h2 className="text-xl font-semibold">{question.title}</h2>
                   {isLoading ? <h2>Loading...</h2> : <h2 className="text-xl font-semibold">{question.title}</h2>}
