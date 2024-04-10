@@ -211,9 +211,9 @@ const QuestionDetail = () => {
       {userRole === 'psy' ? (
         <>
           <button className='text-gray-600 hover:text-neutral-600 hover:text-gray-800 uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 px-2'
-            onClick={onAnswerAdd}>Add Answer</button>
+            onClick={onAnswerAdd}>Ответить</button>
           <button className='text-gray-600 hover:text-neutral-600 hover:text-gray-800 uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 px-2'
-            onClick={onSave}>Save </button>
+            onClick={onSave}>Сохранить </button>
         </>
       ) : null}
 
