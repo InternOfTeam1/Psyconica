@@ -61,9 +61,9 @@ const QuestionsComponent: React.FC = () => {
         </div>
         <div className="w-full lg:w-3/4 px-2">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {questions.map((question, index) => (
-              <Link href={`/questions/${question.slug || question.id}`}>
-                <div key={index} onClick={(e) => handleClick(`/questions/${question.slug || question.id}`, e)}
+            {questions.map((question) => (
+              <Link key={question.slug || question.id} href={`/questions/${question.slug || question.id}`}>
+                <div onClick={(e) => handleClick(`/questions/${question.slug || question.id}`, e)}
                   role="button"
                   tabIndex={0}
                   onKeyDown={(e) => e.key === 'Enter' && handleClick(`/questions/${question.slug || question.id}`, e)}
