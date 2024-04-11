@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { fetchDataFromCollection } from '@/lib/firebase/firebaseGetDocs';
 import { Data } from '@/interfaces/collections';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 const TopicsComponent: React.FC<{ position: 'left' | 'right' }> = ({ position }) => {
   const [topics, setTopics] = useState<Data[]>([]);
@@ -32,7 +33,8 @@ const TopicsComponent: React.FC<{ position: 'left' | 'right' }> = ({ position })
     return <div>Error: {error}</div>;
   }
 
-  const handleClick = async (url: string) => {
+  const handleClick = async (url: string, e: React.MouseEvent<HTMLDivElement> | React.KeyboardEvent<HTMLDivElement>) => {
+    e.preventDefault();
     try {
       await router.push(url);
     } catch (error) {
@@ -43,35 +45,39 @@ const TopicsComponent: React.FC<{ position: 'left' | 'right' }> = ({ position })
   return (
     <button className="z-10 mx-auto grid grid-cols-1 gap-2 p-0 md:gap-2 lg:gap-2 xl:gap-6" style={contentStyle}>
       {topicToShow.map((topic, index) => (
-        <div
-          key={index}
-          className="z-10 w-full flex flex-col justify-center bg-no-repeat bg-center rounded-lg cursor-pointer"
-          onMouseDown={(e) => {
-            if (e.button === 1) {
-              e.preventDefault();
-              window.open(`/topics/${topic.slug || topic.id}`, '_blank');
-            }
-          }}
-          onClick={() => handleClick(`/topics/${topic.slug || topic.id}`)}
-          role="button"
-          tabIndex={0}
-          onKeyDown={(e) => e.key === 'Enter' && handleClick(`/topics/${topic.slug || topic.id}`)}
 
-          style={{
-            backgroundImage: `url(${backgroundImageUrl})`,
-            backgroundSize: '120%',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-          }}
-        >
+        <Link key={topic.id} href={`/topics/${topic.slug || topic.id}`} passHref>
+          <div
+            key={index}
+            className="z-10 w-full flex flex-col justify-center bg-no-repeat bg-center rounded-lg cursor-pointer"
+            onMouseDown={(e) => {
+              if (e.button === 1) {
+                e.preventDefault();
+                window.open(`/topics/${topic.slug || topic.id}`, '_blank');
+              }
+            }}
+            onClick={(e) => handleClick(`/topics/${topic.slug || topic.id}`, e)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => e.key === 'Enter' && handleClick(`/topics/${topic.slug || topic.id}`, e)}
 
-          <div className="z-10 space-y-2 md:space-y-2  xs:pt-2 xs:pb-2 xs:pl-7 xs:pr-7 sm:pl-16 sm:pr-12 md:pl-[3.25rem] md:pr-[3.25rem] md:pt-1 md:pb-1 lg:pl-[2.25rem] lg:pr-[2.25rem] lg:pt-1 lg:pb-1" style={textStyle}>
-            <h2 className="font-balsamiq-sans font-bold text-small-caps text-xs sm:text-sm md:text-base lg:text-base xl:text-lg text-gray-600">
-              {topic.title}
-            </h2>
+            style={{
+              backgroundImage: `url(${backgroundImageUrl})`,
+              backgroundSize: '120%',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+            }}
+          >
 
+            <div className="z-10 space-y-2 md:space-y-2  xs:pt-2 xs:pb-2 xs:pl-7 xs:pr-7 sm:pl-16 sm:pr-12 md:pl-[3.25rem] md:pr-[3.25rem] md:pt-1 md:pb-1 lg:pl-[2.25rem] lg:pr-[2.25rem] lg:pt-1 lg:pb-1" style={textStyle}>
+              <h2 className="font-balsamiq-sans font-bold text-small-caps text-xs sm:text-sm md:text-base lg:text-base xl:text-lg text-gray-600">
+                {topic.title}
+              </h2>
+
+            </div>
           </div>
-        </div>
+        </Link>
+
       ))}
 
     </button>

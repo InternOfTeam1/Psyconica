@@ -53,11 +53,26 @@
   }
 }
 
-@media (min-width: 360px) and (max-width: 639px) {
+@media (min-width: 400px) and (max-width: 639px) {
   .bg-custom-size {
     background-size: 90%;
     margin-left: 8%;
-    margin-top: 0;
+    margin-top: 2%;
+    width: 70%;
+    margin-right: 0;
+    min-height: 14rem;
+  }
+}
+
+@media (min-width: 360px) and (max-width: 399px) {
+  .bg-custom-size {
+    background-size: 90%;
+    margin-left: 8%;
+    margin-top: 2%;
+    width: 70%;
+    margin-right: 0;
+    padding-top: 70%;
+    min-height: 12rem;
   }
 }
 
@@ -65,5 +80,6 @@
   .bg-custom-size {
     margin-left: 6%;
     margin-top: 2%;
+    margin-bottom: 10%;
   }
 }
