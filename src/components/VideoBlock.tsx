@@ -26,7 +26,7 @@ export const VideoBlock = ({ videos }: VideoBlockProps) => {
       className="rounded-lg" 
     ></iframe>
   );
-
+console.log(selectedVideoUrl.split("/embed/")[1])
   return (
     <div className="p-3 m-4 bg-white rounded-2xl shadow-2xl border"> 
       <div className="flex flex-wrap justify-center gap-2"> 
@@ -42,7 +42,6 @@ export const VideoBlock = ({ videos }: VideoBlockProps) => {
       </div>
       {isOpen && (
   <Dialog open={isOpen} onClose={() => setIsOpen(false)} className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center">
-    <Dialog.Overlay className="fixed inset-0" />
     <Dialog.Panel className="m-4 bg-white  mx-auto">
       {renderIframe(selectedVideoUrl, "200%", "400")}
       <div className="text-center mt-4">

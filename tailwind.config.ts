@@ -27,7 +27,7 @@ const config: Config = {
         'custom': '22px',
         'base': ['16px', '20px'],
         'sm': ['12px', '16px'],
-        'lg': ['17px', '24px'],
+        'lg': ['17px', '20px'],
         'xl': ['20px', '32px'],
       },
 
