@@ -8,13 +8,12 @@ import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
 import { useParams, useRouter } from 'next/navigation';
 import { useAppSelector } from '../redux/hooks';
-import { updateAnswerLikes, updateQuestion, updateComment } from '@/lib/firebase/firebaseFunctions';
+import { updateAnswerLikes, updateQuestion } from '@/lib/firebase/firebaseFunctions';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store';
 import { openModal, closeModal } from '@/redux/slices/modalSlice';
 import { nanoid } from '@reduxjs/toolkit';
 import VideosFetcher from './VideosFetcher';
-import { DiVim } from 'react-icons/di';
 
 function fetchQuestionData(slug: {}) {
   return fetchDoc('questions', slug);
@@ -23,8 +22,6 @@ function fetchQuestionData(slug: {}) {
 
 const QuestionDetail = () => {
   const [questionData, setQuestionData] = useState<QuestionData | null>(null);
-  const [answerForComments, setAnswerForComments] = useState<any>(null);
-  const [lastCommentId, setLastCommentId] = useState<any>(null);
   const params = useParams();
   const questionSlug: any = params.slug;
   const userId = useAppSelector((state) => state.auth.user?.id);
@@ -132,59 +129,7 @@ const QuestionDetail = () => {
       answers: newAnswers
     })
   }
-
-  const onCommentAdd = (answerIndex: number) => {
-    setAnswerForComments(answerIndex)
-    const commentId = nanoid();
-    setLastCommentId(commentId)
-    const comments = questionData?.comments;
-
-    setQuestionData({
-      ...questionData,
-      comments: [...comments, {
-        content: '',
-        num: commentId,
-        answerId: answerIndex,
-      }]
-    })
-  }
-
-
-
-  const onCommentChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>, commentNumber: string) => {
-    const newValue = e.target.value;
-
-    const comments = questionData?.comments;
-
-    const changedAnswers = comments?.map(comment => commentNumber === comment.num ? { ...comment, content: newValue } : comment);
-
-    setQuestionData({
-      ...questionData,
-      comments: changedAnswers ?? []
-    })
-  }
-
-  const onCommentSave = async () => {
-    await updateComment(questionSlug, questionData)
-
-    setAnswerForComments(null)
-    setLastCommentId(null)
-  }
-
-  const onCommentDelete = async (commentNum: string) => {
-    const comments: any = questionData?.comments;
-
-    const newComments = comments?.filter((comment: { num: number; }) => comment.num !== commentNum)
-
-    const updatedQuestion = {
-      ...questionData,
-      comments: newComments
-    }
-
-    setQuestionData(updatedQuestion)
-    await updateComment(questionSlug, updatedQuestion)
-  }
-
+  const sortedAnswers = questionData?.answers?.sort((a, b) => b.likes.length - a.likes.length) || [];
 
   return (
     <div className="container mx-auto px-4 py-4 max-w-7xl">
@@ -197,7 +142,7 @@ const QuestionDetail = () => {
             <>
               <h2 className="font-semibold bg-amber-300 text-gray-600 px-7 py-3 rounded-2xl leading-6 text-center xs:text-sm xs:px-3 sm:text-sm sm:px-4 md:text-base md:px-5 lg:text-lg lg:px-6 xl:text-lg xl:px-7">{questionData.title}</h2>
 
-              {questionData.answers?.map((answer: Answers, index: number) => {
+              {sortedAnswers.map((answer: Answers, index: number) => {
                 const progressWidth = (answer.likes.length / MAX_LIKES) * 100;
                 return (
                   <div key={index} className="mt-4 w-full">
@@ -254,42 +199,6 @@ const QuestionDetail = () => {
                         </div>
                       </div>
                     </div>
-
-                    <div className='font-semibold text-gray-600 leading-6 mt-2'>
-                      Комментарии:
-                      <div>
-                        {
-                          questionData?.comments?.filter(comment => comment.answerId === answer.num && comment.num !== lastCommentId).map((comment, index) => (
-                            <div className='flex font-semibold text-gray-500 text-sm leading-6'>
-                              {index + 1}.
-                              <div className='ml-3'>{comment.content}</div>
-                              <div className='cursor-pointer ml-3 mt-1' onClick={() => onCommentDelete(comment.num)}>
-                                <MdClose />
-                              </div>
-                            </div>
-
-                          ))
-                        }
-                      </div>
-                    </div>
-
-                    {userRole === 'user' ? (
-                      <>
-                        {answerForComments === answer.num ?
-                          <>
-                            <input
-                              type="text"
-                              className='w-full font-semibold text-gray-500 text-sm leading-6 mt-2'
-                              onChange={(e) => onCommentChange(e, lastCommentId)}
-                              placeholder=" Текст комментария..."
-                            />
-                            <button className='text-gray-600 hover:text-neutral-600 hover:text-gray-800 uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 px-2'
-                              onClick={() => onCommentSave()}>Сохранить</button>
-                          </>
-                          : (<button className='text-gray-600 hover:text-neutral-600 hover:text-gray-800 uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 px-2'
-                            onClick={() => onCommentAdd(answer.num)}>Комментировать</button>)}
-                      </>
-                    ) : null}
                     <hr className="my-4 border-gray-400" />
                   </div>
                 );
@@ -304,11 +213,9 @@ const QuestionDetail = () => {
               <button className='text-gray-600 hover:text-neutral-600 hover:text-gray-800 uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 px-2'
                 onClick={onAnswerAdd}>Ответить</button>
               <button className='text-gray-600 hover:text-neutral-600 hover:text-gray-800 uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 px-2'
-                onClick={onSave}>Сохранить</button>
+                onClick={onSave}>Сохранить </button>
             </>
           ) : null}
-
-
 
           <br />
 
