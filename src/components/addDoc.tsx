@@ -100,6 +100,8 @@ const Comment: Comment = {
   slug: "",
   content: "hi",
   date: new Date().toISOString(),
+  num: '',
+  answerId: 0
 };
 
 const Video: Video = {

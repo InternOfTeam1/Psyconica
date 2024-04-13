@@ -30,7 +30,7 @@ const Home: React.FC = () => {
 
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center" >
       <h2 className="text-center  sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-balsamiq-sans font-bold text-pink-600 mb-2">
         Психология должна быть простой!
       </h2>

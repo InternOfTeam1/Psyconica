@@ -8,36 +8,32 @@ import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
 import { useParams, useRouter } from 'next/navigation';
 import { useAppSelector } from '../redux/hooks';
-import { updateAnswerLikes, updateQuestion } from '@/lib/firebase/firebaseFunctions';
+import { updateAnswerLikes, updateQuestion, updateComment } from '@/lib/firebase/firebaseFunctions';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store';
 import { openModal, closeModal } from '@/redux/slices/modalSlice';
 import { nanoid } from '@reduxjs/toolkit';
 import VideosFetcher from './VideosFetcher';
+import { DiVim } from 'react-icons/di';
 
 function fetchQuestionData(slug: {}) {
   return fetchDoc('questions', slug);
 }
 
-
 const QuestionDetail = () => {
   const [questionData, setQuestionData] = useState<QuestionData | null>(null);
+  const [answerForComments, setAnswerForComments] = useState<any>(null);
+  const [lastCommentId, setLastCommentId] = useState<any>(null);
   const params = useParams();
   const questionSlug: any = params.slug;
   const userId = useAppSelector((state) => state.auth.user?.id);
   const userRole = useAppSelector((state) => state.auth.user?.role);
   const MAX_LIKES = 100;
-  const router = useRouter();
   const dispatch: AppDispatch = useDispatch();
-  const isModalOpen = useSelector((state: any) => state.modal.isModalOpen);
 
   const handleOpenModal = () => {
     dispatch(openModal());
   };
-
-  // const handleCloseModal = () => {
-  //   dispatch(closeModal());
-  // };
 
   const handleLikeClick = async (answerNum: any, answerLikes: string[]) => {
     const isLiked = answerLikes.includes(userId);
@@ -129,6 +125,69 @@ const QuestionDetail = () => {
       answers: newAnswers
     })
   }
+
+  const onCommentAdd = (answerIndex: number) => {
+    setAnswerForComments(answerIndex)
+    const commentId = nanoid();
+    setLastCommentId(commentId)
+    const comments = questionData?.comments;
+
+    setQuestionData(currentData => ({
+      ...currentData,
+      answers: currentData?.answers || [],
+      comments: [
+        ...(currentData?.comments || []),
+        {
+          content: '',
+          num: commentId,
+          answerId: answerIndex,
+        }
+      ]
+    }));
+
+
+
+  }
+
+  const onCommentChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>, commentNumber: string) => {
+    const newValue = e.target.value;
+
+    setQuestionData(currentData => {
+      const updatedComments = currentData?.comments?.map(comment =>
+        commentNumber === comment.num.toString() ? { ...comment, content: newValue } : comment
+      ) ?? [];
+
+      return {
+        ...currentData,
+        answers: currentData?.answers ?? [],
+        comments: updatedComments
+      };
+    });
+
+  }
+
+  const onCommentSave = async () => {
+    await updateComment(questionSlug, questionData)
+
+    setAnswerForComments(null)
+    setLastCommentId(null)
+  }
+
+  const onCommentDelete = async (commentNum: any) => {
+    const comments: any = questionData?.comments;
+
+    const newComments = comments?.filter((comment: { num: any }) => comment.num !== commentNum)
+
+    const updatedQuestion = {
+      ...questionData,
+      answers: questionData?.answers ?? [],
+      comments: newComments
+    }
+
+    setQuestionData(updatedQuestion)
+    await updateComment(questionSlug, updatedQuestion)
+  }
+
   const sortedAnswers = questionData?.answers?.sort((a, b) => b.likes.length - a.likes.length) || [];
 
   return (
@@ -199,6 +258,46 @@ const QuestionDetail = () => {
                         </div>
                       </div>
                     </div>
+
+
+                    <div className='font-semibold text-gray-600 leading-6 mt-2'>
+                      Комментарии:
+                      <div>
+                        {
+                          questionData?.comments?.filter(comment => comment.answerId === answer.num && comment.num !== lastCommentId).map((comment, index) => (
+                            <div key={index} className='flex font-semibold text-gray-500 text-sm leading-6'>
+                              {index + 1}.
+                              <div className='ml-3'>{comment.content}</div>
+                              <div className='cursor-pointer ml-3 mt-1' onClick={() => onCommentDelete(comment.num)}>
+                                <MdClose />
+                              </div>
+                            </div>
+
+                          ))
+                        }
+                      </div>
+                    </div>
+
+                    {userRole === 'user' || 'psy' ? (
+                      <>
+                        {answerForComments === answer.num ?
+                          <>
+                            <input
+                              type="text"
+                              className='w-full font-semibold text-gray-500 text-sm leading-6 mt-2'
+                              onChange={(e) => onCommentChange(e, lastCommentId)}
+                              placeholder=" Текст комментария..."
+                            />
+                            <button className='text-gray-600 hover:text-neutral-600 hover:text-gray-800 uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 px-2'
+                              onClick={() => onCommentSave()}>Отправить</button>
+                          </>
+                          : (<button className='text-gray-600 hover:text-neutral-600 hover:text-gray-800 uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 px-2'
+                            onClick={() => onCommentAdd(answer.num)}>Комментировать</button>)}
+                      </>
+                    ) : null}
+
+
+
                     <hr className="my-4 border-gray-400" />
                   </div>
                 );
@@ -213,7 +312,7 @@ const QuestionDetail = () => {
               <button className='text-gray-600 hover:text-neutral-600 hover:text-gray-800 uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 px-2'
                 onClick={onAnswerAdd}>Ответить</button>
               <button className='text-gray-600 hover:text-neutral-600 hover:text-gray-800 uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 px-2'
-                onClick={onSave}>Сохранить </button>
+                onClick={onSave}>Опубликовать</button>
             </>
           ) : null}
 
