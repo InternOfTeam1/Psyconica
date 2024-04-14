@@ -36,7 +36,7 @@ const Home: React.FC = () => {
       </h2>
 
       <div className="z-30 mx-auto flex flex-col items-center ">
-        <div className="z-30 flex flex-col  items-center justify-center w-full lg:flex-row mb-5">
+        <div className="z-30 flex flex-col  items-center justify-center w-full lg:flex-row mb-10">
           <div className="z-30 mt-[8%] lg:mt-[-2%] xl:mt-[8%]">
 
             <TopicsComponent position="left" />
