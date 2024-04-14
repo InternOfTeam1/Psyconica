@@ -49,7 +49,7 @@ const Home: React.FC = () => {
 
           </div>
 
-          <div className="z-30 mt-[-25%] xs:mt-[-16%] s:mt-0 sm:mt-0 md:mt-[3%] lg:mt-[-2.3%] xl:mt-[8.5%]" >
+          <div className="z-30 mt-[-25%] xs:mt-0 sm:mt-0 md:mt-[3%] lg:mt-[-2.3%] xl:mt-[8.5%]" >
             <TopicsComponent position="right" />
           </div>
         </div>
