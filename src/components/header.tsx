@@ -37,7 +37,6 @@ const Header: React.FC = () => {
     if (isAuthenticated && user) {
       const userData = { name: user.name, photo: user.photo, email: user.email };
       Cookies.set('user', JSON.stringify(userData), { expires: 7 });
-      router.push(PROFILE_ROUTE);
     }
   }, [isAuthenticated, user, router]);
 
@@ -55,8 +54,7 @@ const Header: React.FC = () => {
   const handleLogout = async () => {
     dispatch(logout());
     Cookies.remove('user');
-    router.push(HOME_ROUTE)
-
+    // router.push(HOME_ROUTE)
   };
 
   const checkUserLoginStatus = async () => {
@@ -98,7 +96,7 @@ const Header: React.FC = () => {
             ) : (
               <>
 
-                <Image src={userPhoto} alt="User Profile" className="w-8 h-8 rounded-full border-2 border-gray-300 shadow-sm xs:w-6 xs:h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 mt-3" />
+                <Image src={userPhoto} alt="User Profile" width={30} height={30} className="w-8 h-8 rounded-full border-2 border-gray-300 shadow-sm xs:w-6 xs:h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 mt-3" />
 
                 <Link href={PROFILE_ROUTE}>
                   <li className="cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold xs:text-xs sm:text-sm lg:text-base border-solid border-2 border-gray-400 rounded-[20px] mt-3 px-3">

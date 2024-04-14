@@ -30,13 +30,13 @@ const Home: React.FC = () => {
 
 
   return (
-    <div className="flex flex-col items-center justify-center" >
+    <div className="flex flex-col items-center justify-center mx-auto" >
       <h2 className="text-center  sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-balsamiq-sans font-bold text-pink-600 mb-2">
         Психология должна быть простой!
       </h2>
 
-      <div className="z-30 mx-auto flex flex-col items-center min-w-full ">
-        <div className="z-30 flex flex-col lg:flex-row items-center justify-center ">
+      <div className="z-30 mx-auto flex flex-col items-center ">
+        <div className="z-30 flex flex-col  items-center justify-center w-full lg:flex-row mb-5">
           <div className="z-30 mt-[8%] lg:mt-[-2%] xl:mt-[8%]">
 
             <TopicsComponent position="left" />
