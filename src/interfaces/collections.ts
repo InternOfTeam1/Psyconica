@@ -1,9 +1,11 @@
 import { ReactNode } from "react";
 
 export interface Comment {
-  slug: string;
+  slug?: string;
   content: string;
-  date: string;
+  date?: string;
+  num: Number | string,
+  answerId: Number
 }
 
 export interface Video {
@@ -76,6 +78,7 @@ export interface Question {
 export interface QuestionData {
   title?: ReactNode;
   answers: Answers[];
+  comments?: Comment[];
 }
 
 export interface Data {

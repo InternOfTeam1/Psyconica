@@ -37,7 +37,6 @@ const Header: React.FC = () => {
     if (isAuthenticated && user) {
       const userData = { name: user.name, photo: user.photo, email: user.email };
       Cookies.set('user', JSON.stringify(userData), { expires: 7 });
-      router.push(PROFILE_ROUTE);
     }
   }, [isAuthenticated, user, router]);
 
@@ -55,8 +54,7 @@ const Header: React.FC = () => {
   const handleLogout = async () => {
     dispatch(logout());
     Cookies.remove('user');
-    router.push(HOME_ROUTE)
-
+    // router.push(HOME_ROUTE)
   };
 
   const checkUserLoginStatus = async () => {
