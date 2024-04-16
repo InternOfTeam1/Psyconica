@@ -43,7 +43,7 @@ const TopicsComponent: React.FC<{ position: 'left' | 'right' }> = ({ position })
   };
 
   return (
-    <button className="z-10 mx-auto grid grid-cols-1 sm:gap-2 xs:gap-2 md:gap-2 lg:gap-12 xl:gap-14" style={contentStyle}>
+    <button className="z-10 mx-auto grid grid-cols-1 sm:gap-2 xs:gap-2 md:gap-2 lg:gap-12 xl:gap-14 mb-10" style={contentStyle}>
       {topicToShow.map((topic, index) => (
 
         <Link key={topic.slug || topic.id} href={`/topics/${topic.slug || topic.id}`}>

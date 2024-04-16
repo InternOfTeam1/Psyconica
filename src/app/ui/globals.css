@@ -7,14 +7,14 @@
 .bg-custom-size {
   background-size: 100%;
   min-height: 20rem;
-  margin-right: -1%;
+  margin-right: -3%;
 }
 
 @media (min-width: 1536px) {
   .bg-custom-size {
     background-size: 112%;
     margin-top: 2%; 
-    padding-top: 46.25%;
+    padding-top: 47.25%;
   }
 }
 
@@ -22,7 +22,7 @@
   .bg-custom-size {
     background-size: 112%;
     margin-top: 2%; 
-    padding-top: 46.25%;
+    padding-top: 47.25%;
   }
 }
 
