@@ -267,7 +267,7 @@ const QuestionDetail = () => {
 
 
                     <div className='font-semibold text-gray-600 leading-6 mt-2'>
-                      Комментарии:
+                      Комментарии
                       <div>
                         {
                           questionData?.comments?.filter(comment => comment.answerId === answer.num && comment.num !== lastCommentId).map((comment, index) => (
