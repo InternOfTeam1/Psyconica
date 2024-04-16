@@ -78,7 +78,7 @@ const Header: React.FC = () => {
       <Link href="/questions" className='text-gray-600 hover:text-neutral-600 hover:bg-neutral-600 hover:rounded-full hover:text-white uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm px-2'>Вопросы</Link>
       <Link href="/articles" className='text-gray-600 hover:text-neutral-600 hover:bg-neutral-600 hover:rounded-full hover:text-white uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm px-2'>Статьи</Link>
     </nav>
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2 ">
       <Link href={HOME_ROUTE} className="flex items-center">
         <Image
           src="/siteName.webp"

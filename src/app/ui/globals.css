@@ -90,3 +90,7 @@
    min-height: 15rem;
   }
 }
+
+.shadow-purple {
+  box-shadow: 0px 4px 8px rgba(128, 0, 128, 0.2); 
+}
