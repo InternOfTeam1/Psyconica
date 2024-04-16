@@ -1,4 +1,6 @@
+import { HOME_ROUTE } from '@/constants/routes';
 import Image from 'next/image'
+import Link from 'next/link';
 
 const Articles: React.FC = () => {
   return (
@@ -37,7 +39,9 @@ const Articles: React.FC = () => {
         <Image src="/article2.jpeg" alt="img" width={500} height={500} className="mx-auto block" />
       </div>
 
-
+      <Link href={HOME_ROUTE}>
+        <div className="inline-block mt-4 px-6 py-2 font-medium leading-6 text-center text-white uppercase transition bg-blue-500 rounded-full shadow ripple waves-light hover:shadow-lg focus:outline-none hover:bg-blue-600">Вернуться на главную</div>
+      </Link>
 
 
     </div>

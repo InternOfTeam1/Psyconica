@@ -6,39 +6,40 @@
 
 .bg-custom-size {
   background-size: 100%;
-  min-height: 21rem;
+  min-height: 20rem;
+  margin-right: -1%;
 }
 
 @media (min-width: 1536px) {
   .bg-custom-size {
     background-size: 112%;
     margin-top: 2%; 
-    padding-top: 52.25%;
+    padding-top: 45.25%;
   }
 }
 
-@media (min-width: 1280px) and (max-width: 1535px) {
+@media (min-width: 1200px) and (max-width: 1535px) {
   .bg-custom-size {
     background-size: 112%;
     margin-top: 2%; 
-    padding-top: 52.25%;
+    padding-top: 45.25%;
   }
 }
 
-@media (min-width: 1024px) and (max-width: 1279px) {
+@media (min-width: 1024px) and (max-width: 1199px) {
   .bg-custom-size {
-    background-size: 100%;
-    margin-top: 2%; 
-    min-height: 30rem;
+    background-size: 110%;
+    margin-top: 2%;
+    padding-top: 55.25%;
   }
 }
 
 @media (min-width: 768px) and (max-width: 1023px) {
   .bg-custom-size {
-    background-size: 90%;
-    margin-left: 10%;
+    background-size: 95%;
+    margin-left: 12%;
     margin-top: 0;
-    padding-top: 74.25%;
+    padding-top: 78.25%;
   }
 }
 
@@ -46,24 +47,46 @@
 
 @media (min-width: 640px) and (max-width: 767px) {
   .bg-custom-size {
-    background-size: 90%;
-    min-height: 22rem;
-    margin-left: 7%;
+    background-size: 93%;
+    margin-left: 12%;
     margin-top: 1%;
+    padding-top: 78.25%;
   }
 }
 
-@media (min-width: 360px) and (max-width: 639px) {
+@media (min-width: 400px) and (max-width: 639px) {
   .bg-custom-size {
-    background-size: 90%;
-    margin-left: 8%;
-    margin-top: 0;
+    background-size: 95%;
+    margin-left: 12%;
+    margin-right: 0;
+    width: 88%;
+    min-height: 18rem;
+  }
+}
+
+
+@media (min-width: 381px) and (max-width: 399px) {
+  .bg-custom-size {
+    background-size: 100%;
+    margin-left: 0;
+    width: 88%;
+    min-height: 18rem;
+  }
+}
+
+@media (min-width: 360px) and (max-width: 380px) {
+  .bg-custom-size {
+    background-size: 100%;
+    margin-left: 0;
+    width: 88%;
+    min-height: 17rem;
   }
 }
 
 @media (min-width: 200px) and (max-width: 359px) {
   .bg-custom-size {
-    margin-left: 6%;
-    margin-top: 2%;
+   width: 50%;
+   margin-left: 0;
+   min-height: 15rem;
   }
 }

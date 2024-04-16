@@ -27,7 +27,7 @@ const config: Config = {
         'custom': '22px',
         'base': ['16px', '20px'],
         'sm': ['12px', '16px'],
-        'lg': ['17px', '24px'],
+        'lg': ['17px', '20px'],
         'xl': ['20px', '32px'],
       },
 
@@ -44,11 +44,6 @@ const config: Config = {
         'small-caps': { 'font-variant': 'small-caps' },
       },
     },
-  },
-  colors: {
-    beige: '#f5f5dc',
-    // Если вы добавляете оттенки, убедитесь, что они указаны правильно
-    'beige-100': '#fafaf4',
   },
   plugins: [
     function ({ addUtilities, theme }: { addUtilities: any; theme: any }) {

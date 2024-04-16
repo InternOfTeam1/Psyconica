@@ -42,9 +42,26 @@ export const updateQuestion = async (slug: string, data: any) => {
     const questionDocRef = doc(db, "questions", slug);
 
     const questionData = await getDoc(questionDocRef);
-  
+
     if (questionData.exists()) {
       await updateDoc(questionDocRef, data);
+    } else {
+      console.log("Document does not exist!");
+    }
+  } catch (e) {
+    console.log(e)
+  }
+
+};
+
+export const updateComment = async (slug: string, data: any) => {
+  try {
+    const commentDocRef = doc(db, "questions", slug);
+
+    const commentData = await getDoc(commentDocRef);
+
+    if (commentData.exists()) {
+      await updateDoc(commentDocRef, data);
     } else {
       console.log("Document does not exist!");
     }
