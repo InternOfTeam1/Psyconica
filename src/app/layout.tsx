@@ -19,7 +19,8 @@ export default function RootLayout({
 }>) {
 
   return (
-    <html lang="en">
+    <html lang="en"
+    style={{  backgroundImage: 'linear-gradient(to right, #E0FBFC, #FAF3E0, #E8E0FC)' }}>
 
       <body className={inter.className} >
         <Providers>
