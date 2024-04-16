@@ -45,6 +45,11 @@ const config: Config = {
       },
     },
   },
+  colors: {
+    beige: '#f5f5dc',
+    // Если вы добавляете оттенки, убедитесь, что они указаны правильно
+    'beige-100': '#fafaf4',
+  },
   plugins: [
     function ({ addUtilities, theme }: { addUtilities: any; theme: any }) {
       addUtilities({
