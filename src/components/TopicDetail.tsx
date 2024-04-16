@@ -24,7 +24,7 @@ const TopicDetail = () => {
         setTopicData(data);
       }
     };
-
+    document.title = `${topicSlug}`;
     fetchData();
   }, [topicSlug]);
 

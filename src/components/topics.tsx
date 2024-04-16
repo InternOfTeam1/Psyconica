@@ -43,19 +43,13 @@ const TopicsComponent: React.FC<{ position: 'left' | 'right' }> = ({ position })
   };
 
   return (
-    <button className="z-10 mx-auto grid grid-cols-1 sm:gap-2 xs:gap-2 md:gap-2" style={contentStyle}>
+    <button className="z-10 mx-auto grid grid-cols-1 sm:gap-2 xs:gap-2 md:gap-2 lg:gap-12 xl:gap-14" style={contentStyle}>
       {topicToShow.map((topic, index) => (
 
-        <Link key={topic.id} href={`/topics/${topic.slug || topic.id}`} passHref>
+        <Link key={topic.slug || topic.id} href={`/topics/${topic.slug || topic.id}`}>
           <div
             key={index}
             className="z-10 w-full flex flex-col justify-center bg-no-repeat bg-center rounded-lg cursor-pointer sm:h-auto xs:h-auto md:h-auto lg:h-[5rem] xl:h-[5rem] 2xl:h-[5rem]"
-            onMouseDown={(e) => {
-              if (e.button === 1) {
-                e.preventDefault();
-                window.open(`/topics/${topic.slug || topic.id}`, '_blank');
-              }
-            }}
             onClick={(e) => handleClick(`/topics/${topic.slug || topic.id}`, e)}
             role="button"
             tabIndex={0}
