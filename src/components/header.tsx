@@ -73,13 +73,13 @@ const Header: React.FC = () => {
 
   return (
     <>
-    <header className="flex flex-wrap mx-auto max-w-[1200px] bg-transparent justify-between items-center align-middle xs:mb-[50px] mt-5 mb-[100px]">
-     <nav className="flex gap-2">
-      <Link href="/questions" className='text-gray-600 hover:text-neutral-600 hover:bg-neutral-600 hover:rounded-full hover:text-white uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm px-2'>Вопросы</Link>
-      <Link href="/articles" className='text-gray-600 hover:text-neutral-600 hover:bg-neutral-600 hover:rounded-full hover:text-white uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm px-2'>Статьи</Link>
+    <header className="flex flex-wrap mx-auto max-w-[1200px] bg-transparent justify-between items-center align-middle xs:mb-[50px] mt-5 mb-[100px] header">
+     <nav className="flex gap-2 nav">
+      <Link href="/questions" className="flex cursor-pointer text-gray-500 hover:text-neutral-600  hover:bg-neutral-500  hover:rounded-full hover:text-white font-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 mt-5 py-1 px-5 nav-link">Вопросы</Link>
+      <Link href="/articles" className="flex cursor-pointer text-gray-500 hover:text-neutral-600  hover:bg-neutral-500  hover:rounded-full hover:text-white font-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 mt-5 py-1 px-5 nav-link">Статьи</Link>
     </nav>
-    <div className="flex items-center gap-2">
-      <Link href={HOME_ROUTE} className="flex items-center">
+    <div className="flex items-center gap-2 ">
+      <Link href={HOME_ROUTE} className="flex items-center mt-5 logo">
         <Image
           src="/siteName.webp"
           alt="website name"
@@ -90,32 +90,27 @@ const Header: React.FC = () => {
         />
       </Link>
     </div>
-        <div className="xs:order-2 sm:order-2 sm:mr-20 md:order-2 md:mr-30 lg:order-3 xl:order-3 xl:mr-20 mr-5">
-          <ul className="flex items-center gap-2 mb-4 align-middle">
+    <div className="xs:order-2 sm:order-2 sm:mr-20 md:order-2 md:mr-30 lg:order-3 xl:order-3 xl:mr-20 mr-5 social ">
+        <Social />
+          <ul className="flex items-center gap-2 mb-4 align-middle list">
             {!isAuthenticated ? (
-              <li onClick={handleOpenModal} className="flex cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 border-solid border-2 border-gray-400 whitespace-nowrap rounded-[20px] mt-5 py-1 px-5">Log in with social network</li>
+              <li onClick={handleOpenModal} className="list-item flex cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 border-solid border-2 border-gray-400 whitespace-nowrap rounded-[20px] mt-5 mb-5 py-1 px-5">Log in with social network</li>
             ) : (
               <>
 
                 <Image src={userPhoto} alt="User Profile" width={30} height={30} className="w-8 h-8 rounded-full border-2 border-gray-300 shadow-sm xs:w-6 xs:h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 mt-3" />
 
                 <Link href={PROFILE_ROUTE}>
-                <li className="cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-base border-solid border-2 border-gray-400 whitespace-nowrap rounded-[20px] mt-1 px-5 py-1 hover:bg-gray-200">
+                <li className=" list-item cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-base border-solid border-2 border-gray-400 whitespace-nowrap rounded-[20px] mt-5 mb-5 px-5 py-1 hover:bg-gray-200">
                     Личный кабинет
                   </li>
                 </Link>
-                <li onClick={handleLogout} className="cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-base border-solid border-2 border-gray-400 whitespace-nowrap rounded-[20px] mt-1 px-5 py-1 hover:bg-gray-200">
+                <li onClick={handleLogout} className=" list-item cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-base border-solid border-2 border-gray-400 whitespace-nowrap rounded-[20px] mt-5 mb-5 px-5 py-1 hover:bg-gray-200">
                   Log out
                 </li>
-
               </>
             )}
-
           </ul>
-        </div>
-
-        <div className="flex bg-transparent justify-between items-center xs:order-last xs:w-full xs:mr-10 xs:justify-center xs:align-center sm:order-last sm:mr-20 sm:w-full md:order-last md:w-full md:mr-20 lg:order-last lg:w-ful lg:mr-20 xl:order-last xl:w-full mt-5">
-          <Social />
         </div>
       </header>
       {isModalOpenPsy && (
