@@ -24,9 +24,13 @@ const TopicDetail = () => {
         setTopicData(data);
       }
     };
-    document.title = `${topicSlug}`;
     fetchData();
+
   }, [topicSlug]);
+
+  useEffect(() => {
+    document.title = `${topicData?.title}`;
+  })
 
   if (!topicData) {
     return <div>

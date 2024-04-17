@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { updateUserProfile } from '../redux/slices/authSlice';
+import { updateUserProfile, setUserRole } from '../redux/slices/authSlice';
 import { AppDispatch } from '../redux/store';
 import { useAppSelector } from '../redux/hooks';
 import Cookies from 'js-cookie';
@@ -18,6 +18,7 @@ const PsychologistModal: React.FC<{ isOpen: boolean, onClose: () => void }> = ({
     } else {
       setIsChecked(false);
     }
+    dispatch(setUserRole(isPsychologistCookie === "true" ? 'psy': 'user')) 
   }, [isOpen, userId]);
 
   const handleCheckboxChange = async () => {

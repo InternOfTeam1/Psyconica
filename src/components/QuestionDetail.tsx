@@ -76,9 +76,13 @@ const QuestionDetail = () => {
         setQuestionData(data);
       }
     };
-    document.title = `${questionSlug}`;
+
     fetchData();
   }, [questionSlug]);
+
+  useEffect(() => {
+    document.title = `${questionData?.title}`;
+  })
 
 
   const onAnswerChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>, answerNumber: number, field = 'title') => {
@@ -202,7 +206,7 @@ const QuestionDetail = () => {
         <div className="w-full lg:w-1/4 px-1 lg:mb-0">
           <VideosFetcher />
         </div>
-        <div className="container mx-auto px-2 py-4 max-w-xl bg-white shadow-xl rounded-2xl">
+        <div className="container ml-5 px-2 py-4 max-w-3xl bg-white shadow-xl rounded-2xl">
           {questionData && (
             <>
               <h2 className="font-semibold bg-amber-300 text-gray-600 px-7 py-3 rounded-2xl leading-6 text-center xs:text-sm xs:px-3 sm:text-sm sm:px-4 md:text-base md:px-5 lg:text-lg lg:px-6 xl:text-lg xl:px-7">{questionData.title}</h2>
@@ -212,7 +216,7 @@ const QuestionDetail = () => {
                 return (
                   <div key={index} className="mt-4 w-full">
                     <div className="flex items-start mb-4">
-                      <p className="font-semibold text-gray-600 mr-2">{index + 1}.</p>
+                      <p className="font-semibold text-gray-600 ml-3 mr-2">{index + 1}.</p>
                       {userRole === 'psy' ? (
                         <>
                           <div className='w-full'>
@@ -222,15 +226,15 @@ const QuestionDetail = () => {
                                 className='w-full'
                                 value={answer.title}
                                 onChange={(e) => onAnswerChange(e, answer.num)}
-                                placeholder="Enter your answer"
+                                placeholder="Текст ответа"
                               />
                             </h3>
-                            <p className="text-gray-500 text-sm mt-2 w-full">
+                            <p className="font-base text-gray-600 mt-2 w-full">
                               <textarea
                                 value={answer.content}
                                 className='w-full h-12'
                                 onChange={(e) => onAnswerChange(e, answer.num, 'content')}
-                                placeholder="Enter your description"
+                                placeholder="Описание ответа"
                               />
                             </p>
                           </div>
@@ -244,7 +248,7 @@ const QuestionDetail = () => {
                             <h3 className="font-semibold text-gray-600 leading-6">
                               {answer.title}
                             </h3>
-                            <p className="text-gray-500 text-sm mt-2 w-full">
+                            <p className="font-normal text-base text-gray-600 mt-2 pr-5 leading-5 w-full">
                               {answer.content}
                             </p>
                           </div>
@@ -264,19 +268,22 @@ const QuestionDetail = () => {
                         </div>
                       </div>
                     </div>
-
-
                     <div className='font-semibold text-gray-600 leading-6 mt-2'>
+=======
+                    <div className='font-semibold text-gray-600 leading-6 mt-2 ml-5'>
+
                       Комментарии
                       <div>
                         {
                           questionData?.comments?.filter(comment => comment.answerId === answer.num && comment.num !== lastCommentId).map((comment, index) => (
                             <div key={index} className='flex font-semibold text-gray-500 text-sm leading-6'>
                               {index + 1}.
-                              <div className='ml-3'>{comment.content}</div>
-                              <div className='cursor-pointer ml-3 mt-1' onClick={() => onCommentDelete(comment.num)}>
-                                <MdClose />
-                              </div>
+                              <div className='ml-3 leading-5'>{comment.content}</div>
+                              {userRole === 'user' ? (
+                                <div className='cursor-pointer ml-3 mt-1' onClick={() => onCommentDelete(comment.num)}>
+                                  <MdClose />
+                                </div>
+                              ) : null}
                             </div>
 
                           ))
@@ -284,22 +291,23 @@ const QuestionDetail = () => {
                       </div>
                     </div>
 
-
-                    <>
-                      {answerForComments === answer.num ?
-                        <>
-                          <input
-                            type="text"
-                            className='w-full font-semibold text-gray-500 text-sm leading-6 mt-2'
-                            onChange={(e) => onCommentChange(e, lastCommentId)}
-                            placeholder=" Текст комментария..."
-                          />
-                          <button className='text-gray-600 hover:text-neutral-600 hover:text-gray-800 uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 px-2'
-                            onClick={() => onCommentSave()}>Отправить</button>
-                        </>
-                        : (<button className='text-gray-600 hover:text-neutral-600 hover:text-gray-800 uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 px-2'
-                          onClick={() => onCommentAdd(answer.num)}>Комментировать</button>)}
-                    </>
+                    {userRole === 'user' ? (
+                      <>
+                        {answerForComments === answer.num ?
+                          <>
+                            <input
+                              type="text"
+                              className='w-full font-semibold text-gray-500 text-sm leading-6 mt-2'
+                              onChange={(e) => onCommentChange(e, lastCommentId)}
+                              placeholder=" Текст комментария..."
+                            />
+                            <button className='text-gray-600 hover:text-neutral-600 hover:text-gray-800 uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 px-2'
+                              onClick={() => onCommentSave()}>Отправить</button>
+                          </>
+                          : (<button className='text-gray-600 hover:text-neutral-600 hover:text-gray-800 uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 ml-3 px-2'
+                            onClick={() => onCommentAdd(answer.num)}>Комментировать</button>)}
+                      </>
+                    ) : null}
 
 
 
@@ -315,9 +323,9 @@ const QuestionDetail = () => {
 
           {userRole === 'psy' ? (
             <>
-              <button className='text-gray-600 hover:text-neutral-600 hover:text-gray-800 uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 px-2'
+              <button className='text-gray-600 hover:text-neutral-600 hover:text-gray-800 uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-3 px-2'
                 onClick={onAnswerAdd}>Ответить</button>
-              <button className='text-gray-600 hover:text-neutral-600 hover:text-gray-800 uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 px-2'
+              <button className='text-gray-600 hover:text-neutral-600 hover:text-gray-800 uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-3 px-2'
                 onClick={onSave}>Опубликовать</button>
             </>
           ) : null}
