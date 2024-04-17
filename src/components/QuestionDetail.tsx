@@ -199,10 +199,10 @@ const QuestionDetail = () => {
   return (
     <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-30px]">
     <div className="flex flex-wrap -mx-1 lg:-mx-1">
-      <div className="w-full lg:w-1/4 px-1 lg:mb-0">
+      <div className=" px-1 lg:mb-0 mt-[-1px] sm:ml-[75px] md:ml-[100px] lg:ml-[30px] sm:w-3/4 md:w-3/4 lg:w-[250px] xl:w-[300px]">
         <VideosFetcher />
       </div>
-      <div className="container mx-auto px-1 py-2 bg-white shadow-xl rounded-2xl w-full lg:ml-[70px] sm:w-3/4 md:w-3/4 lg:w-[700px] xl:w-[780px] " style={{ maxWidth: '100%' }}>  
+      <div className="container mx-auto px-1 py-2 bg-white shadow-xl rounded-2xl w-full lg:ml-[40px] sm:w-3/4 md:w-3/4 lg:w-[700px] xl:w-[780px] " style={{ maxWidth: '100%' }}>  
           {questionData && (
           <>
             <h2 className="font-semibold bg-amber-300 text-gray-600 px-7 py-3 rounded-2xl leading-6 text-center">{questionData.title}</h2>

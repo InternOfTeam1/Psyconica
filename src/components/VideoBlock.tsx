@@ -28,7 +28,7 @@ export const VideoBlock = ({ videos }: VideoBlockProps) => {
   );
 console.log(selectedVideoUrl.split("/embed/")[1])
   return (
-    <div className="p-3 m-4 bg-white rounded-2xl shadow-2xl border mt-[-1px] sm:ml-[75px] md:ml-[100px] lg:ml-[50px] sm:w-3/4 md:w-3/4 lg:w-[250px] xl:w-[300px]"> 
+    <div className="p-3 m-4 bg-white rounded-2xl shadow-2xl border mt-[-1px]"> 
       <div className="flex flex-wrap justify-center gap-2"> 
         {videos.map((video, index) => (
           video.video.map((url, urlIndex) => (
