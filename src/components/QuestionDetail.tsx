@@ -197,16 +197,15 @@ const QuestionDetail = () => {
   const sortedAnswers = questionData?.answers?.sort((a, b) => b.likes.length - a.likes.length) || [];
 
   return (
-    <div className="container mx-auto px-4 py-4 max-w-7xl">
-      <div className="flex flex-wrap -mx-1 lg:-mx-1">
-        <div className="w-full lg:w-1/4 px-1 lg:mb-0">
-          <VideosFetcher />
-        </div>
-        <div className="container mx-auto px-2 py-4 max-w-xl bg-white shadow-xl rounded-2xl">
+    <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-30px]">
+    <div className="flex flex-wrap -mx-1 lg:-mx-1">
+      <div className="w-full lg:w-1/4 px-1 lg:mb-0">
+        <VideosFetcher />
+      </div>
+      <div className="container mx-auto px-1 py-2 bg-white shadow-xl rounded-2xl w-full lg:ml-[70px] sm:w-3/4 md:w-3/4 lg:w-[700px] xl:w-[780px] " style={{ maxWidth: '100%' }}>  
           {questionData && (
-            <>
-              <h2 className="font-semibold bg-amber-300 text-gray-600 px-7 py-3 rounded-2xl leading-6 text-center xs:text-sm xs:px-3 sm:text-sm sm:px-4 md:text-base md:px-5 lg:text-lg lg:px-6 xl:text-lg xl:px-7">{questionData.title}</h2>
-
+          <>
+            <h2 className="font-semibold bg-amber-300 text-gray-600 px-7 py-3 rounded-2xl leading-6 text-center">{questionData.title}</h2>
               {sortedAnswers.map((answer: Answers, index: number) => {
                 const progressWidth = (answer.likes.length / MAX_LIKES) * 100;
                 return (
