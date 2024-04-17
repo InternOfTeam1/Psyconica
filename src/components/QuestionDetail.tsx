@@ -76,9 +76,13 @@ const QuestionDetail = () => {
         setQuestionData(data);
       }
     };
-    document.title = `${questionSlug}`;
+
     fetchData();
   }, [questionSlug]);
+
+  useEffect(() => {
+    document.title = `${questionData?.title}`;
+  })
 
 
   const onAnswerChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>, answerNumber: number, field = 'title') => {
@@ -275,9 +279,9 @@ const QuestionDetail = () => {
                               {index + 1}.
                               <div className='ml-3 leading-5'>{comment.content}</div>
                               {userRole === 'user' ? (
-                              <div className='cursor-pointer ml-3 mt-1' onClick={() => onCommentDelete(comment.num)}>
-                                <MdClose />
-                              </div>
+                                <div className='cursor-pointer ml-3 mt-1' onClick={() => onCommentDelete(comment.num)}>
+                                  <MdClose />
+                                </div>
                               ) : null}
                             </div>
 
@@ -286,23 +290,23 @@ const QuestionDetail = () => {
                       </div>
                     </div>
 
-                  {userRole === 'user' ? (
-                    <>
-                      {answerForComments === answer.num ?
-                        <>
-                          <input
-                            type="text"
-                            className='w-full font-semibold text-gray-500 text-sm leading-6 mt-2'
-                            onChange={(e) => onCommentChange(e, lastCommentId)}
-                            placeholder=" Текст комментария..."
-                          />
-                          <button className='text-gray-600 hover:text-neutral-600 hover:text-gray-800 uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 px-2'
-                            onClick={() => onCommentSave()}>Отправить</button>
-                        </>
-                        : (<button className='text-gray-600 hover:text-neutral-600 hover:text-gray-800 uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 ml-3 px-2'
-                          onClick={() => onCommentAdd(answer.num)}>Комментировать</button>)}
-                    </>
-                  ) : null}
+                    {userRole === 'user' ? (
+                      <>
+                        {answerForComments === answer.num ?
+                          <>
+                            <input
+                              type="text"
+                              className='w-full font-semibold text-gray-500 text-sm leading-6 mt-2'
+                              onChange={(e) => onCommentChange(e, lastCommentId)}
+                              placeholder=" Текст комментария..."
+                            />
+                            <button className='text-gray-600 hover:text-neutral-600 hover:text-gray-800 uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 px-2'
+                              onClick={() => onCommentSave()}>Отправить</button>
+                          </>
+                          : (<button className='text-gray-600 hover:text-neutral-600 hover:text-gray-800 uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 ml-3 px-2'
+                            onClick={() => onCommentAdd(answer.num)}>Комментировать</button>)}
+                      </>
+                    ) : null}
 
 
 
