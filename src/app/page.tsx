@@ -31,8 +31,8 @@ const Home: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center justify-center mx-auto" >
-      <h1 className="sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 leading-none text-center shadow-lg">
-        Психологическая ясность для современной жизни
+      <h1 className="sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 leading-none text-center ">
+        Психология должна быть простой!
       </h1>
 
 
