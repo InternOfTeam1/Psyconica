@@ -37,8 +37,10 @@ const initialState: any = {
 export const updateUserProfile = createAsyncThunk(
   'auth/updateUserProfile',
   async ({ userId, isPsychologist }: { userId: string; isPsychologist: boolean }, thunkAPI) => {
+    const role = isPsychologist ? 'psy' : 'user';
     console.log(`Обновление профиля пользователя ${userId} на роль ${isPsychologist ? 'psy' : 'user'}`);
     await updateUserDataInFirebase(userId, { role: isPsychologist ? 'psy' : 'user' });
+    thunkAPI.dispatch(setUserRole(role))
   }
 );
 
@@ -51,6 +53,9 @@ const authSlice = createSlice({
         state.user = { ...state.user, ...action.payload.user };
       }
       state.isAuthenticated = action.payload.isAuthenticated !== undefined ? action.payload.isAuthenticated : state.isAuthenticated;
+    },
+    setUserRole(state, action) {
+      state.user.role = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -79,4 +84,4 @@ const authSlice = createSlice({
 
 
 export default authSlice.reducer;
-export const { setUserState } = authSlice.actions;
+export const { setUserState, setUserRole } = authSlice.actions;
