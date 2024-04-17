@@ -76,14 +76,12 @@ const QuestionDetail = () => {
         setQuestionData(data);
       }
     };
-
     fetchData();
   }, [questionSlug]);
 
   useEffect(() => {
     document.title = `${questionData?.title}`;
   })
-
 
   const onAnswerChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>, answerNumber: number, field = 'title') => {
     const newValue = e.target.value;
@@ -268,10 +266,9 @@ const QuestionDetail = () => {
                         </div>
                       </div>
                     </div>
-                    <div className='font-semibold text-gray-600 leading-6 mt-2'>
-=======
-                    <div className='font-semibold text-gray-600 leading-6 mt-2 ml-5'>
 
+
+                    <div className='font-semibold text-gray-600 leading-6 mt-2 ml-5'>
                       Комментарии
                       <div>
                         {
@@ -291,7 +288,7 @@ const QuestionDetail = () => {
                       </div>
                     </div>
 
-                    {userRole === 'user' ? (
+                    {userRole === 'user' || 'psy' ? (
                       <>
                         {answerForComments === answer.num ?
                           <>
