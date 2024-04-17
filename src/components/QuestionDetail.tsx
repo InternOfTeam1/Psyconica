@@ -6,15 +6,14 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { Answers, QuestionData } from '@/interfaces/collections';
 import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useAppSelector } from '../redux/hooks';
 import { updateAnswerLikes, updateQuestion, updateComment } from '@/lib/firebase/firebaseFunctions';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '@/redux/store';
-import { openModal, closeModal } from '@/redux/slices/modalSlice';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/redux/store';
+import { openModal } from '@/redux/slices/modalSlice';
 import { nanoid } from '@reduxjs/toolkit';
 import VideosFetcher from './VideosFetcher';
-import { DiVim } from 'react-icons/di';
 
 function fetchQuestionData(slug: {}) {
   return fetchDoc('questions', slug);
@@ -81,7 +80,7 @@ const QuestionDetail = () => {
 
   useEffect(() => {
     document.title = `${questionData?.title}`;
-  })
+  }, [questionData])
 
   const onAnswerChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>, answerNumber: number, field = 'title') => {
     const newValue = e.target.value;

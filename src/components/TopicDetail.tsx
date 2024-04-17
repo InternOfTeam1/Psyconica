@@ -30,7 +30,7 @@ const TopicDetail = () => {
 
   useEffect(() => {
     document.title = `${topicData?.title}`;
-  })
+  }, [topicData])
 
   if (!topicData) {
     return <div>
