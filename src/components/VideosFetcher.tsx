@@ -1,3 +1,4 @@
+'use client'
 import React, { useEffect, useState } from 'react';
 import { fetchDataFromCollection } from '@/lib/firebase/firebaseGetDocs';
 import { VideoBlock } from '@/components/VideoBlock';

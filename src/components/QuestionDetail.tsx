@@ -206,7 +206,7 @@ const QuestionDetail = () => {
         <div className="container ml-5 px-2 py-4 max-w-3xl bg-white shadow-xl rounded-2xl">
           {questionData && (
             <>
-              <h2 className="font-semibold bg-amber-300 text-gray-600 px-7 py-3 rounded-2xl leading-6 text-center xs:text-sm xs:px-3 sm:text-sm sm:px-4 md:text-base md:px-5 lg:text-lg lg:px-6 xl:text-lg xl:px-7">{questionData.title}</h2>
+              <h2 className="font-semibold bg-amber-300 text-gray-600 px-7 py-3 rounded-2xl leading-6 text-center xs:text-sm xs:px-3 sm:text-sm sm:px-4 md:text-base md:px-5 lg:text-lg lg:px-6 xl:text-xl xl:px-7">{questionData.title}</h2>
 
               {sortedAnswers.map((answer: Answers, index: number) => {
                 const progressWidth = (answer.likes.length / MAX_LIKES) * 100;
@@ -220,16 +220,16 @@ const QuestionDetail = () => {
                             <h3 className="font-semibold text-gray-600 leading-6">
                               <input
                                 type="text"
-                                className='w-full'
+                                className='w-full font-semibold'
                                 value={answer.title}
                                 onChange={(e) => onAnswerChange(e, answer.num)}
                                 placeholder="Текст ответа"
                               />
                             </h3>
-                            <p className="font-base text-gray-600 mt-2 w-full">
+                            <p className="font-semibold text-gray-600 mt-2 w-full ">
                               <textarea
                                 value={answer.content}
-                                className='w-full h-12'
+                                className='w-full h-12 font-semibold'
                                 onChange={(e) => onAnswerChange(e, answer.num, 'content')}
                                 placeholder="Описание ответа"
                               />
@@ -242,10 +242,10 @@ const QuestionDetail = () => {
                       ) : (
                         <>
                           <div className='w-full'>
-                            <h3 className="font-semibold text-gray-600 leading-6">
+                            <h3 className="font-semibold text-gray-600 leading-6 sm:text-md md:text-lg lg:text-xl">
                               {answer.title}
                             </h3>
-                            <p className="font-normal text-base text-gray-600 mt-2 pr-5 leading-5 w-full">
+                            <p className="font-semibold text-gray-600 mt-2 pr-5 leading-5 w-full sm:text-sm md:text-md lg:text-lg">
                               {answer.content}
                             </p>
                           </div>
@@ -272,7 +272,7 @@ const QuestionDetail = () => {
                       <div>
                         {
                           questionData?.comments?.filter(comment => comment.answerId === answer.num && comment.num !== lastCommentId).map((comment, index) => (
-                            <div key={index} className='flex font-semibold text-gray-500 text-sm leading-6'>
+                            <div key={index} className='flex font-semibold text-gray-600 text-lg leading-6'>
                               {index + 1}.
                               <div className='ml-3 leading-5'>{comment.content}</div>
                               {userRole === 'user' ? (
@@ -293,14 +293,14 @@ const QuestionDetail = () => {
                           <>
                             <input
                               type="text"
-                              className='w-full font-semibold text-gray-500 text-sm leading-6 mt-2'
+                              className='w-full font-semibold text-gray-500 text-md leading-6 mt-2'
                               onChange={(e) => onCommentChange(e, lastCommentId)}
                               placeholder=" Текст комментария..."
                             />
                             <button className='text-gray-600 hover:text-neutral-600 hover:text-gray-800 uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 px-2'
                               onClick={() => onCommentSave()}>Отправить</button>
                           </>
-                          : (<button className='text-gray-600 hover:text-neutral-600 hover:text-gray-800 uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 ml-3 px-2'
+                          : (<button className='text-gray-600 hover:text-neutral-600 hover:text-gray-800 uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sn mt-5 ml-3 px-2'
                             onClick={() => onCommentAdd(answer.num)}>Комментировать</button>)}
                       </>
                     ) : null}
