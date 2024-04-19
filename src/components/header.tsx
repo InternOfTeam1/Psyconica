@@ -13,6 +13,7 @@ import { setUserState } from "@/redux/slices/authSlice";
 import Cookies from 'js-cookie';
 import PsychologistModal from './PsychologistCheckbox';
 import { openModal, closeModal } from '@/redux/slices/modalSlice';
+import { AiOutlineMenu, AiOutlineClose } from 'react-icons/ai';
 
 
 const Header: React.FC = () => {
@@ -24,6 +25,10 @@ const Header: React.FC = () => {
   const isModalOpen = useSelector((state: any) => state.modal.isModalOpen);
   const [isModalOpenPsy, setIsModalOpenPsy] = useState(false);
   const router = useRouter();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const handleNav = () =>{
+    setMenuOpen(!menuOpen)
+  } 
 
   const handleOpenModal = () => {
     dispatch(openModal());
@@ -73,17 +78,22 @@ const Header: React.FC = () => {
 
   return (
     <>
-    <header className="flex flex-wrap mx-auto max-w-[1200px] bg-transparent justify-between items-center align-middle xs:mb-[50px] mt-5 mb-[100px] header">
-     <nav className="flex gap-2 nav">
-      <Link href="/questions" className="flex cursor-pointer text-gray-500 hover:text-neutral-600  hover:bg-neutral-500  hover:rounded-full hover:text-white font-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 mt-5 py-1 px-5 nav-link">Вопросы</Link>
-      <Link href="/articles" className="flex cursor-pointer text-gray-500 hover:text-neutral-600  hover:bg-neutral-500  hover:rounded-full hover:text-white font-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 mt-5 py-1 px-5 nav-link">Статьи</Link>
+    <header className="flex flex-wrap mx-auto max-w-[1200px] bg-transparent justify-between items-center  xs:mb-[50px] mt-5 mb-[100px] header">
+    {!menuOpen && (
+        <div onClick={handleNav} className='sm:hidden cursor-pointer pl-5 pt-5 absolute top-0 left-0 text-gray-500  hover:text-white'>
+          <AiOutlineMenu size={25}/>
+        </div>
+      )}
+     <nav className="gap-2 nav hidden sm:flex">
+      <Link href="/questions" className=" cursor-pointer text-gray-500  hover:bg-neutral-500  hover:rounded-full hover:text-white font-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 mt-5 py-1 px-5 nav-link  hidden sm:flex">Вопросы</Link>
+      <Link href="/articles" className="cursor-pointer text-gray-500  hover:bg-neutral-500  hover:rounded-full hover:text-white font-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 mt-5 py-1 px-5 nav-link  hidden sm:flex">Статьи</Link>
     </nav>
-    <div className="flex items-center gap-2 ">
-      <Link href={HOME_ROUTE} className="flex items-center mt-5 logo">
+    <div className="flex items-center justify-center">
+  <Link href={HOME_ROUTE} className="flex items-center mt-5 logo lg:order-3 text-center">
         <Image
           src="/siteName.webp"
           alt="website name"
-          width={400}
+          width={400}                                   
           height={100}
           className="max-w-full h-full object-cover"
           priority={true}
@@ -92,25 +102,65 @@ const Header: React.FC = () => {
     </div>
     <div className="xs:order-2 sm:order-2 sm:mr-20 md:order-2 md:mr-30 lg:order-3 xl:order-3 xl:mr-20 mr-5 social ">
         <Social />
-          <ul className="flex items-center gap-2 mb-4 align-middle list">
+          <ul className="items-center gap-2 mb-4 align-middle list hidden sm:flex">
             {!isAuthenticated ? (
-              <li onClick={handleOpenModal} className="list-item flex cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 border-solid border-2 border-gray-400 whitespace-nowrap rounded-[20px] mt-5 mb-5 py-1 px-5">Log in with social network</li>
+              <li onClick={handleOpenModal} className="flex cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 border-solid border-2 border-gray-400 whitespace-nowrap rounded-[20px] mt-5 mb-5 py-1 px-5">Log in with social network</li>
             ) : (
               <>
-
-                <Image src={userPhoto} alt="User Profile" width={30} height={30} className="w-8 h-8 rounded-full border-2 border-gray-300 shadow-sm xs:w-6 xs:h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 mt-3" />
+                <Image src={userPhoto} alt="User Profile" width={30} height={30} className="w-8 h-8 rounded-full border-2 border-gray-400 shadow-sm xs:w-6 xs:h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 mt-5 mb-5 " />
 
                 <Link href={PROFILE_ROUTE}>
-                <li className=" list-item cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-base border-solid border-2 border-gray-400 whitespace-nowrap rounded-[20px] mt-5 mb-5 px-5 py-1 hover:bg-gray-200">
+                <li className=" list-item cursor-pointer text-gray-500 hover:text-neutral-600 font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-base border-solid border-2 border-gray-400 whitespace-nowrap rounded-[20px] mt-5 mb-5 px-5 py-1 hover:bg-gray-200">
                     Личный кабинет
                   </li>
                 </Link>
-                <li onClick={handleLogout} className=" list-item cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-base border-solid border-2 border-gray-400 whitespace-nowrap rounded-[20px] mt-5 mb-5 px-5 py-1 hover:bg-gray-200">
+                <li onClick={handleLogout} className=" list-item cursor-pointer text-gray-500 hover:text-neutral-600 font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-base border-solid border-2 border-gray-400 whitespace-nowrap rounded-[20px] mt-5 mb-5 px-5 py-1 hover:bg-gray-200">
                   Log out
                 </li>
               </>
             )}
           </ul>
+        </div>
+        <div className={
+          menuOpen 
+          ? "fixed left-0 top-0 w-[60%] sm:hidden p-10 ease-in duration-500 h-[fit-content] max-h-screen overflow-y-auto bg-[#c787f160]"
+          : "fixed left-[-100%] top-0 p-10 ease-in duration-500"
+        }> 
+        <div className='flex w-full items-center justify-end'>
+          <div onClick={handleNav} className='cursor-pointer text-gray-500 hover:text-white'>
+            <AiOutlineClose size={25}/>
+          </div>
+        </div>
+        <div className='flex-col py-4'>
+          <ul>
+          <Link href="/questions">
+            <li onClick={() => setMenuOpen(false)}
+            className='py-2 cursor-pointer text-gray-600 font-semibold  hover:text-white'>
+              Вопросы
+            </li>
+          </Link>
+          <Link href="/articles">
+            <li onClick={() => setMenuOpen(false)}
+            className='py-2 cursor-pointer text-gray-600 font-semibold hover:text-white'>
+              Статьи
+            </li>
+          </Link>
+            {!isAuthenticated ? (
+              <li onClick={() => { handleOpenModal(); setMenuOpen(false); }} className="py-2 cursor-pointer text-gray-600 font-semibold  hover:text-white">Log in with social network</li>
+            ) : (
+              <>
+                <Link href={PROFILE_ROUTE}>
+                <li onClick={() => setMenuOpen(false)} className="py-2 cursor-pointer text-gray-600 font-semibold  hover:text-white">
+                    Личный кабинет
+                  </li>
+                </Link>
+                <li onClick={() => { handleLogout(); setMenuOpen(false); }} className="py-2 cursor-pointer text-gray-600 font-semibold  hover:text-white">
+                  Log out
+                </li>
+              </>
+            )}
+          </ul>
+        </div>
         </div>
       </header>
       {isModalOpenPsy && (
