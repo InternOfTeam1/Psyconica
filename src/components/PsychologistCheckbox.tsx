@@ -5,6 +5,7 @@ import { AppDispatch } from '../redux/store';
 import { useAppSelector } from '../redux/hooks';
 import Cookies from 'js-cookie';
 import { updateUserDataInFirebase } from '../lib/firebase/firebaseFunctions'; 
+import { setUserState } from '../redux/slices/authSlice';
 
 const PsychologistModal: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ isOpen, onClose }) => {
   const [isChecked, setIsChecked] = useState(false);
@@ -32,6 +33,17 @@ const PsychologistModal: React.FC<{ isOpen: boolean, onClose: () => void }> = ({
     Cookies.set('isPsychologist', String(newIsPsychologistValue), { expires: expirationDays });
     await updateUserDataInFirebase(userId, { role: newIsPsychologistValue ? 'psy' : 'user' });
     dispatch(updateUserProfile({ userId, isPsychologist: newIsPsychologistValue }));
+    const userCookie = Cookies.get('user');
+    if(userCookie){
+      const user = JSON.parse(userCookie as string);
+      const updatedUser = {
+        ...user, 
+        role: newIsPsychologistValue ? 'psy' : 'user'
+      }
+      dispatch(setUserState(updatedUser));
+      Cookies.set('user', JSON.stringify(updatedUser), { expires: 7 });
+      console.log(JSON.parse(userCookie as string))
+    }
   };
 
 

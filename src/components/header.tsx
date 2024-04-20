@@ -38,12 +38,20 @@ const Header: React.FC = () => {
     dispatch(closeModal());
   };
 
+//  useEffect(() => {
+//     if (isAuthenticated && user) {
+//       const userData = { name: user.name, photo: user.photo, email: user.email };
+//       Cookies.set('user', JSON.stringify(userData), { expires: 7 });
+//     }
+//   }, [isAuthenticated, user, router]);
+
   useEffect(() => {
-    if (isAuthenticated && user) {
-      const userData = { name: user.name, photo: user.photo, email: user.email };
-      Cookies.set('user', JSON.stringify(userData), { expires: 7 });
+    const userCookie = Cookies.get('user');
+    if(userCookie){
+      dispatch(setUserState(JSON.parse(userCookie as string)));
+      console.log(JSON.parse(userCookie as string))
     }
-  }, [isAuthenticated, user, router]);
+  },[dispatch])
 
   const handleLogin = async (provider: 'google' | 'facebook') => {
     try {

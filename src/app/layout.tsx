@@ -19,13 +19,12 @@ export default function RootLayout({
 }>) {
 
   return (
-    <html lang="en"
-    style={{  backgroundImage: 'linear-gradient(to right, #E0FBFC, #FAF3E0, #E8E0FC)' }}>
-
+    <html lang="en">
       <body className={inter.className} >
         <Providers>
 
-          <div className="mx-auto max-w-full">
+          <div className="mx-auto max-w-full"
+          >
             <Header />
             {children}
           </div>

@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { signInWithGoogle, signInWithTwitter, signOutUser } from "@/lib/firebase/firebaseConfig";
 import { fetchDataFromCollection } from '@/lib/firebase/firebaseGetDocs';
 import { updateUserDataInFirebase } from "@/lib/firebase/firebaseFunctions";
+import Cookies from 'js-cookie';
 
 export const login = createAsyncThunk(
   'auth/login',
@@ -10,7 +11,8 @@ export const login = createAsyncThunk(
     if (user) {
       const usersData = await fetchDataFromCollection('users');
       const loggedInUser = usersData.find(u => u.mail === user.email);
-      if (loggedInUser) {
+      if (loggedInUser) { 
+        Cookies.set('user', JSON.stringify(loggedInUser), { expires: 7 });
         return { isAuthenticated: true, user: loggedInUser };
       }
     }

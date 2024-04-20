@@ -1,6 +1,17 @@
-import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { db } from "./firebaseConfig";
+import { db } from './firebaseConfig';
+import { doc, setDoc, collection, updateDoc, getDoc } from 'firebase/firestore';
+import { Video } from '../../interfaces/collections';
 
+export const addVideoToCollection = async (videoUrl: Video) => {
+  const newVideoRef = doc(collection(db, 'videos'));
+  try {
+    await setDoc(newVideoRef, { url: videoUrl });
+    console.log('Video added successfully!');
+  } catch (error) {
+    console.error('Error adding video:', error);
+    throw new Error('Failed to add video');
+  }
+};
 export const updateUserDataInFirebase = async (userId: string, data: object) => {
   const userRef = doc(db, "users", userId);
   try {

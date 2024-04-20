@@ -1,18 +1,50 @@
-import { Dialog } from '@headlessui/react';
-import { useState } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
+import React, { Fragment, useState } from 'react';
 import { Video } from '@/interfaces/collections'; 
+import { addVideoToCollection } from '@/lib/firebase/firebaseFunctions';
+import { nanoid } from 'nanoid'
+
 
 interface VideoBlockProps {
   videos: Video[];
+  userRole: 'user' | 'psy';
+  updateVideo: (video: Video) => void;
 }
 
-export const VideoBlock = ({ videos }: VideoBlockProps) => {
+export const VideoBlock = ({ videos, userRole, updateVideo }: VideoBlockProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedVideoUrl, setSelectedVideoUrl] = useState<string>('');
+  const [newVideoUrl, setNewVideoUrl] = useState<string>('');
+  
 
   const openModal = (videoUrl: string): void => {
     setSelectedVideoUrl(videoUrl);
     setIsOpen(true);
+  };
+
+  const addVideo = async () => {
+    if (newVideoUrl.trim() !== '') {
+      try {
+        const newVideo = {
+          url: [newVideoUrl], 
+          slug: '',
+          title: '',
+          likes: [], 
+          SEOTitle: '',
+          SEODesc: '',
+          canonical: '',
+          video: [], 
+          id: nanoid(),
+        }
+        await addVideoToCollection(newVideo);
+        updateVideo(newVideo);
+        alert('Video added successfully!');
+        setNewVideoUrl('');
+      } catch (error) {
+        console.error('Failed to add video', error);
+        alert('Failed to add video');
+      }
+    }
   };
 
   const renderIframe = (url: string, width: string, height: string) => (
@@ -26,32 +58,93 @@ export const VideoBlock = ({ videos }: VideoBlockProps) => {
       className="rounded-lg" 
     ></iframe>
   );
-console.log(selectedVideoUrl.split("/embed/")[1])
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+  console.log(videos)
   return (
     <div className="p-3 m-4 bg-white rounded-2xl shadow-2xl border mt-[-1px]"> 
       <div className="flex flex-wrap justify-center gap-2"> 
         {videos.map((video, index) => (
           video.video.map((url, urlIndex) => (
-            <div key={`${index}-${urlIndex}`} className="w-full  p-1 "> 
-             <div className="cursor-pointer border-2 pb-2 rounded-2xl overflow-hidden" onClick={() => openModal(url)}>
-                {renderIframe(url, "101%", "150")} 
+            <div key={`${index}-${urlIndex}`} className="w-full p-1"> 
+              <div className="cursor-pointer border-2 pb-2 rounded-2xl overflow-hidden" onClick={() => openModal(url)}>
+                {renderIframe(url, "100%", "150")} 
               </div>
             </div>
           ))
         ))}
       </div>
+      {userRole === 'psy' && (
+        <div className="mt-4">
+          <input 
+            type="text"
+            value={newVideoUrl}
+            onChange={(e) => setNewVideoUrl(e.target.value)}
+            placeholder="Enter video URL"
+            className="border p-2 w-full"
+          />
+          <button onClick={addVideo} className="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Add Video
+          </button>
+        </div>
+      )}
       {isOpen && (
-  <Dialog open={isOpen} onClose={() => setIsOpen(false)} className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center">
-    <Dialog.Panel className="m-4 bg-white  mx-auto">
-      {renderIframe(selectedVideoUrl, "200%", "400")}
-      <div className="text-center mt-4">
-        <a href={`https://www.youtube.com/watch?v=${selectedVideoUrl.split("/embed/")[1]}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
-          Перейти в ютуб
-        </a>
-      </div>
-    </Dialog.Panel>
-  </Dialog>
-)}
+        <Transition.Root show={isOpen} as={Fragment}>
+          <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={closeModal}>
+            <div className="min-h-screen px-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0"
+                enterTo="opacity-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+              >
+                <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-30" />
+              </Transition.Child>
+              <span className="inline-block h-screen align-middle" aria-hidden="true">&#8203;</span>
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+                  <iframe
+                    width="100%"
+                    height="300"
+                    src={selectedVideoUrl}
+                    frameBorder="0"
+                    allowFullScreen
+                  ></iframe>
+                  <div className="mt-4">
+                    <button
+                      type="button"
+                      className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+                      onClick={closeModal}
+                    >
+                      Close
+                    </button>
+                    <a
+                      href={`https://www.youtube.com/watch?v=${selectedVideoUrl.split("/embed/")[1]}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="ml-4 text-blue-500 hover:underline"
+                    >
+                      Перейти в YouTube
+                    </a>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </Dialog>
+        </Transition.Root>
+      )}
     </div>
   );
 };

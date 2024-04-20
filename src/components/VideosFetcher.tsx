@@ -1,15 +1,22 @@
 'use client'
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { fetchDataFromCollection } from '@/lib/firebase/firebaseGetDocs';
 import { VideoBlock } from '@/components/VideoBlock';
 import { Video } from '@/interfaces/collections';
+import { useAppSelector } from '../redux/hooks';
+
 
 const VideosFetcher: React.FC = () => {
   const [videos, setVideos] = useState<Video[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
+  const userRole = useAppSelector((state) => state.auth.user?.role);
 
-
+  const addVideo = useCallback((newVideo: Video) => {
+    setVideos((prevState) => {
+      return [ ...prevState, newVideo ]
+    })
+  },[]) 
 
   useEffect(() => {
     const loadVideos = async () => {
@@ -30,7 +37,10 @@ const VideosFetcher: React.FC = () => {
     };
 
     loadVideos();
-  }, []);
+  }, [videos.length]);
+
+  
+
 
   if (loading) {
     return <div> <svg aria-hidden="true" className="inline w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -44,7 +54,7 @@ const VideosFetcher: React.FC = () => {
     return <div>Error: {error}</div>;
   }
 
-  return <VideoBlock videos={videos} />;
+  return <VideoBlock videos={videos} userRole={userRole} updateVideo={addVideo} />;
 };
 
 export default VideosFetcher;

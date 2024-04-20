@@ -27,8 +27,12 @@ const QuestionDetail = () => {
   const questionSlug: any = params.slug;
   const userId = useAppSelector((state) => state.auth.user?.id);
   const userRole = useAppSelector((state) => state.auth.user?.role);
+  const userName = useAppSelector((state) => state.auth.user?.name);
+  const userPhoto = useAppSelector((state) => state.auth.user?.photo);
   const MAX_LIKES = 100;
   const dispatch: AppDispatch = useDispatch();
+
+  
 
   const handleOpenModal = () => {
     dispatch(openModal());
@@ -128,11 +132,14 @@ const QuestionDetail = () => {
   }
 
   const onCommentAdd = (answerIndex: number) => {
+    debugger
     if (userId) {
       setAnswerForComments(answerIndex)
       const commentId = nanoid();
       setLastCommentId(commentId)
       const comments = questionData?.comments;
+
+      
 
       setQuestionData(currentData => ({
         ...currentData,
@@ -143,6 +150,9 @@ const QuestionDetail = () => {
             content: '',
             num: commentId,
             answerId: answerIndex,
+            name: userName,
+            photo: userPhoto,
+            userId, 
           }
         ]
       }));
@@ -150,10 +160,6 @@ const QuestionDetail = () => {
     } else {
       handleOpenModal()
     }
-
-
-
-
   }
 
   const onCommentChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>, commentNumber: string) => {
@@ -198,12 +204,12 @@ const QuestionDetail = () => {
   const sortedAnswers = questionData?.answers?.sort((a, b) => b.likes.length - a.likes.length) || [];
 
   return (
-    <div className="container mx-auto px-4 py-4 max-w-7xl">
+    <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px]">
       <div className="flex flex-wrap -mx-1 lg:-mx-1">
         <div className="w-full lg:w-1/4 px-1 lg:mb-0">
           <VideosFetcher />
         </div>
-        <div className="container ml-5 px-2 py-4 max-w-3xl bg-white shadow-xl rounded-2xl">
+        <div className="container ml-5 px-2 py-4 max-w-3xl bg-white shadow-xl rounded-2xl " style={{ maxWidth: '820px' }}>
           {questionData && (
             <>
               <h2 className="font-semibold bg-amber-300 text-gray-600 px-7 py-3 rounded-2xl leading-6 text-center xs:text-sm xs:px-3 sm:text-sm sm:px-4 md:text-base md:px-5 lg:text-lg lg:px-6 xl:text-xl xl:px-7">{questionData.title}</h2>
@@ -220,7 +226,7 @@ const QuestionDetail = () => {
                             <h3 className="font-semibold text-gray-600 leading-6">
                               <input
                                 type="text"
-                                className='w-full font-semibold'
+                                className='w-1/2 font-semibold'
                                 value={answer.title}
                                 onChange={(e) => onAnswerChange(e, answer.num)}
                                 placeholder="Текст ответа"
@@ -229,7 +235,7 @@ const QuestionDetail = () => {
                             <p className="font-semibold text-gray-600 mt-2 w-full ">
                               <textarea
                                 value={answer.content}
-                                className='w-full h-12 font-semibold'
+                                className='w-1/2 h-12 font-semibold'
                                 onChange={(e) => onAnswerChange(e, answer.num, 'content')}
                                 placeholder="Описание ответа"
                               />
@@ -260,30 +266,34 @@ const QuestionDetail = () => {
                         onClick={() => handleLikeClick(answer.num, answer.likes)} />
                       <span className="text-gray-500">{answer.likes.length}</span>
                       <div className="flex-1 mx-2.5">
-                        <div className="h-2.5 border border-gray-300 rounded">
-                          <div className="h-full bg-teal-400 rounded" style={{ width: `${progressWidth}%` }}></div>
+                        <div className=" h-2.5 border border-gray-300 rounded">
+                          <div className=" h-full bg-teal-400 rounded" style={{ width: `${progressWidth}%` }}></div>
                         </div>
                       </div>
                     </div>
 
 
-                    <div className='font-semibold text-gray-600 leading-6 mt-2 ml-5'>
-                      Комментарии
+                    <div className='font-semibold  text-gray-800 leading-6 mt-2 ml-5'>
+                      <p className='text-lg'>Комментарии</p>
                       <div>
-                        {
-                          questionData?.comments?.filter(comment => comment.answerId === answer.num && comment.num !== lastCommentId).map((comment, index) => (
-                            <div key={index} className='flex font-semibold text-gray-600 text-lg leading-6'>
-                              {index + 1}.
-                              <div className='ml-3 leading-5'>{comment.content}</div>
-                              {userRole === 'user' ? (
-                                <div className='cursor-pointer ml-3 mt-1' onClick={() => onCommentDelete(comment.num)}>
-                                  <MdClose />
-                                </div>
-                              ) : null}
-                            </div>
-
-                          ))
-                        }
+                      {
+  questionData?.comments?.filter(comment => comment.answerId === answer.num && comment.num !== lastCommentId).map((comment, index) => (
+    <div key={index} className="flex flex-col p-3 bg-white shadow rounded-lg mb-3 mt-2">
+      <div className="flex items-center space-x-3 ">
+        <img src={comment.photo || '/default_avatar.jpg'} alt="User Avatar" className="w-10 h-10 rounded-full object-cover" />
+        <div className="flex flex-col flex-grow">
+          <p className="text-xs font-semibold text-gray-800">{comment?.userId === userId ? 'Вы' : comment?.name}</p>
+          <p className="text-md text-gray-600 mt-1">{comment.content}</p>
+        </div>
+        {userRole === 'user' && (
+          <div className='cursor-pointer' onClick={() => onCommentDelete(comment.num)}>
+            <MdClose />
+          </div>
+        )}
+      </div>
+    </div>
+  ))
+}
                       </div>
                     </div>
 
@@ -293,21 +303,21 @@ const QuestionDetail = () => {
                           <>
                             <input
                               type="text"
-                              className='w-full font-semibold text-gray-500 text-md leading-6 mt-2'
+                              className='w-1/2 font-semibold text-gray-500 text-md leading-6 mt-2'
                               onChange={(e) => onCommentChange(e, lastCommentId)}
                               placeholder=" Текст комментария..."
                             />
-                            <button className='text-gray-600 hover:text-neutral-600 hover:text-gray-800 uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 px-2'
-                              onClick={() => onCommentSave()}>Отправить</button>
+                            <button
+  className='text-white bg-gray-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg'
+  onClick={() => onCommentSave()}
+>
+  Отправить
+</button>
                           </>
                           : (<button className='text-gray-600 hover:text-neutral-600 hover:text-gray-800 uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sn mt-5 ml-3 px-2'
                             onClick={() => onCommentAdd(answer.num)}>Комментировать</button>)}
                       </>
                     ) : null}
-
-
-
-
                     <hr className="my-4 border-gray-400" />
                   </div>
                 );
@@ -315,8 +325,6 @@ const QuestionDetail = () => {
             </>
           )
           }
-
-
           {userRole === 'psy' ? (
             <>
               <button className='text-gray-600 hover:text-neutral-600 hover:text-gray-800 uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-3 px-2'
@@ -325,16 +333,12 @@ const QuestionDetail = () => {
                 onClick={onSave}>Опубликовать</button>
             </>
           ) : null}
-
           <br />
-
-
           <Link href={HOME_ROUTE}>
             <button className="inline-block mt-4 px-6 py-2 font-medium leading-6 text-center text-white uppercase transition bg-blue-500 rounded-full shadow ripple waves-light hover:shadow-lg focus:outline-none hover:bg-blue-600 xs:text-xs sm:text-xs md:text-xs lg:text-sm xl:text-sm">
               Вернуться на главную
             </button>
           </Link>
-
         </div >
       </div>
     </div>
