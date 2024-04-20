@@ -7,7 +7,7 @@ import VideosFetcher from '@/components/VideosFetcher';
 const Articles: React.FC = () => {
   return (
 
-    <div className="container mx-auto px-4 py-8 flex">
+    <div className="container mx-auto px-4 py-8 flex mt-[-40px]">
       <div className="w-1/4 px-1 lg:mb-0">
         <VideosFetcher />
       </div>

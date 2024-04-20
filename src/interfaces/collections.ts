@@ -6,6 +6,9 @@ export interface Comment {
   date?: string;
   num: Number | string,
   answerId: Number
+  userId?: string; 
+  name?: string;
+  photo?: string;
 }
 
 export interface Video {

@@ -30,7 +30,7 @@ const Home: React.FC = () => {
 
 
   return (
-    <div className="flex flex-col items-center justify-center mx-auto" >
+    <div className="flex flex-col items-center justify-center mx-auto">
       <h1 className="sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 leading-none text-center ">
         Психология должна быть простой!
       </h1>

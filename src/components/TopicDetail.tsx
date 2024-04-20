@@ -43,13 +43,13 @@ const TopicDetail = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-4 max-w-7xl">
+    <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px]" >
       <div className="flex flex-wrap -mx-1 lg:-mx-1">
         <div className="w-full lg:w-1/4 px-1 lg:mb-0">
           <VideosFetcher />
         </div>
 
-        <div className="container mx-auto px-2 py-4 max-w-xl bg-white shadow-xl rounded-2xl">
+        <div className="container ml-5 px-2 py-4 max-w-xl bg-white shadow-xl rounded-2xl" style={{ maxWidth: '820px' }}>
           <h2 className="font-semibold bg-amber-300 text-gray-600 px-7 py-3 rounded-2xl leading-6 text-center">{topicData.title}</h2>
 
           <Link href={HOME_ROUTE}>

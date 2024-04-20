@@ -64,7 +64,7 @@ const TopicsComponent: React.FC<{ position: 'left' | 'right' }> = ({ position })
           >
 
             <div className="z-10 space-y-2 md:space-y-2  xs:pt-2 xs:pb-2 xs:pl-7 xs:pr-7 sm:pl-16 sm:pr-12 md:pl-[3.25rem] md:pr-[3.25rem] md:pt-1 md:pb-1 lg:pl-[2.25rem] lg:pr-[2.25rem] lg:pt-1 lg:pb-1" style={textStyle}>
-              <h2 className="font-balsamiq-sans font-bold text-small-caps text-xs sm:text-sm md:text-base lg:text-base xl:text-lg text-gray-600">
+              <h2 className="font-balsamiq-sans font-bold text-small-caps text-xs sm:text-sm md:text-base lg:text-base xl:text-lg text-gray-600 ">
                 {topic.title}
               </h2>
 
