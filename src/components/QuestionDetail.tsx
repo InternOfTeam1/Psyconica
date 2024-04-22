@@ -16,6 +16,7 @@ import { nanoid } from '@reduxjs/toolkit';
 import VideosFetcher from './VideosFetcher';
 import icon from '../../public/iconPsy.png';
 import Image from 'next/image';
+import { FaPen } from "react-icons/fa";
 
 function fetchQuestionData(slug: {}) {
   return fetchDoc('questions', slug);
@@ -147,15 +148,17 @@ const QuestionDetail = () => {
     await updateQuestion(questionSlug, questionData)
   }
 
-  const onAnswerDelete = (answerNum: number) => {
+  const onAnswerDelete = async(answerNum: number) => {
     const answers: any = questionData?.answers;
 
     const newAnswers = answers?.filter((answer: { num: number; }) => answer.num !== answerNum)
-
-    setQuestionData({
+    const newQuestionData ={
       ...questionData,
       answers: newAnswers
-    })
+    }
+
+    setQuestionData(newQuestionData)
+    await updateQuestion(questionSlug, newQuestionData);
   }
 
   const onCommentAdd = (answerIndex: number) => {
@@ -342,9 +345,9 @@ const QuestionDetail = () => {
                                   <p className="text-xs font-semibold text-gray-800">{comment?.userId === userId ? 'Вы' : comment?.name}</p>
                                   <p className="text-md text-gray-600 mt-1">{comment.content}</p>
                                 </div>
-                                {userRole === 'user' && (
+                                {userRole === 'user' || 'psy' && (
                                   <>
-                                    <button className='text-white bg-gray-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-2 mt-2 py-1 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg'>Изменить</button>
+                                    <FaPen className='text-grey-500 mr-1 cursor-pointer' />
                                     <div className='cursor-pointer' onClick={() => onCommentDelete(comment.num)}>
                                       <MdClose />
                                     </div>
