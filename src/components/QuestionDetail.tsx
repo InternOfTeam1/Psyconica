@@ -148,11 +148,11 @@ const QuestionDetail = () => {
     await updateQuestion(questionSlug, questionData)
   }
 
-  const onAnswerDelete = async(answerNum: number) => {
+  const onAnswerDelete = async (answerNum: number) => {
     const answers: any = questionData?.answers;
 
     const newAnswers = answers?.filter((answer: { num: number; }) => answer.num !== answerNum)
-    const newQuestionData ={
+    const newQuestionData = {
       ...questionData,
       answers: newAnswers
     }
@@ -235,7 +235,7 @@ const QuestionDetail = () => {
 
   return (
     <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px]">
-      <div className="flex flex-wrap -mx-1 lg:-mx-1">
+      <div className="flex flex-wrap -mx-1 xs:flex-col-reverse lg:flex-row lg:-mx-1">
         <div className="w-full lg:w-1/4 px-1 lg:mb-0">
           <VideosFetcher />
         </div>
@@ -390,12 +390,16 @@ const QuestionDetail = () => {
           }
 
           <br />
-          <Link href={HOME_ROUTE}>
-            <button className="inline-block mt-4 px-6 py-2 font-medium leading-6 text-center text-white uppercase transition bg-blue-500 rounded-full shadow ripple waves-light hover:shadow-lg focus:outline-none hover:bg-blue-600 xs:text-xs sm:text-xs md:text-xs lg:text-sm xl:text-sm">
-              Вернуться на главную
-            </button>
-          </Link>
+
         </div >
+
+      </div>
+      <div className='text-center'>
+        <Link href={HOME_ROUTE}>
+          <button className="inline-block mt-4 mb-10 px-6 py-2 text-sm font-medium leading-6 text-center text-white uppercase transition bg-blue-500 rounded-full shadow ripple hover:shadow-lg focus:outline-none hover:bg-blue-600">
+            Вернуться на главную
+          </button>
+        </Link>
       </div>
     </div>
 
