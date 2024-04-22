@@ -13,7 +13,7 @@ import { setUserState } from "@/redux/slices/authSlice";
 import Cookies from 'js-cookie';
 import PsychologistModal from './PsychologistCheckbox';
 import { openModal, closeModal } from '@/redux/slices/modalSlice';
-import { AiOutlineMenu, AiOutlineClose } from 'react-icons/ai';
+import { PiXBold, PiListBold } from "react-icons/pi";
 
 
 const Header: React.FC = () => {
@@ -89,26 +89,26 @@ const Header: React.FC = () => {
     <header className="flex flex-wrap mx-auto max-w-[1200px] bg-transparent justify-between items-center  xs:mb-[50px] mt-5 mb-[100px] header">
     {!menuOpen && (
         <div onClick={handleNav} className='sm:hidden cursor-pointer pl-5 pt-5 absolute top-0 left-0 text-gray-500  hover:text-white'>
-          <AiOutlineMenu size={25}/>
+          <PiListBold size={25}/>
         </div>
       )}
-     <nav className="gap-2 nav hidden sm:flex">
-      <Link href="/questions" className=" cursor-pointer text-gray-500  hover:bg-neutral-500  hover:rounded-full hover:text-white font-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 mt-5 py-1 px-5 nav-link  hidden sm:flex">Вопросы</Link>
-      <Link href="/articles" className="cursor-pointer text-gray-500  hover:bg-neutral-500  hover:rounded-full hover:text-white font-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 mt-5 py-1 px-5 nav-link  hidden sm:flex">Статьи</Link>
+     <nav className="gap-2 hidden sm:flex">
+      <Link href="/questions" className=" cursor-pointer text-gray-500  hover:bg-neutral-500  hover:rounded-full hover:text-white font-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 mt-5 py-1 px-5 hidden sm:flex">Вопросы</Link>
+      <Link href="/articles" className="cursor-pointer text-gray-500  hover:bg-neutral-500  hover:rounded-full hover:text-white font-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 mt-5 py-1 px-5 hidden sm:flex">Статьи</Link>
     </nav>
     <div className="flex items-center justify-center">
-  <Link href={HOME_ROUTE} className="flex items-center mt-5 logo lg:order-3 text-center">
-        <Image
-          src="/siteName.webp"
-          alt="website name"
-          width={400}                                   
-          height={100}
-          className="max-w-full h-full object-cover"
-          priority={true}
-        />
-      </Link>
+    <Link href={HOME_ROUTE} className="flex items-center mt-5 lg:order-3 md:order-3 text-center xs:max-w-[80%] lg:max-w-[100%]">
+      <Image
+        src="/siteName.webp"
+        alt="website name"
+        width={400}
+        height={100}
+        className="max-w-full h-full object-cover"
+        priority={true}
+      />
+    </Link>
     </div>
-    <div className="xs:order-2 sm:order-2 sm:mr-20 md:order-2 md:mr-30 lg:order-3 xl:order-3 xl:mr-20 mr-5 social ">
+    <div className="xs:order-2 sm:order-2 sm:mr-10 md:order-2 md:mr-30 lg:order-3 xl:order-3 xl:mr-20 mr-5 ">
         <Social />
           <ul className="items-center gap-2 mb-4 align-middle list hidden sm:flex">
             {!isAuthenticated ? (
@@ -131,38 +131,38 @@ const Header: React.FC = () => {
         </div>
         <div className={
           menuOpen 
-          ? "fixed left-0 top-0 w-[60%] sm:hidden p-10 ease-in duration-500 h-[fit-content] max-h-screen overflow-y-auto bg-[#c787f160]"
-          : "fixed left-[-100%] top-0 p-10 ease-in duration-500"
+          ? "fixed left-0 top-0 w-[75%] sm:hidden p-7 ease-in duration-500 h-[fit-content] max-h-screen overflow-y-auto bg-gradient-to-r from-purple-300 to-transparent"
+          : "fixed left-[-100%] top-0 p-10 ease-in duration-500 bg-gradient-to-r from-purple-300 to-transparent"
         }> 
-        <div className='flex w-full items-center justify-end'>
+        <div className='flex w-full items-center justify-start'>
           <div onClick={handleNav} className='cursor-pointer text-gray-500 hover:text-white'>
-            <AiOutlineClose size={25}/>
+            <PiXBold size={25} />
           </div>
         </div>
         <div className='flex-col py-4'>
           <ul>
           <Link href="/questions">
             <li onClick={() => setMenuOpen(false)}
-            className='py-2 cursor-pointer text-gray-600 font-semibold  hover:text-white'>
+            className='py-1.5 cursor-pointer text-gray-600 font-bold  hover:text-white'>
               Вопросы
             </li>
           </Link>
           <Link href="/articles">
             <li onClick={() => setMenuOpen(false)}
-            className='py-2 cursor-pointer text-gray-600 font-semibold hover:text-white'>
+            className='py-1.5 cursor-pointer text-gray-600 font-bold hover:text-white'>
               Статьи
             </li>
           </Link>
             {!isAuthenticated ? (
-              <li onClick={() => { handleOpenModal(); setMenuOpen(false); }} className="py-2 cursor-pointer text-gray-600 font-semibold  hover:text-white">Log in with social network</li>
+              <li onClick={() => { handleOpenModal(); setMenuOpen(false); }} className="py-1.5 cursor-pointer text-gray-600 font-bold  hover:text-white">Log in with social network</li>
             ) : (
               <>
                 <Link href={PROFILE_ROUTE}>
-                <li onClick={() => setMenuOpen(false)} className="py-2 cursor-pointer text-gray-600 font-semibold  hover:text-white">
+                <li onClick={() => setMenuOpen(false)} className="py-1.5 cursor-pointer text-gray-600 font-bold  hover:text-white">
                     Личный кабинет
                   </li>
                 </Link>
-                <li onClick={() => { handleLogout(); setMenuOpen(false); }} className="py-2 cursor-pointer text-gray-600 font-semibold  hover:text-white">
+                <li onClick={() => { handleLogout(); setMenuOpen(false); }} className="py-1.5 cursor-pointer text-gray-600 font-bold  hover:text-white">
                   Log out
                 </li>
               </>
