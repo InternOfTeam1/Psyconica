@@ -11,7 +11,7 @@ const VideosFetcher: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
   const userRole = useAppSelector((state) => state.auth.user?.role);
-
+console.log('gdghdhdhjdsjud', videos)
   const addVideo = useCallback((newVideo: Video) => {
     setVideos((prevState) => {
       return [ ...prevState, newVideo ]
@@ -55,6 +55,7 @@ const VideosFetcher: React.FC = () => {
   }
 
   return <VideoBlock videos={videos} userRole={userRole} updateVideo={addVideo} />;
+  
 };
 
 export default VideosFetcher;

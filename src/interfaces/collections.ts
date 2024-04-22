@@ -12,15 +12,17 @@ export interface Comment {
 }
 
 export interface Video {
-  url: string[];
-  slug?: string;
+  id: string;
+  video: string[]; 
   title?: string;
+  description?: string;
+  slug?: string;
+  content?: string;
+  date?: string;
   likes?: string[];
   SEOTitle?: string;
   SEODesc?: string;
   canonical?: string;
-  video: string[];
-  id: string;
 }
 
 export interface Article {
