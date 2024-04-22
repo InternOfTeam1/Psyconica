@@ -14,6 +14,8 @@ import { AppDispatch } from '@/redux/store';
 import { openModal } from '@/redux/slices/modalSlice';
 import { nanoid } from '@reduxjs/toolkit';
 import VideosFetcher from './VideosFetcher';
+import icon from '../../public/iconPsy.png';
+import Image from 'next/image';
 
 function fetchQuestionData(slug: {}) {
   return fetchDoc('questions', slug);
@@ -119,12 +121,20 @@ const QuestionDetail = () => {
   }
 
 
-  const onNewAnswerSave = async() => {
+  const onNewAnswerSave = async () => {
     const answers: any = questionData?.answers;
+
+    const nameToAdd = userRole === 'psy' ? userName : 'Psy';
+
+    const updatedNewAnswer = {
+      ...newAnswer,
+      name: nameToAdd,
+      psyPhoto: userRole === 'psy' ? userPhoto : '/psy_avatar.jpg',
+    };
 
     const newQuestionData = {
       ...questionData,
-      answers: [...answers, newAnswer]
+      answers: [...answers, updatedNewAnswer]
     }
 
     setQuestionData(newQuestionData)
@@ -230,7 +240,7 @@ const QuestionDetail = () => {
           {questionData && (
             <>
               <h2 className="font-semibold bg-amber-300 text-gray-600 px-7 py-3 rounded-2xl leading-6 text-center xs:text-sm xs:px-3 sm:text-sm sm:px-4 md:text-base md:px-5 lg:text-lg lg:px-6 xl:text-xl xl:px-7">{questionData.title}</h2>
-              
+
               {userRole === 'psy' ? (
                 newAnswer ?
                   <>
@@ -248,22 +258,38 @@ const QuestionDetail = () => {
                     </button>
                   </>
                   : (<button className='text-gray-600 hover:text-neutral-600 hover:text-gray-800 uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sn mt-5 ml-3 px-2'
-                  onClick={onAnswerAdd}>Ответить</button>)
-               ) : null}
+                    onClick={onAnswerAdd}>Ответить</button>)
+              ) : null}
 
               {sortedAnswers.map((answer: Answers, index: number) => {
                 const progressWidth = (answer.likes.length / MAX_LIKES) * 100;
                 return (
-                  <div key={index} className="mt-4 w-full">
+                  <div key={index} className="mt-4 w-full ">
+
+                    <div className="flex items-center">
+                      {answer.psyPhoto && (
+                        <img
+                          src={answer.psyPhoto}
+                          alt="User Avatar"
+                          className="w-10 h-10 rounded-full object-cover mr-3"
+                        />
+                      )}
+                      <p className="font-semibold text-black flex items-center bg-gray-200 rounded-2xl p-1">
+                        <span className="mr-1">{answer.name}</span>
+                        <Image src={icon} alt="Psy Icon" width={20} height={20} />
+                      </p>
+                    </div>
+
                     <div className="flex items-start mb-4">
-                      <p className="font-semibold text-gray-600 mt-1 ml-3 mr-2">{index + 1}.</p>
+
+                      <p className="font-semibold text-gray-500 mt-1 ml-1 mr-1 px-1 xs:text-sm  sm:text-sm md:text-base lg:text-lg xl:text-xl ">{index + 1}.</p>
                       {userRole === 'psy' ? (
                         <>
                           <div className='w-full'>
                             <h3 className="font-semibold text-gray-600 leading-6">
                               <input
                                 type="text"
-                                className='w-1/2 font-semibold text-gray-500 text-md leading-6 mt-1'
+                                className='w-1/2 font-semibold text-gray-500 text-md leading-6 mt-1 px-1 xs:text-sm  sm:text-sm md:text-base lg:text-lg  xl:text-xl '
                                 value={answer.title}
                                 onChange={(e) => onAnswerChange(e, answer.num)}
                                 placeholder="Текст ответа"
@@ -318,10 +344,10 @@ const QuestionDetail = () => {
                                 </div>
                                 {userRole === 'user' && (
                                   <>
-                                  <button className='text-white bg-gray-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-2 mt-2 py-1 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg'>Изменить</button>
-                                  <div className='cursor-pointer' onClick={() => onCommentDelete(comment.num)}>
-                                    <MdClose />
-                                  </div>
+                                    <button className='text-white bg-gray-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-2 mt-2 py-1 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg'>Изменить</button>
+                                    <div className='cursor-pointer' onClick={() => onCommentDelete(comment.num)}>
+                                      <MdClose />
+                                    </div>
                                   </>
                                 )}
                               </div>
