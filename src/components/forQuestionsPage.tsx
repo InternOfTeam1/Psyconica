@@ -56,7 +56,7 @@ const QuestionsComponent: React.FC = () => {
 
       <h1 className="text-2xl font-bold text-center my-6">Вопросы</h1>
       <div className="flex flex-wrap -mx-4 xs:flex-col-reverse lg:flex-row">
-        <div className="w-full lg:w-1/4 px-1 mb-4 lg:mb-0">
+        <div className="w-full lg:w-1/4 px-1 mb-4 lg:mb-0  xs:mt-2 xs:mx-auto lg:mx-0 lg:mt-0">
           <VideosFetcher />
         </div>
         <div className="w-full lg:w-3/4 px-2">
@@ -76,14 +76,16 @@ const QuestionsComponent: React.FC = () => {
               </Link>
             ))}
           </div>
-          <div className='text-center'>
-            <Link href={HOME_ROUTE}>
-              <button className="inline-block mt-4 mb-10 px-6 py-2 text-sm font-medium leading-6 text-center text-white uppercase transition bg-blue-500 rounded-full shadow ripple hover:shadow-lg focus:outline-none hover:bg-blue-600">
-                Вернуться на главную
-              </button>
-            </Link>
-          </div>
+
         </div>
+
+      </div>
+      <div className='text-center'>
+        <Link href={HOME_ROUTE}>
+          <button className="inline-block mt-4 mb-10 px-6 py-2 text-sm font-medium leading-6 text-center text-white uppercase transition bg-blue-500 rounded-full shadow ripple hover:shadow-lg focus:outline-none hover:bg-blue-600">
+            Вернуться на главную
+          </button>
+        </Link>
       </div>
     </div>
   );

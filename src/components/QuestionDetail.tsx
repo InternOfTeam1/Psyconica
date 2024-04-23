@@ -5,7 +5,7 @@ import { fetchDoc } from '@/lib/firebase/firebaseGetDocs';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { Answers, QuestionData } from '@/interfaces/collections';
 import Link from 'next/link';
-import { HOME_ROUTE } from '@/constants/routes';
+import { HOME_ROUTE, PROFILE_ROUTE } from '@/constants/routes';
 import { useParams } from 'next/navigation';
 import { useAppSelector } from '../redux/hooks';
 import { updateAnswerLikes, updateQuestion, updateComment } from '@/lib/firebase/firebaseFunctions';
@@ -236,13 +236,14 @@ const QuestionDetail = () => {
   return (
     <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px]">
       <div className="flex flex-wrap -mx-1 xs:flex-col-reverse lg:flex-row lg:-mx-1">
-        <div className="w-full lg:w-1/4 px-1 lg:mb-0">
+
+        <div className="w-full lg:w-1/4 px-1 mb-4 lg:mb-0  xs:mt-2 xs:mx-auto lg:mx-0 lg:mt-0">
           <VideosFetcher />
         </div>
         <div className="container ml-5 px-2 py-4 max-w-3xl bg-white shadow-xl rounded-2xl " style={{ maxWidth: '820px' }}>
           {questionData && (
             <>
-              <h2 className="font-semibold bg-amber-300 text-gray-600 px-7 py-3 rounded-2xl leading-6 text-center xs:text-sm xs:px-3 sm:text-sm sm:px-4 md:text-base md:px-5 lg:text-lg lg:px-6 xl:text-xl xl:px-7">{questionData.title}</h2>
+              <h2 className="font-semibold bg-amber-300 text-black px-7 py-3 rounded-2xl leading-6 text-center xs:text-sm xs:px-3 sm:text-sm sm:px-4 md:text-base md:px-5 lg:text-lg lg:px-6 xl:text-xl xl:px-7">{questionData.title}</h2>
 
               {userRole === 'psy' ? (
                 newAnswer ?
@@ -268,20 +269,24 @@ const QuestionDetail = () => {
                 const progressWidth = (answer.likes.length / MAX_LIKES) * 100;
                 return (
                   <div key={index} className="mt-4 w-full ">
+                    <Link href={PROFILE_ROUTE}>
 
-                    <div className="flex items-center">
-                      {answer.psyPhoto && (
-                        <img
-                          src={answer.psyPhoto}
-                          alt="User Avatar"
-                          className="w-10 h-10 rounded-full object-cover mr-3"
-                        />
-                      )}
-                      <p className="font-semibold text-black flex items-center bg-gray-200 rounded-2xl p-1">
-                        <span className="mr-1">{answer.name}</span>
-                        <Image src={icon} alt="Psy Icon" width={20} height={20} />
-                      </p>
-                    </div>
+                      <div className="flex items-center">
+                        {answer.psyPhoto && (
+                          <img
+                            src={answer.psyPhoto}
+                            alt="User Avatar"
+                            className="w-10 h-10 rounded-full object-cover mr-3"
+                          />
+                        )}
+                        <p className="font-semibold text-black flex items-center bg-gray-200 rounded-2xl p-1">
+                          <span className="mr-1">{answer.name}</span>
+                          <Image src={icon} alt="Psy Icon" width={20} height={20} />
+                        </p>
+                      </div>
+
+
+                    </Link>
 
                     <div className="flex items-start mb-4">
 
@@ -289,10 +294,10 @@ const QuestionDetail = () => {
                       {userRole === 'psy' ? (
                         <>
                           <div className='w-full'>
-                            <h3 className="font-semibold text-gray-600 leading-6">
+                            <h3 className="font-semibold text-black text-md leading-6 mt-1 px-1 xs:text-base sm:text-base md:text-base lg:text-lg  xl:text-xl ">
                               <input
                                 type="text"
-                                className='w-1/2 font-semibold text-gray-500 text-md leading-6 mt-1 px-1 xs:text-sm  sm:text-sm md:text-base lg:text-lg  xl:text-xl '
+                                className='w-1/2 font-semibold text-black text-md leading-6 mt-1 px-1 xs:text-base sm:text-base md:text-base lg:text-lg  xl:text-xl '
                                 value={answer.title}
                                 onChange={(e) => onAnswerChange(e, answer.num)}
                                 placeholder="Текст ответа"

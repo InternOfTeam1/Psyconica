@@ -46,7 +46,7 @@ const TopicDetail = () => {
     <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px]" >
       <div className="flex flex-wrap -mx-1 xs:flex-col-reverse lg:flex-row">
 
-        <div className="w-full lg:w-1/4 px-1 lg:mb-0">
+        <div className="w-full lg:w-1/4 px-1 mb-4 lg:mb-0  xs:mt-2 xs:mx-auto lg:mx-0 lg:mt-0">
           <VideosFetcher />
         </div>
 
