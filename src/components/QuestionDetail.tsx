@@ -27,10 +27,6 @@ const QuestionDetail = () => {
   const [answerForComments, setAnswerForComments] = useState<any>(null);
   const [newAnswer, setNewAnswer] = useState<any>(null);
   const [lastCommentId, setLastCommentId] = useState<any>(null);
-  const [editingAnswerNum, setEditingAnswerNum] = useState<number | null>(null);
-  const [editedAnswer, setEditedAnswer] = useState<string>('');
-  const [editingCommentNum, setEditingCommentNum] = useState<string | null>(null);
-  const [editedComment, setEditedComment] = useState<string>('');
   const params = useParams();
   const questionSlug: any = params.slug;
   const userId = useAppSelector((state) => state.auth.user?.id);
@@ -94,19 +90,19 @@ const QuestionDetail = () => {
     document.title = `${questionData?.title}`;
   }, [questionData])
 
-  // const onAnswerChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>, answerNumber: number, field = 'title') => {
-  //   const newValue = e.target.value;
+  const onAnswerChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>, answerNumber: number, field = 'title') => {
+    const newValue = e.target.value;
 
-  //   console.log(questionData)
-  //   const answers = questionData?.answers;
+    console.log(questionData)
+    const answers = questionData?.answers;
 
-  //   const changedAnswers = answers?.map(answer => answerNumber === answer.num ? { ...answer, [field]: newValue } : answer);
+    const changedAnswers = answers?.map(answer => answerNumber === answer.num ? { ...answer, [field]: newValue } : answer);
 
-  //   setQuestionData({
-  //     ...questionData,
-  //     answers: changedAnswers ?? []
-  //   })
-  // }
+    setQuestionData({
+      ...questionData,
+      answers: changedAnswers ?? []
+    })
+  }
 
   const onAnswerAdd = () => {
     setNewAnswer({
@@ -165,123 +161,53 @@ const QuestionDetail = () => {
     await updateQuestion(questionSlug, newQuestionData);
   }
 
-  const onAnswerEdit = (answerNum: number) => {
-    setEditingAnswerNum(answerNum);
-    const currentAnswer = questionData?.answers?.find(answer => answer.num === answerNum);
-    if (currentAnswer) {
-      setEditedAnswer(currentAnswer.title);
-    }
-  };
-
-  const onAnswerSave = async (answerNum: number) => {
-    const updatedAnswers = questionData?.answers?.map(answer =>
-      answer.num === answerNum ? { ...answer, title: editedAnswer } : answer
-    );
-    const newQuestionData = {
-      ...questionData,
-      answers: updatedAnswers || []
-    }
-
-    setQuestionData(newQuestionData);
-    setEditingAnswerNum(null);
-
-    await updateQuestion(questionSlug, newQuestionData);
-  };
-
-  const onAnswerChange = (e: ChangeEvent<HTMLInputElement>, answerNumber: number) => {
-    setEditedAnswer(e.target.value);
-  };
-
   const onCommentAdd = (answerIndex: number) => {
     debugger
     if (userId) {
       setAnswerForComments(answerIndex)
       const commentId = nanoid();
       setLastCommentId(commentId)
+      const comments = questionData?.comments;
+
+
+
+      setQuestionData(currentData => ({
+        ...currentData,
+        answers: currentData?.answers || [],
+        comments: [
+          ...(currentData?.comments || []),
+          {
+            content: '',
+            num: commentId,
+            answerId: answerIndex,
+            name: userName,
+            photo: userPhoto,
+            userId,
+          }
+        ]
+      }));
+
     } else {
       handleOpenModal()
     }
   }
 
-  // const onCommentChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>, commentNumber: string) => {
-  //   const newValue = e.target.value;
+  const onCommentChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>, commentNumber: string) => {
+    const newValue = e.target.value;
 
-  //   setQuestionData(currentData => {
-  //     const updatedComments = currentData?.comments?.map(comment =>
-  //       commentNumber === comment.num.toString() ? { ...comment, content: newValue } : comment
-  //     ) ?? [];
+    setQuestionData(currentData => {
+      const updatedComments = currentData?.comments?.map(comment =>
+        commentNumber === comment.num.toString() ? { ...comment, content: newValue } : comment
+      ) ?? [];
 
-  //     return {
-  //       ...currentData,
-  //       answers: currentData?.answers ?? [],
-  //       comments: updatedComments
-  //     };
-  //   });
+      return {
+        ...currentData,
+        answers: currentData?.answers ?? [],
+        comments: updatedComments
+      };
+    });
 
-  // }
-
-  // const onCommentDelete = async (commentNum: any) => {
-  //   const comments: any = questionData?.comments;
-
-  //   const newComments = comments?.filter((comment: { num: any }) => comment.num !== commentNum)
-
-  //   const updatedQuestion = {
-  //     ...questionData,
-  //     answers: questionData?.answers ?? [],
-  //     comments: newComments
-  //   }
-
-  //   setQuestionData(updatedQuestion)
-  //   await updateComment(questionSlug, updatedQuestion)
-  // }
-
-  const onCommentEdit = (commentNum: string, commentText: string) => {
-    setEditingCommentNum(commentNum);
-    // Установить текст текущего комментария для редактирования
-    setEditedComment(commentText);
-  };
-
-  const onCommentSend = async (commentNum: string) => {
-    // Обновить комментарий с указанным номером
-    // Найти комментарий по номеру и обновить его текст
-    const updatedComments = questionData?.comments?.map(comment =>
-      comment.num === commentNum ? { ...comment, content: editedComment } : comment
-    );
-
-    const newQuestionData = {
-      ...questionData,
-      comments: updatedComments || []
-    };
-
-    setQuestionData(newQuestionData)
-    setEditingCommentNum(null);
-
-    await updateComment(questionSlug, newQuestionData)
-  };
-
-  const onCommentCreate = async (answerNum: string) => {
-    const newComment = {
-      num: lastCommentId,
-      answerId: answerNum,
-      content: editedComment,
-      name: userName,
-      photo: userPhoto,
-      userId,
-    }
-
-    const newQuestionData = {
-      ...questionData,
-      comments: questionData?.comments?.length ? [...questionData?.comments, newComment] : [newComment]
-    };
-
-    setQuestionData(newQuestionData)
-    setEditingCommentNum(null);
-    setEditedComment('')
-    setAnswerForComments(null)
-    setLastCommentId(null)
-
-    await updateComment(questionSlug, newQuestionData)
-  };
+  }
 
   const onCommentSave = async () => {
     await updateComment(questionSlug, questionData)
@@ -289,10 +215,6 @@ const QuestionDetail = () => {
     setAnswerForComments(null)
     setLastCommentId(null)
   }
-
-  const onCommentChange = (e: ChangeEvent<HTMLInputElement>, commentNum: string) => {
-    setEditedComment(e.target.value);
-  };
 
   const onCommentDelete = async (commentNum: any) => {
     const comments: any = questionData?.comments;
@@ -327,18 +249,18 @@ const QuestionDetail = () => {
                   <>
                     <input
                       type="text"
-                      className='w-1/2 font-semibold text-gray-500 text-md leading-6 mt-2 ml-5'
+                      className='w-1/2 font-semibold text-gray-500 text-md leading-6 mt-2'
                       onChange={onNewAnswerChange}
                       placeholder=" Текст ответа..."
                     />
                     <button
-                      className='text-white bg-gray-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mt-3 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg'
+                      className='text-white bg-gray-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg'
                       onClick={onNewAnswerSave}
                     >
                       Опубликовать
                     </button>
                   </>
-                  : (<button className='text-white bg-gray-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mt-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg'
+                  : (<button className='text-gray-600 hover:text-neutral-600 hover:text-gray-800 uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sn mt-5 ml-3 px-2'
                     onClick={onAnswerAdd}>Ответить</button>)
               ) : null}
 
@@ -363,41 +285,36 @@ const QuestionDetail = () => {
 
                     <div className="flex items-start mb-4">
 
-                      <p className="font-semibold text-gray-500 ml-1 mr-1 px-1 xs:text-sm  sm:text-sm md:text-base lg:text-lg xl:text-xl ">{index + 1}.</p>
-                      {editingAnswerNum === answer.num ? (
+                      <p className="font-semibold text-gray-500 mt-1 ml-1 mr-1 px-1 xs:text-sm  sm:text-sm md:text-base lg:text-lg xl:text-xl ">{index + 1}.</p>
+                      {userRole === 'psy' ? (
                         <>
-                          <input
-                            type="text"
-                            className="w-1/2 font-semibold text-gray-600 text-md leading-6 sm:text-md md:text-lg lg:text-xl"
-                            value={editedAnswer}
-                            onChange={(e) => onAnswerChange(e, answer.num)}
-                            placeholder="Текст ответа"
-                          />
-                          <button
-                            className="text-white bg-gray-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-2 text-center ml-auto mt-2 mr-7 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg"
-                            onClick={() => onAnswerSave(answer.num)}
-                          >
-                            Сохранить
-                          </button>
+                          <div className='w-full'>
+                            <h3 className="font-semibold text-gray-600 leading-6">
+                              <input
+                                type="text"
+                                className='w-1/2 font-semibold text-gray-500 text-md leading-6 mt-1 px-1 xs:text-sm  sm:text-sm md:text-base lg:text-lg  xl:text-xl '
+                                value={answer.title}
+                                onChange={(e) => onAnswerChange(e, answer.num)}
+                                placeholder="Текст ответа"
+                              />
+
+                            </h3>
+                          </div>
+                          <button className='text-white bg-gray-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-2 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg' onClick={onSave}>Изменить</button>
+                          <div className='cursor-pointer' onClick={() => onAnswerDelete(answer.num)}>
+                            <MdClose />
+                          </div>
                         </>
                       ) : (
                         <>
-                          <h3 className="font-semibold text-gray-600 leading-6 sm:text-md md:text-lg lg:text-xl">
-                            {answer.title}
-                          </h3>
-                          {userRole === 'psy' && (
-                            <>
-                              <button
-                                className="text-white bg-gray-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-md text-sm px-2 text-center mr-2 mb-2 mt-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg ml-auto"
-                                onClick={() => onAnswerEdit(answer.num)}
-                              >
-                                Изменить
-                              </button>
-                              <div className='cursor-pointer mt-2 mr-3' onClick={() => onAnswerDelete(answer.num)}>
-                                <MdClose />
-                              </div>
-                            </>
-                          )}
+                          <div className='w-full'>
+                            <h3 className="font-semibold text-gray-600 leading-6 sm:text-md md:text-lg lg:text-xl">
+                              {answer.title}
+                            </h3>
+                            <p className="font-semibold text-gray-600 mt-2 pr-5 leading-5 w-full sm:text-sm md:text-md lg:text-lg">
+                              {answer.content}
+                            </p>
+                          </div>
                         </>
                       )}
                     </div>
@@ -420,44 +337,20 @@ const QuestionDetail = () => {
                       <p className='text-lg'>Комментарии</p>
                       <div>
                         {
-                          questionData?.comments?.filter(comment => comment.answerId === answer.num && comment.num !== lastCommentId).map((comment: CommentData, index: number) => (
+                          questionData?.comments?.filter(comment => comment.answerId === answer.num && comment.num !== lastCommentId).map((comment, index) => (
                             <div key={index} className="flex flex-col p-3 bg-white shadow rounded-lg mb-3 mt-2">
                               <div className="flex items-center space-x-3 ">
-
-                                {editingCommentNum === comment.num ? (
+                                <img src={comment.photo || '/default_avatar.jpg'} alt="User Avatar" className="w-10 h-10 rounded-full object-cover" />
+                                <div className="flex flex-col flex-grow">
+                                  <p className="text-xs font-semibold text-gray-800">{comment?.userId === userId ? 'Вы' : comment?.name}</p>
+                                  <p className="text-md text-gray-600 mt-1">{comment.content}</p>
+                                </div>
+                                {userRole === 'user' || 'psy' && (
                                   <>
-                                    <input
-                                      type="text"
-                                      className="w-1/2 font-semibold text-gray-500 text-md leading-6"
-                                      value={editedComment}
-                                      onChange={(e) => onCommentChange(e, comment.num)}
-                                      placeholder="Текст комментария"
-                                    />
-                                    <button
-                                      className="text-white bg-gray-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-2 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg ml-auto"
-                                      onClick={() => onCommentSend(comment.num)}
-                                    >
-                                      Сохранить
-                                    </button>
-                                  </>
-                                ) : (
-                                  <>
-                                    {/* <p className="font-semibold text-gray-600 ml-3 mr-2">{index + 1}.</p> */}
-                                    <img src={comment.photo || '/default_avatar.jpg'} alt="User Avatar" className="w-10 h-10 rounded-full object-cover" />
-                                    <div className="flex flex-col flex-grow">
-                                      <p className="text-xs font-semibold text-gray-800">{comment?.userId === userId ? 'Вы' : comment?.name}</p>
-                                      <p className="text-md text-gray-600 mt-1">{comment.content}</p>
+                                    <FaPen className='text-grey-500 mr-1 cursor-pointer' />
+                                    <div className='cursor-pointer' onClick={() => onCommentDelete(comment.num)}>
+                                      <MdClose />
                                     </div>
-                                    {userRole === 'psy' && (
-                                      <>
-                                        <FaPen
-                                          className='cursor-pointer mt-1'
-                                          onClick={() => onCommentEdit(comment.num, comment.content)} />
-                                        <div className='cursor-pointer mt-2 mr-5' onClick={() => onCommentDelete(comment.num)}>
-                                          <MdClose />
-                                        </div>
-                                      </>
-                                    )}
                                   </>
                                 )}
                               </div>
@@ -479,7 +372,7 @@ const QuestionDetail = () => {
                             />
                             <button
                               className='text-white bg-gray-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg'
-                              onClick={() => onCommentCreate(answer.num)}
+                              onClick={() => onCommentSave()}
                             >
                               Отправить
                             </button>
