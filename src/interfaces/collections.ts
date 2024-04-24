@@ -6,7 +6,7 @@ export interface Comment {
   date?: string;
   num: Number | string,
   answerId: Number
-  userId?: string; 
+  userId?: string;
   name?: string;
   photo?: string;
 }
@@ -23,6 +23,7 @@ export interface Video {
   SEOTitle?: string;
   SEODesc?: string;
   canonical?: string;
+  userId?: string;
 }
 
 export interface Article {
@@ -65,6 +66,8 @@ export interface Answers {
   num: number,
   title: string,
   likes: string[],
+  psyPhoto: any,
+  name: any
 }
 
 export interface Question {

@@ -1,11 +1,12 @@
 "use client"
 
+import {VideoBlock} from "@/components/VideoBlock";
+import {useAppSelector} from "@/redux/hooks";
 import React, { useEffect, useState } from 'react';
 import { fetchDataFromCollection } from '@/lib/firebase/firebaseGetDocs';
-import { Data } from '@/interfaces/collections';
+import {Data, Video} from '@/interfaces/collections';
 import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
-import VideosFetcher from '@/components/VideosFetcher';
 import { useRouter } from 'next/navigation';
 
 interface QuestionData {
@@ -14,7 +15,13 @@ interface QuestionData {
   title: string;
 }
 
-const QuestionsComponent: React.FC = () => {
+type Props = {
+  videos: Video[]
+}
+
+const QuestionsComponent: React.FC = (props: Props) => {
+  const { videos } = props;
+  const userRole = useAppSelector((state) => state.auth.user?.role);
   const [questions, setQuestions] = useState<QuestionData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
@@ -25,7 +32,7 @@ const QuestionsComponent: React.FC = () => {
     const fetchQuestions = async () => {
       try {
         const questionsData = await fetchDataFromCollection('questions') as Data[];
-        
+
         const filteredAndTransformedQuestions = questionsData
           .filter(question => question.title !== undefined)
           .map(question => ({
@@ -61,13 +68,33 @@ const QuestionsComponent: React.FC = () => {
     return <div>Ошибка: {error}</div>;
   }
 
+  const renderIframe = (url: string, width: string, height: string) => (
+      <iframe
+          width={width}
+          height={height}
+          src={url}
+          title="YouTube video player"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          className="rounded-lg"
+      ></iframe>
+  );
+
   return (
     <div className="container mx-auto max-w-7xl px-4 py-6 mt-[-50px]">
       <h1 className="text-2xl font-bold text-center mb-6">Вопросы</h1>
       <div className="flex flex-wrap -mx-4">
-        <div className="w-full lg:w-1/4 px-4 mb-4 lg:mb-0">
-          <VideosFetcher />
-        </div>
+      <div className="w-full lg:w-1/4 px-4 mb-4 lg:mb-0">
+    <ul className="space-y-2">
+        {videos.map((video, index) => (
+            <li key={index} className="bg-white border-2 rounded-2xl overflow-hidden shadow-2xl">
+                <div className="cursor-pointer p-3 m-2 bg-white rounded-2xl shadow-xl" onClick={() => openModal(video.url?.url?.[0])}>
+                    {renderIframe(video.url?.url?.[0], "100%", "150")}
+                </div>
+            </li>
+        ))}
+    </ul>
+</div>
         <div className="w-full lg:w-3/4 px-4" style={{ maxWidth: '860px' }}>
           <div className="flex flex-col space-y-4">
             {questions.map((question) => (

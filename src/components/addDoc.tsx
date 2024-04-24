@@ -86,7 +86,9 @@ const Question: Question = {
     title: 'Ответ',
     likes: [],
     content: '',
-    num: 1
+    num: 1,
+    psyPhoto: undefined,
+    name: undefined
   }],
   video: [],
   topics: [],

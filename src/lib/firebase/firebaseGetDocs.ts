@@ -49,14 +49,12 @@ export const fetchDataFromCollection = async (collectionName: string): Promise<D
           comments: docData.comments,
           likes: docData.likes,
           answers: docData.answers,
-          video: docData.video, 
+          video: docData.video,
         });
       } else {
         data.push({
           id: doc.id,
-          content: docData.content,
-          date: docData.date,
-          title: ''
+          ...docData
         });
       }
     });

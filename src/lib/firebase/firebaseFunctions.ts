@@ -1,10 +1,35 @@
 import { db } from './firebaseConfig';
-import { doc, setDoc, collection, updateDoc, getDoc } from 'firebase/firestore';
+import { doc, setDoc, collection, updateDoc, getDoc, query, where, getDocs } from 'firebase/firestore';
 import { Video } from '../../interfaces/collections';
+
+export const getVideosById = async (userId: string) => {
+  if (false) {
+    console.error("No user ID provided");
+    return []; // Возвращаем пустой массив или обрабатываем ошибку
+  }
+
+  const videosRef = collection(db, "videos");
+  const q = query(videosRef, where("url.avtor", "==", "3uwkrhucywyfmr7ngkf9jjipwwe2"));
+
+  try {
+    const querySnapshot = await getDocs(q);
+    console.log(querySnapshot) 
+
+    const videos = [];
+    querySnapshot.forEach((doc) => {
+      videos.push({ id: doc.id, ...doc.data() });
+    });
+    return videos;
+  } catch (error) {
+    console.error("Error getting documents: ", error);
+    return []; // Возвращаем пустой массив в случае ошибки
+  }
+};
 
 export const addVideoToCollection = async (videoUrl: Video) => {
   const newVideoRef = doc(collection(db, 'videos'));
   try {
+
     await setDoc(newVideoRef, { url: videoUrl });
     console.log('Video added successfully!');
   } catch (error) {

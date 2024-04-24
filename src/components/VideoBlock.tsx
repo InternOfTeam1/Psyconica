@@ -3,6 +3,7 @@ import React, { Fragment, useState } from 'react';
 import { Video } from '@/interfaces/collections'; 
 import { addVideoToCollection } from '@/lib/firebase/firebaseFunctions';
 import { nanoid } from 'nanoid'
+import { useAppSelector } from '@/redux/hooks';
 
 
 interface VideoBlockProps {
@@ -15,7 +16,7 @@ export const VideoBlock = ({ videos, userRole, updateVideo }: VideoBlockProps) =
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedVideoUrl, setSelectedVideoUrl] = useState<string>('');
   const [newVideoUrl, setNewVideoUrl] = useState<string>('');
-  
+  const avtor = useAppSelector((state) => state.auth.user?.id);
 
   const openModal = (videoUrl: string): void => {
     setSelectedVideoUrl(videoUrl);
@@ -35,6 +36,7 @@ export const VideoBlock = ({ videos, userRole, updateVideo }: VideoBlockProps) =
           canonical: '',
           video: [], 
           id: nanoid(),
+          avtor,
         }
         await addVideoToCollection(newVideo);
         updateVideo(newVideo);

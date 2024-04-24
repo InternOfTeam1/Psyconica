@@ -8,8 +8,8 @@ const TopicsComponent: React.FC<{ position: 'left' | 'right' }> = ({ position })
   const [topics, setTopics] = useState<Data[]>([]);
   const [error, setError] = useState('');
   const router = useRouter();
-  const contentStyle = position === 'right' ? { transform: 'scaleX(-1)' } : {};
-  const textStyle = position === 'right' ? { transform: 'scaleX(-1)' } : {};
+  const contentStyle = position === 'right' ? { transform: 'scale(1, 1)' } : { transform: 'scale(-1, 1)' };
+  const textStyle = position === 'right' ? { transform: 'scaleX(1)' } : { transform: 'scaleX(-1)' }
 
   useEffect(() => {
     const fetchTopics = async () => {
