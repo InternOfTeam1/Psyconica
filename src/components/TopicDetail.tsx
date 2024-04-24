@@ -44,20 +44,26 @@ const TopicDetail = () => {
 
   return (
     <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px]" >
-      <div className="flex flex-wrap -mx-1 lg:-mx-1">
-        <div className="w-full lg:w-1/4 px-1 lg:mb-0">
+      <div className="flex flex-wrap -mx-1 xs:flex-col-reverse lg:flex-row">
+
+        <div className="w-full lg:w-1/4 px-1 mb-4 lg:mb-0  xs:mt-2 xs:mx-auto lg:mx-0 lg:mt-0">
           <VideosFetcher />
         </div>
 
         <div className="container ml-5 px-2 py-4 max-w-xl bg-white shadow-xl rounded-2xl" style={{ maxWidth: '820px' }}>
           <h2 className="font-semibold bg-amber-300 text-gray-600 px-7 py-3 rounded-2xl leading-6 text-center">{topicData.title}</h2>
 
-          <Link href={HOME_ROUTE}>
-            <div className="inline-block mt-4 px-6 py-2 font-medium leading-6 text-center text-white uppercase transition bg-blue-500 rounded-full shadow ripple waves-light hover:shadow-lg focus:outline-none hover:bg-blue-600">Вернуться на главную</div>
-          </Link>
+
         </div>
       </div>
-    </div>
+      <div className='text-center'>
+        <Link href={HOME_ROUTE}>
+          <button className="inline-block mt-4 mb-10 px-6 py-2 text-sm font-medium leading-6 text-center text-white uppercase transition bg-blue-500 rounded-full shadow ripple hover:shadow-lg focus:outline-none hover:bg-blue-600">
+            Вернуться на главную
+          </button>
+        </Link>
+      </div>
+    </div >
   );
 };
 
