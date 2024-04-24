@@ -282,12 +282,12 @@ const QuestionDetail = () => {
                   <>
                     <input
                       type="text"
-                      className='w-1/2 font-semibold text-gray-500 text-md leading-6 mt-2 ml-5'
+                      className='w-1/2 font-semibold text-gray-500 text-md leading-6 mt-5 ml-5 mr-2'
                       onChange={onNewAnswerChange}
                       placeholder=" Текст ответа..."
                     />
                     <button
-                      className='text-white bg-gray-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg'
+                      className='text-white bg-gray-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mt-1 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg'
                       onClick={onNewAnswerSave}
                     >
                       Опубликовать
@@ -326,18 +326,18 @@ const QuestionDetail = () => {
                       {editingAnswerNum === answer.num ? (
                         <>
                           <div className='w-full'>
-                            <h3 className="font-semibold text-black text-md leading-6 mt-1 px-1 xs:text-base sm:text-base md:text-base lg:text-lg  xl:text-xl ">
+                            <h3 className="font-semibold text-black text-md leading-6 xs:text-base sm:text-base md:text-base lg:text-lg  xl:text-xl ">
                               <input
                                 type="text"
-                                className='w-1/2 font-semibold text-black text-md leading-6 mt-1 px-1 xs:text-base sm:text-base md:text-base lg:text-lg  xl:text-xl '
-                                value={answer.title}
+                                className='w-full font-semibold text-black text-md leading-6 xs:text-base sm:text-base md:text-base lg:text-lg  xl:text-xl '
+                                value={editedAnswer}
                                 onChange={(e) => onAnswerChange(e, answer.num)}
                                 placeholder="Текст ответа"
                               />
                             </h3>
                           </div>
                           <button
-                            className="text-white bg-gray-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-2 text-center ml-auto mt-2 mr-7 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg"
+                            className="text-white bg-gray-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-2 text-center ml-auto mr-7 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg"
                             onClick={() => onAnswerSave(answer.num)}
                           >
                             Сохранить
@@ -390,13 +390,13 @@ const QuestionDetail = () => {
                                   <>
                                     <input
                                       type="text"
-                                      className="w-1/2 font-semibold text-gray-500 text-md leading-6"
+                                      className="w-10/12 font-semibold text-gray-500 text-md leading-6"
                                       value={editedComment}
                                       onChange={(e) => onCommentChange(e, comment.num)}
                                       placeholder="Текст комментария"
                                     />
                                     <button
-                                      className="text-white bg-gray-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-2 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg ml-auto"
+                                      className="text-white bg-gray-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-2 text-center mt-2 mr-4 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg ml-auto"
                                       onClick={() => onCommentSend(comment.num)}
                                     >
                                       Сохранить
@@ -413,10 +413,10 @@ const QuestionDetail = () => {
                                     {userRole === 'psy' && comment.userId === userId && (
                                       <>
                                         <FaPen
-                                          className='cursor-pointer mt-1'
+                                          className='cursor-pointer mr-3'
                                           onClick={() => onCommentEdit(comment.num, comment.content)}
                                         />
-                                        <div className='cursor-pointer mt-2 mr-5' onClick={() => onCommentDelete(comment.num)}>
+                                        <div className='cursor-pointer mt-1 mr-5' onClick={() => onCommentDelete(comment.num)}>
                                           <MdClose />
                                         </div>
                                       </>
@@ -436,7 +436,7 @@ const QuestionDetail = () => {
                           <>
                             <input
                               type="text"
-                              className='w-1/2 font-semibold text-gray-500 text-md leading-6 mt-2'
+                              className='w-1/2 font-semibold text-gray-500 text-md leading-6 mt-3 mr-2'
                               onChange={(e) => onCommentChange(e, lastCommentId)}
                               placeholder=" Текст комментария..."
                             />
