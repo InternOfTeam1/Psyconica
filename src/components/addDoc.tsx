@@ -88,7 +88,8 @@ const Question: Question = {
     content: '',
     num: 1,
     psyPhoto: undefined,
-    name: undefined
+    name: undefined,
+    userId: ''
   }],
   video: [],
   topics: [],

@@ -64,7 +64,8 @@ export interface Answers {
   title: string,
   likes: string[],
   psyPhoto: any,
-  name: any
+  name: any,
+  userId: string
 }
 
 export interface Question {
