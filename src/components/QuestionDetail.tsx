@@ -6,7 +6,7 @@ import { fetchDoc } from '@/lib/firebase/firebaseGetDocs';
 import React, {ChangeEvent, useCallback, useEffect, useState} from 'react';
 import {Answers, QuestionData, Video} from '@/interfaces/collections';
 import Link from 'next/link';
-import { HOME_ROUTE, PROFILE_ROUTE } from '@/constants/routes';
+import { HOME_ROUTE } from '@/constants/routes';
 import { useParams } from 'next/navigation';
 import { useAppSelector } from '../redux/hooks';
 import { updateAnswerLikes, updateQuestion, updateComment } from '@/lib/firebase/firebaseFunctions';
@@ -14,7 +14,6 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/redux/store';
 import { openModal } from '@/redux/slices/modalSlice';
 import { nanoid } from '@reduxjs/toolkit';
-import VideosFetcher from './VideosFetcher';
 import icon from '../../public/iconPsy.png';
 import Image from 'next/image';
 import { FaPen } from "react-icons/fa";
@@ -33,8 +32,8 @@ const QuestionDetail = (props: Props) => {
   const [answerForComments, setAnswerForComments] = useState<any>(null);
   const [newAnswer, setNewAnswer] = useState<any>(null);
   const [lastCommentId, setLastCommentId] = useState<any>(null);
-  const [videos, setVideos] = useState<Video[]>(() => rawData.video);
-  const params = useParams();
+  const [videos, setVideos] = useState<Video[]>(() => rawData?.video || []);
+    const params = useParams();
   const questionSlug: any = params.slug;
   const userId = useAppSelector((state) => state.auth.user?.id);
   const userRole = useAppSelector((state) => state.auth.user?.role);
@@ -155,11 +154,11 @@ const QuestionDetail = (props: Props) => {
     await updateQuestion(questionSlug, questionData)
   }
 
-  const onAnswerDelete = async (answerNum: number) => {
+  const onAnswerDelete = async(answerNum: number) => {
     const answers: any = questionData?.answers;
 
     const newAnswers = answers?.filter((answer: { num: number; }) => answer.num !== answerNum)
-    const newQuestionData = {
+    const newQuestionData ={
       ...questionData,
       answers: newAnswers
     }
@@ -251,15 +250,11 @@ const QuestionDetail = (props: Props) => {
       <div className="flex flex-wrap -mx-1 lg:-mx-1">
         <div className="w-full lg:w-1/4 px-1 lg:mb-0">
           <VideoBlock videos={videos} userRole={userRole} updateVideo={addVideo} />
-      <div className="flex flex-wrap -mx-1 xs:flex-col-reverse lg:flex-row lg:-mx-1">
-
-        <div className="w-full lg:w-1/4 px-1 mb-4 lg:mb-0  xs:mt-2 xs:mx-auto lg:mx-0 lg:mt-0">
-          <VideosFetcher />
         </div>
         <div className="container ml-5 px-2 py-4 max-w-3xl bg-white shadow-xl rounded-2xl " style={{ maxWidth: '820px' }}>
           {questionData && (
             <>
-              <h2 className="font-semibold bg-amber-300 text-black px-7 py-3 rounded-2xl leading-6 text-center xs:text-sm xs:px-3 sm:text-sm sm:px-4 md:text-base md:px-5 lg:text-lg lg:px-6 xl:text-xl xl:px-7">{questionData.title}</h2>
+              <h2 className="font-semibold bg-amber-300 text-gray-600 px-7 py-3 rounded-2xl leading-6 text-center xs:text-sm xs:px-3 sm:text-sm sm:px-4 md:text-base md:px-5 lg:text-lg lg:px-6 xl:text-xl xl:px-7">{questionData.title}</h2>
 
               {userRole === 'psy' ? (
                 newAnswer ?
@@ -285,24 +280,20 @@ const QuestionDetail = (props: Props) => {
                 const progressWidth = (answer.likes.length / MAX_LIKES) * 100;
                 return (
                   <div key={index} className="mt-4 w-full ">
-                    <Link href={PROFILE_ROUTE}>
 
-                      <div className="flex items-center">
-                        {answer.psyPhoto && (
-                          <img
-                            src={answer.psyPhoto}
-                            alt="User Avatar"
-                            className="w-10 h-10 rounded-full object-cover mr-3"
-                          />
-                        )}
-                        <p className="font-semibold text-black flex items-center bg-gray-200 rounded-2xl p-1">
-                          <span className="mr-1">{answer.name}</span>
-                          <Image src={icon} alt="Psy Icon" width={20} height={20} />
-                        </p>
-                      </div>
-
-
-                    </Link>
+                    <div className="flex items-center">
+                      {answer.psyPhoto && (
+                        <img
+                          src={answer.psyPhoto}
+                          alt="User Avatar"
+                          className="w-10 h-10 rounded-full object-cover mr-3"
+                        />
+                      )}
+                      <p className="font-semibold text-black flex items-center bg-gray-200 rounded-2xl p-1">
+                        <span className="mr-1">{answer.name}</span>
+                        <Image src={icon} alt="Psy Icon" width={20} height={20} />
+                      </p>
+                    </div>
 
                     <div className="flex items-start mb-4">
 
@@ -310,10 +301,10 @@ const QuestionDetail = (props: Props) => {
                       {userRole === 'psy' ? (
                         <>
                           <div className='w-full'>
-                            <h3 className="font-semibold text-black text-md leading-6 mt-1 px-1 xs:text-base sm:text-base md:text-base lg:text-lg  xl:text-xl ">
+                            <h3 className="font-semibold text-gray-600 leading-6">
                               <input
                                 type="text"
-                                className='w-1/2 font-semibold text-black text-md leading-6 mt-1 px-1 xs:text-base sm:text-base md:text-base lg:text-lg  xl:text-xl '
+                                className='w-1/2 font-semibold text-gray-500 text-md leading-6 mt-1 px-1 xs:text-sm  sm:text-sm md:text-base lg:text-lg  xl:text-xl '
                                 value={answer.title}
                                 onChange={(e) => onAnswerChange(e, answer.num)}
                                 placeholder="Текст ответа"
@@ -411,16 +402,12 @@ const QuestionDetail = (props: Props) => {
           }
 
           <br />
-
+          <Link href={HOME_ROUTE}>
+            <button className="inline-block mt-4 px-6 py-2 font-medium leading-6 text-center text-white uppercase transition bg-blue-500 rounded-full shadow ripple waves-light hover:shadow-lg focus:outline-none hover:bg-blue-600 xs:text-xs sm:text-xs md:text-xs lg:text-sm xl:text-sm">
+              Вернуться на главную
+            </button>
+          </Link>
         </div >
-
-      </div>
-      <div className='text-center'>
-        <Link href={HOME_ROUTE}>
-          <button className="inline-block mt-4 mb-10 px-6 py-2 text-sm font-medium leading-6 text-center text-white uppercase transition bg-blue-500 rounded-full shadow ripple hover:shadow-lg focus:outline-none hover:bg-blue-600">
-            Вернуться на главную
-          </button>
-        </Link>
       </div>
     </div>
 
