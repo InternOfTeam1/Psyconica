@@ -6,7 +6,7 @@ import { Topic } from '@/interfaces/collections';
 import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
 import { useParams } from 'next/navigation';
-import VideosFetcher from './VideosFetcher';
+import VideoGallery from './VideoGallery';
 
 function fetchTopicData(slug: {}) {
   return fetchDoc('topics', slug);
@@ -46,8 +46,8 @@ const TopicDetail = () => {
     <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px]" >
       <div className="flex flex-wrap -mx-1 xs:flex-col-reverse lg:flex-row">
 
-        <div className="w-full lg:w-1/4 px-1 mb-4 lg:mb-0  xs:mt-2 xs:mx-auto lg:mx-0 lg:mt-0">
-          <VideosFetcher />
+      <div className="w-full lg:w-1/4 px-1 mb-4 lg:mb-0  xs:mt-2 xs:mx-auto lg:mx-0 lg:mt-0">
+          <VideoGallery />
         </div>
 
         <div className="container ml-5 px-2 py-4 max-w-xl bg-white shadow-xl rounded-2xl" style={{ maxWidth: '820px' }}>

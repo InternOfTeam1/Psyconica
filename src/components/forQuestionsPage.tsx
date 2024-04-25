@@ -1,6 +1,4 @@
 "use client"
-
-import {VideoBlock} from "@/components/VideoBlock";
 import {useAppSelector} from "@/redux/hooks";
 import React, { useEffect, useState } from 'react';
 import { fetchDataFromCollection } from '@/lib/firebase/firebaseGetDocs';
@@ -8,6 +6,7 @@ import {Data, Video} from '@/interfaces/collections';
 import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
 import { useRouter } from 'next/navigation';
+import VideoGallery from "./VideoGallery";
 
 interface QuestionData {
   id: string;
@@ -19,13 +18,14 @@ type Props = {
   videos: Video[]
 }
 
-const QuestionsComponent: React.FC = (props: Props) => {
-  const { videos } = props;
+const QuestionsComponent: React.FC<Props> = ({ videos }) => {
   const userRole = useAppSelector((state) => state.auth.user?.role);
   const [questions, setQuestions] = useState<QuestionData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
   const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedVideoUrl, setSelectedVideoUrl] = useState('');
 
 
   useEffect(() => {
@@ -79,22 +79,18 @@ const QuestionsComponent: React.FC = (props: Props) => {
           className="rounded-lg"
       ></iframe>
   );
+  const openModal = (videoUrl: string): void => {
+    setSelectedVideoUrl(videoUrl);
+    setIsOpen(true);
+  };
 
   return (
     <div className="container mx-auto max-w-7xl px-4 py-6 mt-[-50px]">
       <h1 className="text-2xl font-bold text-center mb-6">Вопросы</h1>
       <div className="flex flex-wrap -mx-4">
-      <div className="w-full lg:w-1/4 px-4 mb-4 lg:mb-0">
-    <ul className="space-y-2">
-        {videos.map((video, index) => (
-            <li key={index} className="bg-white border-2 rounded-2xl overflow-hidden shadow-2xl">
-                <div className="cursor-pointer p-3 m-2 bg-white rounded-2xl shadow-xl" onClick={() => openModal(video.url?.url?.[0])}>
-                    {renderIframe(video.url?.url?.[0], "100%", "150")}
-                </div>
-            </li>
-        ))}
-    </ul>
-</div>
+      <div className="w-full lg:w-1/4 px-1 mb-4 lg:mb-0  xs:mt-2 xs:mx-auto lg:mx-0 lg:mt-0">
+          <VideoGallery />
+        </div>
         <div className="w-full lg:w-3/4 px-4" style={{ maxWidth: '860px' }}>
           <div className="flex flex-col space-y-4">
             {questions.map((question) => (

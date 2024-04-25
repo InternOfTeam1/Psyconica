@@ -1,8 +1,8 @@
-
+'use client'
 import { HOME_ROUTE } from '@/constants/routes';
 import Image from 'next/image'
 import Link from 'next/link';
-import VideosFetcher from '@/components/VideosFetcher';
+import VideoGallery from '@/components/VideoGallery';
 
 const Articles: React.FC = () => {
 
@@ -12,7 +12,7 @@ const Articles: React.FC = () => {
       <div className="flex flex-wrap -mx-1 xs:flex-col-reverse lg:flex-row">
 
         <div className="w-full lg:w-1/4 px-1 mb-4 lg:mb-0  xs:mt-2 xs:mx-auto lg:mx-0 lg:mt-0">
-          <VideosFetcher />
+          <VideoGallery />
         </div>
 
         <div className="container ml-5 px-2 py-4 max-w-xl bg-white shadow-xl rounded-2xl" style={{ maxWidth: '820px' }}>

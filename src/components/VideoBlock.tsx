@@ -37,7 +37,7 @@ export const VideoBlock = ({ videos, userRole, updateVideo }: VideoBlockProps) =
           video: [], 
           id: nanoid(),
           avtor,
-        }
+        };
         await addVideoToCollection(newVideo);
         updateVideo(newVideo);
         alert('Video added successfully!');
@@ -60,22 +60,21 @@ export const VideoBlock = ({ videos, userRole, updateVideo }: VideoBlockProps) =
       className="rounded-lg" 
     ></iframe>
   );
+
   const closeModal = () => {
     setIsOpen(false);
   };
-  console.log(videos)
+
   return (
     <div className="p-3 m-4 bg-white rounded-2xl shadow-2xl border mt-[-1px]"> 
       <div className="flex flex-wrap justify-center gap-2"> 
-        {videos.map((video, index) => (
-          video.video.map((url, urlIndex) => (
-            <div key={`${index}-${urlIndex}`} className="w-full p-1"> 
-              <div className="cursor-pointer border-2 pb-2 rounded-2xl overflow-hidden" onClick={() => openModal(url)}>
-                {renderIframe(url, "100%", "150")} 
-              </div>
+        {videos.map((video, index) => video.video && video.video.map((url, urlIndex) => (
+          <div key={`${index}-${urlIndex}`} className="w-full p-1"> 
+            <div className="cursor-pointer border-2 pb-2 rounded-2xl overflow-hidden" onClick={() => openModal(url)}>
+              {renderIframe(url, "100%", "150")} 
             </div>
-          ))
-        ))}
+          </div>
+        )))}
       </div>
       {userRole === 'psy' && (
         <div className="mt-4">
