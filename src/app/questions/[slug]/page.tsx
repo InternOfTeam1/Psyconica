@@ -2,6 +2,8 @@ import QuestionDetail from '@/components/QuestionDetail';
 import { fetchDoc } from '@/lib/firebase/firebaseGetDocs';
 import { nanoid } from 'nanoid'
 
+
+
 const Question: React.FC = async (props) => {
   const {params: { slug }} = props
 
@@ -11,6 +13,7 @@ const Question: React.FC = async (props) => {
     return null
   }
 
+ 
   rawData = {
     ...rawData,
     video: rawData.video.map((url) => {

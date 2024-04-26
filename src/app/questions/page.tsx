@@ -1,6 +1,8 @@
 import QuestionsComponent from '@/components/forQuestionsPage';
 import {Video} from "@/interfaces/collections";
-import {fetchDataFromCollection, fetchDoc} from "@/lib/firebase/firebaseGetDocs";
+import {fetchDataFromCollection} from "@/lib/firebase/firebaseGetDocs";
+
+
 
 function shuffleAndTrimVideos(videos: Video[], maxLength: number): Video[] {
     let shuffledVideos = videos.slice();
@@ -9,7 +11,7 @@ function shuffleAndTrimVideos(videos: Video[], maxLength: number): Video[] {
         const j = Math.floor(Math.random() * (i + 1));
         [shuffledVideos[i], shuffledVideos[j]] = [shuffledVideos[j], shuffledVideos[i]];
     }
-    return shuffledVideos.slice(0, maxLength);
+    return shuffledVideos.filter(v => v.video).slice(0, maxLength);
 }
 
  const Questions: React.FC = async () => {

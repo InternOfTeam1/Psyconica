@@ -7,23 +7,25 @@ import { nanoid } from 'nanoid';
 import { useAppSelector } from '@/redux/hooks';
 
 interface Video {
-  url: string;
+  url: string[];
   title: string;
   id: string;
   avtor: string;
   newVideo: string;
-  video: any,
+  video: any;
 } 
-const transformYouTubeUrl = (url) => {
+
+const transformYouTubeUrl = (url: string): string => {
   let videoId = '';
   url = url.trim();
-  
+
   if (url.includes('youtu.be')) {
-    videoId = url.split('/').pop().split('?')[0]; 
+    videoId = url.split('/').pop()?.split('?')[0] || ''; 
   } else if (url.includes('youtube.com')) {
     const urlObj = new URL(url);
-    videoId = urlObj.searchParams.get('v'); 
+    videoId = urlObj.searchParams.get('v') || ''; 
   }
+  
   const additionalParams = url.includes('?') ? url.substring(url.indexOf('?') + 1) : '';
   const embedUrl = `https://www.youtube.com/embed/${videoId}${additionalParams ? `?${additionalParams}` : ''}`;
 
@@ -31,10 +33,10 @@ const transformYouTubeUrl = (url) => {
 };
 
 const PsychologistDashboard = () => {
-  const [videoUrl, setVideoUrl] = useState('');
+  const [videoUrl, setVideoUrl] = useState<string>('');
   const [videos, setVideos] = useState<Video[]>([]);
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedVideoUrl, setSelectedVideoUrl] = useState('');
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [selectedVideoUrl, setSelectedVideoUrl] = useState<string>('');
   const avtor = useAppSelector(state => state.auth.user?.id);
 
   useEffect(() => {
@@ -56,16 +58,18 @@ const PsychologistDashboard = () => {
         title: '',
         id: nanoid(),
         avtor,
+        newVideo: '',
+        video: []  
       };
   
       try {
         await addVideoToCollection(newVideo);
         setVideos(prev => [...prev, newVideo]);
         setVideoUrl('');
-        alert('Video added successfully!');
+        alert('Видео успешно добавлено!');
       } catch (error) {
-        console.error('Failed to add video:', error);
-        alert('Failed to add video');
+        console.error('Не удалось добавить видео:', error);
+        alert('Не удалось добавить видео:');
       }
     }
   };
@@ -78,6 +82,7 @@ const PsychologistDashboard = () => {
   const closeModal = () => {
     setIsOpen(false);
   };
+  
 
   return (
     <div className="p-3 m-4 bg-white rounded-2xl shadow-2xl border">
@@ -93,16 +98,20 @@ const PsychologistDashboard = () => {
           ></iframe>
         </div>
       ))}
-      <input
-        type="text"
-        value={videoUrl}
-        onChange={(e) => setVideoUrl(e.target.value)}
-        placeholder="Enter video URL"
-        className="border p-2 w-full mt-4"
-      />
-      <button onClick={addVideo} className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mt-2">
-        Add Video
-      </button>
+      {avtor && ( 
+        <>
+          <input
+            type="text"
+            value={videoUrl}
+            onChange={(e) => setVideoUrl(e.target.value)}
+            placeholder="Enter video URL"
+            className="border p-2 w-full mt-4"
+          />
+          <button onClick={addVideo} className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mt-2">
+            Add Video
+          </button>
+        </>
+      )}
 
       {isOpen && (
         <Transition.Root show={isOpen} as={Fragment}>

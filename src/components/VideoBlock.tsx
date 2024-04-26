@@ -1,10 +1,8 @@
 import { Dialog, Transition } from '@headlessui/react';
 import React, { Fragment, useState } from 'react';
-import { Video } from '@/interfaces/collections'; 
-import { addVideoToCollection } from '@/lib/firebase/firebaseFunctions';
-import { nanoid } from 'nanoid'
+import { Video } from '@/interfaces/collections';
+import { nanoid } from 'nanoid';
 import { useAppSelector } from '@/redux/hooks';
-
 
 interface VideoBlockProps {
   videos: Video[];
@@ -15,38 +13,10 @@ interface VideoBlockProps {
 export const VideoBlock = ({ videos, userRole, updateVideo }: VideoBlockProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedVideoUrl, setSelectedVideoUrl] = useState<string>('');
-  const [newVideoUrl, setNewVideoUrl] = useState<string>('');
-  const avtor = useAppSelector((state) => state.auth.user?.id);
 
   const openModal = (videoUrl: string): void => {
     setSelectedVideoUrl(videoUrl);
     setIsOpen(true);
-  };
-
-  const addVideo = async () => {
-    if (newVideoUrl.trim() !== '') {
-      try {
-        const newVideo = {
-          url: [newVideoUrl], 
-          slug: '',
-          title: '',
-          likes: [], 
-          SEOTitle: '',
-          SEODesc: '',
-          canonical: '',
-          video: [], 
-          id: nanoid(),
-          avtor,
-        };
-        await addVideoToCollection(newVideo);
-        updateVideo(newVideo);
-        alert('Video added successfully!');
-        setNewVideoUrl('');
-      } catch (error) {
-        console.error('Failed to add video', error);
-        alert('Failed to add video');
-      }
-    }
   };
 
   const renderIframe = (url: string, width: string, height: string) => (
@@ -57,7 +27,7 @@ export const VideoBlock = ({ videos, userRole, updateVideo }: VideoBlockProps) =
       title="YouTube video player"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
       allowFullScreen
-      className="rounded-lg" 
+      className="rounded-lg"
     ></iframe>
   );
 
@@ -66,30 +36,16 @@ export const VideoBlock = ({ videos, userRole, updateVideo }: VideoBlockProps) =
   };
 
   return (
-    <div className="p-3 m-4 bg-white rounded-2xl shadow-2xl border mt-[-1px]"> 
-      <div className="flex flex-wrap justify-center gap-2"> 
+    <div className="p-3 m-4 bg-white rounded-2xl shadow-2xl border mt-[-1px]">
+      <div className="flex flex-wrap justify-center gap-2">
         {videos.map((video, index) => video.video && video.video.map((url, urlIndex) => (
-          <div key={`${index}-${urlIndex}`} className="w-full p-1"> 
+          <div key={`${index}-${urlIndex}`} className="w-full p-1">
             <div className="cursor-pointer border-2 pb-2 rounded-2xl overflow-hidden" onClick={() => openModal(url)}>
-              {renderIframe(url, "100%", "150")} 
+              {renderIframe(url, "100%", "150")}
             </div>
           </div>
         )))}
       </div>
-      {userRole === 'psy' && (
-        <div className="mt-4">
-          <input 
-            type="text"
-            value={newVideoUrl}
-            onChange={(e) => setNewVideoUrl(e.target.value)}
-            placeholder="Enter video URL"
-            className="border p-2 w-full"
-          />
-          <button onClick={addVideo} className="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            Add Video
-          </button>
-        </div>
-      )}
       {isOpen && (
         <Transition.Root show={isOpen} as={Fragment}>
           <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={closeModal}>

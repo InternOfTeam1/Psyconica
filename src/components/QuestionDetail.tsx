@@ -36,6 +36,7 @@ const QuestionDetail = (props: Props) => {
   const [editedAnswer, setEditedAnswer] = useState<string>('');
   const [editingCommentNum, setEditingCommentNum] = useState<string | null>(null);
   const [editedComment, setEditedComment] = useState<string>('');
+  const [videos, setVideos] = useState([] as Video[]);
   const params = useParams();
   const questionSlug: any = params.slug;
   const userId = useAppSelector((state) => state.auth.user?.id);
@@ -44,7 +45,8 @@ const QuestionDetail = (props: Props) => {
   const userPhoto = useAppSelector((state) => state.auth.user?.photo);
   const MAX_LIKES = 100;
   const dispatch: AppDispatch = useDispatch();
-
+  
+console.log(rawData)
 
 
   const handleOpenModal = () => {
@@ -280,7 +282,7 @@ const QuestionDetail = (props: Props) => {
     <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px]">
       <div className="flex flex-wrap -mx-1 lg:-mx-1">
         <div className="w-full lg:w-1/4 px-1 lg:mb-0">
-          <VideoBlock videos={videos} userRole={userRole} updateVideo={addVideo} />
+          <VideoBlock videos={rawData.video} userRole={userRole} updateVideo={addVideo} />
         </div>
         <div className="container ml-5 px-2 py-4 max-w-3xl bg-white shadow-xl rounded-2xl " style={{ maxWidth: '820px' }}>
           {questionData && (
