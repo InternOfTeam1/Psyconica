@@ -1,8 +1,6 @@
 import { Dialog, Transition } from '@headlessui/react';
 import React, { Fragment, useState } from 'react';
 import { Video } from '@/interfaces/collections';
-import { nanoid } from 'nanoid';
-import { useAppSelector } from '@/redux/hooks';
 
 interface VideoBlockProps {
   videos: Video[];
@@ -10,7 +8,7 @@ interface VideoBlockProps {
   updateVideo: (video: Video) => void;
 }
 
-export const VideoBlock = ({ videos, userRole, updateVideo }: VideoBlockProps) => {
+export const VideoBlock = ({ videos }: VideoBlockProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedVideoUrl, setSelectedVideoUrl] = useState<string>('');
 

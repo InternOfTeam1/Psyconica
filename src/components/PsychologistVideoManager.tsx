@@ -7,13 +7,16 @@ import { nanoid } from 'nanoid';
 import { useAppSelector } from '@/redux/hooks';
 
 interface Video {
-  url: string[];
+  url: {
+    url: string[];
+    avtor: string;
+  };
   title: string;
   id: string;
-  avtor: string;
   newVideo: string;
   video: any;
-} 
+  
+}
 
 const transformYouTubeUrl = (url: string): string => {
   let videoId = '';
@@ -40,19 +43,19 @@ const PsychologistDashboard = () => {
   const avtor = useAppSelector(state => state.auth.user?.id);
 
   useEffect(() => {
-    async function loadVideos() {
-      const fetchedVideos = await fetchDataFromCollection('videos');
-      console.log(fetchedVideos);
-      const filteredVideos = fetchedVideos.filter(video => video.url.avtor === avtor);
-      setVideos(filteredVideos);
-    }
-  
-    loadVideos();
-  }, [avtor]);
+  async function loadVideos() {
+    const fetchedVideos = await fetchDataFromCollection('videos');
+    console.log("Загруженные видео:", fetchedVideos);
+    const filteredVideos = fetchedVideos.filter(video => video.url.avtor === avtor);
+    setVideos(filteredVideos);
+  }
+
+  loadVideos();
+}, [avtor]);
 
   const addVideo = async () => {
     if (videoUrl.trim() !== '') {
-      const embedUrl = transformYouTubeUrl(videoUrl);
+      const embedUrl= transformYouTubeUrl(videoUrl);
       const newVideo = {
         url: [embedUrl],
         title: '',

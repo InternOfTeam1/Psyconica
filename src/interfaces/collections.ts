@@ -88,6 +88,7 @@ export interface QuestionData {
   title?: ReactNode;
   answers: Answers[];
   comments?: Comment[];
+
 }
 
 export interface Data {
@@ -113,5 +114,7 @@ export interface Data {
   comments?: Comment[];
   answers?: string[];
   userId?: any;
+  url: string[];
+  avtor?: string,
 }
-
+<Video[]>([])
