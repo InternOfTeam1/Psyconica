@@ -15,7 +15,7 @@ interface Video {
   id: string;
   newVideo: string;
   video: any;
-  
+
 }
 
 const transformYouTubeUrl = (url: string): string => {
@@ -23,12 +23,12 @@ const transformYouTubeUrl = (url: string): string => {
   url = url.trim();
 
   if (url.includes('youtu.be')) {
-    videoId = url.split('/').pop()?.split('?')[0] || ''; 
+    videoId = url.split('/').pop()?.split('?')[0] || '';
   } else if (url.includes('youtube.com')) {
     const urlObj = new URL(url);
-    videoId = urlObj.searchParams.get('v') || ''; 
+    videoId = urlObj.searchParams.get('v') || '';
   }
-  
+
   const additionalParams = url.includes('?') ? url.substring(url.indexOf('?') + 1) : '';
   const embedUrl = `https://www.youtube.com/embed/${videoId}${additionalParams ? `?${additionalParams}` : ''}`;
 
@@ -43,28 +43,27 @@ const PsychologistDashboard = () => {
   const avtor = useAppSelector(state => state.auth.user?.id);
 
   useEffect(() => {
-  async function loadVideos() {
-    const fetchedVideos = await fetchDataFromCollection('videos');
-    console.log("Загруженные видео:", fetchedVideos);
-    const filteredVideos = fetchedVideos.filter(video => video.url.avtor === avtor);
-    setVideos(filteredVideos);
-  }
+    async function loadVideos() {
+      const fetchedVideos: any = await fetchDataFromCollection('videos');
+      console.log("Загруженные видео:", fetchedVideos);
+      const filteredVideos = fetchedVideos.filter((video: { url: { avtor: any; }; }) => video.url.avtor === avtor);
+      setVideos(filteredVideos);
+    }
 
-  loadVideos();
-}, [avtor]);
+    loadVideos();
+  }, [avtor]);
 
   const addVideo = async () => {
     if (videoUrl.trim() !== '') {
-      const embedUrl= transformYouTubeUrl(videoUrl);
+      const embedUrl = transformYouTubeUrl(videoUrl);
       const newVideo = {
-        url: [embedUrl],
+        url: { url: [embedUrl], avtor },
         title: '',
         id: nanoid(),
-        avtor,
         newVideo: '',
-        video: []  
+        video: []
       };
-  
+
       try {
         await addVideoToCollection(newVideo);
         setVideos(prev => [...prev, newVideo]);
@@ -85,7 +84,7 @@ const PsychologistDashboard = () => {
   const closeModal = () => {
     setIsOpen(false);
   };
-  
+
 
   return (
     <div className="p-3 m-4 bg-white rounded-2xl shadow-2xl border">
@@ -101,7 +100,7 @@ const PsychologistDashboard = () => {
           ></iframe>
         </div>
       ))}
-      {avtor && ( 
+      {avtor && (
         <>
           <input
             type="text"

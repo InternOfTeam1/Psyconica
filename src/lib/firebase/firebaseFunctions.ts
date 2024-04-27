@@ -13,9 +13,9 @@ export const getVideosById = async (userId: string) => {
 
   try {
     const querySnapshot = await getDocs(q);
-    console.log(querySnapshot) 
+    console.log(querySnapshot)
 
-    const videos = [];
+    const videos: any = [];
     querySnapshot.forEach((doc) => {
       videos.push({ id: doc.id, ...doc.data() });
     });

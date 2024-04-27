@@ -1,10 +1,10 @@
 "use client";
-import {VideoBlock} from "@/components/VideoBlock";
+import { VideoBlock } from "@/components/VideoBlock";
 import { FaThumbsUp } from 'react-icons/fa';
 import { MdClose } from 'react-icons/md';
 import { fetchDoc } from '@/lib/firebase/firebaseGetDocs';
-import React, {ChangeEvent, useCallback, useEffect, useState} from 'react';
-import {Answers, QuestionData, Video} from '@/interfaces/collections';
+import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { Answers, QuestionData, Video } from '@/interfaces/collections';
 import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
 import { useParams } from 'next/navigation';
@@ -18,7 +18,7 @@ import icon from '../../public/iconPsy.png';
 import Image from 'next/image';
 import { FaPen } from "react-icons/fa";
 
-function fetchQuestionData(slug: {}) {
+function fetchQuestionData(slug: any) {
   return fetchDoc('questions', slug);
 }
 
@@ -27,7 +27,7 @@ type Props = {
 }
 
 const QuestionDetail = (props: Props) => {
-  const {rawData} = props
+  const { rawData } = props
   const [questionData, setQuestionData] = useState<QuestionData | null>(null);
   const [answerForComments, setAnswerForComments] = useState<any>(null);
   const [newAnswer, setNewAnswer] = useState<any>(null);
@@ -45,8 +45,8 @@ const QuestionDetail = (props: Props) => {
   const userPhoto = useAppSelector((state) => state.auth.user?.photo);
   const MAX_LIKES = 100;
   const dispatch: AppDispatch = useDispatch();
-  
-console.log(rawData)
+
+  console.log(rawData)
 
 
   const handleOpenModal = () => {
@@ -142,15 +142,11 @@ console.log(rawData)
   }
 
 
-  const onSave = async () => {
-    await updateQuestion(questionSlug, questionData)
-  }
-
-  const onAnswerDelete = async(answerNum: number) => {
+  const onAnswerDelete = async (answerNum: number) => {
     const answers: any = questionData?.answers;
 
     const newAnswers = answers?.filter((answer: { num: number; }) => answer.num !== answerNum)
-    const newQuestionData ={
+    const newQuestionData = {
       ...questionData,
       answers: newAnswers
     }
@@ -197,12 +193,6 @@ console.log(rawData)
     }
   }
 
-  const onCommentSave = async () => {
-    await updateComment(questionSlug, questionData)
-
-    setAnswerForComments(null)
-    setLastCommentId(null)
-  }
 
   const onCommentEdit = (commentNum: string, commentText: string) => {
     setEditingCommentNum(commentNum);
@@ -272,9 +262,9 @@ console.log(rawData)
 
   const addVideo = useCallback((newVideo: Video) => {
     setVideos((prevState) => {
-      return [ ...prevState, newVideo ]
+      return [...prevState, newVideo]
     })
-  },[])
+  }, [])
 
   const sortedAnswers = questionData?.answers?.sort((a, b) => b.likes.length - a.likes.length) || [];
 
@@ -412,7 +402,6 @@ console.log(rawData)
                                   </>
                                 ) : (
                                   <>
-                                    {/* <p className="font-semibold text-gray-600 ml-3 mr-2">{index + 1}.</p> */}
                                     <img src={comment.photo || '/default_avatar.jpg'} alt="User Avatar" className="w-10 h-10 rounded-full object-cover" />
                                     <div className="flex flex-col flex-grow">
                                       <p className="text-xs font-semibold text-gray-800">{comment?.userId === userId ? 'Вы' : comment?.name}</p>

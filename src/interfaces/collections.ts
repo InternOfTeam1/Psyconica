@@ -13,7 +13,7 @@ export interface Comment {
 
 export interface Video {
   id: string;
-  video: string[]; 
+  video: string[];
   title?: string;
   description?: string;
   slug?: string;
@@ -75,7 +75,7 @@ export interface Question {
   slug: string;
   comments: Comment[];
   answers: Answers[];
-  video: string[];
+  video: any;
   title: string;
   topics: [];
   SEOTitle: string;

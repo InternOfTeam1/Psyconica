@@ -1,27 +1,39 @@
+"use client";
+
+import { useEffect, useState } from 'react';
 import QuestionDetail from '@/components/QuestionDetail';
 import { fetchDoc } from '@/lib/firebase/firebaseGetDocs';
 import { nanoid } from 'nanoid'
 
 
 
-const Question: React.FC = async (props) => {
-  const {params: { slug }} = props
+const Question: React.FC<{ params: { slug: string } }> = async ({ params }) => {
+  const { slug } = params;
+  const [rawData, setRawData] = useState<any>(null);
 
-  let rawData = await fetchDoc('questions', slug)
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data: any = await fetchDoc('questions', slug);
+        if (data.video) {
+          const modifiedData = {
+            ...data,
+            video: data.video.map((url: any) => ({
+              id: nanoid(),
+              video: [url],
+            })),
+          };
+          setRawData(modifiedData);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
+  }, [slug]);
 
   if (!rawData) {
-    return null
-  }
-
- 
-  rawData = {
-    ...rawData,
-    video: rawData.video.map((url) => {
-      return ({
-        id: nanoid(),
-        video: [url],
-      })
-    })
+    return null;
   }
 
   return (

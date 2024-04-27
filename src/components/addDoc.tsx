@@ -114,7 +114,6 @@ const Video: Video = {
   SEOTitle: "Video SEO Title",
   SEODesc: "SEO description for video",
   canonical: "https://example.com/videos/example-video",
-  url: [],
   video: [],
   id: ''
 };
