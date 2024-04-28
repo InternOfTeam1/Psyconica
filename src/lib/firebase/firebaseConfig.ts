@@ -34,7 +34,10 @@ export const signInWithGoogle = async (): Promise<User | null> => {
       photo: user.photoURL,
       role: 'user',
       slug: user.displayName,
-      userId: user.uid
+      userId: user.uid,
+      answeredQuestions: [],
+      aboutUser: 'more',
+      contactUser: 'contact'
     };
 
     localStorage.setItem('userPhoto', JSON.stringify(user.photoURL));
@@ -62,7 +65,10 @@ export const signInWithTwitter = async (): Promise<User | null> => {
       photo: user.photoURL,
       role: 'user',
       slug: user.displayName,
-      userId: user.uid
+      userId: user.uid,
+      answeredQuestions: [],
+      aboutUser: 'more',
+      contactUser: 'contact'
     };
 
     await addDocumentWithSlug('users', userData, 'userId');

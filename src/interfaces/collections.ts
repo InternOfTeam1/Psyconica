@@ -57,7 +57,11 @@ export interface Users {
   desc?: string;
   video?: string[];
   articles?: string[];
-  userId: any
+  userId: any,
+  answeredQuestions?: any,
+  aboutUser?: any,
+  contactUser?: any
+
 }
 
 export interface Answers {

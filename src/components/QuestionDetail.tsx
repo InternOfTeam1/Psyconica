@@ -4,7 +4,7 @@ import { FaThumbsUp } from 'react-icons/fa';
 import { MdClose } from 'react-icons/md';
 import { fetchDoc } from '@/lib/firebase/firebaseGetDocs';
 import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
-import { Answers, QuestionData, Video } from '@/interfaces/collections';
+import { Answers, QuestionData, Users, Video } from '@/interfaces/collections';
 import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
 import { useParams } from 'next/navigation';
@@ -17,6 +17,8 @@ import { nanoid } from '@reduxjs/toolkit';
 import icon from '../../public/iconPsy.png';
 import Image from 'next/image';
 import { FaPen } from "react-icons/fa";
+import { User } from "firebase/auth";
+import { addDocumentWithSlug } from "@/lib/firebase/firebaseAdddoc";
 
 function fetchQuestionData(slug: any) {
   return fetchDoc('questions', slug);
@@ -139,6 +141,21 @@ const QuestionDetail = (props: Props) => {
     setQuestionData(newQuestionData)
     setNewAnswer(null)
     await updateQuestion(questionSlug, newQuestionData);
+
+
+    if (userRole === 'psy') {
+      const userDocs = await fetchDoc('users', userId) as unknown as Users;
+
+      if (userDocs) {
+        const answeredQuestions = userDocs.answeredQuestions || [];
+        const updatedUserDoc = {
+          ...userDocs,
+          answeredQuestions: [...answeredQuestions, questionData?.title]
+        }
+        await addDocumentWithSlug('users', updatedUserDoc, 'userId');
+      }
+
+    }
   }
 
 
@@ -407,7 +424,7 @@ const QuestionDetail = (props: Props) => {
                                       <p className="text-xs font-semibold text-gray-800">{comment?.userId === userId ? 'Вы' : comment?.name}</p>
                                       <p className="text-md text-gray-600 mt-1">{comment.content}</p>
                                     </div>
-                                    {((userRole === 'psy' && comment.userId === userId) || (userRole !== 'psy' && comment.userId === userId)) && (
+                                    {((userId && comment.userId === userId) || (userRole !== 'psy' && comment.userId === userId)) && (
                                       <>
                                         <FaPen
                                           className='cursor-pointer mr-3'
@@ -427,7 +444,7 @@ const QuestionDetail = (props: Props) => {
                       </div>
                     </div>
 
-                    {userRole === 'user' || 'psy' ? (
+                    {userId ? (
                       <>
                         {answerForComments === answer.num ?
                           <>

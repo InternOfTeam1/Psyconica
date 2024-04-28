@@ -1,14 +1,15 @@
 'use client'
 import Link from "next/link";
 import { HOME_ROUTE } from "@/constants/routes";
+import PsychologistVideoManager from "@/components/PsychologistVideoManager";
 
 const Account: React.FC = () => {
   return (
 
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
-
+      <PsychologistVideoManager />
       <div className="bg-white p-6 rounded-lg shadow-lg">
-        <h1 className="text-2xl font-semibold mb-4">Личный Кабинет</h1>
+        <h1 className="text-2xl font-semibold mb-4">Личный Кабинет </h1>
 
 
         <Link href={HOME_ROUTE}>
