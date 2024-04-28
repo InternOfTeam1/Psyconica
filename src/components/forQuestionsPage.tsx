@@ -1,8 +1,8 @@
 "use client"
-import {useAppSelector} from "@/redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 import React, { useEffect, useState } from 'react';
 import { fetchDataFromCollection } from '@/lib/firebase/firebaseGetDocs';
-import {Data, Video} from '@/interfaces/collections';
+import { Data, Video } from '@/interfaces/collections';
 import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
 import { useRouter } from 'next/navigation';
@@ -69,15 +69,15 @@ const QuestionsComponent: React.FC<Props> = ({ videos }) => {
   }
 
   const renderIframe = (url: string, width: string, height: string) => (
-      <iframe
-          width={width}
-          height={height}
-          src={url}
-          title="YouTube video player"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          className="rounded-lg"
-      ></iframe>
+    <iframe
+      width={width}
+      height={height}
+      src={url}
+      title="YouTube video player"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowFullScreen
+      className="rounded-lg"
+    ></iframe>
   );
   const openModal = (videoUrl: string): void => {
     setSelectedVideoUrl(videoUrl);
@@ -88,7 +88,7 @@ const QuestionsComponent: React.FC<Props> = ({ videos }) => {
     <div className="container mx-auto max-w-7xl px-4 py-6 mt-[-50px]">
       <h1 className="text-2xl font-bold text-center mb-6">Вопросы</h1>
       <div className="flex flex-wrap -mx-4">
-      <div className="w-full lg:w-1/4 px-1 mb-4 lg:mb-0  xs:mt-2 xs:mx-auto lg:mx-0 lg:mt-0">
+        <div className="w-full lg:w-1/4 px-1 mb-4 lg:mb-0  xs:mt-2 xs:mx-auto lg:mx-0 lg:mt-0">
           <VideoGallery />
         </div>
         <div className="w-full lg:w-3/4 px-4" style={{ maxWidth: '860px' }}>

@@ -4,7 +4,7 @@ import { FaThumbsUp } from 'react-icons/fa';
 import { MdClose } from 'react-icons/md';
 import { fetchDoc } from '@/lib/firebase/firebaseGetDocs';
 import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
-import { Answers, QuestionData, Video } from '@/interfaces/collections';
+import { Answers, QuestionData, Users, Video } from '@/interfaces/collections';
 import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
 import { useParams } from 'next/navigation';
@@ -17,10 +17,14 @@ import { nanoid } from '@reduxjs/toolkit';
 import icon from '../../public/iconPsy.png';
 import Image from 'next/image';
 import { FaPen } from "react-icons/fa";
+import { User } from "firebase/auth";
+import { addDocumentWithSlug } from "@/lib/firebase/firebaseAdddoc";
+import { useRouter } from 'next/navigation';
 
 function fetchQuestionData(slug: any) {
   return fetchDoc('questions', slug);
 }
+
 
 type Props = {
   rawData: any
@@ -45,13 +49,14 @@ const QuestionDetail = (props: Props) => {
   const userPhoto = useAppSelector((state) => state.auth.user?.photo);
   const MAX_LIKES = 100;
   const dispatch: AppDispatch = useDispatch();
-
-  console.log(rawData)
+  const [userData, setUserData] = useState<any>(null);
+  const router = useRouter();
 
 
   const handleOpenModal = () => {
     dispatch(openModal());
   };
+
 
   const handleLikeClick = async (answerNum: any, answerLikes: string[]) => {
     const isLiked = answerLikes.includes(userId);
@@ -87,6 +92,16 @@ const QuestionDetail = (props: Props) => {
     }
   };
 
+
+  const handleClick = async (url: string, e: React.MouseEvent<HTMLDivElement> | React.KeyboardEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    try {
+      await router.push(url);
+    } catch (error) {
+      console.error('Ошибка навигации:', error);
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       if (questionSlug) {
@@ -95,11 +110,38 @@ const QuestionDetail = (props: Props) => {
       }
     };
     fetchData();
+
+
   }, [questionSlug]);
 
   useEffect(() => {
     document.title = `${questionData?.title}`;
   }, [questionData])
+
+
+  useEffect(() => {
+    async function fetchUserData(userId: any) {
+      try {
+        const fetchedUserData = await fetchDoc('users', userId);
+        setUserData(fetchedUserData);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    }
+
+    if (userId) {
+      fetchUserData(userId);
+    }
+
+    console.log(userData, 'ffffffff')
+  }, [userId]);
+
+
+  if (userData) {
+    console.log(userData, 'fetched userdata223');
+  }
+
+
 
   const onAnswerAdd = () => {
     setNewAnswer({
@@ -139,6 +181,21 @@ const QuestionDetail = (props: Props) => {
     setQuestionData(newQuestionData)
     setNewAnswer(null)
     await updateQuestion(questionSlug, newQuestionData);
+
+
+    if (userRole === 'psy') {
+      const userDocs = await fetchDoc('users', userId) as unknown as Users;
+
+      if (userDocs) {
+        const answeredQuestions = userDocs.answeredQuestions || [];
+        const updatedUserDoc = {
+          ...userDocs,
+          answeredQuestions: [...answeredQuestions, questionData?.title]
+        }
+        await addDocumentWithSlug('users', updatedUserDoc, 'userId');
+      }
+
+    }
   }
 
 
@@ -304,19 +361,28 @@ const QuestionDetail = (props: Props) => {
                 return (
                   <div key={index} className="mt-4 w-full ">
 
-                    <div className="flex items-center">
-                      {answer.psyPhoto && (
-                        <img
-                          src={answer.psyPhoto}
-                          alt="User Avatar"
-                          className="w-10 h-10 rounded-full object-cover mr-3"
-                        />
-                      )}
-                      <p className="font-semibold text-black flex items-center bg-gray-200 rounded-2xl p-1">
-                        <span className="mr-1">{answer.name}</span>
-                        <Image src={icon} alt="Psy Icon" width={20} height={20} />
-                      </p>
-                    </div>
+
+                    {userData && (
+                      <div key={userData.id} onClick={(e) => handleClick(`/profile/${userData.id}`, e)}
+                        className="flex items-center cursor-pointer">
+
+                        {answer.psyPhoto && (
+                          <img
+                            src={answer.psyPhoto}
+                            alt="User Avatar"
+                            className="w-10 h-10 rounded-full object-cover mr-3"
+                          />
+                        )}
+
+                        <p className="font-semibold text-black flex items-center bg-gray-200 rounded-2xl p-1">
+                          <span className="mr-1">{answer.name}</span>
+                          <Image src={icon} alt="Psy Icon" width={20} height={20} />
+                        </p>
+                      </div>
+
+                    )}
+
+
 
                     <div className="flex items-start mb-4">
 
@@ -407,7 +473,7 @@ const QuestionDetail = (props: Props) => {
                                       <p className="text-xs font-semibold text-gray-800">{comment?.userId === userId ? 'Вы' : comment?.name}</p>
                                       <p className="text-md text-gray-600 mt-1">{comment.content}</p>
                                     </div>
-                                    {((userRole === 'psy' && comment.userId === userId) || (userRole !== 'psy' && comment.userId === userId)) && (
+                                    {((userId && comment.userId === userId) || (userRole !== 'psy' && comment.userId === userId)) && (
                                       <>
                                         <FaPen
                                           className='cursor-pointer mr-3'
@@ -427,7 +493,7 @@ const QuestionDetail = (props: Props) => {
                       </div>
                     </div>
 
-                    {userRole === 'user' || 'psy' ? (
+                    {userId ? (
                       <>
                         {answerForComments === answer.num ?
                           <>
