@@ -7,7 +7,7 @@ import { nanoid } from 'nanoid'
 
 
 
-const Question: React.FC<{ params: { slug: string } }> = async ({ params }) => {
+const Question: React.FC<{ params: { slug: string } }> = ({ params }) => {
   const { slug } = params;
   const [rawData, setRawData] = useState<any>(null);
 
