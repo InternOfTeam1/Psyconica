@@ -20,47 +20,45 @@ const VideoGallery = () => {
     const [videos, setVideos] = useState<Video[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedVideoUrl, setSelectedVideoUrl] = useState('');
- 
+ const [displayCount, setDisplayCount] = useState(4);
 
-  useEffect(() => {
+   useEffect(() => {
     const loadVideos = async () => {
-
-        try {
-            const videosData = await fetchDataFromCollection('videos');
-            console.log("Loaded videos:", videosData);
-            if (!videosData.length) {
-                
-              console.log("No videos found");
-              return; 
-            }
-            const shuffledVideos = shuffleArray(videosData).slice(0, 4);
-            setVideos(shuffledVideos);
-          } catch (error) {
-            console.error('Error loading videos:', error);
-            return;
-          }
+      try {
+        const videosData = await fetchDataFromCollection('videos');
+        console.log("Loaded videos:", videosData);
+        if (!videosData.length) {
+          console.log("No videos found");
+          return;
+        }
+        const shuffledVideos = shuffleArray(videosData);
+        setVideos(shuffledVideos);
+      } catch (error) {
+        console.error('Error loading videos:', error);
+      }
     };
-  
+
     loadVideos();
   }, []);
-  
+
   const openModal = (videoUrl: string): void => {
     setSelectedVideoUrl(videoUrl);
     setIsOpen(true);
   };
 
-
   const closeModal = () => {
     setIsOpen(false);
   };
 
+  const loadMoreVideos = () => {
+    const newDisplayCount = displayCount + 1; 
+    setDisplayCount(newDisplayCount);
+  };
+
   return (
     <div className="p-3 m-4 bg-white rounded-2xl shadow-2xl border mt-[-3px]">
-        
       <div className="flex flex-wrap justify-center gap-2">
-         
-        {videos.map((video, index) => (
-      
+        {videos.slice(0, displayCount).map((video, index) => (
           <div key={index} className="w-full p-1">
             <div className="cursor-pointer border-2 pb-2 rounded-2xl overflow-hidden" onClick={() => openModal(video.url?.url?.[0])}>
               <iframe
@@ -75,6 +73,13 @@ const VideoGallery = () => {
           </div>
         ))}
       </div>
+       <button
+        type="button"
+        className="mt-4 p-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        onClick={loadMoreVideos}
+      >
+        Больше видео
+      </button>
 
       {isOpen && (
         <Transition.Root show={isOpen} as={React.Fragment}>

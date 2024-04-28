@@ -89,11 +89,11 @@ const PsychologistDashboard = () => {
   return (
     <div className="p-3 m-4 bg-white rounded-2xl shadow-2xl border">
       {videos.map((video, index) => (
-        <div key={index} className="p-1 w-full cursor-pointer border-2 rounded-2xl overflow-hidden" onClick={() => openModal(video.url.url[0])}>
+        <div key={index} className="p-1 w-full cursor-pointer border-2 rounded-2xl overflow-hidden" onClick={() => openModal(video.url?.url?.[0])}>
           <iframe
             width="100%"
             height="150"
-            src={video.url.url[0]}
+            src={video.url?.url?.[0]}
             title="YouTube video player"
             allowFullScreen
             className="rounded-lg"
