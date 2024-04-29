@@ -393,8 +393,8 @@ const QuestionDetail = (props: Props) => {
                             <h3 className="font-semibold text-black text-md leading-6 mt-1 px-1 xs:text-base sm:text-base md:text-base lg:text-lg  xl:text-xl ">
                               <input
                                 type="text"
-                                className='w-1/2 font-semibold text-black text-md leading-6 mt-1 px-1 xs:text-base sm:text-base md:text-base lg:text-lg  xl:text-xl '
-                                value={answer.title}
+                                className='w-1/2 font-semibold text-black text-md leading-6 mt-1 px-1 xs:text-base sm:text-base md:text-base lg:text-lg  xl:text-xl'
+                                value={editedAnswer}
                                 onChange={(e) => onAnswerChange(e, answer.num)}
                                 placeholder="Текст ответа"
                               />
