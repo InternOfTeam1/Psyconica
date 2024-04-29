@@ -27,9 +27,24 @@ const Header: React.FC = () => {
   const [isModalOpenPsy, setIsModalOpenPsy] = useState(false);
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
+  
   const handleNav = () =>{
     setMenuOpen(!menuOpen)
   } 
+
+  useEffect(() => {
+    function handleScroll() {
+      if (window.scrollY > 0) {
+        setMenuOpen(false);
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   const handleOpenModal = () => {
     dispatch(openModal());
@@ -91,11 +106,11 @@ const Header: React.FC = () => {
 
   return (
     <>
-    <header className="flex flex-wrap mx-auto max-w-[1200px] bg-transparent justify-between items-center  xs:mb-[50px] mt-5 mb-[100px] header">
-    {!menuOpen && (
-        <div onClick={handleNav} className='sm:hidden cursor-pointer pl-5 pt-5 absolute top-0 left-0 text-gray-500  hover:text-white'>
-          <PiListBold size={25}/>
-        </div>
+      <header className="flex flex-wrap mx-auto max-w-[1200px] bg-transparent justify-between items-center xs:mb-[50px] mt-5 mb-[100px] header">
+        {!menuOpen && (
+          <div onClick={handleNav} className='sm:hidden cursor-pointer pl-5 pt-5 absolute top-0 left-0 text-gray-500  hover:text-white'>
+            <PiListBold size={25} />
+          </div>
       )}
      <nav className="gap-2 hidden sm:flex">
       <Link href="/questions" className=" cursor-pointer text-gray-500  hover:bg-neutral-500  hover:rounded-full hover:text-white font-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 mt-5 py-1 px-5 hidden sm:flex">Вопросы</Link>
@@ -138,38 +153,44 @@ const Header: React.FC = () => {
         </div>
         <div className={
           menuOpen 
-          ? "fixed left-0 top-0 w-[75%] sm:hidden p-7 ease-in duration-500 h-[fit-content] max-h-screen overflow-y-auto bg-gradient-to-r from-purple-300 to-transparent"
-          : "fixed left-[-100%] top-0 p-10 ease-in duration-500 bg-gradient-to-r from-purple-300 to-transparent"
+          ? "fixed top-0 left-0 w-[75%] sm:hidden p-7 ease-in duration-500 max-h-screen overflow-hidden bg-gradient-to-r from-purple-300 to-transparent z-50"
+          : "fixed left-[-100%] top-0 p-10 ease-in duration-500 bg-gradient-to-r from-purple-300 to-transparent z-0"
         }> 
         <div className='flex w-full items-center justify-start'>
-          <div onClick={handleNav} className='cursor-pointer text-gray-500 hover:text-white'>
+          <div onClick={handleNav} className='cursor-pointer text-black hover:text-white'>
             <PiXBold size={25} />
           </div>
         </div>
         <div className='flex-col py-4'>
           <ul>
+          <Link href={HOME_ROUTE} className='py-1.5 cursor-pointer text-black font-bold  hover:text-white'>
+           <li onClick={() => setMenuOpen(false)}
+            className='py-1.5 cursor-pointer text-black font-bold  hover:text-white'>
+              Главная
+            </li>
+           </Link>
           <Link href="/questions">
             <li onClick={() => setMenuOpen(false)}
-            className='py-1.5 cursor-pointer text-gray-600 font-bold  hover:text-white'>
+            className='py-1.5 cursor-pointer text-black font-bold  hover:text-white'>
               Вопросы
             </li>
           </Link>
           <Link href="/articles">
             <li onClick={() => setMenuOpen(false)}
-            className='py-1.5 cursor-pointer text-gray-600 font-bold hover:text-white'>
+            className='py-1.5 cursor-pointer text-black font-bold hover:text-white'>
               Статьи
             </li>
           </Link>
             {!isAuthenticated ? (
-              <li onClick={() => { handleOpenModal(); setMenuOpen(false); }} className="py-1.5 cursor-pointer text-gray-600 font-bold  hover:text-white">Log in with social network</li>
+              <li onClick={() => { handleOpenModal(); setMenuOpen(false); }} className="py-1.5 cursor-pointer text-black font-bold  hover:text-white">Log in with social network</li>
             ) : (
               <>
                 <Link href={PROFILE_ROUTE}>
-                <li onClick={() => setMenuOpen(false)} className="py-1.5 cursor-pointer text-gray-600 font-bold  hover:text-white">
+                <li onClick={() => setMenuOpen(false)} className="py-1.5 cursor-pointer text-black font-bold  hover:text-white">
                     Личный кабинет
                   </li>
                 </Link>
-                <li onClick={() => { handleLogout(); setMenuOpen(false); }} className="py-1.5 cursor-pointer text-gray-600 font-bold  hover:text-white">
+                <li onClick={() => { handleLogout(); setMenuOpen(false); }} className="py-1.5 cursor-pointer text-black font-bold  hover:text-white">
                   Log out
                 </li>
               </>
