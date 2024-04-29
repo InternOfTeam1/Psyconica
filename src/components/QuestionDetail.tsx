@@ -412,7 +412,7 @@ const QuestionDetail = (props: Props) => {
                           <h3 className="font-semibold text-gray-600 leading-6 sm:text-md md:text-lg lg:text-xl">
                             {answer.title}
                           </h3>
-                          {((userRole === 'psy' && answer.userId === userId) || (userRole !== 'psy' && answer.userId === userId)) && (
+                          {((userRole === 'psy' && answer.userId === userId) || (userRole !== 'psy' && answer.userId === userId)) &&  (
                             <>
                               <button
                                 className="text-white bg-gray-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-2 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg ml-auto"
@@ -473,7 +473,7 @@ const QuestionDetail = (props: Props) => {
                                       <p className="text-xs font-semibold text-gray-800">{comment?.userId === userId ? 'Вы' : comment?.name}</p>
                                       <p className="text-md text-gray-600 mt-1">{comment.content}</p>
                                     </div>
-                                    {((userId && comment.userId === userId) || (userRole !== 'psy' && comment.userId === userId)) && (
+                                    {((userRole === 'psy' && comment.userId === userId) || (userRole !== 'psy' && comment.userId === userId)) && (
                                       <>
                                         <FaPen
                                           className='cursor-pointer mr-3'
