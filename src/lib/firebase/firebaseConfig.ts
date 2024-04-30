@@ -3,6 +3,7 @@ import { Firestore, getFirestore } from 'firebase/firestore';
 import { getAuth, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup, User, signOut, TwitterAuthProvider } from 'firebase/auth';
 import { Users } from '@/interfaces/collections';
 import { addDocumentWithSlug } from '@/lib/firebase/firebaseAdddoc';
+import { fetchDoc } from './firebaseGetDocs';
 
 
 const firebaseConfig = {
@@ -21,29 +22,31 @@ export const db: Firestore = getFirestore(firebaseApp);
 
 const auth = getAuth(firebaseApp);
 
+
 export const signInWithGoogle = async (): Promise<User | null> => {
+
+
   try {
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
 
-
-    const userData: Users = {
-      name: user.displayName,
-      mail: user.email,
-      photo: user.photoURL,
-      role: 'user',
-      slug: user.displayName,
-      userId: user.uid,
-      answeredQuestions: [],
-      aboutUser: 'more',
-      contactUser: 'contact'
-    };
-
-    localStorage.setItem('userPhoto', JSON.stringify(user.photoURL));
-
-    await addDocumentWithSlug('users', userData, 'userId');
-
+    if (!user.uid) {
+      const userData: Users = {
+        name: user.displayName,
+        mail: user.email,
+        photo: user.photoURL,
+        role: 'user',
+        slug: user.displayName,
+        userId: user.uid,
+        answeredQuestions: [],
+        aboutUser: 'more',
+        contactUser: 'contact',
+        video: []
+      }
+      localStorage.setItem('userPhoto', JSON.stringify(user.photoURL));
+      await addDocumentWithSlug('users', userData, 'userId');
+    }
     console.log('Успешный вход:', user);
     return user;
   } catch (error) {
@@ -59,22 +62,26 @@ export const signInWithTwitter = async (): Promise<User | null> => {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
 
-    const userData: Users = {
-      name: user.displayName,
-      mail: user.email,
-      photo: user.photoURL,
-      role: 'user',
-      slug: user.displayName,
-      userId: user.uid,
-      answeredQuestions: [],
-      aboutUser: 'more',
-      contactUser: 'contact'
-    };
-
-    await addDocumentWithSlug('users', userData, 'userId');
+    if (!user.uid) {
+      const userData: Users = {
+        name: user.displayName,
+        mail: user.email,
+        photo: user.photoURL,
+        role: 'user',
+        slug: user.displayName,
+        userId: user.uid,
+        answeredQuestions: [],
+        aboutUser: 'more',
+        contactUser: 'contact',
+        video: []
+      }
+      localStorage.setItem('userPhoto', JSON.stringify(user.photoURL));
+      await addDocumentWithSlug('users', userData, 'userId');
+    }
+    console.log('Успешный вход:', user);
     return user;
   } catch (error) {
-    console.error('Error with Facebook authentication:', error);
+    console.error('Ошибка аутентификации:', error);
     return null;
   }
 };

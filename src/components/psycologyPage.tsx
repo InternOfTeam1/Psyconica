@@ -45,7 +45,6 @@ const PsyAccount = () => {
       fetchUserData(userId);
     }
 
-    console.log(userData, 'ffffffff')
   }, [userId]);
 
   return (
