@@ -95,6 +95,14 @@ const QuestionDetail = (props: Props) => {
 
   const handleClick = async (url: string, e: React.MouseEvent<HTMLDivElement> | React.KeyboardEvent<HTMLDivElement>) => {
     e.preventDefault();
+
+    if (!userId) {
+      handleOpenModal()
+
+      console.error("User ID is undefined.");
+      return;
+    }
+
     try {
       await router.push(url);
     } catch (error) {
@@ -163,41 +171,48 @@ const QuestionDetail = (props: Props) => {
 
 
   const onNewAnswerSave = async () => {
-    const answers: any = questionData?.answers;
+    try {
+      const answers: any = questionData?.answers;
 
-    const nameToAdd = userRole === 'psy' ? userName : 'Psy';
+      const nameToAdd = userRole === 'psy' ? userName : 'Psy';
 
-    const updatedNewAnswer = {
-      ...newAnswer,
-      name: nameToAdd,
-      psyPhoto: userRole === 'psy' ? userPhoto : '/psy_avatar.jpg',
-    };
+      const updatedNewAnswer = {
+        ...newAnswer,
+        name: nameToAdd,
+        psyPhoto: userRole === 'psy' ? userPhoto : '/psy_avatar.jpg',
+      };
 
-    const newQuestionData = {
-      ...questionData,
-      answers: [...answers, updatedNewAnswer]
-    }
-
-    setQuestionData(newQuestionData)
-    setNewAnswer(null)
-    await updateQuestion(questionSlug, newQuestionData);
-
-
-    if (userRole === 'psy') {
-      const userDocs = await fetchDoc('users', userId) as unknown as Users;
-
-      if (userDocs) {
-        const answeredQuestions = userDocs.answeredQuestions || [];
-        const updatedUserDoc = {
-          ...userDocs,
-          answeredQuestions: [...answeredQuestions, questionData?.title]
-        }
-        await addDocumentWithSlug('users', updatedUserDoc, 'userId');
+      const newQuestionData = {
+        ...questionData,
+        answers: [...answers, updatedNewAnswer]
       }
 
-    }
-  }
+      setQuestionData(newQuestionData)
+      setNewAnswer(null)
+      await updateQuestion(questionSlug, newQuestionData);
 
+
+      if (userRole === 'psy') {
+        const userDocs = await fetchDoc('users', userId) as unknown as Users;
+
+        if (userDocs) {
+          const answeredQuestions = userDocs.answeredQuestions || [];
+          const questionTitle = questionData?.title;
+
+          if (questionTitle && !answeredQuestions.includes(questionTitle)) {
+            const updatedUserDoc = {
+              ...userDocs,
+              answeredQuestions: [...answeredQuestions, questionTitle]
+            }
+            await addDocumentWithSlug('users', updatedUserDoc, 'userId');
+          }
+        };
+      }
+    } catch (error) {
+      console.error("Error saving new answer:", error);
+
+    }
+  };
 
   const onAnswerDelete = async (answerNum: number) => {
     const answers: any = questionData?.answers;
@@ -361,28 +376,23 @@ const QuestionDetail = (props: Props) => {
                 return (
                   <div key={index} className="mt-4 w-full ">
 
+                    <div onClick={(e) => handleClick(`/profile/${userData?.id}`, e)}
 
-                    {userData && (
-                      <div key={userData.id} onClick={(e) => handleClick(`/profile/${userData.id}`, e)}
-                        className="flex items-center cursor-pointer">
+                      className="flex items-center cursor-pointer">
 
-                        {answer.psyPhoto && (
-                          <img
-                            src={answer.psyPhoto}
-                            alt="User Avatar"
-                            className="w-10 h-10 rounded-full object-cover mr-3"
-                          />
-                        )}
+                      {answer.psyPhoto && (
+                        <img
+                          src={answer.psyPhoto}
+                          alt="User Avatar"
+                          className="w-10 h-10 rounded-full object-cover mr-3"
+                        />
+                      )}
 
-                        <p className="font-semibold text-black flex items-center bg-gray-200 rounded-2xl p-1">
-                          <span className="mr-1">{answer.name}</span>
-                          <Image src={icon} alt="Psy Icon" width={20} height={20} />
-                        </p>
-                      </div>
-
-                    )}
-
-
+                      <p className="font-semibold text-black flex items-center bg-gray-200 rounded-2xl p-1">
+                        <span className="mr-1">{answer.name}</span>
+                        <Image src={icon} alt="Psy Icon" width={20} height={20} />
+                      </p>
+                    </div>
 
                     <div className="flex items-start mb-4">
 
@@ -412,7 +422,7 @@ const QuestionDetail = (props: Props) => {
                           <h3 className="font-semibold text-gray-600 leading-6 sm:text-md md:text-lg lg:text-xl">
                             {answer.title}
                           </h3>
-                          {((userRole === 'psy' && answer.userId === userId) || (userRole !== 'psy' && answer.userId === userId)) &&  (
+                          {((userRole === 'psy' && answer.userId === userId) || (userRole !== 'psy' && answer.userId === userId)) && (
                             <>
                               <button
                                 className="text-white bg-gray-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-2 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg ml-auto"
@@ -493,27 +503,27 @@ const QuestionDetail = (props: Props) => {
                       </div>
                     </div>
 
-                    {userId ? (
-                      <>
-                        {answerForComments === answer.num ?
-                          <>
-                            <input
-                              type="text"
-                              className='w-1/2 font-semibold text-gray-500 text-md leading-6 mt-3 mr-2'
-                              onChange={(e) => onCommentChange(e, lastCommentId)}
-                              placeholder=" Текст комментария..."
-                            />
-                            <button
-                              className='text-white bg-gray-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg'
-                              onClick={() => onCommentCreate(String(answer.num))}
-                            >
-                              Отправить
-                            </button>
-                          </>
-                          : (<button className='text-gray-600 hover:text-neutral-600 hover:text-gray-800 uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sn mt-5 ml-3 px-2'
-                            onClick={() => onCommentAdd(answer.num)}>Комментировать</button>)}
-                      </>
-                    ) : null}
+
+                    <>
+                      {answerForComments === answer.num ?
+                        <>
+                          <input
+                            type="text"
+                            className='w-1/2 font-semibold text-gray-500 text-md leading-6 mt-3 mr-2'
+                            onChange={(e) => onCommentChange(e, lastCommentId)}
+                            placeholder=" Текст комментария..."
+                          />
+                          <button
+                            className='text-white bg-gray-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg'
+                            onClick={() => onCommentCreate(String(answer.num))}
+                          >
+                            Отправить
+                          </button>
+                        </>
+                        : (<button className='text-gray-600 hover:text-neutral-600 hover:text-gray-800 uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sn mt-5 ml-3 px-2'
+                          onClick={() => onCommentAdd(answer.num)}>Комментировать</button>)}
+                    </>
+
                     <hr className="my-4 border-gray-400" />
                   </div>
                 );
