@@ -31,22 +31,22 @@ export const signInWithGoogle = async (): Promise<User | null> => {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
 
-    if (!user.uid) {
-      const userData: Users = {
-        name: user.displayName,
-        mail: user.email,
-        photo: user.photoURL,
-        role: 'user',
-        slug: user.displayName,
-        userId: user.uid,
-        answeredQuestions: [],
-        aboutUser: 'more',
-        contactUser: 'contact',
-        video: []
-      }
-      localStorage.setItem('userPhoto', JSON.stringify(user.photoURL));
-      await addDocumentWithSlug('users', userData, 'userId');
+    // if (!user.uid) {
+    const userData: Users = {
+      name: user.displayName,
+      mail: user.email,
+      photo: user.photoURL,
+      role: 'user',
+      slug: user.displayName,
+      userId: user.uid,
+      answeredQuestions: [],
+      aboutUser: 'more',
+      contactUser: 'contact',
+      video: []
     }
+    localStorage.setItem('userPhoto', JSON.stringify(user.photoURL));
+    await addDocumentWithSlug('users', userData, 'userId');
+    // }
     console.log('Успешный вход:', user);
     return user;
   } catch (error) {
@@ -62,22 +62,22 @@ export const signInWithTwitter = async (): Promise<User | null> => {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
 
-    if (!user.uid) {
-      const userData: Users = {
-        name: user.displayName,
-        mail: user.email,
-        photo: user.photoURL,
-        role: 'user',
-        slug: user.displayName,
-        userId: user.uid,
-        answeredQuestions: [],
-        aboutUser: 'more',
-        contactUser: 'contact',
-        video: []
-      }
-      localStorage.setItem('userPhoto', JSON.stringify(user.photoURL));
-      await addDocumentWithSlug('users', userData, 'userId');
+    // if (!user.uid) {
+    const userData: Users = {
+      name: user.displayName,
+      mail: user.email,
+      photo: user.photoURL,
+      role: 'user',
+      slug: user.displayName,
+      userId: user.uid,
+      answeredQuestions: [],
+      aboutUser: 'more',
+      contactUser: 'contact',
+      video: []
     }
+    localStorage.setItem('userPhoto', JSON.stringify(user.photoURL));
+    await addDocumentWithSlug('users', userData, 'userId');
+    // }
     console.log('Успешный вход:', user);
     return user;
   } catch (error) {
