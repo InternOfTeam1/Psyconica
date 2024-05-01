@@ -42,7 +42,8 @@ export const signInWithGoogle = async (): Promise<User | null> => {
       answeredQuestions: [],
       aboutUser: 'more',
       contactUser: 'contact',
-      video: []
+      video: [],
+      slogan: "Psychology should be simple..."
     }
     localStorage.setItem('userPhoto', JSON.stringify(user.photoURL));
     await addDocumentWithSlug('users', userData, 'userId');
@@ -73,7 +74,8 @@ export const signInWithTwitter = async (): Promise<User | null> => {
       answeredQuestions: [],
       aboutUser: 'more',
       contactUser: 'contact',
-      video: []
+      video: [],
+      slogan: "Psychology should be simple..."
     }
     localStorage.setItem('userPhoto', JSON.stringify(user.photoURL));
     await addDocumentWithSlug('users', userData, 'userId');

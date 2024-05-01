@@ -34,9 +34,9 @@ const PsyAccount = () => {
   const userRole = useAppSelector((state) => state.auth.user?.role);
   const userName = useAppSelector((state) => state.auth.user?.name);
   const userPhoto = useAppSelector((state) => state.auth.user?.photo);
-  const userSlogan = useAppSelector((state) => state.auth.user?.slogan);
-  const userContact = useAppSelector((state) => state.auth.user?.contact);
-  const userAbout = useAppSelector((state) => state.auth.user?.about);
+  // const userSlogan = useAppSelector((state) => state.auth.user?.slogan);
+  // const userContact = useAppSelector((state) => state.auth.user?.contactUser);
+  // const userAbout = useAppSelector((state) => state.auth.user?.aboutUser);
   const dispatch: AppDispatch = useDispatch();
 
 
@@ -63,26 +63,40 @@ const PsyAccount = () => {
         <VideoGallery />
         {userData && <PsychologistDashboard />}
         </div>
-        <div className="container ml-5 px-2 py-4 max-w-3xl bg-white shadow-xl rounded-2xl " style={{ maxWidth: '820px' }}>
+        <div className="container ml-5 px-2 py-4 max-w-3xl bg-white shadow-xl rounded-2xl " style={{ maxWidth: '700px' }}>
         {userData && (
-        <p className='font-semibold italic text-gray-800 leading-7 mt-3 ml-5'>{userData.slogan}</p>
+ <div className="text-center mb-5">
+ <p className='flex items-center justify-center font-semibold bg-amber-300 px-7 py-1 rounded-2xl text-center text-gray-800 leading-7'>
+   <Image
+     src="/bigLogo.webp"
+     alt="logo"
+     width={50}
+     height={50}
+     className="mr-2" />
+   {userData.slogan}
+ </p>
+</div>
            )}
           {
             userData && (
               <>
-                <p className='font-semibold  text-gray-800 leading-6 mt-2 ml-5'>{userData.name}</p>
-                {userData.photo && (
-                  <div className="user-photo-container  mt-2 ml-5">
-                    <Image src={userData.photo} alt="User Avatar" width={200} height={200} />
-                  </div>
-                )}
+          <div className="flex ml-5 items-start">
+            {userData.photo && (
+              <div className="user-photo-container mt-2 mr-5">
+                <Image src={userData.photo} alt="User Avatar" width={200} height={200} />
+              </div>
+            )}
+            <div className="flex flex-col">
+              <p className='font-semibold text-gray-800 leading-6'>{userData.name}</p>
+            </div>
+          </div>
                     <div>
                     <p className='font-bold text-gray-800 leading-6 mt-2 ml-5'>About:</p>
-                    <p className=' text-gray-600 leading-6 mt-2 mx-5'>{userData.about}</p>
+                    <p className=' text-gray-600 leading-6 mt-2 mx-5'>{userData.aboutUser}</p>
                   </div>  
                   <div>
                     <p className='font-bold text-gray-800 leading-6 mt-2 ml-5'>Contact:</p>
-                    <p className=' text-gray-600 leading-6 mt-2 ml-5'>{userData.contact}</p>
+                    <p className=' text-gray-600 leading-6 mt-2 ml-5'>{userData.contactUser}</p>
                   </div>  
                 <div>
                   <p className='font-semibold  text-gray-800 leading-6 mt-2 ml-5'>Answered Question:</p>

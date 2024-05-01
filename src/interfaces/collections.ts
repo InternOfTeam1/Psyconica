@@ -61,6 +61,7 @@ export interface Users {
   answeredQuestions?: any,
   aboutUser?: any,
   contactUser?: any
+  slogan?: string;
 
 }
 
