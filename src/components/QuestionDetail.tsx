@@ -93,7 +93,7 @@ const QuestionDetail = (props: Props) => {
   };
 
 
-  const handleClick = async (url: string, e: React.MouseEvent<HTMLDivElement> | React.KeyboardEvent<HTMLDivElement>) => {
+  const handleClick = async (userId: string, e: React.MouseEvent<HTMLDivElement> | React.KeyboardEvent<HTMLDivElement>) => {
     e.preventDefault();
 
     if (!userId) {
@@ -104,7 +104,10 @@ const QuestionDetail = (props: Props) => {
     }
 
     try {
-      await router.push(url);
+      const fetchedUserData = await fetchDoc('users', userId);
+      setUserData(fetchedUserData);
+      await router.push(`/profile/${userId}`);
+
     } catch (error) {
       console.error('Ошибка навигации:', error);
     }
@@ -125,30 +128,6 @@ const QuestionDetail = (props: Props) => {
   useEffect(() => {
     document.title = `${questionData?.title}`;
   }, [questionData])
-
-
-  useEffect(() => {
-    async function fetchUserData(userId: any) {
-      try {
-        const fetchedUserData = await fetchDoc('users', userId);
-        setUserData(fetchedUserData);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    }
-
-    if (userId) {
-      fetchUserData(userId);
-    }
-
-    console.log(userData, 'ffffffff')
-  }, [userId]);
-
-
-  if (userData) {
-    console.log(userData, 'fetched userdata223');
-  }
-
 
 
   const onAnswerAdd = () => {
@@ -376,7 +355,7 @@ const QuestionDetail = (props: Props) => {
                 return (
                   <div key={index} className="mt-4 w-full ">
 
-                    <div onClick={(e) => handleClick(`/profile/${userData?.id}`, e)}
+                    <div onClick={(e) => handleClick(answer.userId, e)}
 
                       className="flex items-center cursor-pointer">
 

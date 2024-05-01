@@ -21,7 +21,7 @@ export const db: Firestore = getFirestore(firebaseApp);
 
 
 const auth = getAuth(firebaseApp);
-
+let hasUserAdded = false;
 
 export const signInWithGoogle = async (): Promise<User | null> => {
 
@@ -31,23 +31,12 @@ export const signInWithGoogle = async (): Promise<User | null> => {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
 
-    // if (!user.uid) {
-    const userData: Users = {
-      name: user.displayName,
-      mail: user.email,
-      photo: user.photoURL,
-      role: 'user',
-      slug: user.displayName,
-      userId: user.uid,
-      answeredQuestions: [],
-      aboutUser: 'more',
-      contactUser: 'contact',
-      video: [],
-      slogan: "Psychology should be simple..."
+    if (!hasUserAdded) {
+      await addUserDocument(user);
+      hasUserAdded = true;
     }
-    localStorage.setItem('userPhoto', JSON.stringify(user.photoURL));
-    await addDocumentWithSlug('users', userData, 'userId');
-    // }
+
+
     console.log('Успешный вход:', user);
     return user;
   } catch (error) {
@@ -63,23 +52,13 @@ export const signInWithTwitter = async (): Promise<User | null> => {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
 
-    // if (!user.uid) {
-    const userData: Users = {
-      name: user.displayName,
-      mail: user.email,
-      photo: user.photoURL,
-      role: 'user',
-      slug: user.displayName,
-      userId: user.uid,
-      answeredQuestions: [],
-      aboutUser: 'more',
-      contactUser: 'contact',
-      video: [],
-      slogan: "Psychology should be simple..."
+    if (!hasUserAdded) {
+      await addUserDocument(user);
+      hasUserAdded = true;
     }
-    localStorage.setItem('userPhoto', JSON.stringify(user.photoURL));
-    await addDocumentWithSlug('users', userData, 'userId');
-    // }
+
+
+
     console.log('Успешный вход:', user);
     return user;
   } catch (error) {
@@ -88,6 +67,23 @@ export const signInWithTwitter = async (): Promise<User | null> => {
   }
 };
 
+async function addUserDocument(user: User) {
+  const userData: Users = {
+    name: user.displayName,
+    mail: user.email,
+    photo: user.photoURL,
+    role: 'user',
+    slug: user.displayName,
+    userId: user.uid,
+    answeredQuestions: [],
+    aboutUser: 'more',
+    contactUser: 'contact',
+    video: [],
+    slogan: "Psychology should be simple..."
+  };
+  localStorage.setItem('userPhoto', JSON.stringify(user.photoURL));
+  await addDocumentWithSlug('users', userData, 'userId');
+}
 
 export const signOutUser = async (): Promise<void> => {
   try {

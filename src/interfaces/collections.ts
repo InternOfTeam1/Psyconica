@@ -52,7 +52,7 @@ export interface Users {
   mail?: any;
   name?: any;
   photo?: any;
-  role: 'user' | 'psy';
+  role: any;
   favourite?: any;
   desc?: string;
   video?: string[];
