@@ -8,11 +8,11 @@ const Account: React.FC = () => {
   return (
 
     <div>
-      <PsychologistVideoManager />
-
 
 
       <PsyAccount />
+{/* 
+      <PsychologistVideoManager /> */}
 
 
     </div>
