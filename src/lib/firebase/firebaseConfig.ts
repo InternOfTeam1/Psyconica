@@ -79,7 +79,8 @@ async function addUserDocument(user: User) {
     aboutUser: 'more',
     contactUser: 'contact',
     video: [],
-    slogan: "Psychology should be simple..."
+    slogan: "Psychology should be simple...",
+    comments: []
   };
   localStorage.setItem('userPhoto', JSON.stringify(user.photoURL));
   await addDocumentWithSlug('users', userData, 'userId');

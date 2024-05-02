@@ -62,6 +62,7 @@ export interface Users {
   aboutUser?: any,
   contactUser?: any
   slogan?: string;
+  comments: Comment[];
 
 }
 
