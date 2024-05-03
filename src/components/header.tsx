@@ -161,7 +161,7 @@ const Header: React.FC = () => {
             <PiXBold size={25} />
           </div>
         </div>
-        <div className='flex-col py-4'>
+        <div className='flex-col py-1.5'>
           <ul>
           <Link href={HOME_ROUTE} className='py-1.5 cursor-pointer text-black font-bold  hover:text-white'>
            <li onClick={() => setMenuOpen(false)}
