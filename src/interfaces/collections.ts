@@ -97,6 +97,14 @@ export interface QuestionData {
 
 }
 
+export interface Comments {
+  id: string;
+  content: string;
+  photo: string;
+  userId: string;
+  name: string;
+}
+
 export interface Data {
   id: string;
   title?: string;

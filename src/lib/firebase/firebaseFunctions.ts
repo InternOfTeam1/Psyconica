@@ -106,3 +106,20 @@ export const updateComment = async (slug: string, data: any) => {
   }
 
 };
+
+export const updateUser = async (slug: string, data: any) => {
+  try {
+    const userDocRef = doc(db, "users", slug);
+
+    const userData = await getDoc(userDocRef);
+
+    if (userData.exists()) {
+      await updateDoc(userDocRef, data);
+    } else {
+      console.log("Document does not exist!");
+    }
+  } catch (e) {
+    console.log(e)
+  }
+
+};

@@ -129,7 +129,9 @@ const Header: React.FC = () => {
     </Link>
     </div>
     <div className="xs:order-2 sm:order-2 sm:mr-10 md:order-2 md:mr-30 lg:order-3 xl:order-3 xl:mr-20 mr-5 ">
+      <div className='xs:ml-4'>
         <Social />
+        </div>
           <ul className="items-center gap-2 mb-4 align-middle list hidden sm:flex">
             {!isAuthenticated ? (
               <li onClick={handleOpenModal} className="flex cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 border-solid border-2 border-gray-400 whitespace-nowrap rounded-[20px] mt-5 mb-5 py-1 px-5">Log in with social network</li>
@@ -159,7 +161,7 @@ const Header: React.FC = () => {
             <PiXBold size={25} />
           </div>
         </div>
-        <div className='flex-col py-4'>
+        <div className='flex-col py-1.5'>
           <ul>
           <Link href={HOME_ROUTE} className='py-1.5 cursor-pointer text-black font-bold  hover:text-white'>
            <li onClick={() => setMenuOpen(false)}
