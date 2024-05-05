@@ -93,7 +93,7 @@ const QuestionDetail = (props: Props) => {
   };
 
 
-  const handleClick = async (userId: string, e: React.MouseEvent<HTMLDivElement> | React.KeyboardEvent<HTMLDivElement>) => {
+  const handleClick = async (user: string, e: React.MouseEvent<HTMLDivElement> | React.KeyboardEvent<HTMLDivElement>) => {
     e.preventDefault();
 
     if (!userId) {
@@ -104,9 +104,9 @@ const QuestionDetail = (props: Props) => {
     }
 
     try {
-      const fetchedUserData = await fetchDoc('users', userId);
+      const fetchedUserData = await fetchDoc('users', user);
       setUserData(fetchedUserData);
-      await router.push(`/profile/${userId}`);
+      await router.push(`/profile/${user}`);
 
     } catch (error) {
       console.error('Ошибка навигации:', error);

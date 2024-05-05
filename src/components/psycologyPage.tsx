@@ -12,6 +12,8 @@ import PsychologistDashboard from './PsychologistVideoManager';
 import { FaPen } from 'react-icons/fa';
 import { MdClose } from 'react-icons/md';
 import { useAppSelector } from '../redux/hooks';
+import slugify from 'slugify';
+import { useRouter } from 'next/navigation';
 
 
 export function fetchUserData(slug: any) {
@@ -30,6 +32,16 @@ const PsyAccount = () => {
   const userPhoto = useAppSelector((state) => state.auth.user?.photo);
   const params = useParams();
   const userSlug: any = params.slug;
+  const router = useRouter();
+  const [questionSlug, setQuestionSlug] = useState<string>('');
+
+  const handleClick = async (url: string) => {
+    try {
+      await router.push(url);
+    } catch (error) {
+      console.error('Navigation error:', error);
+    }
+  };
 
   useEffect(() => {
     async function fetchUserData(userId: any) {
@@ -98,6 +110,17 @@ const PsyAccount = () => {
     }
   };
 
+  useEffect(() => {
+    const questionsString = userData?.answeredQuestions.join(', ');
+
+    if (userData?.answeredQuestions && userData.answeredQuestions.length > 0) {
+      const slug = slugify(questionsString, { lower: true, strict: true, remove: /[*+~.()'"!:@]/g });
+      setQuestionSlug(slug);
+    }
+
+  }, [userData]);
+
+
   return (
     <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px]">
       <div className="flex flex-wrap -mx-1 lg:-mx-1">
@@ -145,7 +168,22 @@ const PsyAccount = () => {
                   <ul className=' text-gray-600 leading-6 mt-2 ml-5'>
                     {userData.answeredQuestions && userData.answeredQuestions.length > 0 ? (
                       userData.answeredQuestions.map((question: any, index: number) => (
-                        <li key={index}>{question}</li>
+
+
+                        <Link key={questionSlug} href={`/questions/${questionSlug}`}>
+                          <li
+                            key={index}
+                            onClick={(e: React.MouseEvent<HTMLLIElement, MouseEvent>) => handleClick(`/questions/${questionSlug}`)}
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={(e: React.KeyboardEvent<HTMLLIElement>) => e.key === 'Enter' && handleClick(`/questions/${questionSlug}`)}
+                          >
+                            {question}
+                          </li>
+
+                        </Link>
+
+
                       ))
                     ) : (
                       <li>No answered questions yet.</li>
@@ -172,8 +210,8 @@ const PsyAccount = () => {
                   placeholder="Текст комментария"
                 />
                 <button
-                className="text-white bg-gray-600 hover:bg-blue-700"
-                onClick={handleComment}>Сохранить</button>
+                  className="text-white bg-gray-600 hover:bg-blue-700"
+                  onClick={handleComment}>Сохранить</button>
               </div>
             )}
 
