@@ -119,6 +119,7 @@ const PsyAccount = () => {
     }
 
   }, [userData]);
+  
 
 
   return (
@@ -128,7 +129,7 @@ const PsyAccount = () => {
           <VideoGallery />
           {userData && <PsychologistDashboard />}
         </div>
-        <div className="container ml-5 px-2 py-4 max-w-3xl bg-white shadow-xl rounded-2xl " style={{ maxWidth: '700px' }}>
+        <div className="container ml-5 px-2 py-4 max-w-3xl bg-white shadow-xl rounded-2xl " style={{ maxWidth: '600px' }}>
           {userData && (
             <div className="text-center mb-5">
               <p className='flex items-center justify-center font-semibold bg-amber-300 px-7 py-1 rounded-2xl text-center text-gray-800 leading-7'>
@@ -148,47 +149,21 @@ const PsyAccount = () => {
                 <div className="flex ml-5 items-start">
                   {userData.photo && (
                     <div className="user-photo-container mt-2 mr-5">
-                      <Image src={userData.photo} alt="User Avatar" width={200} height={200} />
+                      <Image src={userData.photo} alt="User Avatar" width={180} height={180} />
                     </div>
                   )}
                   <div className="flex flex-col">
-                    <p className='font-semibold text-gray-800 leading-6'>{userData.name}</p>
+                    <p className='font-semibold text-gray-800 leading-6 p-1'>{userData.name}</p>
+                    {userData.expert}
                   </div>
                 </div>
                 <div>
-                  <p className='font-bold text-gray-800 leading-6 mt-2 ml-5'>About:</p>
-                  <p className=' text-gray-600 leading-6 mt-2 mx-5'>{userData.aboutUser}</p>
+                  <p className='font-bold text-gray-800 leading-6 mt-3 ml-5'>About:</p>
+                  <p className=' text-gray-600 leading-6 mt-2 ml-5'>{userData.aboutUser}</p>
                 </div>
                 <div>
-                  <p className='font-bold text-gray-800 leading-6 mt-2 ml-5'>Contact:</p>
+                  <p className='font-bold text-gray-800 leading-6 mt-3 ml-5'>Contact:</p>
                   <p className=' text-gray-600 leading-6 mt-2 ml-5'>{userData.contactUser}</p>
-                </div>
-                <div>
-                  <p className='font-semibold  text-gray-800 leading-6 mt-2 ml-5'>Answered Question:</p>
-                  <ul className=' text-gray-600 leading-6 mt-2 ml-5'>
-                    {userData.answeredQuestions && userData.answeredQuestions.length > 0 ? (
-                      userData.answeredQuestions.map((question: any, index: number) => (
-
-
-                        <Link key={questionSlug} href={`/questions/${questionSlug}`}>
-                          <li
-                            key={index}
-                            onClick={(e: React.MouseEvent<HTMLLIElement, MouseEvent>) => handleClick(`/questions/${questionSlug}`)}
-                            role="button"
-                            tabIndex={0}
-                            onKeyDown={(e: React.KeyboardEvent<HTMLLIElement>) => e.key === 'Enter' && handleClick(`/questions/${questionSlug}`)}
-                          >
-                            {question}
-                          </li>
-
-                        </Link>
-
-
-                      ))
-                    ) : (
-                      <li>No answered questions yet.</li>
-                    )}
-                  </ul>
                 </div>
               </>
             )
@@ -201,16 +176,16 @@ const PsyAccount = () => {
                 className="my-5"
                 onClick={() => setIsCommenting(true)}>Комментировать</button>
             ) : (
-              <div>
+              <div className="flex items-center py-3">
                 <input
                   type="text"
-                  className="w-10/12 font-semibold text-gray-500 text-md leading-6"
+                  className="w-10/12 font-semibold text-gray-500 text-md leading-6 mr-2"
                   value={commentText}
                   onChange={(e) => setCommentText(e.target.value)}
                   placeholder="Текст комментария"
                 />
                 <button
-                  className="text-white bg-gray-600 hover:bg-blue-700"
+                  className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl"
                   onClick={handleComment}>Сохранить</button>
               </div>
             )}
@@ -253,13 +228,38 @@ const PsyAccount = () => {
                       </>
                     )}
                   </div>
-
                 </li>
               ))}
             </ul>
           </div>
-
-
+        </div>
+        <div className="p-3 ml-5 bg-white rounded-2xl shadow-2xl border mt-[-3px]" style={{ width: '300px', maxHeight: '800px', overflowY: 'auto' }}>
+  <div className="w-full p-1">
+    <p className='font-semibold  text-gray-800 leading-6 mt-3 ml-5'>Answered Question:</p>
+    {userData && userData.answeredQuestions && (
+      <ul className='text-gray-600 leading-6 mt-2 ml-5'>
+        {userData.answeredQuestions.length > 0 ? (
+          userData.answeredQuestions.map((question: any, index: number) => (
+            <Link key={questionSlug} href={`/questions/${questionSlug}`}>
+              <li
+                key={index}
+                onClick={(e: React.MouseEvent<HTMLLIElement, MouseEvent>) => handleClick(`/questions/${questionSlug}`)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e: React.KeyboardEvent<HTMLLIElement>) => e.key === 'Enter' && handleClick(`/questions/${questionSlug}`)}
+                className="my-3"
+              >
+                {question}
+              </li>
+            </Link>
+          ))
+        ) : (
+          <li>No answered questions yet.</li>
+        )}
+      </ul>
+    )}
+  </div>
+</div>
           <br />
           {!userData && (
             <div className="flex justify-center">
@@ -272,7 +272,6 @@ const PsyAccount = () => {
           )}
         </div >
       </div>
-    </div>
 
   );
 };

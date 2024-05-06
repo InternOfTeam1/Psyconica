@@ -80,6 +80,7 @@ async function addUserDocument(user: User) {
     contactUser: 'contact',
     video: [],
     slogan: "Psychology should be simple...",
+    expert: "Clinical psychologist",
     comments: []
   };
   localStorage.setItem('userPhoto', JSON.stringify(user.photoURL));
