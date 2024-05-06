@@ -11,8 +11,8 @@ const Account: React.FC = () => {
 
 
       <PsyAccount />
-{/* 
-      <PsychologistVideoManager /> */}
+
+      <PsychologistVideoManager />
 
 
     </div>
