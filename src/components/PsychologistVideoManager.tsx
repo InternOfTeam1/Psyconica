@@ -6,7 +6,6 @@ import { fetchDataFromCollection } from '@/lib/firebase/firebaseGetDocs';
 import { nanoid } from 'nanoid';
 import { useAppSelector } from '@/redux/hooks';
 import { transformYouTubeUrl } from '@/helpers/transformYouTubeUrl';
-import { url } from 'inspector';
 
 
 interface Users {
@@ -30,6 +29,7 @@ const PsychologistDashboard = () => {
   const [selectedVideoUrl, setSelectedVideoUrl] = useState<string>('');
   const userId = useAppSelector(state => state.auth.user?.id);
   const role = useAppSelector( state => state.auth.user?.role);
+  const [visibleCount, setVisibleCount] = useState(4);
 
   const currentUser = users?.filter(user => user.id === userId);
 
@@ -66,22 +66,29 @@ const PsychologistDashboard = () => {
   const closeModal = () => {
     setIsOpen(false);
   };
-
+  const showMoreVideos = () => {
+    setVisibleCount(prevCount => prevCount + 4);
+  };
 
   return (
     <div className="p-3 m-4 bg-white rounded-2xl shadow-2xl border">
-      {currentUser[0]?.video?.map((url) => (
-        <div key={url} className="p-1 w-full cursor-pointer border-2 rounded-2xl overflow-hidden" onClick={() => openModal(url)}>
-          <iframe
-            width="100%"
-            height="150"
-            src={url}
-            title="YouTube video player"
-            allowFullScreen
-            className="rounded-lg"
-          ></iframe>
-        </div>
+  {currentUser[0]?.video.slice(0, visibleCount).map((url, index) => (
+    <div key={index} className="p-1 w-full cursor-pointer border-2 rounded-2xl overflow-hidden" onClick={() => openModal(url)}>
+      <iframe
+        width="100%"
+        height="150"
+        src={url}
+        title="YouTube video player"
+        allowFullScreen
+        className="rounded-lg"
+      ></iframe>
+    </div>
       ))}
+      {currentUser[0]?.video.length > visibleCount && (
+  <button onClick={showMoreVideos} className="mt-4 mb-4 bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">
+    Показать больше
+  </button>
+)}
       {role === 'psy' && (
         <>
           <input

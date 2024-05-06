@@ -62,6 +62,7 @@ export interface Users {
   aboutUser?: any,
   contactUser?: any
   slogan?: string;
+  expert:  string;
   comments: Comment[];
 
 }
@@ -95,6 +96,14 @@ export interface QuestionData {
   answers: Answers[];
   comments?: Comment[];
 
+}
+
+export interface Comments {
+  id: string;
+  content: string;
+  photo: string;
+  userId: string;
+  name: string;
 }
 
 export interface Data {

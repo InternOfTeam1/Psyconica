@@ -1,6 +1,5 @@
 import { db } from './firebaseConfig';
 import { doc, setDoc, collection, updateDoc, getDoc, query, where, getDocs, arrayUnion } from 'firebase/firestore';
-import { Video } from '../../interfaces/collections';
 
 export const getVideosById = async (userId: string) => {
   if (!userId) {
@@ -97,6 +96,23 @@ export const updateComment = async (slug: string, data: any) => {
 
     if (commentData.exists()) {
       await updateDoc(commentDocRef, data);
+    } else {
+      console.log("Document does not exist!");
+    }
+  } catch (e) {
+    console.log(e)
+  }
+
+};
+
+export const updateUser = async (slug: string, data: any) => {
+  try {
+    const userDocRef = doc(db, "users", slug);
+
+    const userData = await getDoc(userDocRef);
+
+    if (userData.exists()) {
+      await updateDoc(userDocRef, data);
     } else {
       console.log("Document does not exist!");
     }
