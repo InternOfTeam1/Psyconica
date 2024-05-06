@@ -1,37 +1,35 @@
 import { db } from './firebaseConfig';
-import { doc, setDoc, collection, updateDoc, getDoc, query, where, getDocs } from 'firebase/firestore';
-import { Video } from '../../interfaces/collections';
+import { doc, setDoc, collection, updateDoc, getDoc, query, where, getDocs, arrayUnion } from 'firebase/firestore';
 
 export const getVideosById = async (userId: string) => {
-  if (false) {
+  if (!userId) {
     console.error("No user ID provided");
-    return []; // Возвращаем пустой массив или обрабатываем ошибку
+    return [];
   }
 
-  const videosRef = collection(db, "videos");
-  const q = query(videosRef, where("url.avtor", "==", "3uwkrhucywyfmr7ngkf9jjipwwe2"));
+  const userDocRef = doc(db, "users", userId);
 
   try {
-    const querySnapshot = await getDocs(q);
-    console.log(querySnapshot)
-
-    const videos: any = [];
-    querySnapshot.forEach((doc) => {
-      videos.push({ id: doc.id, ...doc.data() });
-    });
-    return videos;
+    const docSnapshot = await getDoc(userDocRef);
+    if (docSnapshot.exists()) {
+      const userData = docSnapshot.data();
+      return userData.video || []; 
+    } else {
+      console.log("No such document!");
+      return [];
+    }
   } catch (error) {
-    console.error("Error getting documents: ", error);
-    return []; // Возвращаем пустой массив в случае ошибки
+    console.error("Error getting document:", error);
+    return [];
   }
 };
 
-export const addVideoToCollection = async (videoUrl: Video) => {
-  const newVideoRef = doc(collection(db, 'videos'));
+export const addVideoToCollection = async (videoUrl: string, userId: string,) => {
+  const newVideoRef = doc(db, "users", userId); 
   try {
-
-    await setDoc(newVideoRef, { url: videoUrl });
-    console.log('Video added successfully!');
+    await updateDoc(newVideoRef, {
+      video: arrayUnion(videoUrl) 
+    });
   } catch (error) {
     console.error('Error adding video:', error);
     throw new Error('Failed to add video');

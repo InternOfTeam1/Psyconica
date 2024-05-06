@@ -23,7 +23,8 @@ export const fetchDataFromCollection = async (collectionName: string): Promise<D
           role: docData.role,
           photo: docData.photo,
           userId: docData.userId,
-          url: docData.url
+          url: docData.url,
+          video: docData.video || []
         });
       } else if (collectionName === 'topics') {
         data.push({

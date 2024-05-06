@@ -3,11 +3,8 @@ import { Dialog, Transition } from '@headlessui/react';
 import { fetchDataFromCollection } from '@/lib/firebase/firebaseGetDocs';
 
 interface Video {
-    title?: string; 
-    url: {
-      url: string[];
-    };
-  }
+  url: string;
+}  
 
 const shuffleArray = (array: any) => {
   for (let i = array.length - 1; i > 0; i--) {
@@ -22,24 +19,34 @@ const VideoGallery = () => {
   const [selectedVideoUrl, setSelectedVideoUrl] = useState('');
  const [displayCount, setDisplayCount] = useState(4);
 
-   useEffect(() => {
-    const loadVideos = async () => {
+ useEffect(() => {
+  const loadVideos = async () => {
       try {
-        const videosData = await fetchDataFromCollection('videos');
-        console.log("Loaded videos:", videosData);
-        if (!videosData.length) {
-          console.log("No videos found");
-          return;
-        }
-        const shuffledVideos = shuffleArray(videosData);
-        setVideos(shuffledVideos);
-      } catch (error) {
-        console.error('Error loading videos:', error);
-      }
-    };
+          const usersData = await fetchDataFromCollection('users');
+          let videosData: Video[] = [];
 
-    loadVideos();
-  }, []);
+          usersData.forEach((user: any) => {
+              if (user.video && user.video.length > 0) {
+                  user.video.forEach((videoUrl: string) => {
+                      videosData.push({ url: videoUrl });
+                  });
+              }
+          });
+
+          if (!videosData.length) {
+              console.log("No videos found");
+              return;
+          }
+
+          const shuffledVideos = shuffleArray(videosData);
+          setVideos(shuffledVideos);
+      } catch (error) {
+          console.error('Error loading videos:', error);
+      }
+  };
+
+  loadVideos();
+}, []);
 
   const openModal = (videoUrl: string): void => {
     setSelectedVideoUrl(videoUrl);
@@ -54,24 +61,30 @@ const VideoGallery = () => {
     const newDisplayCount = displayCount + 1; 
     setDisplayCount(newDisplayCount);
   };
-
   return (
     <div className="p-3 m-4 bg-white rounded-2xl shadow-2xl border mt-[-3px]">
       <div className="flex flex-wrap justify-center gap-2">
-        {videos.slice(0, displayCount).map((video, index) => (
-          <div key={index} className="w-full p-1">
-            <div className="cursor-pointer border-2 pb-2 rounded-2xl overflow-hidden" onClick={() => openModal(video.url?.url?.[0])}>
-              <iframe
-                width="100%"
-                height="150"
-                src={video.url?.url?.[0]}
-                title="YouTube video player"
-                allowFullScreen
-                className="rounded-lg"
-              ></iframe>
-            </div>
-          </div>
-        ))}
+      {videos.slice(0, displayCount).map((video, index) => {
+    if (video) {  
+      console.log(video.url);  
+    } else {
+      console.log("Video data is not loaded yet");  
+    }
+    return (
+      <div key={index} className="w-full p-1">
+        <div className="cursor-pointer border-2 pb-2 rounded-2xl overflow-hidden" onClick={() => openModal(video.url)}>
+          <iframe
+            width="100%"
+            height="150"
+            src={video.url}
+            title="YouTube video player"
+            allowFullScreen
+            className="rounded-lg"
+          ></iframe>
+        </div>
+      </div>
+    );
+  })}
       </div>
        <button
         type="button"

@@ -5,8 +5,10 @@ import { addVideoToCollection } from '@/lib/firebase/firebaseFunctions';
 import { fetchDataFromCollection } from '@/lib/firebase/firebaseGetDocs';
 import { nanoid } from 'nanoid';
 import { useAppSelector } from '@/redux/hooks';
+import { transformYouTubeUrl } from '@/helpers/transformYouTubeUrl';
 
-interface Video {
+
+interface Users {
   url: {
     url: string[];
     avtor: string;
@@ -14,60 +16,40 @@ interface Video {
   title: string;
   id: string;
   newVideo: string;
-  video: any;
+  video: string[];
 
 }
 
-const transformYouTubeUrl = (url: string): string => {
-  let videoId = '';
-  url = url.trim();
 
-  if (url.includes('youtu.be')) {
-    videoId = url.split('/').pop()?.split('?')[0] || '';
-  } else if (url.includes('youtube.com')) {
-    const urlObj = new URL(url);
-    videoId = urlObj.searchParams.get('v') || '';
-  }
-
-  const additionalParams = url.includes('?') ? url.substring(url.indexOf('?') + 1) : '';
-  const embedUrl = `https://www.youtube.com/embed/${videoId}${additionalParams ? `?${additionalParams}` : ''}`;
-
-  return embedUrl;
-};
 
 const PsychologistDashboard = () => {
   const [videoUrl, setVideoUrl] = useState<string>('');
-  const [videos, setVideos] = useState<Video[]>([]);
+  const [users, setUsers] = useState<Users[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedVideoUrl, setSelectedVideoUrl] = useState<string>('');
-  const avtor = useAppSelector(state => state.auth.user?.id);
+  const userId = useAppSelector(state => state.auth.user?.id);
+  const role = useAppSelector( state => state.auth.user?.role);
+  const [visibleCount, setVisibleCount] = useState(4);
+
+  const currentUser = users?.filter(user => user.id === userId);
 
   useEffect(() => {
     async function loadVideos() {
-      const fetchedVideos: any = await fetchDataFromCollection('videos');
-      console.log("Загруженные видео:", fetchedVideos);
-      const filteredVideos = fetchedVideos.filter((video: { url: { avtor: any; }; }) => video.url.avtor === avtor);
-      setVideos(filteredVideos);
+      const fetchedUsers: any = await fetchDataFromCollection('users');
+      const filteredVideos = fetchedUsers.filter((video: { url: { userId: string; }; }) => video);
+      setUsers(filteredVideos);
     }
 
     loadVideos();
-  }, [avtor]);
+  }, [userId]);
 
   const addVideo = async () => {
     if (videoUrl.trim() !== '') {
       const embedUrl = transformYouTubeUrl(videoUrl);
-      const newVideo = {
-        url: { url: [embedUrl], avtor },
-        title: '',
-        id: nanoid(),
-        newVideo: '',
-        video: []
-      };
 
       try {
-        await addVideoToCollection(newVideo);
-        setVideos(prev => [...prev, newVideo]);
-        setVideoUrl('');
+        await addVideoToCollection(embedUrl, userId); 
+        setVideoUrl(''); 
         alert('Видео успешно добавлено!');
       } catch (error) {
         console.error('Не удалось добавить видео:', error);
@@ -84,23 +66,30 @@ const PsychologistDashboard = () => {
   const closeModal = () => {
     setIsOpen(false);
   };
-
+  const showMoreVideos = () => {
+    setVisibleCount(prevCount => prevCount + 4);
+  };
 
   return (
     <div className="p-3 m-4 bg-white rounded-2xl shadow-2xl border">
-      {videos.map((video, index) => (
-        <div key={index} className="p-1 w-full cursor-pointer border-2 rounded-2xl overflow-hidden" onClick={() => openModal(video.url?.url?.[0])}>
-          <iframe
-            width="100%"
-            height="150"
-            src={video.url?.url?.[0]}
-            title="YouTube video player"
-            allowFullScreen
-            className="rounded-lg"
-          ></iframe>
-        </div>
+  {currentUser[0]?.video.slice(0, visibleCount).map((url, index) => (
+    <div key={index} className="p-1 w-full cursor-pointer border-2 rounded-2xl overflow-hidden" onClick={() => openModal(url)}>
+      <iframe
+        width="100%"
+        height="150"
+        src={url}
+        title="YouTube video player"
+        allowFullScreen
+        className="rounded-lg"
+      ></iframe>
+    </div>
       ))}
-      {avtor && (
+      {currentUser[0]?.video.length > visibleCount && (
+  <button onClick={showMoreVideos} className="mt-4 mb-4 bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">
+    Показать больше
+  </button>
+)}
+      {role === 'psy' && (
         <>
           <input
             type="text"
