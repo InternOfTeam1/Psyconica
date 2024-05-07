@@ -40,8 +40,9 @@ const PsyAccount = () => {
   useEffect(() => {
     async function fetchUserData(userId: any) {
       try {
-        const fetchedUserData: any = await fetchDoc('users', userId);
+        const fetchedUserData: any = await fetchDoc('users', userSlug);
         setUserData(fetchedUserData);
+        console.log(fetchedUserData, 'comment')
         setComments(fetchedUserData?.comments ?? [])
       } catch (error) {
         console.error('Error fetching user data:', error);

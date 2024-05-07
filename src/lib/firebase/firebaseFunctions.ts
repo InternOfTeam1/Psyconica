@@ -46,6 +46,7 @@ export const updateUserDataInFirebase = async (userId: string, data: object) => 
 };
 
 
+
 export const updateAnswerLikes = async (answerNum: number, updatedLikes: string[], slug: string) => {
   const questionDocRef = doc(db, "questions", slug);
 

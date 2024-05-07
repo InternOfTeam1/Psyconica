@@ -14,6 +14,7 @@ const PsychologistModal: React.FC<{ isOpen: boolean, onClose: () => void }> = ({
 
   useEffect(() => {
     const isPsychologistCookie = Cookies.get("isPsychologist");
+    debugger
     if (userId && isPsychologistCookie) {
       setIsChecked(isPsychologistCookie === "true");
     } else {
@@ -29,20 +30,23 @@ const PsychologistModal: React.FC<{ isOpen: boolean, onClose: () => void }> = ({
     }
     const newIsPsychologistValue = !isChecked;
     setIsChecked(newIsPsychologistValue);
+  
     const expirationDays = 7;
     Cookies.set('isPsychologist', String(newIsPsychologistValue), { expires: expirationDays });
+  
     await updateUserDataInFirebase(userId, { role: newIsPsychologistValue ? 'psy' : 'user' });
+  
     dispatch(updateUserProfile({ userId, isPsychologist: newIsPsychologistValue }));
+  
     const userCookie = Cookies.get('user');
-    if(userCookie){
-      const user = JSON.parse(userCookie as string);
+    if (userCookie) {
+      const user = JSON.parse(userCookie);
       const updatedUser = {
-        ...user, 
+        ...user,
         role: newIsPsychologistValue ? 'psy' : 'user'
-      }
+      };
       dispatch(setUserState(updatedUser));
-      Cookies.set('user', JSON.stringify(updatedUser), { expires: 7 });
-      console.log(JSON.parse(userCookie as string))
+      Cookies.set('user', JSON.stringify(updatedUser), { expires: expirationDays });
     }
   };
 

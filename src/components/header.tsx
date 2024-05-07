@@ -215,9 +215,9 @@ const Header: React.FC = () => {
           </div>
         </div>
       </header >
-      {isModalOpenPsy && (
+      {isModalOpenPsy && userId &&  (
         <PsychologistModal
-          isOpen={isModalOpenPsy}
+          isOpen={isModalOpenPsy} 
           onClose={() => setIsModalOpenPsy(false)}
         />
       )

@@ -77,6 +77,7 @@ export const fetchDoc = async (collectionName: string, slug: any) => {
     const docRef = doc(db, collectionName, slug);
 
     const docSnap = await getDoc(docRef);
+    console.log(docSnap.data(), 'jsjsjsjsjsjs')
 
     if (docSnap.exists()) {
       return { id: docSnap.id, ...docSnap.data() };

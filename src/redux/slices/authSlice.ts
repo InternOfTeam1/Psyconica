@@ -4,13 +4,21 @@ import { fetchDataFromCollection } from '@/lib/firebase/firebaseGetDocs';
 import { updateUserDataInFirebase } from "@/lib/firebase/firebaseFunctions";
 import Cookies from 'js-cookie';
 
+
+export const getUser = async (id : string ) =>{
+  const usersData = await fetchDataFromCollection('users');
+   return usersData.find(u => u.mail === id);
+}
+
+
 export const login = createAsyncThunk(
   'auth/login',
   async (provider: string) => {
     const user = provider === 'google' ? await signInWithGoogle() : await signInWithTwitter();
+
     if (user) {
       const usersData = await fetchDataFromCollection('users');
-      const loggedInUser = usersData.find(u => u.mail === user.email);
+      const loggedInUser = await getUser((user.mail || user.email) as string);
       if (loggedInUser) { 
         Cookies.set('user', JSON.stringify(loggedInUser), { expires: 7 });
         return { isAuthenticated: true, user: loggedInUser };

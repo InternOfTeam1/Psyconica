@@ -11,6 +11,8 @@ interface VideoBlockProps {
 export const VideoBlock = ({ videos }: VideoBlockProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedVideoUrl, setSelectedVideoUrl] = useState<string>('');
+  const [displayCount, setDisplayCount] = useState(4);
+
 
   const openModal = (videoUrl: string): void => {
     setSelectedVideoUrl(videoUrl);
@@ -32,6 +34,10 @@ export const VideoBlock = ({ videos }: VideoBlockProps) => {
   const closeModal = () => {
     setIsOpen(false);
   };
+  const loadMoreVideos = () => {
+    const newDisplayCount = displayCount + 1; 
+    setDisplayCount(newDisplayCount);
+  };
 
   return (
     <div className="p-3 m-4 bg-white rounded-2xl shadow-2xl border mt-[-1px]">
@@ -43,6 +49,15 @@ export const VideoBlock = ({ videos }: VideoBlockProps) => {
             </div>
           </div>
         )))}
+      </div>
+      <div className=' flex justify-center'>
+       <button
+        type="button"
+        className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 "
+        onClick={loadMoreVideos}
+      >
+        Еще
+      </button>
       </div>
       {isOpen && (
         <Transition.Root show={isOpen} as={Fragment}>
@@ -83,7 +98,7 @@ export const VideoBlock = ({ videos }: VideoBlockProps) => {
                       className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
                       onClick={closeModal}
                     >
-                      Close
+                      Закрыть
                     </button>
                     <a
                       href={`https://www.youtube.com/watch?v=${selectedVideoUrl.split("/embed/")[1]}`}
