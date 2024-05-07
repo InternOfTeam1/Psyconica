@@ -86,13 +86,15 @@ const VideoGallery = () => {
     );
   })}
       </div>
+      <div className=' flex justify-center'>
        <button
         type="button"
-        className="mt-4 p-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 "
         onClick={loadMoreVideos}
       >
-        Больше видео
+        Еще
       </button>
+      </div>
 
       {isOpen && (
         <Transition.Root show={isOpen} as={React.Fragment}>
@@ -119,18 +121,18 @@ const VideoGallery = () => {
                   <div className="mt-4 p-4">
                     <button
                       type="button"
-                      className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm"
+                      className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
                       onClick={closeModal}
                     >
-                      Close
+                      Закрыть
                     </button>
                     <a
                       href={`https://www.youtube.com/watch?v=${selectedVideoUrl.split("/embed/")[1]}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="ml-4 text-blue-500 hover:underline"
+                      className="ml-4 text-blue-500 hover:underline "
                     >
-                      Watch on YouTube
+                      Перейти
                     </a>
                   </div>
                 </Dialog.Panel>

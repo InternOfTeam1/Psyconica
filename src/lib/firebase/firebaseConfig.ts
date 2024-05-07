@@ -4,6 +4,8 @@ import { getAuth, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup, Use
 import { Users } from '@/interfaces/collections';
 import { addDocumentWithSlug } from '@/lib/firebase/firebaseAdddoc';
 import { fetchDoc } from './firebaseGetDocs';
+import { getUser } from '@/redux/slices/authSlice';
+import { type } from 'os';
 
 
 const firebaseConfig = {
@@ -21,24 +23,30 @@ export const db: Firestore = getFirestore(firebaseApp);
 
 
 const auth = getAuth(firebaseApp);
-let hasUserAdded = false;
 
-export const signInWithGoogle = async (): Promise<User | null> => {
+type User2 = User & {
+  mail?: string
+  email?: string
+}
+
+export const signInWithGoogle = async (): Promise<User2 | null> => {
 
 
   try {
+    
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
-
-    if (!hasUserAdded) {
+    const id =  user.uid;
+    const firebaseUser =  await getUser(user.email as string);
+    if (!firebaseUser) {
       await addUserDocument(user);
-      hasUserAdded = true;
+      return  user as User2
     }
 
 
     console.log('Успешный вход:', user);
-    return user;
+    return firebaseUser as unknown as User2;
   } catch (error) {
     console.error('Ошибка аутентификации:', error);
     return null;
@@ -46,21 +54,23 @@ export const signInWithGoogle = async (): Promise<User | null> => {
 };
 
 
-export const signInWithTwitter = async (): Promise<User | null> => {
+export const signInWithTwitter = async (): Promise<User2 | null> => {
   try {
+    
     const provider = new TwitterAuthProvider();
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
-
-    if (!hasUserAdded) {
+    const id =  user.uid;
+    const firebaseUser = await getUser(user.email as string);
+    if (!firebaseUser) {
       await addUserDocument(user);
-      hasUserAdded = true;
+      return  user as User2
     }
 
 
 
     console.log('Успешный вход:', user);
-    return user;
+    return firebaseUser as unknown as User2;
   } catch (error) {
     console.error('Ошибка аутентификации:', error);
     return null;

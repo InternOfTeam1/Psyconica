@@ -3,10 +3,9 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { addVideoToCollection } from '@/lib/firebase/firebaseFunctions';
 import { fetchDataFromCollection } from '@/lib/firebase/firebaseGetDocs';
-import { nanoid } from 'nanoid';
 import { useAppSelector } from '@/redux/hooks';
 import { transformYouTubeUrl } from '@/helpers/transformYouTubeUrl';
-
+import { useParams } from 'next/navigation';
 
 interface Users {
   url: {
@@ -24,24 +23,28 @@ interface Users {
 
 const PsychologistDashboard = () => {
   const [videoUrl, setVideoUrl] = useState<string>('');
-  const [users, setUsers] = useState<Users[]>([]);
+  const [users, setUsers] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedVideoUrl, setSelectedVideoUrl] = useState<string>('');
   const userId = useAppSelector(state => state.auth.user?.id);
   const role = useAppSelector( state => state.auth.user?.role);
+  const params = useParams();
+  const userSlug: any = params.slug;
   const [visibleCount, setVisibleCount] = useState(4);
-
-  const currentUser = users?.filter(user => user.id === userId);
 
   useEffect(() => {
     async function loadVideos() {
       const fetchedUsers: any = await fetchDataFromCollection('users');
-      const filteredVideos = fetchedUsers.filter((video: { url: { userId: string; }; }) => video);
-      setUsers(filteredVideos);
+      console.log(fetchedUsers)
+       const profileUser = fetchedUsers.find((user: any)=> user.id === userSlug)
+       console.log(userSlug)
+       if(profileUser) {
+        setUsers(profileUser.video);
+       }
     }
 
     loadVideos();
-  }, [userId]);
+  }, [userSlug]);
 
   const addVideo = async () => {
     if (videoUrl.trim() !== '') {
@@ -67,29 +70,35 @@ const PsychologistDashboard = () => {
     setIsOpen(false);
   };
   const showMoreVideos = () => {
-    setVisibleCount(prevCount => prevCount + 4);
+    setVisibleCount(prevCount => prevCount + 1);
   };
 
   return (
-    <div className="p-3 m-4 bg-white rounded-2xl shadow-2xl border">
-  {currentUser[0]?.video.slice(0, visibleCount).map((url, index) => (
-    <div key={index} className="p-1 w-full cursor-pointer border-2 rounded-2xl overflow-hidden" onClick={() => openModal(url)}>
-      <iframe
-        width="100%"
-        height="150"
-        src={url}
-        title="YouTube video player"
-        allowFullScreen
-        className="rounded-lg"
-      ></iframe>
+    <div className="p-3 m-4 bg-white rounded-2xl shadow-2xl border mt-[-3px]">
+      <div className="flex flex-wrap justify-center gap-2">
+    {users.slice(0, visibleCount).map((url, index) => (
+      <div key={index} className="p-1 w-full cursor-pointer border-2 rounded-2xl overflow-hidden" onClick={() => openModal(url)}>
+        <iframe
+          width="100%"
+          height="150"
+          src={url}
+          title="YouTube video player"
+          allowFullScreen
+          className="rounded-lg"
+        ></iframe>
+      </div>
+      
+    ))}
     </div>
-      ))}
-      {currentUser[0]?.video.length > visibleCount && (
-  <button onClick={showMoreVideos} className="mt-4 mb-4 bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">
-    Показать больше
-  </button>
+    {users.length > visibleCount && (
+  <div className="flex justify-center mt-2 mb-2 ">
+    <button onClick={showMoreVideos} className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">
+      Еще
+    </button>
+  </div>
+  
 )}
-      {role === 'psy' && (
+      {role === 'psy' &&  userId === userSlug &&(
         <>
           <input
             type="text"
@@ -99,7 +108,7 @@ const PsychologistDashboard = () => {
             className="border p-2 w-full mt-4"
           />
           <button onClick={addVideo} className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mt-2">
-            Add Video
+            Добавить видео
           </button>
         </>
       )}
@@ -132,7 +141,7 @@ const PsychologistDashboard = () => {
                       className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
                       onClick={closeModal}
                     >
-                      Close
+                      Закрыть
                     </button>
                     <a
                       href={`https://www.youtube.com/watch?v=${selectedVideoUrl.split("/embed/")[1]}`}

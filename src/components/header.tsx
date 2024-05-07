@@ -22,7 +22,6 @@ const Header: React.FC = () => {
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
   const userPhoto = useSelector((state: RootState) => state.auth.user?.photo || '');
   const user: any = useSelector((state: RootState) => state.auth.user || '');
-  // const [isModalOpen, setIsModalOpen] = useState(false);
   const isModalOpen = useSelector((state: any) => state.modal.isModalOpen);
   const [isModalOpenPsy, setIsModalOpenPsy] = useState(false);
   const router = useRouter();
@@ -217,9 +216,9 @@ const Header: React.FC = () => {
           </div>
         </div>
       </header >
-      {isModalOpenPsy && (
+      {isModalOpenPsy && userId &&  (
         <PsychologistModal
-          isOpen={isModalOpenPsy}
+          isOpen={isModalOpenPsy} 
           onClose={() => setIsModalOpenPsy(false)}
         />
       )
