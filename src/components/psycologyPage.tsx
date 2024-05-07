@@ -33,15 +33,9 @@ const PsyAccount = () => {
   const params = useParams();
   const userSlug: any = params.slug;
   const router = useRouter();
-  const [questionSlug, setQuestionSlug] = useState<string>('');
 
-  const handleClick = async (url: string) => {
-    try {
-      await router.push(url);
-    } catch (error) {
-      console.error('Navigation error:', error);
-    }
-  };
+
+
 
   useEffect(() => {
     async function fetchUserData(userId: any) {
@@ -111,16 +105,25 @@ const PsyAccount = () => {
     }
   };
 
-  useEffect(() => {
-    const questionsString = userData?.answeredQuestions.join(', ');
+  const handleClick = async (url: string) => {
+
+    const questionsString = url;
 
     if (userData?.answeredQuestions && userData.answeredQuestions.length > 0) {
-      const slug = slugify(questionsString, { lower: true, strict: true, remove: /[*+~.()'"!:@]/g });
-      setQuestionSlug(slug);
+      const slug: any = slugify(questionsString, { lower: true, strict: true, remove: /[*+~.()'"!:@]/g });
+      const questionSlugs = `/questions/${slug}`;
+      try {
+        await router.push(questionSlugs);
+      } catch (error) {
+        console.error('Navigation error:', error);
+      }
     }
 
-  }, [userData]);
-  
+
+  };
+
+
+
 
 
   return (
@@ -158,11 +161,11 @@ const PsyAccount = () => {
                   </div>
                 </div>
                 <div>
-                  <p className='font-bold text-gray-800 leading-6 mt-3 ml-5'>About:</p>
+                  <p className='font-bold text-gray-800 leading-6 mt-3 ml-5'>Информация о психологе:</p>
                   <p className=' text-gray-600 leading-6 mt-2 ml-5'>{userData.aboutUser}</p>
                 </div>
                 <div>
-                  <p className='font-bold text-gray-800 leading-6 mt-3 ml-5'>Contact:</p>
+                  <p className='font-bold text-gray-800 leading-6 mt-3 ml-5'>Контактная информация:</p>
                   <p className=' text-gray-600 leading-6 mt-2 ml-5'>{userData.contactUser}</p>
                 </div>
               </>
@@ -234,44 +237,44 @@ const PsyAccount = () => {
           </div>
         </div>
         <div className="p-3 ml-5 bg-white rounded-2xl shadow-2xl border mt-[-3px]" style={{ width: '300px', maxHeight: '800px', overflowY: 'auto' }}>
-  <div className="w-full p-1">
-    <p className='font-semibold  text-gray-800 leading-6 mt-3 ml-5'>Answered Question:</p>
-    {userData && userData.answeredQuestions && (
-      <ul className='text-gray-600 leading-6 mt-2 ml-5'>
-        {userData.answeredQuestions.length > 0 ? (
-          userData.answeredQuestions.map((question: any, index: number) => (
-            <Link key={questionSlug} href={`/questions/${questionSlug}`}>
-              <li
-                key={index}
-                onClick={(e: React.MouseEvent<HTMLLIElement, MouseEvent>) => handleClick(`/questions/${questionSlug}`)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e: React.KeyboardEvent<HTMLLIElement>) => e.key === 'Enter' && handleClick(`/questions/${questionSlug}`)}
-                className="my-3"
-              >
-                {question}
-              </li>
+          <div className="w-full p-1">
+            <p className='font-semibold  text-gray-800 leading-6 mt-3 ml-5'>Вопросы, на которые ответил психолог.</p>
+            {userData && userData.answeredQuestions && (
+              <ul className='text-gray-600 leading-6 mt-2 ml-5'>
+                {userData.answeredQuestions.length > 0 ? (
+                  userData.answeredQuestions.map((question: any, index: number) => (
+
+                    <li
+                      key={index}
+                      onClick={(e: React.MouseEvent<HTMLLIElement, MouseEvent>) => handleClick(`${question}`)}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e: React.KeyboardEvent<HTMLLIElement>) => e.key === 'Enter' && handleClick(`${question}`)}
+                      className="my-3"
+                    >
+                      {question}
+                    </li>
+
+                  ))
+                ) : (
+                  <li>Пока нет ответов на вопросы.</li>
+                )}
+              </ul>
+            )}
+          </div>
+        </div>
+        <br />
+        {!userData && (
+          <div className="flex justify-center">
+            <Link href={HOME_ROUTE}>
+              <button className="mt-4 px-6 py-2 font-medium leading-6 text-center text-white uppercase transition bg-blue-500 rounded-full shadow ripple waves-light hover:shadow-lg focus:outline-none hover:bg-blue-600 xs:text-xs sm:text-xs md:text-xs lg:text-sm xl:text-sm">
+                Вернуться на главную
+              </button>
             </Link>
-          ))
-        ) : (
-          <li>No answered questions yet.</li>
+          </div>
         )}
-      </ul>
-    )}
-  </div>
-</div>
-          <br />
-          {!userData && (
-            <div className="flex justify-center">
-              <Link href={HOME_ROUTE}>
-                <button className="mt-4 px-6 py-2 font-medium leading-6 text-center text-white uppercase transition bg-blue-500 rounded-full shadow ripple waves-light hover:shadow-lg focus:outline-none hover:bg-blue-600 xs:text-xs sm:text-xs md:text-xs lg:text-sm xl:text-sm">
-                  Вернуться на главную
-                </button>
-              </Link>
-            </div>
-          )}
-        </div >
-      </div>
+      </div >
+    </div>
 
   );
 };

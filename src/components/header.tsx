@@ -151,18 +151,17 @@ const Header: React.FC = () => {
           </div>
           <ul className="items-center gap-2 mb-4 align-middle list hidden sm:flex">
             {!isAuthenticated ? (
-              <li onClick={handleOpenModal} className="flex cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 border-solid border-2 border-gray-400 whitespace-nowrap rounded-[20px] mt-5 mb-5 py-1 px-5">Log in with social network</li>
+              <li onClick={handleOpenModal} className="flex cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 border-solid border-2 border-gray-400 whitespace-nowrap rounded-[20px] mt-5 mb-5 py-1 px-5">Вход через социальные сети</li>
             ) : (
               <>
                 <Image src={userPhoto} alt="User Profile" width={30} height={30} className="w-8 h-8 rounded-full border-2 border-gray-400 shadow-sm xs:w-6 xs:h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 mt-5 mb-5 " />
 
-                {/* <Link href={PROFILE_ROUTE}> */}
                 <li className=" list-item cursor-pointer text-gray-500 hover:text-neutral-600 font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-base border-solid border-2 border-gray-400 whitespace-nowrap rounded-[20px] mt-5 mb-5 px-5 py-1 hover:bg-gray-200 " onClick={() => handleClick(userId)} >
                   Личный кабинет
                 </li>
-                {/* </Link> */}
+
                 <li onClick={handleLogout} className=" list-item cursor-pointer text-gray-500 hover:text-neutral-600 font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-base border-solid border-2 border-gray-400 whitespace-nowrap rounded-[20px] mt-5 mb-5 px-5 py-1 hover:bg-gray-200">
-                  Log out
+                  Выйти
                 </li>
               </>
             )}
@@ -199,16 +198,16 @@ const Header: React.FC = () => {
                 </li>
               </Link>
               {!isAuthenticated ? (
-                <li onClick={() => { handleOpenModal(); setMenuOpen(false); }} className="py-1.5 cursor-pointer text-black font-bold  hover:text-white">Log in with social network</li>
+                <li onClick={() => { handleOpenModal(); setMenuOpen(false); }} className="py-1.5 cursor-pointer text-black font-bold  hover:text-white">Вход через социальные сети</li>
               ) : (
                 <>
-                  <Link href={PROFILE_ROUTE}>
-                    <li onClick={() => setMenuOpen(false)} className="py-1.5 cursor-pointer text-black font-bold  hover:text-white">
-                      Личный кабинет
-                    </li>
-                  </Link>
+
+                  <li onClick={() => { setMenuOpen(false); handleClick(userId); }} className="py-1.5 cursor-pointer text-black font-bold  hover:text-white" >
+                    Личный кабинет
+                  </li>
+
                   <li onClick={() => { handleLogout(); setMenuOpen(false); }} className="py-1.5 cursor-pointer text-black font-bold  hover:text-white">
-                    Log out
+                    Выйти
                   </li>
                 </>
               )}
@@ -234,22 +233,22 @@ const Header: React.FC = () => {
                 <div className="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                   <div className="sm:flex sm:items-start">
                     <div className="mt-3 text-center sm:mt-0 sm:text-left w-full">
-                      <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">Login</h3>
+                      <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">Вход</h3>
                       <div className="mt-2">
-                        <p className="text-sm text-gray-500">Choose your login method:</p>
+                        <p className="text-sm text-gray-500">Выберите способ входа:</p>
                       </div>
                       <div className="mt-4">
                         <button
                           onClick={() => handleLogin('google')}
                           className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm"
                         >
-                          Log in with Google
+                          Вход через Google
                         </button>
                         <button
                           onClick={() => handleLogin('facebook')}
                           className="mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm"
                         >
-                          Log in with Twitter
+                          Вход через Twitter
                         </button>
                       </div>
                     </div>
