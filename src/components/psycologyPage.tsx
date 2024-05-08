@@ -156,8 +156,8 @@ const PsyAccount = () => {
                     </div>
                   )}
                   <div className="flex flex-col">
-                    <p className='font-semibold text-gray-800 leading-6 p-1'>{userData.name}</p>
-                    {userData.expert}
+                    <p className='font-semibold text-gray-800 leading-6 p-3'>{userData.name}</p>
+                    <p className='text-gray-800 leading-6 ml-3'>{userData.expert}</p>
                   </div>
                 </div>
                 <div>
@@ -238,7 +238,7 @@ const PsyAccount = () => {
         </div>
         <div className="p-3 ml-5 bg-white rounded-2xl shadow-2xl border mt-[-3px]" style={{ width: '300px', maxHeight: '800px', overflowY: 'auto' }}>
           <div className="w-full p-1">
-            <p className='font-semibold  text-gray-800 leading-6 mt-3 ml-5'>Вопросы, на которые ответил психолог.</p>
+            <p className='font-semibold  text-gray-800 leading-6 mt-3 ml-5'>Вопросы, на которые ответил психолог:</p>
             {userData && userData.answeredQuestions && (
               <ul className='text-gray-600 leading-6 mt-2 ml-5'>
                 {userData.answeredQuestions.length > 0 ? (
@@ -252,7 +252,7 @@ const PsyAccount = () => {
                       onKeyDown={(e: React.KeyboardEvent<HTMLLIElement>) => e.key === 'Enter' && handleClick(`${question}`)}
                       className="my-3"
                     >
-                      {question}
+                     <hr /> {question}
                     </li>
 
                   ))
