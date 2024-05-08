@@ -172,11 +172,12 @@ const PsyAccount = () => {
             )
           }
 
-          <div className="mt-10 ml-5">
-            <p className='text-lg font-bold'>Комментарии</p>
+          <hr className="mt-10 my-4 border-gray-400" />
+          <div className="mt-5 ml-5" style={{ maxHeight: '800px', overflowY: 'auto' }}>
+            <p className='text-lg font-bold ml-2'>Комментарии</p>
             {!isCommenting ? (
               <button
-                className="my-5"
+                className="my-5 text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl"
                 onClick={() => setIsCommenting(true)}>Комментировать</button>
             ) : (
               <div className="flex items-center py-3">
@@ -215,7 +216,7 @@ const PsyAccount = () => {
                             <p className="text-md text-gray-600 mt-1">{comment.content}</p>
                           </div>
                         </div>
-                        {editCommentId !== comment.id && (
+                        {editCommentId !== comment.id && comment.userId === userId && (
                           <>
                             <div className="flex">
                               <FaPen
