@@ -111,11 +111,9 @@ const PsyAccount = () => {
 
   const handleClick = async (url: string) => {
 
-    const questionsString = url;
 
     if (userData?.answeredQuestions && userData.answeredQuestions.length > 0) {
-      const slug: any = slugify(questionsString, { lower: true, strict: true, remove: /[*+~.()'"!:@]/g });
-      const questionSlugs = `/questions/${slug}`;
+      const questionSlugs = `/questions/${url}`;
       try {
         await router.push(questionSlugs);
       } catch (error) {
@@ -252,13 +250,13 @@ const PsyAccount = () => {
                   userData.answeredQuestions.map((question: any, index: number) => (
                     <li
                       key={index}
-                      onClick={(e: React.MouseEvent<HTMLLIElement, MouseEvent>) => handleClick(`${question}`)}
+                      onClick={(e: React.MouseEvent<HTMLLIElement, MouseEvent>) => handleClick(`${question.slug}`)}
                       role="button"
                       tabIndex={0}
-                      onKeyDown={(e: React.KeyboardEvent<HTMLLIElement>) => e.key === 'Enter' && handleClick(`${question}`)}
+                      onKeyDown={(e: React.KeyboardEvent<HTMLLIElement>) => e.key === 'Enter' && handleClick(`${question.slug}`)}
                       className="my-3"
                     >
-                      <hr /> {question}
+                      <hr /> {question.title}
                     </li>
 
                   ))

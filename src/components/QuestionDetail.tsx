@@ -175,10 +175,11 @@ const QuestionDetail = (props: Props) => {
           const answeredQuestions = userDocs.answeredQuestions || [];
           const questionTitle = questionData?.title;
 
+
           if (questionTitle && !answeredQuestions.includes(questionTitle)) {
             const updatedUserDoc = {
               ...userDocs,
-              answeredQuestions: [...answeredQuestions, questionTitle]
+              answeredQuestions: [...answeredQuestions, { title: questionTitle, slug: questionSlug }]
             }
             await addDocumentWithSlug('users', updatedUserDoc, 'userId');
           }
