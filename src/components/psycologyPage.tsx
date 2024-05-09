@@ -156,8 +156,8 @@ const PsyAccount = () => {
                     </div>
                   )}
                   <div className="flex flex-col">
-                    <p className='font-semibold text-gray-800 leading-6 p-1'>{userData.name}</p>
-                    {userData.expert}
+                    <p className='font-semibold text-gray-800 leading-6 p-3'>{userData.name}</p>
+                    <p className='text-gray-800 leading-6 ml-3'>{userData.expert}</p>
                   </div>
                 </div>
                 <div>
@@ -172,11 +172,12 @@ const PsyAccount = () => {
             )
           }
 
-          <div className="mt-10 ml-5">
-            <p className='text-lg font-bold'>Комментарии</p>
+          <hr className="mt-10 my-4 border-gray-400" />
+          <div className="mt-5 ml-5" style={{ maxHeight: '800px', overflowY: 'auto' }}>
+            <p className='text-lg font-bold ml-2'>Комментарии</p>
             {!isCommenting ? (
               <button
-                className="my-5"
+                className="my-5 text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl"
                 onClick={() => setIsCommenting(true)}>Комментировать</button>
             ) : (
               <div className="flex items-center py-3">
@@ -215,7 +216,7 @@ const PsyAccount = () => {
                             <p className="text-md text-gray-600 mt-1">{comment.content}</p>
                           </div>
                         </div>
-                        {editCommentId !== comment.id && (
+                        {editCommentId !== comment.id && comment.userId === userId && (
                           <>
                             <div className="flex">
                               <FaPen
@@ -238,7 +239,7 @@ const PsyAccount = () => {
         </div>
         <div className="p-3 ml-5 bg-white rounded-2xl shadow-2xl border mt-[-3px]" style={{ width: '300px', maxHeight: '800px', overflowY: 'auto' }}>
           <div className="w-full p-1">
-            <p className='font-semibold  text-gray-800 leading-6 mt-3 ml-5'>Вопросы, на которые ответил психолог.</p>
+            <p className='font-semibold  text-gray-800 leading-6 mt-3 ml-5'>Вопросы, на которые ответил психолог:</p>
             {userData && userData.answeredQuestions && (
               <ul className='text-gray-600 leading-6 mt-2 ml-5'>
                 {userData.answeredQuestions.length > 0 ? (
@@ -252,7 +253,7 @@ const PsyAccount = () => {
                       onKeyDown={(e: React.KeyboardEvent<HTMLLIElement>) => e.key === 'Enter' && handleClick(`${question}`)}
                       className="my-3"
                     >
-                      {question}
+                     <hr /> {question}
                     </li>
 
                   ))
