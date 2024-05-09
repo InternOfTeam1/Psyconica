@@ -87,7 +87,7 @@ const QuestionsComponent: React.FC<Props> = ({ videos }) => {
   return (
     <div className="container mx-auto max-w-7xl px-4 py-6 mt-[-50px]">
       <h1 className="text-2xl font-bold text-center mb-6">Вопросы</h1>
-      <div className="flex flex-wrap -mx-4">
+      <div className="flex flex-wrap -mx-4 xs:flex-col-reverse lg:flex-row">
         <div className="w-full lg:w-1/4 px-1 mb-4 lg:mb-0  xs:mt-2 xs:mx-auto lg:mx-0 lg:mt-0">
           <VideoGallery />
         </div>

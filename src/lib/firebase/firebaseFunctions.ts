@@ -1,5 +1,5 @@
 import { db } from './firebaseConfig';
-import { doc, setDoc, collection, updateDoc, getDoc, query, where, getDocs, arrayUnion } from 'firebase/firestore';
+import { doc, updateDoc, getDoc, arrayUnion } from 'firebase/firestore';
 
 export const getVideosById = async (userId: string) => {
   if (!userId) {
@@ -13,7 +13,7 @@ export const getVideosById = async (userId: string) => {
     const docSnapshot = await getDoc(userDocRef);
     if (docSnapshot.exists()) {
       const userData = docSnapshot.data();
-      return userData.video || []; 
+      return userData.video || [];
     } else {
       console.log("No such document!");
       return [];
@@ -25,10 +25,10 @@ export const getVideosById = async (userId: string) => {
 };
 
 export const addVideoToCollection = async (videoUrl: string, userId: string,) => {
-  const newVideoRef = doc(db, "users", userId); 
+  const newVideoRef = doc(db, "users", userId);
   try {
     await updateDoc(newVideoRef, {
-      video: arrayUnion(videoUrl) 
+      video: arrayUnion(videoUrl)
     });
   } catch (error) {
     console.error('Error adding video:', error);

@@ -7,7 +7,6 @@ import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
-import VideoGallery from './VideoGallery';
 import PsychologistDashboard from './PsychologistVideoManager';
 import { FaPen } from 'react-icons/fa';
 import { MdClose } from 'react-icons/md';
@@ -42,7 +41,6 @@ const PsyAccount = () => {
       try {
         const fetchedUserData: any = await fetchDoc('users', userSlug);
         setUserData(fetchedUserData);
-        console.log(fetchedUserData, 'comment')
         setComments(fetchedUserData?.comments ?? [])
       } catch (error) {
         console.error('Error fetching user data:', error);
@@ -142,8 +140,8 @@ const PsyAccount = () => {
                   width={50}
                   height={50}
                   className="mr-2" />
-                  <p className='flex items-center justify-center font-semibold pl-20 py-1 text-gray-800 leading-7'>
-                {userData.slogan}
+                <p className='flex items-center justify-center font-semibold pl-20 py-1 text-gray-800 leading-7'>
+                  {userData.slogan}
                 </p>
               </p>
             </div>
@@ -254,7 +252,7 @@ const PsyAccount = () => {
                       onKeyDown={(e: React.KeyboardEvent<HTMLLIElement>) => e.key === 'Enter' && handleClick(`${question}`)}
                       className="my-3"
                     >
-                     <hr /> {question}
+                      <hr /> {question}
                     </li>
 
                   ))
