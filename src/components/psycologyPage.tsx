@@ -129,20 +129,22 @@ const PsyAccount = () => {
   return (
     <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px]">
       <div className="flex flex-wrap -mx-1 lg:-mx-1">
-        <div className="w-full lg:w-1/4 px-1 lg:mb-0">
+        <div className="w-full lg:w-1/4 px-1 lg:mb-0 order-last lg:order-first">
           {userData && <PsychologistDashboard />}
         </div>
         <div className="container ml-5 px-2 py-4 max-w-3xl bg-white shadow-xl rounded-2xl " style={{ maxWidth: '600px' }}>
           {userData && (
             <div className="text-center mb-5">
-              <p className='flex items-center justify-center font-semibold bg-amber-300 px-7 py-1 rounded-2xl text-center text-gray-800 leading-7'>
+              <p className='flex items-center justify-start bg-amber-300 px-7 py-1 rounded-2xl text-center text-gray-800 leading-7'>
                 <Image
                   src="/bigLogo.webp"
                   alt="logo"
                   width={50}
                   height={50}
                   className="mr-2" />
+                  <p className='flex items-center justify-center font-semibold pl-20 py-1 text-gray-800 leading-7'>
                 {userData.slogan}
+                </p>
               </p>
             </div>
           )}
@@ -239,12 +241,11 @@ const PsyAccount = () => {
         </div>
         <div className="p-3 ml-5 bg-white rounded-2xl shadow-2xl border mt-[-3px]" style={{ width: '300px', maxHeight: '800px', overflowY: 'auto' }}>
           <div className="w-full p-1">
-            <p className='font-semibold  text-gray-800 leading-6 mt-3 ml-5'>Вопросы, на которые ответил психолог:</p>
+            <p className='font-semibold  text-gray-800 leading-6 mt-3 mx-3'>Вопросы, на которые ответил психолог:</p>
             {userData && userData.answeredQuestions && (
-              <ul className='text-gray-600 leading-6 mt-2 ml-5'>
+              <ul className='text-gray-600 leading-6 mt-2 mx-3'>
                 {userData.answeredQuestions.length > 0 ? (
                   userData.answeredQuestions.map((question: any, index: number) => (
-
                     <li
                       key={index}
                       onClick={(e: React.MouseEvent<HTMLLIElement, MouseEvent>) => handleClick(`${question}`)}
