@@ -7,19 +7,6 @@ import { useAppSelector } from '@/redux/hooks';
 import { transformYouTubeUrl } from '@/helpers/transformYouTubeUrl';
 import { useParams } from 'next/navigation';
 
-interface Users {
-  url: {
-    url: string[];
-    avtor: string;
-  };
-  title: string;
-  id: string;
-  newVideo: string;
-  video: string[];
-
-}
-
-
 
 const PsychologistDashboard = () => {
   const [videoUrl, setVideoUrl] = useState<string>('');
@@ -27,7 +14,7 @@ const PsychologistDashboard = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedVideoUrl, setSelectedVideoUrl] = useState<string>('');
   const userId = useAppSelector(state => state.auth.user?.id);
-  const role = useAppSelector( state => state.auth.user?.role);
+  const role = useAppSelector(state => state.auth.user?.role);
   const params = useParams();
   const userSlug: any = params.slug;
   const [visibleCount, setVisibleCount] = useState(4);
@@ -35,12 +22,10 @@ const PsychologistDashboard = () => {
   useEffect(() => {
     async function loadVideos() {
       const fetchedUsers: any = await fetchDataFromCollection('users');
-      console.log(fetchedUsers)
-       const profileUser = fetchedUsers.find((user: any)=> user.id === userSlug)
-       console.log(userSlug)
-       if(profileUser) {
+      const profileUser = fetchedUsers.find((user: any) => user.id === userSlug)
+      if (profileUser) {
         setUsers(profileUser.video);
-       }
+      }
     }
 
     loadVideos();
@@ -51,12 +36,10 @@ const PsychologistDashboard = () => {
       const embedUrl = transformYouTubeUrl(videoUrl);
 
       try {
-        await addVideoToCollection(embedUrl, userId); 
-        setVideoUrl(''); 
-        alert('Видео успешно добавлено!');
+        await addVideoToCollection(embedUrl, userId);
+        setVideoUrl('');
       } catch (error) {
         console.error('Не удалось добавить видео:', error);
-        alert('Не удалось добавить видео:');
       }
     }
   };
@@ -76,29 +59,29 @@ const PsychologistDashboard = () => {
   return (
     <div className="p-3 m-4 bg-white rounded-2xl shadow-2xl border mt-[-3px]">
       <div className="flex flex-wrap justify-center gap-2">
-    {users.slice(0, visibleCount).map((url, index) => (
-      <div key={index} className="p-1 w-full cursor-pointer border-2 rounded-2xl overflow-hidden" onClick={() => openModal(url)}>
-        <iframe
-          width="100%"
-          height="150"
-          src={url}
-          title="YouTube video player"
-          allowFullScreen
-          className="rounded-lg"
-        ></iframe>
+        {users.slice(0, visibleCount).map((url, index) => (
+          <div key={index} className="p-1 w-full cursor-pointer border-2 rounded-2xl overflow-hidden" onClick={() => openModal(url)}>
+            <iframe
+              width="100%"
+              height="150"
+              src={url}
+              title="YouTube video player"
+              allowFullScreen
+              className="rounded-lg"
+            ></iframe>
+          </div>
+
+        ))}
       </div>
-      
-    ))}
-    </div>
-    {users.length > visibleCount && (
-  <div className="flex justify-center mt-2 mb-2 ">
-    <button onClick={showMoreVideos} className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">
-      Еще
-    </button>
-  </div>
-  
-)}
-      {role === 'psy' &&  userId === userSlug &&(
+      {users.length > visibleCount && (
+        <div className="flex justify-center mt-2 mb-2 ">
+          <button onClick={showMoreVideos} className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">
+            Еще
+          </button>
+        </div>
+
+      )}
+      {role === 'psy' && userId === userSlug && (
         <>
           <input
             type="text"

@@ -3,8 +3,7 @@ import { useState, useEffect } from 'react';
 import Link from "next/link";
 import Social from "@/components/Social";
 import Image from 'next/image';
-// import LogoWebP from '/siteName.webp';
-import { HOME_ROUTE, PROFILE_ROUTE } from "@/constants/routes";
+import { HOME_ROUTE } from "@/constants/routes";
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store';
 import { login, logout } from '@/redux/slices/authSlice';
@@ -54,18 +53,10 @@ const Header: React.FC = () => {
     dispatch(closeModal());
   };
 
-  //  useEffect(() => {
-  //     if (isAuthenticated && user) {
-  //       const userData = { name: user.name, photo: user.photo, email: user.email };
-  //       Cookies.set('user', JSON.stringify(userData), { expires: 7 });
-  //     }
-  //   }, [isAuthenticated, user, router]);
-
   useEffect(() => {
     const userCookie = Cookies.get('user');
     if (userCookie) {
       dispatch(setUserState(JSON.parse(userCookie as string)));
-      console.log(JSON.parse(userCookie as string))
     }
   }, [dispatch])
 
@@ -104,7 +95,6 @@ const Header: React.FC = () => {
   const handleLogout = async () => {
     dispatch(logout());
     Cookies.remove('user');
-    // router.push(HOME_ROUTE)
   };
 
   const checkUserLoginStatus = async () => {
@@ -215,9 +205,9 @@ const Header: React.FC = () => {
           </div>
         </div>
       </header >
-      {isModalOpenPsy && userId &&  (
+      {isModalOpenPsy && userId && (
         <PsychologistModal
-          isOpen={isModalOpenPsy} 
+          isOpen={isModalOpenPsy}
           onClose={() => setIsModalOpenPsy(false)}
         />
       )

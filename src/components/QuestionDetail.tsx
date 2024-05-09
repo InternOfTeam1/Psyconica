@@ -17,7 +17,6 @@ import { nanoid } from '@reduxjs/toolkit';
 import icon from '../../public/iconPsy.png';
 import Image from 'next/image';
 import { FaPen } from "react-icons/fa";
-import { User } from "firebase/auth";
 import { addDocumentWithSlug } from "@/lib/firebase/firebaseAdddoc";
 import { useRouter } from 'next/navigation';
 
@@ -72,14 +71,12 @@ const QuestionDetail = (props: Props) => {
 
     if (isLiked) {
       updatedLikes = answerLikes.filter(id => id !== userId);
-      console.log(updatedLikes)
 
     } else {
       updatedLikes = [...answerLikes, userId];
     }
     try {
       await updateAnswerLikes(answerNum, updatedLikes, questionSlug);
-      console.log("Likes updated successfully.");
     } catch (error) {
       console.error("Error updating likes", error);
     }
@@ -321,7 +318,7 @@ const QuestionDetail = (props: Props) => {
 
   return (
     <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px]">
-      <div className="flex flex-wrap -mx-1 lg:-mx-1">
+      <div className="flex flex-wrap -mx-1 xs:flex-col-reverse lg:flex-row lg:-mx-1">
         <div className="w-full lg:w-1/4 px-1 lg:mb-0">
           <VideoBlock videos={rawData.video} userRole={userRole} updateVideo={addVideo} />
         </div>
