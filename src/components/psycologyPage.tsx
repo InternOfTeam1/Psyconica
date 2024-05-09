@@ -26,6 +26,12 @@ const PsyAccount = () => {
   const [isCommenting, setIsCommenting] = useState<boolean>(false);
   const [editCommentId, setEditCommentId] = useState<string | null>(null);
   const [editedCommentText, setEditedCommentText] = useState<string>('');
+  // const [about, setAbout] = useState<any>(null);
+  // const [contact, setContact] = useState<any>(null);
+  // const [slogan, setSlogan] = useState<any>(null);
+  // const [expert, setExpert] = useState<any>(null);
+  // const [name, setName] = useState<any>(null);
+  // const [photo, setPhoto] = useState<any>(null);
   const userId = useAppSelector((state) => state.auth.user?.id);
   const userName = useAppSelector((state) => state.auth.user?.name);
   const userPhoto = useAppSelector((state) => state.auth.user?.photo);
