@@ -181,7 +181,7 @@ const PsyAccount = () => {
             <p className='text-lg font-bold ml-2'>Комментарии</p>
             {!isCommenting ? (
               <button
-                className="my-5 text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl"
+                className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sn my-5 mt-5 ml-1"
                 onClick={() => setIsCommenting(true)}>Комментировать</button>
             ) : (
               <div className="flex items-center py-3">
@@ -191,25 +191,38 @@ const PsyAccount = () => {
                   value={commentText}
                   onChange={(e) => setCommentText(e.target.value)}
                   placeholder="Текст комментария"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      handleComment();
+                    }
+                  }}
                 />
                 <button
-                  className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl"
+                  className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sn my-5 mt-5 ml-1"
                   onClick={handleComment}>Сохранить</button>
               </div>
             )}
 
-            <ul>
+            <ul style={{ maxHeight: '300px', overflowY: 'auto' }}>
               {comments.map(comment => (
                 <li className="flex flex-col p-3 bg-white shadow rounded-lg mb-3 mt-2" key={comment.id}>
                   <div className="flex items-center space-x-3 justify-between">
                     {editCommentId === comment.id ? (
-                      <div>
+                      <div className="flex items-center justify-between">
                         <input
                           type="text"
+                          className="w-full font-semibold text-gray-500 text-md leading-6 mr-auto"
                           value={editedCommentText}
                           onChange={(e) => setEditedCommentText(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              handleEditComment();
+                            }
+                          }}
                         />
-                        <button onClick={handleEditComment}>Сохранить</button>
+                        <button
+                        className="text-white bg-gray-500 hover:bg-blue-500 focus:ring-4 focus:ring-blue-300 font-semibold rounded-2xl text-sm py-1 px-2 text-center mt-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg ml-3"
+                        onClick={handleEditComment}>Сохранить</button>
                       </div>
                     ) : (
                       <>
