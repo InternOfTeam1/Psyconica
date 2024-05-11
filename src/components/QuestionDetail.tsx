@@ -176,7 +176,11 @@ const QuestionDetail = (props: Props) => {
           const questionTitle = questionData?.title;
 
 
-          if (questionTitle && !answeredQuestions.includes(questionTitle)) {
+          if (
+            questionTitle &&
+            questionSlug &&
+            !answeredQuestions.some((q: { title: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | React.PromiseLikeOfReactNode; slug: any; }) => q.title === questionTitle && q.slug === questionSlug)
+          ) {
             const updatedUserDoc = {
               ...userDocs,
               answeredQuestions: [...answeredQuestions, { title: questionTitle, slug: questionSlug }]
