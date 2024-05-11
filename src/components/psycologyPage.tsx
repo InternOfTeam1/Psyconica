@@ -27,6 +27,12 @@ const PsyAccount = () => {
   const [isCommenting, setIsCommenting] = useState<boolean>(false);
   const [editCommentId, setEditCommentId] = useState<string | null>(null);
   const [editedCommentText, setEditedCommentText] = useState<string>('');
+  // const [about, setAbout] = useState<any>(null);
+  // const [contact, setContact] = useState<any>(null);
+  // const [slogan, setSlogan] = useState<any>(null);
+  // const [expert, setExpert] = useState<any>(null);
+  // const [name, setName] = useState<any>(null);
+  // const [photo, setPhoto] = useState<any>(null);
   const userId = useAppSelector((state) => state.auth.user?.id);
   const userName = useAppSelector((state) => state.auth.user?.name);
   const userPhoto = useAppSelector((state) => state.auth.user?.photo);
@@ -43,7 +49,6 @@ const PsyAccount = () => {
       try {
         const fetchedUserData: any = await fetchDoc('users', userSlug);
         setUserData(fetchedUserData);
-        console.log(fetchedUserData, 'comment')
         setComments(fetchedUserData?.comments ?? [])
         setRating(fetchedUserData.averageRating || 0);
       } catch (error) {
@@ -110,11 +115,9 @@ const PsyAccount = () => {
 
   const handleClick = async (url: string) => {
 
-    const questionsString = url;
 
     if (userData?.answeredQuestions && userData.answeredQuestions.length > 0) {
-      const slug: any = slugify(questionsString, { lower: true, strict: true, remove: /[*+~.()'"!:@]/g });
-      const questionSlugs = `/questions/${slug}`;
+      const questionSlugs = `/questions/${url}`;
       try {
         await router.push(questionSlugs);
       } catch (error) {
@@ -137,21 +140,22 @@ const PsyAccount = () => {
   return (
     <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px]">
       <div className="flex flex-wrap -mx-1 lg:-mx-1">
-        <div className="w-full lg:w-1/4 px-1 lg:mb-0">
+        <div className="w-full lg:w-1/4 px-1 lg:mb-0 order-last lg:order-first">
           {userData && <PsychologistDashboard />}
         </div>
         <div className="container ml-5 px-2 py-4 max-w-3xl bg-white shadow-xl rounded-2xl " style={{ maxWidth: '600px' }}>
           {userData && (
             <div className="text-center mb-5">
-              
-              <p className='flex items-center justify-center font-semibold bg-amber-300 px-7 py-1 rounded-2xl text-center text-gray-800 leading-7'>
+              <p className='flex items-center justify-start bg-amber-300 px-7 py-1 rounded-2xl text-center text-gray-800 leading-7'>
                 <Image
                   src="/bigLogo.webp"
                   alt="logo"
                   width={50}
                   height={50}
                   className="mr-2" />
-                {userData.slogan}
+                <p className='flex items-center justify-center font-semibold pl-20 py-1 text-gray-800 leading-7'>
+                  {userData.slogan}
+                </p>
               </p>
              
             </div>
@@ -187,11 +191,12 @@ const PsyAccount = () => {
             )
           }
 
-          <div className="mt-10 ml-5">
-            <p className='text-lg font-bold'>Комментарии</p>
+          <hr className="mt-10 my-4 border-gray-400" />
+          <div className="mt-5 ml-5" style={{ maxHeight: '800px', overflowY: 'auto' }}>
+            <p className='text-lg font-bold ml-2'>Комментарии</p>
             {!isCommenting ? (
               <button
-                className="my-5"
+                className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sn my-5 mt-5 ml-1"
                 onClick={() => setIsCommenting(true)}>Комментировать</button>
             ) : (
               <div className="flex items-center py-3">
@@ -201,25 +206,38 @@ const PsyAccount = () => {
                   value={commentText}
                   onChange={(e) => setCommentText(e.target.value)}
                   placeholder="Текст комментария"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      handleComment();
+                    }
+                  }}
                 />
                 <button
-                  className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl"
+                  className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sn my-5 mt-5 ml-1"
                   onClick={handleComment}>Сохранить</button>
               </div>
             )}
 
-            <ul>
+            <ul style={{ maxHeight: '300px', overflowY: 'auto' }}>
               {comments.map(comment => (
                 <li className="flex flex-col p-3 bg-white shadow rounded-lg mb-3 mt-2" key={comment.id}>
                   <div className="flex items-center space-x-3 justify-between">
                     {editCommentId === comment.id ? (
-                      <div>
+                      <div className="flex items-center justify-between">
                         <input
                           type="text"
+                          className="w-full font-semibold text-gray-500 text-md leading-6 mr-auto"
                           value={editedCommentText}
                           onChange={(e) => setEditedCommentText(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              handleEditComment();
+                            }
+                          }}
                         />
-                        <button onClick={handleEditComment}>Сохранить</button>
+                        <button
+                        className="text-white bg-gray-500 hover:bg-blue-500 focus:ring-4 focus:ring-blue-300 font-semibold rounded-2xl text-sm py-1 px-2 text-center mt-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg ml-3"
+                        onClick={handleEditComment}>Сохранить</button>
                       </div>
                     ) : (
                       <>
@@ -230,7 +248,7 @@ const PsyAccount = () => {
                             <p className="text-md text-gray-600 mt-1">{comment.content}</p>
                           </div>
                         </div>
-                        {editCommentId !== comment.id && (
+                        {editCommentId !== comment.id && comment.userId === userId && (
                           <>
                             <div className="flex">
                               <FaPen
@@ -253,21 +271,20 @@ const PsyAccount = () => {
         </div>
         <div className="p-3 ml-5 bg-white rounded-2xl shadow-2xl border mt-[-3px]" style={{ width: '300px', maxHeight: '800px', overflowY: 'auto' }}>
           <div className="w-full p-1">
-            <p className='font-semibold  text-gray-800 leading-6 mt-3 ml-5'>Вопросы, на которые ответил психолог.</p>
+            <p className='font-semibold  text-gray-800 leading-6 mt-3 mx-3'>Вопросы, на которые ответил психолог:</p>
             {userData && userData.answeredQuestions && (
-              <ul className='text-gray-600 leading-6 mt-2 ml-5'>
+              <ul className='text-gray-600 leading-6 mt-2 mx-3'>
                 {userData.answeredQuestions.length > 0 ? (
                   userData.answeredQuestions.map((question: any, index: number) => (
-
                     <li
                       key={index}
-                      onClick={(e: React.MouseEvent<HTMLLIElement, MouseEvent>) => handleClick(`${question}`)}
+                      onClick={(e: React.MouseEvent<HTMLLIElement, MouseEvent>) => handleClick(`${question.slug}`)}
                       role="button"
                       tabIndex={0}
-                      onKeyDown={(e: React.KeyboardEvent<HTMLLIElement>) => e.key === 'Enter' && handleClick(`${question}`)}
+                      onKeyDown={(e: React.KeyboardEvent<HTMLLIElement>) => e.key === 'Enter' && handleClick(`${question.slug}`)}
                       className="my-3"
                     >
-                      {question}
+                      <hr /> {question.title}
                     </li>
 
                   ))

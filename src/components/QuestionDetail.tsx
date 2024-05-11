@@ -17,7 +17,6 @@ import { nanoid } from '@reduxjs/toolkit';
 import icon from '../../public/iconPsy.png';
 import Image from 'next/image';
 import { FaPen } from "react-icons/fa";
-import { User } from "firebase/auth";
 import { addDocumentWithSlug } from "@/lib/firebase/firebaseAdddoc";
 import { useRouter } from 'next/navigation';
 
@@ -72,14 +71,12 @@ const QuestionDetail = (props: Props) => {
 
     if (isLiked) {
       updatedLikes = answerLikes.filter(id => id !== userId);
-      console.log(updatedLikes)
 
     } else {
       updatedLikes = [...answerLikes, userId];
     }
     try {
       await updateAnswerLikes(answerNum, updatedLikes, questionSlug);
-      console.log("Likes updated successfully.");
     } catch (error) {
       console.error("Error updating likes", error);
     }
@@ -178,10 +175,11 @@ const QuestionDetail = (props: Props) => {
           const answeredQuestions = userDocs.answeredQuestions || [];
           const questionTitle = questionData?.title;
 
+
           if (questionTitle && !answeredQuestions.includes(questionTitle)) {
             const updatedUserDoc = {
               ...userDocs,
-              answeredQuestions: [...answeredQuestions, questionTitle]
+              answeredQuestions: [...answeredQuestions, { title: questionTitle, slug: questionSlug }]
             }
             await addDocumentWithSlug('users', updatedUserDoc, 'userId');
           }
@@ -321,7 +319,7 @@ const QuestionDetail = (props: Props) => {
 
   return (
     <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px]">
-      <div className="flex flex-wrap -mx-1 lg:-mx-1">
+      <div className="flex flex-wrap -mx-1 xs:flex-col-reverse lg:flex-row lg:-mx-1">
         <div className="w-full lg:w-1/4 px-1 lg:mb-0">
           <VideoBlock videos={rawData.video} userRole={userRole} updateVideo={addVideo} />
         </div>
@@ -337,16 +335,21 @@ const QuestionDetail = (props: Props) => {
                       type="text"
                       className='w-1/2 font-semibold text-gray-500 text-md leading-6 mt-5 ml-5 mr-2'
                       onChange={onNewAnswerChange}
-                      placeholder=" Текст ответа..."
+                      placeholder="Текст ответа..."
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          onNewAnswerSave();
+                        }
+                      }}
                     />
                     <button
-                      className='text-white bg-gray-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mt-1 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg'
+                      className='text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sn my-5 mt-5 ml-1'
                       onClick={onNewAnswerSave}
                     >
                       Опубликовать
                     </button>
                   </>
-                  : (<button className='text-gray-600 hover:text-neutral-600 hover:text-gray-800 uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sn mt-5 ml-3 px-2'
+                  : (<button className='text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sn my-5 mt-5 ml-3'
                     onClick={onAnswerAdd}>Ответить</button>)
               ) : null}
 
@@ -379,18 +382,23 @@ const QuestionDetail = (props: Props) => {
                       {editingAnswerNum === answer.num ? (
                         <>
                           <div className='w-full'>
-                            <h3 className="font-semibold text-black text-md leading-6 mt-1 px-1 xs:text-base sm:text-base md:text-base lg:text-lg  xl:text-xl ">
+                            <h3 className="font-semibold text-black text-md leading-6 xs:text-base sm:text-base md:text-base lg:text-lg  xl:text-xl ">
                               <input
                                 type="text"
-                                className='w-1/2 font-semibold text-black text-md leading-6 mt-1 px-1 xs:text-base sm:text-base md:text-base lg:text-lg  xl:text-xl'
+                                className='w-10/12 font-semibold text-gray-500 text-md leading-6'
                                 value={editedAnswer}
                                 onChange={(e) => onAnswerChange(e, answer.num)}
                                 placeholder="Текст ответа"
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter') {
+                                    onAnswerSave(answer.num);
+                                  }
+                                }}
                               />
                             </h3>
                           </div>
                           <button
-                            className="text-white bg-gray-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-2 text-center ml-auto mr-7 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg"
+                            className="text-white bg-gray-500 hover:bg-blue-500 focus:ring-4 focus:ring-blue-300 font-semibold rounded-2xl text-sm py-1 px-2 text-center ml-auto mr-7 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg"
                             onClick={() => onAnswerSave(answer.num)}
                           >
                             Сохранить
@@ -404,12 +412,12 @@ const QuestionDetail = (props: Props) => {
                           {((userRole === 'psy' && answer.userId === userId) || (userRole !== 'psy' && answer.userId === userId)) && (
                             <>
                               <button
-                                className="text-white bg-gray-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-2 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg ml-auto"
+                                className="text-white bg-gray-500 hover:bg-blue-500 focus:ring-4 focus:ring-blue-300 font-semibold rounded-2xl text-sm py-1 px-2 text-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg ml-auto"
                                 onClick={() => onAnswerEdit(answer.num)}
                               >
                                 Изменить
                               </button>
-                              <div className='cursor-pointer mr-3' onClick={() => onAnswerDelete(answer.num)}>
+                              <div className='cursor-pointer mt-1 mr-3' onClick={() => onAnswerDelete(answer.num)}>
                                 <MdClose />
                               </div>
                             </>
@@ -447,9 +455,14 @@ const QuestionDetail = (props: Props) => {
                                       value={editedComment}
                                       onChange={(e) => onCommentChange(e, comment.num)}
                                       placeholder="Текст комментария"
+                                      onKeyDown={(e) => {
+                                        if (e.key === 'Enter') {
+                                          onCommentSend(comment.num);
+                                        }
+                                      }}
                                     />
                                     <button
-                                      className="text-white bg-gray-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-2 text-center mt-2 mr-4 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg ml-auto"
+                                      className="text-white bg-gray-500 hover:bg-blue-500 focus:ring-4 focus:ring-blue-300 font-semibold rounded-2xl text-sm py-1 px-2 text-center mt-2 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg ml-auto"
                                       onClick={() => onCommentSend(comment.num)}
                                     >
                                       Сохранить
@@ -488,18 +501,23 @@ const QuestionDetail = (props: Props) => {
                         <>
                           <input
                             type="text"
-                            className='w-1/2 font-semibold text-gray-500 text-md leading-6 mt-3 mr-2'
+                            className='w-1/2 font-semibold text-gray-500 text-md leading-6 mt-3 ml-4 mr-2'
                             onChange={(e) => onCommentChange(e, lastCommentId)}
                             placeholder=" Текст комментария..."
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {
+                                onCommentCreate(String(answer.num));
+                              }
+                            }}
                           />
                           <button
-                            className='text-white bg-gray-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg'
+                            className='text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sn my-5 mt-4 ml-1'
                             onClick={() => onCommentCreate(String(answer.num))}
                           >
                             Отправить
                           </button>
                         </>
-                        : (<button className='text-gray-600 hover:text-neutral-600 hover:text-gray-800 uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sn mt-5 ml-3 px-2'
+                        : (<button className='text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sn my-5 mt-5 ml-3'
                           onClick={() => onCommentAdd(answer.num)}>Комментировать</button>)}
                     </>
 
