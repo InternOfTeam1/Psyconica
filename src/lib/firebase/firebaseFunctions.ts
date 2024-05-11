@@ -1,5 +1,14 @@
+import { Comments } from '@/interfaces/collections';
 import { db } from './firebaseConfig';
 import { doc, setDoc, collection, updateDoc, getDoc, query, where, getDocs, arrayUnion } from 'firebase/firestore';
+
+interface UserDataUpdate {
+  [key: string]: any; 
+  ratings?: number[];
+  averageRating?: number;
+  comments?: Comments[];
+}
+
 
 export const getVideosById = async (userId: string) => {
   if (!userId) {
@@ -106,19 +115,22 @@ export const updateComment = async (slug: string, data: any) => {
 
 };
 
-export const updateUser = async (slug: string, data: any) => {
+export const updateUser = async (slug: string, data: UserDataUpdate) => {
   try {
     const userDocRef = doc(db, "users", slug);
-
     const userData = await getDoc(userDocRef);
 
     if (userData.exists()) {
+      if (data.ratings) {
+        const ratings = [...userData.data().ratings || [], ...data.ratings];
+        data.averageRating = ratings.reduce((acc, cur) => acc + cur, 0) / ratings.length;
+      }
       await updateDoc(userDocRef, data);
+      console.log("User updated successfully");
     } else {
-      console.log("Document does not exist!");
+      console.error("Document does not exist!");
     }
-  } catch (e) {
-    console.log(e)
+  } catch (error) {
+    console.error("Error updating user:", error);
   }
-
 };

@@ -7,13 +7,13 @@ import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
-import VideoGallery from './VideoGallery';
 import PsychologistDashboard from './PsychologistVideoManager';
 import { FaPen } from 'react-icons/fa';
 import { MdClose } from 'react-icons/md';
 import { useAppSelector } from '../redux/hooks';
 import slugify from 'slugify';
 import { useRouter } from 'next/navigation';
+import RatingStars from './Rating';
 
 
 export function fetchUserData(slug: any) {
@@ -33,6 +33,7 @@ const PsyAccount = () => {
   const params = useParams();
   const userSlug: any = params.slug;
   const router = useRouter();
+  const [rating, setRating] = useState(0);
 
 
 
@@ -44,6 +45,7 @@ const PsyAccount = () => {
         setUserData(fetchedUserData);
         console.log(fetchedUserData, 'comment')
         setComments(fetchedUserData?.comments ?? [])
+        setRating(fetchedUserData.averageRating || 0);
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
@@ -96,14 +98,15 @@ const PsyAccount = () => {
   };
 
   const handleDeleteComment = async (id: string) => {
-    const updatedComments = comments.filter(comment => comment.id !== id);
-    setComments(updatedComments);
-    try {
-      await updateUser(userSlug, { comments: updatedComments });
-    } catch (error) {
-      console.error('Ошибка при удалении комментария:', error);
-    }
+  const updatedComments = comments.filter(comment => comment.id !== id);
+  setComments(updatedComments);
+  try {
+    await updateUser(userSlug, { comments: updatedComments });
+  } catch (error) {
+    console.error('Ошибка при удалении комментария:', error);
+  }
   };
+  
 
   const handleClick = async (url: string) => {
 
@@ -121,8 +124,13 @@ const PsyAccount = () => {
 
 
   };
-
-
+  const handleUpdateRating = async (newRating: number) => {
+  try {
+    await updateUser(userSlug, { ratings: [newRating] });
+  } catch (error) {
+    console.error('Error updating rating:', error);
+  }
+};
 
 
 
@@ -135,6 +143,7 @@ const PsyAccount = () => {
         <div className="container ml-5 px-2 py-4 max-w-3xl bg-white shadow-xl rounded-2xl " style={{ maxWidth: '600px' }}>
           {userData && (
             <div className="text-center mb-5">
+              
               <p className='flex items-center justify-center font-semibold bg-amber-300 px-7 py-1 rounded-2xl text-center text-gray-800 leading-7'>
                 <Image
                   src="/bigLogo.webp"
@@ -144,30 +153,36 @@ const PsyAccount = () => {
                   className="mr-2" />
                 {userData.slogan}
               </p>
+             
             </div>
           )}
           {
             userData && (
               <>
-                <div className="flex ml-5 items-start">
-                  {userData.photo && (
-                    <div className="user-photo-container mt-2 mr-5">
-                      <Image src={userData.photo} alt="User Avatar" width={180} height={180} />
-                    </div>
-                  )}
-                  <div className="flex flex-col">
-                    <p className='font-semibold text-gray-800 leading-6 p-1'>{userData.name}</p>
-                    {userData.expert}
-                  </div>
-                </div>
-                <div>
-                  <p className='font-bold text-gray-800 leading-6 mt-3 ml-5'>Информация о психологе:</p>
-                  <p className=' text-gray-600 leading-6 mt-2 ml-5'>{userData.aboutUser}</p>
-                </div>
-                <div>
-                  <p className='font-bold text-gray-800 leading-6 mt-3 ml-5'>Контактная информация:</p>
-                  <p className=' text-gray-600 leading-6 mt-2 ml-5'>{userData.contactUser}</p>
-                </div>
+                    <div className="flex ml-5 items-start">
+  {userData.photo && (
+    <div className="user-photo-container mt-2 mr-5">
+      <Image src={userData.photo} alt="User Avatar" width={180} height={180} />
+    </div>
+  )}
+  <div className="flex flex-col flex-grow">
+    <div className="flex justify-between items-center">
+      <p className='font-semibold text-gray-800 leading-6 p-1'>{userData.name}</p>
+      <div className='mr-4 '>
+       <RatingStars userSlug={userSlug} currentRating={rating} setRating={setRating} />
+      </div>
+    </div>
+    <p>{userData.expert}</p>
+  </div>
+</div>
+<div>
+  <p className='font-bold text-gray-800 leading-6 mt-3 ml-5'>Информация о психологе:</p>
+  <p className='text-gray-600 leading-6 mt-2 ml-5'>{userData.aboutUser}</p>
+</div>
+<div>
+  <p className='font-bold text-gray-800 leading-6 mt-3 ml-5'>Контактная информация:</p>
+  <p className='text-gray-600 leading-6 mt-2 ml-5'>{userData.contactUser}</p>
+</div>
               </>
             )
           }
