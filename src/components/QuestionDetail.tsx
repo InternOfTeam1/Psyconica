@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
 import { useParams } from 'next/navigation';
 import { useAppSelector } from '../redux/hooks';
-import { updateAnswerLikes, updateQuestion, updateComment } from '@/lib/firebase/firebaseFunctions';
+import { updateAnswerLikes, updateQuestion, updateComment, updateUser } from '@/lib/firebase/firebaseFunctions';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/redux/store';
 import { openModal } from '@/redux/slices/modalSlice';
@@ -206,6 +206,24 @@ const QuestionDetail = (props: Props) => {
 
     setQuestionData(newQuestionData)
     await updateQuestion(questionSlug, newQuestionData);
+
+    const userDocs = await fetchDoc('users', userId) as unknown as Users;
+
+    if (userDocs) {
+
+      const answeredQuestions = userDocs.answeredQuestions || [];
+
+      const updatedAnsweredQuestions = answeredQuestions.filter((question: { slug: string; title: string }) => {
+        return !(question.slug === questionSlug && question.title === newQuestionData.title)
+      })
+
+      await updateUser(userId, { answeredQuestions: updatedAnsweredQuestions })
+
+    }
+    else {
+      console.error('user document not found')
+    }
+
   }
 
   const onAnswerEdit = (answerNum: number) => {
