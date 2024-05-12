@@ -11,7 +11,6 @@ import PsychologistDashboard from './PsychologistVideoManager';
 import { FaPen } from 'react-icons/fa';
 import { MdClose } from 'react-icons/md';
 import { useAppSelector } from '../redux/hooks';
-import slugify from 'slugify';
 import { useRouter } from 'next/navigation';
 import RatingStars from './Rating';
 
@@ -27,15 +26,16 @@ const PsyAccount = () => {
   const [isCommenting, setIsCommenting] = useState<boolean>(false);
   const [editCommentId, setEditCommentId] = useState<string | null>(null);
   const [editedCommentText, setEditedCommentText] = useState<string>('');
-  // const [about, setAbout] = useState<any>(null);
-  // const [contact, setContact] = useState<any>(null);
-  // const [slogan, setSlogan] = useState<any>(null);
-  // const [expert, setExpert] = useState<any>(null);
-  // const [name, setName] = useState<any>(null);
-  // const [photo, setPhoto] = useState<any>(null);
+  const [editedAbout, setEditedAbout] = useState<string>('');
+  const [editedContact, setEditedContact] = useState<string>('');
+  const [editedSlogan, setEditedSlogan] = useState<string>('');
+  const [editedExpert, setEditedExpert] = useState<string>('');
+  const [editedName, setEditedName] = useState<string>('');
+  const [isEditing, setIsEditing] = useState(false);
   const userId = useAppSelector((state) => state.auth.user?.id);
   const userName = useAppSelector((state) => state.auth.user?.name);
   const userPhoto = useAppSelector((state) => state.auth.user?.photo);
+  const userRole = useAppSelector((state) => state.auth.user?.role);
   const params = useParams();
   const userSlug: any = params.slug;
   const router = useRouter();
@@ -51,6 +51,12 @@ const PsyAccount = () => {
         setUserData(fetchedUserData);
         setComments(fetchedUserData?.comments ?? [])
         setRating(fetchedUserData.averageRating || 0);
+
+        setEditedAbout(fetchedUserData.aboutUser || '');
+        setEditedContact(fetchedUserData.contactUser || '');
+        setEditedSlogan(fetchedUserData.slogan || '');
+        setEditedExpert(fetchedUserData.expert || '');
+        setEditedName(fetchedUserData.name || '');
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
@@ -61,6 +67,30 @@ const PsyAccount = () => {
     }
 
   }, [userSlug]);
+
+  const handleSaveChanges = async () => {
+    try {
+      await updateUser(userSlug, {
+        aboutUser: editedAbout,
+        contactUser: editedContact,
+        slogan: editedSlogan,
+        expert: editedExpert,
+        name: editedName,
+      });
+
+      setUserData({
+        ...userData,
+        aboutUser: editedAbout,
+        contactUser: editedContact,
+        slogan: editedSlogan,
+        expert: editedExpert,
+        name: editedName,
+      });
+      setIsEditing(false);
+    } catch (error) {
+      console.error('Error updating user data:', error);
+    }
+  };
 
   const handleComment = async () => {
     if (!commentText.trim()) return;
@@ -103,15 +133,15 @@ const PsyAccount = () => {
   };
 
   const handleDeleteComment = async (id: string) => {
-  const updatedComments = comments.filter(comment => comment.id !== id);
-  setComments(updatedComments);
-  try {
-    await updateUser(userSlug, { comments: updatedComments });
-  } catch (error) {
-    console.error('Ошибка при удалении комментария:', error);
-  }
+    const updatedComments = comments.filter(comment => comment.id !== id);
+    setComments(updatedComments);
+    try {
+      await updateUser(userSlug, { comments: updatedComments });
+    } catch (error) {
+      console.error('Ошибка при удалении комментария:', error);
+    }
   };
-  
+
 
   const handleClick = async (url: string) => {
 
@@ -128,12 +158,12 @@ const PsyAccount = () => {
 
   };
   const handleUpdateRating = async (newRating: number) => {
-  try {
-    await updateUser(userSlug, { ratings: [newRating] });
-  } catch (error) {
-    console.error('Error updating rating:', error);
-  }
-};
+    try {
+      await updateUser(userSlug, { ratings: [newRating] });
+    } catch (error) {
+      console.error('Error updating rating:', error);
+    }
+  };
 
 
 
@@ -144,49 +174,105 @@ const PsyAccount = () => {
           {userData && <PsychologistDashboard />}
         </div>
         <div className="container ml-5 px-2 py-4 max-w-3xl bg-white shadow-xl rounded-2xl " style={{ maxWidth: '600px' }}>
-          {userData && (
-            <div className="text-center mb-5">
-              <p className='flex items-center justify-start bg-amber-300 px-7 py-1 rounded-2xl text-center text-gray-800 leading-7'>
-                <Image
-                  src="/bigLogo.webp"
-                  alt="logo"
-                  width={50}
-                  height={50}
-                  className="mr-2" />
-                <p className='flex items-center justify-center font-semibold pl-20 py-1 text-gray-800 leading-7'>
-                  {userData.slogan}
-                </p>
-              </p>
-             
-            </div>
-          )}
           {
             userData && (
               <>
-                    <div className="flex ml-5 items-start">
-  {userData.photo && (
-    <div className="user-photo-container mt-2 mr-5">
-      <Image src={userData.photo} alt="User Avatar" width={180} height={180} />
-    </div>
-  )}
-  <div className="flex flex-col flex-grow">
-    <div className="flex justify-between items-center">
-      <p className='font-semibold text-gray-800 leading-6 p-1'>{userData.name}</p>
-      <div className='mr-4 '>
-       <RatingStars userSlug={userSlug} currentRating={rating} setRating={setRating} />
-      </div>
-    </div>
-    <p>{userData.expert}</p>
-  </div>
-</div>
-<div>
-  <p className='font-bold text-gray-800 leading-6 mt-3 ml-5'>Информация о психологе:</p>
-  <p className='text-gray-600 leading-6 mt-2 ml-5'>{userData.aboutUser}</p>
-</div>
-<div>
-  <p className='font-bold text-gray-800 leading-6 mt-3 ml-5'>Контактная информация:</p>
-  <p className='text-gray-600 leading-6 mt-2 ml-5'>{userData.contactUser}</p>
-</div>
+                <div className="text-center mb-5">
+
+
+                  <p className='flex items-center justify-start bg-amber-300 px-7 py-1 rounded-2xl text-center text-gray-800 leading-7'>
+                    <Image
+                      src="/bigLogo.webp"
+                      alt="logo"
+                      width={50}
+                      height={50}
+                      className="mr-2" />
+                    <input
+                      type="text"
+                      value={editedSlogan}
+                      onChange={(e) => setEditedSlogan(e.target.value)}
+                      className={`border ${isEditing ? 'border-green-500' : 'border-none'} block w-full py-1 px-8 font-semibold text-gray-800 bg-transparent  `}
+                      disabled={!isEditing}
+                    />
+
+                  </p>
+
+                  {userId === userData.slug && (
+                    <>
+                      {isEditing ? (
+                        <button
+                          className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sn my-5 mt-5 ml-1"
+                          onClick={handleSaveChanges}
+                        >
+                          Сохранить изменения
+                        </button>
+                      ) : (
+                        <button
+                          className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sn my-5 mt-5 ml-1"
+                          onClick={() => setIsEditing(!isEditing)}
+                        >
+                          Редактировать личный кабинет
+                        </button>
+                      )}
+
+
+                    </>
+
+                  )}
+
+                </div>
+                <div className="flex ml-5 items-start">
+
+
+                  {userData.photo && (
+                    <div className="user-photo-container mt-2 mr-5">
+                      <Image src={userData.photo} alt="User Avatar" width={180} height={180} />
+                    </div>
+                  )}
+
+
+                  <div className="flex flex-col flex-grow">
+                    <div className="flex justify-between items-center">
+                      <input
+                        type="text"
+                        value={editedName}
+                        onChange={(e) => setEditedName(e.target.value)}
+                        className={`border ${isEditing ? 'border-green-500' : 'border-none'} font-semibold text-gray-800 leading-6 p-1 `}
+                        disabled={!isEditing}
+                      />
+                      <div className='mr-4 '>
+                        <RatingStars userSlug={userSlug} currentRating={rating} setRating={setRating} />
+                      </div>
+                    </div>
+                    <input
+                      type="text"
+                      value={editedExpert}
+                      onChange={(e) => setEditedExpert(e.target.value)}
+                      className={`border ${isEditing ? 'border-green-500' : 'border-none'} font-semibold text-gray-800 leading-6 p-1 `}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <p className='font-bold text-gray-800 leading-6 mt-3 ml-5'>Информация о психологе:</p>
+                  <input
+                    type="text"
+                    value={editedAbout}
+                    onChange={(e) => setEditedAbout(e.target.value)}
+                    className={`border ${isEditing ? 'border-green-500' : 'border-none'} text-gray-600 leading-6 mt-2 ml-5 `}
+                    disabled={!isEditing}
+                  />
+                </div>
+                <div>
+                  <p className='font-bold text-gray-800 leading-6 mt-3 ml-5'>Контактная информация:</p>
+                  <input
+                    type="text"
+                    value={editedContact}
+                    onChange={(e) => setEditedContact(e.target.value)}
+                    className={`border ${isEditing ? 'border-green-500' : 'border-none'} text-gray-600 leading-6 mt-2 ml-5 `}
+                    disabled={!isEditing}
+                  />
+                </div>
               </>
             )
           }
@@ -236,8 +322,8 @@ const PsyAccount = () => {
                           }}
                         />
                         <button
-                        className="text-white bg-gray-500 hover:bg-blue-500 focus:ring-4 focus:ring-blue-300 font-semibold rounded-2xl text-sm py-1 px-2 text-center mt-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg ml-3"
-                        onClick={handleEditComment}>Сохранить</button>
+                          className="text-white bg-gray-500 hover:bg-blue-500 focus:ring-4 focus:ring-blue-300 font-semibold rounded-2xl text-sm py-1 px-2 text-center mt-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg ml-3"
+                          onClick={handleEditComment}>Сохранить</button>
                       </div>
                     ) : (
                       <>
