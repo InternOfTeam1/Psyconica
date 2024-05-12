@@ -13,6 +13,7 @@ import { MdClose } from 'react-icons/md';
 import { useAppSelector } from '../redux/hooks';
 import { useRouter } from 'next/navigation';
 import RatingStars from './Rating';
+import { uploadImageToStorage } from '@/lib/firebase/firebaseConfig';
 
 
 export function fetchUserData(slug: any) {
@@ -32,6 +33,8 @@ const PsyAccount = () => {
   const [editedExpert, setEditedExpert] = useState<string>('');
   const [editedName, setEditedName] = useState<string>('');
   const [isEditing, setIsEditing] = useState(false);
+  const [image, setImage] = useState<File | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const userId = useAppSelector((state) => state.auth.user?.id);
   const userName = useAppSelector((state) => state.auth.user?.name);
   const userPhoto = useAppSelector((state) => state.auth.user?.photo);
@@ -165,7 +168,32 @@ const PsyAccount = () => {
     }
   };
 
+  // const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = e.target.files?.[0];
+  //   if (file) {
+  //     setImage(file);
+  //   }
+  // };
 
+  const handleUploadImage = async () => {
+    if (image) {
+      const imageUrl = await uploadImageToStorage(image);
+      if (imageUrl) {
+
+        try {
+          await updateUser(userSlug, { photo: imageUrl });
+          setUserData((prevUserData: any) => ({
+            ...prevUserData,
+            photo: imageUrl
+          }));
+          setImageUrl(imageUrl);
+          console.log('Изображение загружено:', imageUrl);
+        } catch (error) {
+          console.error('Ошибка при обновлении фотографии:', error);
+        }
+      }
+    }
+  };
 
   return (
     <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px]">
@@ -197,18 +225,21 @@ const PsyAccount = () => {
 
                   </p>
 
+
+
+
                   {userId === userData.slug && (
                     <>
                       {isEditing ? (
                         <button
-                          className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sn my-5 mt-5 ml-1"
+                          className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm my-5 mt-5 ml-1"
                           onClick={handleSaveChanges}
                         >
                           Сохранить изменения
                         </button>
                       ) : (
                         <button
-                          className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sn my-5 mt-5 ml-1"
+                          className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm my-5 mt-5 ml-1"
                           onClick={() => setIsEditing(!isEditing)}
                         >
                           Редактировать личный кабинет
@@ -221,14 +252,40 @@ const PsyAccount = () => {
                   )}
 
                 </div>
+
+
+                <div className="flex items-center justify-center mb-4">
+                  <div className="relative mb-4">
+                    <Image
+                      src={imageUrl || (userData?.photo ? userData.photo : '/default_avatar.jpg')}
+                      alt="User Avatar"
+                      width={180}
+                      height={180}
+                      className="user-photo-container mt-2 mr-5"
+                    />
+                    {isEditing && (
+                      <>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => setImage(e.target.files?.[0] || null)}
+                          className="border border-green-500 font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm leading-6 p-1 mb-2"
+                          disabled={!isEditing}
+                        />
+                        <button
+                          onClick={handleUploadImage}
+                          className="bg-blue-500 text-white xs:text-xs sm:text-sm md:text-sm lg:text-sm px-4 py-2 rounded-full shadow hover:bg-blue-600 focus:outline-none"
+                          disabled={!image}
+                        >
+                          Загрузить изображение
+                        </button>
+
+                      </>
+                    )}
+                  </div>
+                </div>
+
                 <div className="flex ml-5 items-start">
-
-
-                  {userData.photo && (
-                    <div className="user-photo-container mt-2 mr-5">
-                      <Image src={userData.photo} alt="User Avatar" width={180} height={180} />
-                    </div>
-                  )}
 
 
                   <div className="flex flex-col flex-grow">
@@ -237,7 +294,7 @@ const PsyAccount = () => {
                         type="text"
                         value={editedName}
                         onChange={(e) => setEditedName(e.target.value)}
-                        className={`border ${isEditing ? 'border-green-500' : 'border-none'} font-semibold text-gray-800 leading-6 p-1 `}
+                        className={`border ${isEditing ? 'border-green-500' : 'border-none'} font-semibold text-gray-800 p-1 bg-white`}
                         disabled={!isEditing}
                       />
                       <div className='mr-4 '>
@@ -248,29 +305,31 @@ const PsyAccount = () => {
                       type="text"
                       value={editedExpert}
                       onChange={(e) => setEditedExpert(e.target.value)}
-                      className={`border ${isEditing ? 'border-green-500' : 'border-none'} font-semibold text-gray-800 leading-6 p-1 `}
+                      className={`border ${isEditing ? 'border-green-500' : 'border-none'} bg-white font-semibold text-gray-800  p-1 mt-5]`}
                       disabled={!isEditing}
                     />
                   </div>
                 </div>
+
                 <div>
-                  <p className='font-bold text-gray-800 leading-6 mt-3 ml-5'>Информация о психологе:</p>
-                  <input
-                    type="text"
+                  <p className='font-bold text-gray-800 mt-3 ml-5'>Информация о психологе:</p>
+                  <textarea
                     value={editedAbout}
                     onChange={(e) => setEditedAbout(e.target.value)}
-                    className={`border ${isEditing ? 'border-green-500' : 'border-none'} text-gray-600 leading-6 mt-2 ml-5 `}
+                    className={`border ${isEditing ? 'border-green-500' : 'border-none'} text-gray-600  mt-2 ml-5 p-2 rounded-md resize-none w-[90%]`}
                     disabled={!isEditing}
+                    rows={3}
+                    placeholder="Введите информацию о cебе..."
                   />
                 </div>
                 <div>
-                  <p className='font-bold text-gray-800 leading-6 mt-3 ml-5'>Контактная информация:</p>
-                  <input
-                    type="text"
+                  <p className='font-bold text-gray-800  mt-3 ml-5'>Контактная информация:</p>
+                  <textarea
                     value={editedContact}
                     onChange={(e) => setEditedContact(e.target.value)}
-                    className={`border ${isEditing ? 'border-green-500' : 'border-none'} text-gray-600 leading-6 mt-2 ml-5 `}
+                    className={`border ${isEditing ? 'border-green-500' : 'border-none'} text-gray-600 leading-6 mt-2 ml-5 rounded-md resize-none w-[90%]`}
                     disabled={!isEditing}
+                    rows={3}
                   />
                 </div>
               </>

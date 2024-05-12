@@ -1,11 +1,10 @@
 import { initializeApp, getApp, getApps, FirebaseApp } from 'firebase/app';
 import { Firestore, getFirestore } from 'firebase/firestore';
-import { getAuth, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup, User, signOut, TwitterAuthProvider } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, signInWithPopup, User, signOut, TwitterAuthProvider } from 'firebase/auth';
 import { Users } from '@/interfaces/collections';
 import { addDocumentWithSlug } from '@/lib/firebase/firebaseAdddoc';
-import { fetchDoc } from './firebaseGetDocs';
 import { getUser } from '@/redux/slices/authSlice';
-import { type } from 'os';
+import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 
 
 const firebaseConfig = {
@@ -19,8 +18,9 @@ const firebaseConfig = {
 
 const firebaseApp: FirebaseApp = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
-export const db: Firestore = getFirestore(firebaseApp);
 
+export const db: Firestore = getFirestore(firebaseApp);
+const storage = getStorage(firebaseApp);
 
 const auth = getAuth(firebaseApp);
 
@@ -33,15 +33,15 @@ export const signInWithGoogle = async (): Promise<User2 | null> => {
 
 
   try {
-    
+
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
-    const id =  user.uid;
-    const firebaseUser =  await getUser(user.email as string);
+    const id = user.uid;
+    const firebaseUser = await getUser(user.email as string);
     if (!firebaseUser) {
       await addUserDocument(user);
-      return  user as User2
+      return user as User2
     }
 
 
@@ -56,15 +56,15 @@ export const signInWithGoogle = async (): Promise<User2 | null> => {
 
 export const signInWithTwitter = async (): Promise<User2 | null> => {
   try {
-    
+
     const provider = new TwitterAuthProvider();
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
-    const id =  user.uid;
+    const id = user.uid;
     const firebaseUser = await getUser(user.email as string);
     if (!firebaseUser) {
       await addUserDocument(user);
-      return  user as User2
+      return user as User2
     }
 
 
@@ -103,5 +103,17 @@ export const signOutUser = async (): Promise<void> => {
     console.log('Successfully signed out');
   } catch (error) {
     console.error('Error signing out:', error);
+  }
+};
+
+export const uploadImageToStorage = async (file: File): Promise<string | null> => {
+  try {
+    const storageRef = ref(storage, `images/${file.name}`);
+    await uploadBytes(storageRef, file);
+    const downloadURL = await getDownloadURL(storageRef);
+    return downloadURL;
+  } catch (error) {
+    console.error('Ошибка при загрузке изображения:', error);
+    return null;
   }
 };

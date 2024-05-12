@@ -16,10 +16,12 @@ import { PiXBold, PiListBold } from "react-icons/pi";
 import { getVideosById } from '@/lib/firebase/firebaseFunctions';
 import { useAppSelector } from '../redux/hooks';
 
+
 const Header: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
-  const userPhoto = useSelector((state: RootState) => state.auth.user?.photo || '');
+  // const userPhoto = useSelector((state: RootState) => state.auth.user?.photo || '');
+  const userPhoto = useAppSelector((state) => state.auth.user?.photo);
   const user: any = useSelector((state: RootState) => state.auth.user || '');
   const isModalOpen = useSelector((state: any) => state.modal.isModalOpen);
   const [isModalOpenPsy, setIsModalOpenPsy] = useState(false);
