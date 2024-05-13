@@ -168,12 +168,6 @@ const PsyAccount = () => {
     }
   };
 
-  // const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const file = e.target.files?.[0];
-  //   if (file) {
-  //     setImage(file);
-  //   }
-  // };
 
   const handleUploadImage = async () => {
     if (image) {
@@ -197,16 +191,18 @@ const PsyAccount = () => {
 
   return (
     <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px]">
-      <div className="flex flex-wrap -mx-1 lg:-mx-1 xs:mx-1 s:mx-2 md:mx-3">
+      <div className="flex flex-wrap -mx-1 lg:-mx-1">
         <div className="w-full lg:w-1/4 px-1 lg:mb-0 order-last lg:order-first">
           {userData && <PsychologistDashboard />}
         </div>
-        <div className="container mx-auto mt-[-1px] sm:mx-2 md:mx-3 lg:mx-1 px-2 py-4 max-w-3xl bg-white shadow-xl rounded-2xl xs:container-min card-small" style={{ maxWidth: '600px' }}>
+        <div className="container ml-5 px-2 py-4 max-w-3xl bg-white shadow-xl rounded-2xl " style={{ maxWidth: '600px' }}>
           {
             userData && (
               <>
                 <div className="text-center mb-5">
-                  <p className='flex items-center justify-start bg-amber-300 px-7 py-1 rounded-2xl text-center text-gray-800 leading-6'>
+
+
+                  <p className='flex items-center justify-start bg-amber-300 px-7 py-1 rounded-2xl text-center text-gray-800 leading-7'>
                     <Image
                       src="/bigLogo.webp"
                       alt="logo"
@@ -217,11 +213,15 @@ const PsyAccount = () => {
                       type="text"
                       value={editedSlogan}
                       onChange={(e) => setEditedSlogan(e.target.value)}
-                      className={`border ${isEditing ? 'border-green-500' : 'border-none'} block w-full py-1 px-8 font-semibold text-gray-800 bg-transparent lg:ml-12 xs:ml-[-10px] `}
+                      className={`border ${isEditing ? 'border-green-500' : 'border-none'} block w-full py-1 px-8 font-semibold text-gray-800 bg-transparent  `}
                       disabled={!isEditing}
                     />
+
                   </p>
-                
+
+
+
+
                   {userId === userData.slug && (
                     <>
                       {isEditing ? (
@@ -248,7 +248,7 @@ const PsyAccount = () => {
                 </div>
 
 
-                <div className="flex items-center justify-center mb-4 sm:px-3 md:px-4">
+                <div className="flex items-start ml-5">
                   <div className="relative mb-4">
                     <Image
                       src={imageUrl || (userData?.photo ? userData.photo : '/default_avatar.jpg')}
@@ -280,6 +280,8 @@ const PsyAccount = () => {
                 </div>
 
                 <div className="flex ml-5 items-start">
+
+
                   <div className="flex flex-col flex-grow">
                     <div className="flex justify-between items-center">
                       <input
@@ -302,7 +304,7 @@ const PsyAccount = () => {
                     />
                   </div>
                 </div>
-                <div className="card-info" >
+
                 <div>
                   <p className='font-bold text-gray-800 mt-3 ml-5'>Информация о психологе:</p>
                   <textarea
@@ -323,7 +325,6 @@ const PsyAccount = () => {
                     disabled={!isEditing}
                     rows={3}
                   />
-                </div>
                 </div>
               </>
             )
@@ -407,7 +408,7 @@ const PsyAccount = () => {
             </ul>
           </div>
         </div>
-        <div className="p-3 mx-auto mt-[-3px] bg-white rounded-2xl shadow-2xl border xs:py-3 my-5 md:py-0 md:py-3-lg xl:py-3-2xl" style={{ width: '300px', maxHeight: '800px', overflowY: 'auto' }}>
+        <div className="p-3 ml-5 bg-white rounded-2xl shadow-2xl border mt-[-3px]" style={{ width: '300px', maxHeight: '800px', overflowY: 'auto' }}>
           <div className="w-full p-1">
             <p className='font-semibold  text-gray-800 leading-6 mt-3 mx-3'>Вопросы, на которые ответил психолог:</p>
             {userData && userData.answeredQuestions && (
