@@ -1,6 +1,6 @@
 import { Comments } from '@/interfaces/collections';
 import { db } from './firebaseConfig';
-import { doc, updateDoc, getDoc, arrayUnion } from 'firebase/firestore';
+import { doc, updateDoc, getDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 
 interface UserDataUpdate {
   [key: string]: any; 
@@ -54,7 +54,18 @@ export const updateUserDataInFirebase = async (userId: string, data: object) => 
   }
 };
 
-
+export const removeVideoFromCollection = async (videoUrl: string, userId: string) => {
+  try {
+    const userDocRef = doc(db, 'users', userId); 
+    await updateDoc(userDocRef, {
+      video: arrayRemove(videoUrl)
+    });
+    console.log('Видео успешно удалено');
+  } catch (error) {
+    console.error('Ошибка при удалении видео:', error);
+    throw new Error('Не удалось удалить видео');
+  }
+};
 
 export const updateAnswerLikes = async (answerNum: number, updatedLikes: string[], slug: string) => {
   const questionDocRef = doc(db, "questions", slug);

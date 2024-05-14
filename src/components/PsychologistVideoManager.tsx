@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect, Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { addVideoToCollection } from '@/lib/firebase/firebaseFunctions';
+import { addVideoToCollection, removeVideoFromCollection } from '@/lib/firebase/firebaseFunctions';
 import { fetchDataFromCollection } from '@/lib/firebase/firebaseGetDocs';
 import { useAppSelector } from '@/redux/hooks';
 import { transformYouTubeUrl } from '@/helpers/transformYouTubeUrl';
@@ -44,6 +44,15 @@ const PsychologistDashboard = () => {
     }
   };
 
+  const removeVideo = async (url: string) => {
+    try {
+      await removeVideoFromCollection(url, userId);
+      setUsers(users.filter(u => u !== url));
+    } catch (error) {
+      console.error('Не удалось удалить видео:', error);
+    }
+  };
+
   const openModal = (url: string) => {
     setSelectedVideoUrl(url);
     setIsOpen(true);
@@ -56,11 +65,17 @@ const PsychologistDashboard = () => {
     setVisibleCount(prevCount => prevCount + 1);
   };
 
+  
+
+
   return (
-    <div className="p-3 m-4 bg-white rounded-2xl shadow-2xl border mt-[-3px]">
-      <div className="flex flex-wrap justify-center gap-2">
-        {users.slice(0, visibleCount).map((url, index) => (
-          <div key={index} className="p-1 w-full cursor-pointer border-2 rounded-2xl overflow-hidden" onClick={() => openModal(url)}>
+   <div className="p-3 m-4 bg-white rounded-2xl shadow-xl border mt-[-3px]">
+    <div className="flex flex-wrap justify-center gap-2">
+      {users.slice(0, visibleCount).map((url, index) => (
+        <div key={index} className="p-1 w-full">
+          <div className="cursor-pointer border-2 rounded-2xl overflow-hidden pb-3 bg-gray-200"
+               style={{ boxShadow: '0 2px 6px rgba(0,0,0,0.4)' }}
+               onClick={() => openModal(url)}>
             <iframe
               width="100%"
               height="150"
@@ -70,8 +85,18 @@ const PsychologistDashboard = () => {
               className="rounded-lg"
             ></iframe>
           </div>
-
-        ))}
+          {role === 'psy' && userId === userSlug && (
+            <button onClick={() => removeVideo(url)} className="bg-red-300 text-white font-bold rounded hover:bg-red-500 mt-2 w-full">
+              Удалить
+            </button>
+            
+          )}
+          {index < users.length - 1 && (
+            <div className="border-b-2 border-gray-700 my-2"></div> 
+          )}
+        </div>
+      ))}
+        
       </div>
       {users.length > visibleCount && (
         <div className="flex justify-center mt-2 mb-2 ">
@@ -141,7 +166,9 @@ const PsychologistDashboard = () => {
           </Dialog>
         </Transition.Root>
       )}
+      
     </div>
+    
   );
 };
 

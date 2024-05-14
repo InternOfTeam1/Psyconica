@@ -34,31 +34,31 @@ export const VideoBlock = ({ videos }: VideoBlockProps) => {
   const closeModal = () => {
     setIsOpen(false);
   };
-  const loadMoreVideos = () => {
-    const newDisplayCount = displayCount + 1; 
-    setDisplayCount(newDisplayCount);
-  };
+ const loadMoreVideos = () => {
+  setDisplayCount(prevDisplayCount => prevDisplayCount + 1);
+};
 
   return (
-    <div className="p-3 m-4 bg-white rounded-2xl shadow-2xl border mt-[-1px]">
-      <div className="flex flex-wrap justify-center gap-2">
-        {videos.map((video, index) => video.video && video.video.map((url, urlIndex) => (
-          <div key={`${index}-${urlIndex}`} className="w-full p-1">
-            <div className="cursor-pointer border-2 pb-2 rounded-2xl overflow-hidden" onClick={() => openModal(url)}>
-              {renderIframe(url, "100%", "150")}
-            </div>
+   <div className="p-3 m-4 bg-white rounded-2xl shadow-2xl border mt-[-1px]">
+    <div className="flex flex-wrap justify-center gap-2">
+      {videos.slice(0, displayCount).map((video, index) => video.video.map((url, urlIndex) => (
+        <div key={`${index}-${urlIndex}`} className="w-full p-1">
+          <div className="cursor-pointer border-2 pb-2 rounded-2xl overflow-hidden" onClick={() => openModal(url)}>
+            {renderIframe(url, "100%", "150")}
           </div>
-        )))}
-      </div>
-      <div className=' flex justify-center'>
-       <button
+        </div>
+      )))}
+    </div>
+    <div className='flex justify-center'>
+      <button
         type="button"
-        className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 "
+        className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
         onClick={loadMoreVideos}
+        disabled={displayCount >= videos.reduce((acc, curr) => acc + curr.video.length, 0)}
       >
         Еще
       </button>
-      </div>
+    </div>
       {isOpen && (
         <Transition.Root show={isOpen} as={Fragment}>
           <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={closeModal}>
