@@ -91,7 +91,7 @@ const QuestionsComponent: React.FC<Props> = ({ videos }) => {
         <div className="w-full lg:w-1/4 px-1 mb-4 lg:mb-0  xs:mt-2 xs:mx-auto lg:mx-0 lg:mt-0">
           <VideoGallery />
         </div>
-        <div className="w-full lg:w-3/4 px-4" style={{ maxWidth: '860px' }}>
+        <div className="w-full mx-auto lg:w-3/4 lg:ml-0 xl:ml-0 px-4" style={{ maxWidth: '870px' }}>
           <div className="flex flex-col space-y-4">
             {questions.map((question) => (
               <div key={question.id} onClick={(e) => handleClick(`/questions/${question.slug || question.id}`, e)}
