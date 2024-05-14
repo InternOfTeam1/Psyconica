@@ -340,12 +340,12 @@ const QuestionDetail = (props: Props) => {
   const sortedAnswers = questionData?.answers?.sort((a, b) => b.likes.length - a.likes.length) || [];
 
   return (
-    <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px]">
-      <div className="flex flex-wrap -mx-1 xs:flex-col-reverse lg:flex-row lg:-mx-1">
+    <div className="container mx-auto max-w-7xl px-4 py-6 mt-[-40px]">
+      <div className="flex flex-wrap -mx-4 xs:flex-col-reverse xs:px-5 sm:px-5 md:px-5 lg:px-5 lg:flex-row xl:px-5">
         <div className="w-full lg:w-1/4 px-1 lg:mb-0">
           <VideoBlock videos={rawData.video} userRole={userRole} updateVideo={addVideo} />
         </div>
-        <div className="container ml-5 px-2 py-4 max-w-3xl bg-white shadow-xl rounded-2xl " style={{ maxWidth: '820px' }}>
+        <div className="w-full mx-auto mb-5 lg:w-3/4 lg:ml-0 xl:ml-0 px-4 py-4 bg-white shadow-xl rounded-2xl" style={{ maxWidth: '850px' }}>
           {questionData && (
             <>
               <h2 className="font-semibold bg-amber-300 text-gray-600 px-7 py-3 rounded-2xl leading-6 text-center xs:text-sm xs:px-3 sm:text-sm sm:px-4 md:text-base md:px-5 lg:text-lg lg:px-6 xl:text-xl xl:px-7">{questionData.title}</h2>
