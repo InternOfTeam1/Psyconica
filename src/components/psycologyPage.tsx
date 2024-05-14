@@ -110,7 +110,7 @@ const PsyAccount = () => {
     setComments(newCommentsArray);
     setCommentText('');
     setIsCommenting(false);
-    await updateUser(userId, {
+    await updateUser(userSlug, {
       ...userData,
       comments: newCommentsArray
     })
@@ -129,7 +129,7 @@ const PsyAccount = () => {
     setComments(updatedComments);
     setEditCommentId(null);
     setEditedCommentText('');
-    await updateUser(userId, {
+    await updateUser(userSlug, {
       ...userData,
       comments: updatedComments
     })
