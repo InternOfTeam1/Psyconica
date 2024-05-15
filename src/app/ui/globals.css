@@ -134,7 +134,7 @@
     border: 1px solid #e5e7eb; 
     max-height: 800px;
     overflow-y: auto;
-    width: 300px;
+    width: 350px;
     overflow-x: hidden;
     overflow-y: auto;
   }
@@ -162,6 +162,14 @@
 
   .card-small .mr-4 {
     margin-right: 5px;
+  }
+}
+
+@media (max-width: 640px) {
+  .photo-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 }
 

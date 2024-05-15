@@ -191,29 +191,30 @@ const PsyAccount = () => {
 
   return (
     <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px]">
-      <div className="flex flex-wrap -mx-1 lg:-mx-1">
+      <div className="flex flex-wrap -mx-1 lg:-mx-1 xs:mx-1 s:mx-2 md:mx-3">
         <div className="w-full lg:w-1/4 px-1 lg:mb-0 order-last lg:order-first">
           {userData && <PsychologistDashboard />}
         </div>
-        <div className="container ml-5 px-2 py-4 max-w-3xl bg-white shadow-xl rounded-2xl " style={{ maxWidth: '600px' }}>
+        <div className="container mx-auto mt-[-1px] sm:mx-2 md:mx-3 lg:mx-1 px-2 py-4 max-w-3xl bg-white shadow-xl rounded-2xl xs:container-min card-small" style={{ maxWidth: '600px' }}>
           {
             userData && (
               <>
-                <div className="text-center mb-5">
-
-
-                  <p className='flex items-center justify-start bg-amber-300 px-7 py-1 rounded-2xl text-center text-gray-800 leading-7'>
+                <div className="text-center mb-5 w-full">
+                <p className='flex items-center justify-start bg-amber-300 pl-6 py-1 rounded-2xl text-center text-gray-800 leading-6 '>
                     <Image
                       src="/bigLogo.webp"
                       alt="logo"
                       width={50}
                       height={50}
-                      className="mr-2" />
+                      className="w-[50px] h-[50px] sm:w-[50px] sm:h-[50px] md:w-[50px] md:h-[50px] lg:w-[50px] lg:h-[50px] xl:w-[40px] xl:h-[40px] xs:w-[40px] xs:h-[40px]"
+                       />
                     <input
                       type="text"
                       value={editedSlogan}
                       onChange={(e) => setEditedSlogan(e.target.value)}
-                      className={`border ${isEditing ? 'border-green-500' : 'border-none'} block w-full py-1 px-8 font-semibold text-gray-800 bg-transparent  `}
+                      className={`border ${isEditing ? 'border-green-500' : 'border-none'} block w-full font-semibold text-gray-800 bg-transparent text-center mr-3`}
+                      maxLength={25}
+                      placeholder="Введите ваш девиз (не более 25 символов)"
                       disabled={!isEditing}
                     />
 
@@ -226,14 +227,14 @@ const PsyAccount = () => {
                     <>
                       {isEditing ? (
                         <button
-                          className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm my-5 mt-5 ml-1"
+                          className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 ml-1"
                           onClick={handleSaveChanges}
                         >
                           Сохранить изменения
                         </button>
                       ) : (
                         <button
-                          className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm my-5 mt-5 ml-1"
+                          className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 ml-1"
                           onClick={() => setIsEditing(!isEditing)}
                         >
                           Редактировать личный кабинет
@@ -247,8 +248,8 @@ const PsyAccount = () => {
 
                 </div>
 
-
-                <div className="flex items-start ml-5">
+                
+                <div className="flex items-start ml-5 photo-block">
                   <div className="relative mb-4">
                     <Image
                       src={imageUrl || (userData?.photo ? userData.photo : '/default_avatar.jpg')}
@@ -263,7 +264,7 @@ const PsyAccount = () => {
                           type="file"
                           accept="image/*"
                           onChange={(e) => setImage(e.target.files?.[0] || null)}
-                          className="border border-green-500 font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm leading-6 p-1 mb-2"
+                          className="border border-green-500 font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm leading-6 p-1 mb-2 w-full" 
                           disabled={!isEditing}
                         />
                         <button
@@ -277,21 +278,19 @@ const PsyAccount = () => {
                       </>
                     )}
                   </div>
-                </div>
+                
 
                 <div className="flex ml-5 items-start">
-
-
                   <div className="flex flex-col flex-grow">
                     <div className="flex justify-between items-center">
                       <input
                         type="text"
                         value={editedName}
                         onChange={(e) => setEditedName(e.target.value)}
-                        className={`border ${isEditing ? 'border-green-500' : 'border-none'} font-semibold text-gray-800 p-1 bg-white`}
+                        className={`border ${isEditing ? 'border-green-500' : 'border-none'} font-semibold text-gray-800 p-1 bg-white xs:w-[90%] w-full`}
                         disabled={!isEditing}
                       />
-                      <div className='mr-4 '>
+                      <div className='mx-2 xs:w-[90%]'>
                         <RatingStars userSlug={userSlug} currentRating={rating} setRating={setRating} />
                       </div>
                     </div>
@@ -299,31 +298,35 @@ const PsyAccount = () => {
                       type="text"
                       value={editedExpert}
                       onChange={(e) => setEditedExpert(e.target.value)}
-                      className={`border ${isEditing ? 'border-green-500' : 'border-none'} bg-white font-semibold text-gray-800  p-1 mt-5]`}
+                      className={`border ${isEditing ? 'border-green-500' : 'border-none'} bg-white font-semibold text-gray-800 py-2 xs:w-[90%] w-full ml-1`}
                       disabled={!isEditing}
                     />
                   </div>
                 </div>
+                </div>
 
-                <div>
-                  <p className='font-bold text-gray-800 mt-3 ml-5'>Информация о психологе:</p>
+                <div className="card-info lg:w-[90%] s:w-[100%] xs:w-[100%] md:w-[100%] mr-10 " >
+                  <p className='font-bold text-gray-800 mt-1 ml-5 mr-5'>Информация о психологе:</p>
                   <textarea
                     value={editedAbout}
                     onChange={(e) => setEditedAbout(e.target.value)}
-                    className={`border ${isEditing ? 'border-green-500' : 'border-none'} text-gray-600  mt-2 ml-5 p-2 rounded-md resize-none w-[90%]`}
+                    className={`border ${isEditing ? 'border-green-500' : 'border-none'} text-gray-600 w-full mt-2 ml-4 p-2 rounded-md resize-none s:w-[100%] xs:w-[100%] md:w-[100%]`}
                     disabled={!isEditing}
-                    rows={3}
-                    placeholder="Введите информацию о cебе..."
+                    rows={8}
+                    maxLength={570}
+                    placeholder="Введите информацию о cебе... (не более 570 символов)"
+                  
                   />
                 </div>
-                <div>
-                  <p className='font-bold text-gray-800  mt-3 ml-5'>Контактная информация:</p>
+                <div className=" lg:w-[90%] s:w-[100%] xs:w-[100%] mb-0 md:w-[100%] mr-10">
+                  <p className='font-bold text-gray-800 mt-3 ml-5'>Контактная информация:</p>
                   <textarea
                     value={editedContact}
                     onChange={(e) => setEditedContact(e.target.value)}
-                    className={`border ${isEditing ? 'border-green-500' : 'border-none'} text-gray-600 leading-6 mt-2 ml-5 rounded-md resize-none w-[90%]`}
+                    className={`border ${isEditing ? 'border-green-500' : 'border-none'} text-gray-600 leading-6 mt-2 ml-4 rounded-md resize-none s:w-[100%] xs:w-[100%] md:w-[100%]`}
                     disabled={!isEditing}
                     rows={3}
+                    maxLength={118}
                   />
                 </div>
               </>
@@ -338,10 +341,10 @@ const PsyAccount = () => {
                 className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sn my-5 mt-5 ml-1"
                 onClick={() => setIsCommenting(true)}>Комментировать</button>
             ) : (
-              <div className="flex items-center py-3">
+              <div className="flex w-full items-center py-3">
                 <input
                   type="text"
-                  className="w-10/12 font-semibold text-gray-500 text-md leading-6 mr-2"
+                  className="lg:w-[90%] w-10/12 font-semibold text-gray-500 text-md leading-6 mr-2"
                   value={commentText}
                   onChange={(e) => setCommentText(e.target.value)}
                   placeholder="Текст комментария"
@@ -408,7 +411,7 @@ const PsyAccount = () => {
             </ul>
           </div>
         </div>
-        <div className="p-3 ml-5 bg-white rounded-2xl shadow-2xl border mt-[-3px]" style={{ width: '300px', maxHeight: '800px', overflowY: 'auto' }}>
+        <div className="p-3 mx-auto mt-[-3px] bg-white rounded-2xl shadow-2xl border xs:py-3 my-5 md:py-0 md:py-3-lg xl:py-3-2xl " style={{ width: '300px', maxHeight: '800px', overflowY: 'auto' }}>
           <div className="w-full p-1">
             <p className='font-semibold  text-gray-800 leading-6 mt-3 mx-3'>Вопросы, на которые ответил психолог:</p>
             {userData && userData.answeredQuestions && (
