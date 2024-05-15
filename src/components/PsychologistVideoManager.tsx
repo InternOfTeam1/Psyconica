@@ -61,52 +61,18 @@ const PsychologistDashboard = () => {
   const closeModal = () => {
     setIsOpen(false);
   };
-  const showMoreVideos = () => {
-    setVisibleCount(prevCount => prevCount + 1);
-  };
-
   
 
+  
+  const containerStyle: React.CSSProperties = {
+    maxHeight: '800px',
+    overflowY: 'auto'
+  }
 
   return (
-   <div className="p-3 m-4 bg-white rounded-2xl shadow-xl border mt-[-3px]">
-    <div className="flex flex-wrap justify-center gap-2">
-      {users.slice(0, visibleCount).map((url, index) => (
-        <div key={index} className="p-1 w-full">
-          <div className="cursor-pointer border-2 rounded-2xl overflow-hidden pb-3 bg-gray-200"
-               style={{ boxShadow: '0 2px 6px rgba(0,0,0,0.4)' }}
-               onClick={() => openModal(url)}>
-            <iframe
-              width="100%"
-              height="150"
-              src={url}
-              title="YouTube video player"
-              allowFullScreen
-              className="rounded-lg"
-            ></iframe>
-          </div>
-          {role === 'psy' && userId === userSlug && (
-            <button onClick={() => removeVideo(url)} className="bg-red-300 text-white font-bold rounded hover:bg-red-500 mt-2 w-full">
-              Удалить
-            </button>
-            
-          )}
-          {index < users.length - 1 && (
-            <div className="border-b-2 border-gray-700 my-2"></div> 
-          )}
-        </div>
-      ))}
-        
-      </div>
-      {users.length > visibleCount && (
-        <div className="flex justify-center mt-2 mb-2 ">
-          <button onClick={showMoreVideos} className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">
-            Еще
-          </button>
-        </div>
-
-      )}
-      {role === 'psy' && userId === userSlug && (
+    <>
+  <div className='p-3 m-4 bg-white rounded-2xl shadow-xl border mt-[-3px]' >
+    {role === 'psy' && userId === userSlug && (
         <>
           <input
             type="text"
@@ -120,6 +86,38 @@ const PsychologistDashboard = () => {
           </button>
         </>
       )}
+      </div>
+    <div className="p-3 m-4 bg-white rounded-2xl shadow-xl border mt-[-3px]" style={containerStyle}>
+      <div className="flex flex-wrap justify-center gap-2">
+        
+    {users.map((url, index) => (
+      <div key={index} className="p-1 w-full">
+        <div className="cursor-pointer border-2 rounded-2xl overflow-hidden pb-3 bg-gray-200"
+             style={{ boxShadow: '0 2px 6px rgba(0,0,0,0.4)' }}
+             onClick={() => openModal(url)}>
+          <iframe
+            width="100%"
+            height="150"
+            src={url}
+            title="YouTube video player"
+            allowFullScreen
+            className="rounded-lg"
+          ></iframe>
+        </div>
+        {role === 'psy' && userId === userSlug && (
+          <button onClick={() => removeVideo(url)} className="bg-red-300 text-white font-bold rounded hover:bg-red-500 mt-2 w-full">
+            Удалить
+          </button>
+        )}
+        {index < users.length - 1 && (
+          <div className="border-b-2 border-gray-700 my-2"></div> 
+        )}
+      </div>
+      ))}
+        
+      </div>
+     
+      
 
       {isOpen && (
         <Transition.Root show={isOpen} as={Fragment}>
@@ -168,7 +166,7 @@ const PsychologistDashboard = () => {
       )}
       
     </div>
-    
+    </>
   );
 };
 
