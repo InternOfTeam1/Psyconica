@@ -45,6 +45,10 @@ const PsyAccount = () => {
   const [rating, setRating] = useState(0);
 
 
+  
+  
+
+
 
 
   useEffect(() => {
@@ -212,17 +216,12 @@ const PsyAccount = () => {
                       type="text"
                       value={editedSlogan}
                       onChange={(e) => setEditedSlogan(e.target.value)}
-                      className={`border ${isEditing ? 'border-green-500' : 'border-none'} block w-full font-semibold text-gray-800 bg-transparent text-center mr-3`}
-                      maxLength={25}
+                      className={`border ${isEditing ? 'border-green-500' : 'border-none'} block w-full font-semibold italic text-gray-800 bg-transparent text-center ml-[-3px]`}
+                      maxLength={40}
                       placeholder="Введите ваш девиз (не более 25 символов)"
                       disabled={!isEditing}
                     />
-
                   </p>
-
-
-
-
                   {userId === userData.slug && (
                     <>
                       {isEditing ? (
@@ -240,10 +239,7 @@ const PsyAccount = () => {
                           Редактировать личный кабинет
                         </button>
                       )}
-
-
                     </>
-
                   )}
 
                 </div>
@@ -289,6 +285,7 @@ const PsyAccount = () => {
                         onChange={(e) => setEditedName(e.target.value)}
                         className={`border ${isEditing ? 'border-green-500' : 'border-none'} font-semibold text-gray-800 p-1 bg-white xs:w-[90%] w-full`}
                         disabled={!isEditing}
+                        maxLength={20}
                       />
                       <div className='mx-2 xs:w-[90%]'>
                         <RatingStars userSlug={userSlug} currentRating={rating} setRating={setRating} />
@@ -300,6 +297,7 @@ const PsyAccount = () => {
                       onChange={(e) => setEditedExpert(e.target.value)}
                       className={`border ${isEditing ? 'border-green-500' : 'border-none'} bg-white font-semibold text-gray-800 py-2 xs:w-[90%] w-full ml-1`}
                       disabled={!isEditing}
+                      maxLength={30}
                     />
                   </div>
                 </div>
@@ -318,8 +316,8 @@ const PsyAccount = () => {
                   
                   />
                 </div>
-                <div className=" lg:w-[90%] s:w-[100%] xs:w-[100%] mb-0 md:w-[100%] mr-10">
-                  <p className='font-bold text-gray-800 mt-3 ml-5'>Контактная информация:</p>
+                <div className=" lg:w-[90%] s:w-[100%] xs:w-[100%] md:w-[100%] mb-0 mr-10">
+                  <p className='font-bold text-gray-800 mt-1 ml-5 mr-5'>Контактная информация:</p>
                   <textarea
                     value={editedContact}
                     onChange={(e) => setEditedContact(e.target.value)}
@@ -333,15 +331,21 @@ const PsyAccount = () => {
             )
           }
 
-          <hr className="mt-10 my-4 border-gray-400" />
-          <div className="mt-5 ml-5" style={{ maxHeight: '800px', overflowY: 'auto' }}>
-            <p className='text-lg font-bold ml-2'>Комментарии</p>
-            {!isCommenting ? (
-              <button
-                className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sn my-5 mt-5 ml-1"
-                onClick={() => setIsCommenting(true)}>Комментировать</button>
-            ) : (
-              <div className="flex w-full items-center py-3">
+          <hr className="mt-10 my-4 border-gray-400 xs:mt-0 sm:mt-0 md:mt-5 lg:mt-5" />
+          <div className="mt-5 ml-5 xs:mt-0 sm:mt-0 md:mt-0" style={{ maxHeight: '90vh', overflowY: 'auto', overflowX: 'hidden'}}>
+          <div className="flex items-center justify-between">
+           <p className='text-lg font-bold ml-2 lg:text-lg md:text-lg xs:text-xs sm:text-sm mx-5'>Комментарии</p>
+           <button
+            className="text-gray-600 hover:text-blue-500 focus:outline-none border border-gray-300 rounded-2xl px-3 py-1 mr-5 text-lg ml-2 lg:text-sm md:text-sm xs:text-xs sm:text-sm mx-5"
+             onClick={() => setIsCommenting(!isCommenting)}
+           >
+           {isCommenting ? 'Скрыть комментарии' : 'Показать комментарии'}
+           </button>
+        </div>
+
+          {isCommenting && (
+             <>
+              <div className="flex w-full items-center py-3 xs:ml-1 sm:ml-1 md:ml-1 ">
                 <input
                   type="text"
                   className="lg:w-[90%] w-10/12 font-semibold text-gray-500 text-md leading-6 mr-2"
@@ -355,12 +359,14 @@ const PsyAccount = () => {
                   }}
                 />
                 <button
-                  className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sn my-5 mt-5 ml-1"
-                  onClick={handleComment}>Сохранить</button>
+                  className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold lg:text-sm md:text-sm xs:text-xs sm:text-sm mx-5"
+                  onClick={() => {
+                    handleComment();
+                    setIsCommenting(true);
+                  }}>Сохранить</button>
               </div>
-            )}
 
-            <ul style={{ maxHeight: '300px', overflowY: 'auto' }}>
+            <ul style={{ maxHeight: '500px', overflowY: 'auto' }}>
               {comments.map(comment => (
                 <li className="flex flex-col p-3 bg-white shadow rounded-lg mb-3 mt-2" key={comment.id}>
                   <div className="flex items-center space-x-3 justify-between">
@@ -409,6 +415,8 @@ const PsyAccount = () => {
                 </li>
               ))}
             </ul>
+            </>
+           )}
           </div>
         </div>
         <div className="p-3 mx-auto mt-[-3px] bg-white rounded-2xl shadow-2xl border xs:py-3 my-5 md:py-0 md:py-3-lg xl:py-3-2xl " style={{ width: '300px', maxHeight: '800px', overflowY: 'auto' }}>
