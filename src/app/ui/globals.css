@@ -96,7 +96,7 @@
   }
 }
 
-@media (max-width: 859px) {
+@media (max-width: 896px) {
   .container {
     display: flex;
     flex-direction: column;
@@ -121,7 +121,7 @@
   }
 }
 
-@media (max-width: 400px) and (min-width: 360px) {
+@media (max-width: 640px) and (min-width: 360px) {
   .card-small {
     padding: 0.75rem; 
     margin-left: auto;
@@ -140,21 +140,21 @@
   }
 }
 
-@media (max-width: 400px) and (min-width: 360px) {
+@media (max-width: 640px) and (min-width: 360px) {
   .card-small {
     font-size: 0.75rem; 
     max-width: 90%; 
   }
 }
 
-@media (max-width: 400px) and (min-width: 360px) {
+@media (max-width: 640px) and (min-width: 360px) {
   .card-small .flex {
     justify-content: flex-start;
     margin-left: 5px;
   }
 }
 
-@media (max-width: 400px) and (min-width: 360px) {
+@media (max-width: 640px) and (min-width: 360px) {
   .card-small input[type="text"] {
     width: 90%; 
     padding: 0.5rem;
@@ -170,7 +170,41 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-bottom: 0;
   }
+}
+
+@media (min-width: 300px) and (max-width: 640px)  {
+  .profile-info {
+    flex-direction: column;
+    align-items: center;
+    font-size: 1rem;
+    flex-wrap: wrap;
+    text-align: center;
+    margin-left: 1.75rem;
+  }
+  .profile-info .name {
+    margin-right: 0.25rem;
+  }
+
+  .profile-info .m-l {
+    margin-left: -1rem;
+    margin-right: 0.75rem;
+    margin-bottom: 0.5rem;
+    font-style: italic;
+  }
+}
+
+@media (min-width: 300px) and (max-width: 640px)  {
+     .info-block {
+      flex-direction: column;
+      align-items: center;
+      margin-top: 0;
+      margin-right: 0.75rem;
+      margin-left: 2rem;
+      text-align: center;
+      font-weight: 600;
+     }
 }
 
 .fixed.top-0 {

@@ -43,7 +43,7 @@ const PsyAccount = () => {
   const userSlug: any = params.slug;
   const router = useRouter();
   const [rating, setRating] = useState(0);
-
+  
 
   
   
@@ -277,18 +277,18 @@ const PsyAccount = () => {
                   </div>
                 
 
-                <div className="flex ml-5 items-start">
-                  <div className="flex flex-col flex-grow">
-                    <div className="flex justify-between items-center">
+                <div className="flex ml-3 items-start">
+                  <div className="flex flex-col flex-grow profile-info">
+                    <div className="flex justify-between items-center p-1 profile-info">
                       <input
                         type="text"
                         value={editedName}
                         onChange={(e) => setEditedName(e.target.value)}
-                        className={`border ${isEditing ? 'border-green-500' : 'border-none'} font-semibold text-gray-800 p-1 bg-white xs:w-[90%] w-full`}
+                        className={`border ${isEditing ? 'border-green-500' : 'border-none'} font-semibold text-gray-800 p-1 bg-white xs:w-[90%] xs:text-lg sm:text-lg md:text-lg lg:text-lg `}
                         disabled={!isEditing}
                         maxLength={20}
                       />
-                      <div className='mx-2 xs:w-[90%]'>
+                      <div className='mx-2 xs:w-[90%] profile-info name '>
                         <RatingStars userSlug={userSlug} currentRating={rating} setRating={setRating} />
                       </div>
                     </div>
@@ -296,7 +296,7 @@ const PsyAccount = () => {
                       type="text"
                       value={editedExpert}
                       onChange={(e) => setEditedExpert(e.target.value)}
-                      className={`border ${isEditing ? 'border-green-500' : 'border-none'} bg-white font-semibold text-gray-800 py-2 xs:w-[90%] w-full ml-1`}
+                      className={`border ${isEditing ? 'border-green-500' : 'border-none'} bg-white font-semibold text-gray-800 py-2 xs:w-[90%] ml-2 xs:text-lg sm:text-lg md:text-lg lg:text-lg profile-info m-l `}
                       disabled={!isEditing}
                       maxLength={30}
                     />
@@ -304,28 +304,28 @@ const PsyAccount = () => {
                 </div>
                 </div>
 
-                <div className="card-info lg:w-[90%] s:w-[100%] xs:w-[100%] md:w-[100%] mr-10 " >
-                  <p className='font-bold text-gray-800 mt-1 ml-5 mr-5'>Информация о психологе:</p>
+                <div className="card-info lg:w-[90%] s:w-[100%] xs:w-[100%] md:w-[100%] mr-10" >
+                  <p className='font-bold text-gray-800 mt-1 ml-5 mr-5 info-block xs:text-lg sm:text-lg md:text-lg lg:text-lg'>Информация о психологе:</p>
                   <textarea
                     value={editedAbout}
                     onChange={(e) => setEditedAbout(e.target.value)}
                     className={`border ${isEditing ? 'border-green-500' : 'border-none'} text-gray-600 w-full mt-2 ml-4 p-2 rounded-md resize-none s:w-[100%] xs:w-[100%] md:w-[100%]`}
                     disabled={!isEditing}
                     rows={8}
-                    maxLength={570}
+                    maxLength={500}
                     placeholder="Введите информацию о cебе... (не более 570 символов)"
                   
                   />
                 </div>
                 <div className=" lg:w-[90%] s:w-[100%] xs:w-[100%] md:w-[100%] mb-0 mr-10">
-                  <p className='font-bold text-gray-800 mt-1 ml-5 mr-5'>Контактная информация:</p>
+                  <p className='font-bold text-gray-800 mt-1 ml-5 mr-5 info-block xs:text-lg sm:text-lg md:text-lg lg:text-lg'>Контактная информация:</p>
                   <textarea
                     value={editedContact}
                     onChange={(e) => setEditedContact(e.target.value)}
-                    className={`border ${isEditing ? 'border-green-500' : 'border-none'} text-gray-600 leading-6 mt-2 ml-4 rounded-md resize-none s:w-[100%] xs:w-[100%] md:w-[100%]`}
+                    className={`border ${isEditing ? 'border-green-500' : 'border-none'} text-gray-600 leading-6 mt-2 p-2 ml-4 rounded-md resize-none s:w-[100%] xs:w-[100%] md:w-[100%]`}
                     disabled={!isEditing}
                     rows={3}
-                    maxLength={118}
+                    maxLength={100}
                   />
                 </div>
               </>
