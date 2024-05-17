@@ -365,14 +365,14 @@ const QuestionDetail = (props: Props) => {
                       }}
                     />
                     <button
-                      className='text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sn my-5 mt-5 ml-1'
+                      className='text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase uppercase font-semibold xs:text-xs xs:normal-case xs:mt-3 xs:ml-0 sm:text-xs sm:normal-case sm:mt-3 sm:ml-0 md:text-xs lg:text-xs lg:uppercase xl:text-xs xl:uppercase my-5 mt-5 ml-1'
                       onClick={onNewAnswerSave}
                     >
-                      Опубликовать
+                      опубликовать
                     </button>
                   </>
-                  : (<button className='text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sn my-5 mt-5 ml-3'
-                    onClick={onAnswerAdd}>Ответить</button>)
+                  : (<button className='text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs xs:normal-case xs:mt-3 xs:ml-0 sm:text-xs sm:normal-case sm:mt-3 sm:ml-0 md:text-xs lg:text-xs lg:uppercase xl:text-xs xl:uppercase my-5 mt-5 ml-3'
+                    onClick={onAnswerAdd}>ответить</button>)
               ) : null}
 
               {sortedAnswers.map((answer: Answers, index: number) => {
@@ -400,14 +400,14 @@ const QuestionDetail = (props: Props) => {
 
                     <div className="flex items-start mb-4">
 
-                      <p className="font-semibold text-gray-500 ml-1 mr-1 px-1 xs:text-sm  sm:text-sm md:text-base lg:text-lg xl:text-xl ">{index + 1}.</p>
+                      <p className="font-semibold text-gray-500 mt-2 ml-1 mr-1 px-1 xs:text-md sm:text-lg md:text-lg lg:text-xl xl:text-xl">{index + 1}.</p>
                       {editingAnswerNum === answer.num ? (
                         <>
                           <div className='w-full'>
                             <h3 className="font-semibold text-black text-md leading-6 xs:text-base sm:text-base md:text-base lg:text-lg  xl:text-xl ">
                               <input
                                 type="text"
-                                className='w-10/12 font-semibold text-gray-500 text-md leading-6'
+                                className='w-10/12 font-semibold text-gray-500 text-md leading-6 mt-2'
                                 value={editedAnswer}
                                 onChange={(e) => onAnswerChange(e, answer.num)}
                                 placeholder="Текст ответа"
@@ -420,25 +420,23 @@ const QuestionDetail = (props: Props) => {
                             </h3>
                           </div>
                           <button
-                            className="text-white bg-gray-500 hover:bg-blue-500 focus:ring-4 focus:ring-blue-300 font-semibold rounded-2xl text-sm py-1 px-2 text-center ml-auto mr-7 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg"
+                            className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs xs:normal-case xs:ml-0 sm:text-xs sm:normal-case sm:mt-3 sm:ml-0 md:text-xs lg:text-xs lg:uppercase xl:text-xs xl:uppercase mt-1 ml-1"
                             onClick={() => onAnswerSave(answer.num)}
                           >
-                            Сохранить
+                            сохранить
                           </button>
                         </>
                       ) : (
                         <>
-                          <h3 className="font-semibold text-gray-600 leading-6 sm:text-md md:text-lg lg:text-xl">
+                          <h3 className="font-semibold text-gray-600 leading-6 sm:text-md md:text-lg lg:text-xl mt-2">
                             {answer.title}
                           </h3>
                           {((userRole === 'psy' && answer.userId === userId) || (userRole !== 'psy' && answer.userId === userId)) && (
                             <>
-                              <button
-                                className="text-white bg-gray-500 hover:bg-blue-500 focus:ring-4 focus:ring-blue-300 font-semibold rounded-2xl text-sm py-1 px-2 text-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg ml-auto"
+                              <FaPen
+                                className="cursor-pointer mt-1 mr-3 ml-auto"
                                 onClick={() => onAnswerEdit(answer.num)}
-                              >
-                                Изменить
-                              </button>
+                              />
                               <div className='cursor-pointer mt-1 mr-3' onClick={() => onAnswerDelete(answer.num)}>
                                 <MdClose />
                               </div>
@@ -463,7 +461,7 @@ const QuestionDetail = (props: Props) => {
 
 
                     <div className='font-semibold  text-gray-800 leading-6 mt-2 ml-5'>
-                      <p className='text-lg'>Комментарии</p>
+                      <p className='text-lg uppercase font-semibold xs:text-base xs:normal-case xs:ml-0 sm:text-base sm:normal-case sm:ml-0 md:text-base lg:text-base lg:normal-case xl:text-lg xl:normal-case'>Комментарии</p>
                       <div>
                         {
                           questionData?.comments?.filter(comment => comment.answerId === answer.num && comment.num !== lastCommentId).map((comment: any, index: number) => (
@@ -533,14 +531,14 @@ const QuestionDetail = (props: Props) => {
                             }}
                           />
                           <button
-                            className='text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sn my-5 mt-4 ml-1'
+                            className='text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs xs:normal-case xs:mt-3 xs:ml-0 sm:text-xs sm:normal-case sm:mt-3 sm:ml-0 md:text-xs lg:text-xs lg:uppercase xl:text-xs xl:uppercase my-5 mt-4 ml-1'
                             onClick={() => onCommentCreate(String(answer.num))}
                           >
-                            Отправить
+                            отправить
                           </button>
                         </>
-                        : (<button className='text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sn my-5 mt-5 ml-3'
-                          onClick={() => onCommentAdd(answer.num)}>Комментировать</button>)}
+                        : (<button className='text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs xs:normal-case xs:mt-3 sm:text-xs sm:normal-case sm:mt-3 md:text-xs lg:text-xs lg:uppercase xl:text-xs xl:uppercase my-5 mt-5 ml-4'
+                          onClick={() => onCommentAdd(answer.num)}>комментировать</button>)}
                     </>
 
                     <hr className="my-4 border-gray-400" />
