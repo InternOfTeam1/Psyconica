@@ -80,6 +80,7 @@ export const signInWithTwitter = async (): Promise<User2 | null> => {
 async function addUserDocument(user: User) {
   const userData: Users = {
     name: user.displayName,
+    telegramUserID: '',
     mail: user.email,
     photo: user.photoURL,
     role: 'user',

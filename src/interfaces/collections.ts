@@ -62,8 +62,9 @@ export interface Users {
   aboutUser?: any,
   contactUser?: any
   slogan?: string;
-  expert:  string;
+  expert: string;
   comments: Comment[];
+  telegramUserID?: any;
 
 }
 
