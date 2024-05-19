@@ -351,7 +351,8 @@ const PsyAccount = () => {
                     <p className="text-center">
                       UserId в телеграмме (Чтобы получить UserId перейдите по ссылке{' '}
                       <a
-                        href="https://t.me/getMyUserIdBot"
+                        https://web.telegram.org/a/#460693903
+                        "
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-500 underline"
