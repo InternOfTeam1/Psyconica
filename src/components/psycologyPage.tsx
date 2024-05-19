@@ -14,6 +14,8 @@ import { useAppSelector } from '../redux/hooks';
 import { useRouter } from 'next/navigation';
 import RatingStars from './Rating';
 import { uploadImageToStorage } from '@/lib/firebase/firebaseConfig';
+import { sendTelegramMessage } from '../app/script/telegram';
+
 
 
 export function fetchUserData(slug: any) {
@@ -35,18 +37,20 @@ const PsyAccount = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [image, setImage] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [telegramUserID, setTelegramUserID] = useState<string>('');
   const userId = useAppSelector((state) => state.auth.user?.id);
   const userName = useAppSelector((state) => state.auth.user?.name);
   const userPhoto = useAppSelector((state) => state.auth.user?.photo);
   const userRole = useAppSelector((state) => state.auth.user?.role);
+  const userEmail = useAppSelector((state) => state.auth.user?.mail);
   const params = useParams();
   const userSlug: any = params.slug;
   const router = useRouter();
   const [rating, setRating] = useState(0);
 
 
-  
-  
+
+
 
 
 
@@ -64,6 +68,7 @@ const PsyAccount = () => {
         setEditedSlogan(fetchedUserData.slogan || '');
         setEditedExpert(fetchedUserData.expert || '');
         setEditedName(fetchedUserData.name || '');
+        setTelegramUserID(fetchedUserData.telegramUserID || '');
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
@@ -83,6 +88,7 @@ const PsyAccount = () => {
         slogan: editedSlogan,
         expert: editedExpert,
         name: editedName,
+        telegramUserID: telegramUserID,
       });
 
       setUserData({
@@ -92,6 +98,7 @@ const PsyAccount = () => {
         slogan: editedSlogan,
         expert: editedExpert,
         name: editedName,
+        telegramUserID: telegramUserID,
       });
       setIsEditing(false);
     } catch (error) {
@@ -193,8 +200,16 @@ const PsyAccount = () => {
     }
   };
 
+
+  const handleSendMessage = async (psyName: any, telegramUserId: any) => {
+    console.log('Sending message to Telegram...');
+    await sendTelegramMessage(userName, userEmail, psyName, telegramUserId);
+  };
+
+  const getMyUserId = 'https://web.telegram.org/a/#460693903';
+
   return (
-  
+
     <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px]">
       <div className="flex flex-wrap -mx-1 lg:-mx-1 xs:mx-1 s:mx-2 md:mx-3">
         <div className="w-full lg:w-1/4 px-1 lg:mb-0 order-last lg:order-first">
@@ -205,14 +220,14 @@ const PsyAccount = () => {
             userData && (
               <>
                 <div className="text-center mb-5 w-full">
-                <p className='flex items-center justify-start bg-amber-300 pl-6 py-1 rounded-2xl text-center text-gray-800 leading-6 '>
+                  <p className='flex items-center justify-start bg-amber-300 pl-6 py-1 rounded-2xl text-center text-gray-800 leading-6 '>
                     <Image
                       src="/bigLogo.webp"
                       alt="logo"
                       width={50}
                       height={50}
                       className="w-[50px] h-[50px] sm:w-[50px] sm:h-[50px] md:w-[50px] md:h-[50px] lg:w-[50px] lg:h-[50px] xl:w-[40px] xl:h-[40px] xs:w-[40px] xs:h-[40px]"
-                       />
+                    />
                     <input
                       type="text"
                       value={editedSlogan}
@@ -225,6 +240,7 @@ const PsyAccount = () => {
                   </p>
                   {userId === userData.slug && (
                     <>
+
                       {isEditing ? (
                         <button
                           className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 ml-1"
@@ -245,7 +261,7 @@ const PsyAccount = () => {
 
                 </div>
 
-                
+
                 <div className="flex items-start ml-5 photo-block">
                   <div className="relative mb-4">
                     <Image
@@ -261,7 +277,7 @@ const PsyAccount = () => {
                           type="file"
                           accept="image/*"
                           onChange={(e) => setImage(e.target.files?.[0] || null)}
-                          className="border border-green-500 font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm leading-6 p-1 mb-2 w-full" 
+                          className="border border-green-500 font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm leading-6 p-1 mb-2 w-full"
                           disabled={!isEditing}
                         />
                         <button
@@ -275,149 +291,196 @@ const PsyAccount = () => {
                       </>
                     )}
                   </div>
-                
 
-                <div className="flex ml-5 items-start">
-                  <div className="flex flex-col flex-grow">
-                    <div className="flex justify-between items-center">
+
+                  <div className="flex ml-3 items-start">
+                    <div className="flex flex-col flex-grow profile-info">
+                      <div className="flex justify-between items-center p-1 profile-info">
+                        <input
+                          type="text"
+                          value={editedName}
+                          onChange={(e) => setEditedName(e.target.value)}
+                          className={`border ${isEditing ? 'border-green-500' : 'border-none'} font-semibold text-gray-800 p-1 bg-white xs:w-[90%] xs:text-lg sm:text-lg md:text-lg lg:text-lg `}
+                          disabled={!isEditing}
+                          maxLength={20}
+                        />
+                        <div className='mx-2 xs:w-[90%] profile-info name '>
+                          <RatingStars userSlug={userSlug} currentRating={rating} setRating={setRating} />
+                        </div>
+                      </div>
                       <input
                         type="text"
-                        value={editedName}
-                        onChange={(e) => setEditedName(e.target.value)}
-                        className={`border ${isEditing ? 'border-green-500' : 'border-none'} font-semibold text-gray-800 p-1 bg-white xs:w-[90%] w-full`}
+                        value={editedExpert}
+                        onChange={(e) => setEditedExpert(e.target.value)}
+                        className={`border ${isEditing ? 'border-green-500' : 'border-none'} bg-white font-semibold text-gray-800 py-2 xs:w-[90%] ml-2 xs:text-lg sm:text-lg md:text-lg lg:text-lg profile-info m-l `}
                         disabled={!isEditing}
-                        maxLength={20}
+                        maxLength={30}
                       />
-                      <div className='mx-2 xs:w-[90%]'>
-                        <RatingStars userSlug={userSlug} currentRating={rating} setRating={setRating} />
-                      </div>
                     </div>
-                    <input
-                      type="text"
-                      value={editedExpert}
-                      onChange={(e) => setEditedExpert(e.target.value)}
-                      className={`border ${isEditing ? 'border-green-500' : 'border-none'} bg-white font-semibold text-gray-800 py-2 xs:w-[90%] w-full ml-1`}
-                      disabled={!isEditing}
-                      maxLength={30}
-                    />
                   </div>
                 </div>
-                </div>
 
-                <div className="card-info lg:w-[90%] s:w-[100%] xs:w-[100%] md:w-[100%] mr-10 " >
-                  <p className='font-bold text-gray-800 mt-1 ml-5 mr-5'>Информация о психологе:</p>
+                <div className="card-info lg:w-[90%] s:w-[100%] xs:w-[100%] md:w-[100%] mr-10" >
+                  <p className='font-bold text-gray-800 mt-1 ml-5 mr-5 info-block xs:text-lg sm:text-lg md:text-lg lg:text-lg'>Информация о психологе:</p>
                   <textarea
                     value={editedAbout}
                     onChange={(e) => setEditedAbout(e.target.value)}
                     className={`border ${isEditing ? 'border-green-500' : 'border-none'} text-gray-600 w-full mt-2 ml-4 p-2 rounded-md resize-none s:w-[100%] xs:w-[100%] md:w-[100%]`}
                     disabled={!isEditing}
                     rows={8}
-                    maxLength={570}
+                    maxLength={500}
                     placeholder="Введите информацию о cебе... (не более 570 символов)"
-                  
+
                   />
                 </div>
                 <div className=" lg:w-[90%] s:w-[100%] xs:w-[100%] md:w-[100%] mb-0 mr-10">
-                  <p className='font-bold text-gray-800 mt-1 ml-5 mr-5'>Контактная информация:</p>
+                  <p className='font-bold text-gray-800 mt-1 ml-5 mr-5 info-block xs:text-lg sm:text-lg md:text-lg lg:text-lg'>Контактная информация:</p>
                   <textarea
                     value={editedContact}
                     onChange={(e) => setEditedContact(e.target.value)}
-                    className={`border ${isEditing ? 'border-green-500' : 'border-none'} text-gray-600 leading-6 mt-2 ml-4 rounded-md resize-none s:w-[100%] xs:w-[100%] md:w-[100%]`}
+                    className={`border ${isEditing ? 'border-green-500' : 'border-none'} text-gray-600 leading-6 mt-2 p-2 ml-4 rounded-md resize-none s:w-[100%] xs:w-[100%] md:w-[100%]`}
                     disabled={!isEditing}
                     rows={3}
-                    maxLength={118}
+                    maxLength={100}
                   />
                 </div>
+
+                {userId === userData.slug && (
+
+                  <div className="flex flex-col items-start p-6 rounded-2xl text-gray-800 leading-6 bg-gray-100 space-y-4">
+                    <p className="text-center">
+                      UserId в телеграмме (Чтобы получить UserId перейдите по ссылке{' '}
+                      <a
+                        href="https://t.me/getMyUserIdBot"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-500 underline"
+                      >
+                        getMyUserId
+                      </a>
+                      {' '}и отправьте сообщение /start)
+                    </p>
+                    <input
+                      type="text"
+                      value={telegramUserID}
+                      onChange={(e) => setTelegramUserID(e.target.value)}
+                      disabled={!isEditing}
+                      placeholder="Введите userId"
+                      className={`appearance-none border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${!isEditing ? 'bg-gray-200' : 'bg-white'}`}
+                    />
+                    <p className="text-center">
+                      Чтобы получать уведомления о клиенте в Telegram, начните переписку с ботом {' '}
+                      <a
+                        href="https://web.telegram.org/a/#7050284789"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-500 underline"
+                      >
+                        psyBot
+                      </a>
+                    </p>
+                  </div>
+
+                )}
               </>
             )
           }
 
+
+
+          <button
+            onClick={() => handleSendMessage(userData?.name, userData?.telegramUserID)}
+            className="bg-blue-500 text-white px-4 py-2 rounded-md text-center hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+          >
+            Записаться на консультацию к {userData?.name}
+          </button>
+
           <hr className="mt-10 my-4 border-gray-400 xs:mt-0 sm:mt-0 md:mt-5 lg:mt-5" />
-          <div className="mt-5 ml-5 xs:mt-0 sm:mt-0 md:mt-0" style={{ maxHeight: '90vh', overflowY: 'auto', overflowX: 'hidden'}}>
-          <div className="flex items-center justify-between">
-           <p className='text-lg font-bold ml-2 lg:text-lg md:text-lg xs:text-xs sm:text-sm mx-5'>Комментарии</p>
-           <button
-            className="text-gray-600 hover:text-blue-500 focus:outline-none border border-gray-300 rounded-2xl px-3 py-1 mr-5 text-lg ml-2 lg:text-sm md:text-sm xs:text-xs sm:text-sm mx-5"
-             onClick={() => setIsCommenting(!isCommenting)}
-           >
-           {isCommenting ? 'Скрыть комментарии' : 'Показать комментарии'}
-           </button>
-        </div>
+          <div className="mt-5 ml-5 xs:mt-0 sm:mt-0 md:mt-0" style={{ maxHeight: '90vh', overflowY: 'auto', overflowX: 'hidden' }}>
+            <div className="flex items-center justify-between">
+              <p className='text-lg font-bold ml-2 lg:text-lg md:text-lg xs:text-xs sm:text-sm mx-5'>Комментарии</p>
+              <button
+                className="text-gray-600 hover:text-blue-500 focus:outline-none border border-gray-300 rounded-2xl px-3 py-1 mr-5 text-lg ml-2 lg:text-sm md:text-sm xs:text-xs sm:text-sm mx-5"
+                onClick={() => setIsCommenting(!isCommenting)}
+              >
+                {isCommenting ? 'Скрыть комментарии' : 'Показать комментарии'}
+              </button>
+            </div>
 
-          {isCommenting && (
-             <>
-              <div className="flex w-full items-center py-3 xs:ml-1 sm:ml-1 md:ml-1 ">
-                <input
-                  type="text"
-                  className="lg:w-[90%] w-10/12 font-semibold text-gray-500 text-md leading-6 mr-2"
-                  value={commentText}
-                  onChange={(e) => setCommentText(e.target.value)}
-                  placeholder="Текст комментария"
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
+            {isCommenting && (
+              <>
+                <div className="flex w-full items-center py-3 xs:ml-1 sm:ml-1 md:ml-1 ">
+                  <input
+                    type="text"
+                    className="lg:w-[90%] w-10/12 font-semibold text-gray-500 text-md leading-6 mr-2"
+                    value={commentText}
+                    onChange={(e) => setCommentText(e.target.value)}
+                    placeholder="Текст комментария"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        handleComment();
+                      }
+                    }}
+                  />
+                  <button
+                    className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold lg:text-sm md:text-sm xs:text-xs sm:text-sm mx-5"
+                    onClick={() => {
                       handleComment();
-                    }
-                  }}
-                />
-                <button
-                  className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold lg:text-sm md:text-sm xs:text-xs sm:text-sm mx-5"
-                  onClick={() => {
-                    handleComment();
-                    setIsCommenting(true);
-                  }}>Сохранить</button>
-              </div>
+                      setIsCommenting(true);
+                    }}>Сохранить</button>
+                </div>
 
-            <ul style={{ maxHeight: '500px', overflowY: 'auto' }}>
-              {comments.map(comment => (
-                <li className="flex flex-col p-3 bg-white shadow rounded-lg mb-3 mt-2" key={comment.id}>
-                  <div className="flex items-center space-x-3 justify-between">
-                    {editCommentId === comment.id ? (
-                      <div className="flex items-center justify-between">
-                        <input
-                          type="text"
-                          className="w-full font-semibold text-gray-500 text-md leading-6 mr-auto"
-                          value={editedCommentText}
-                          onChange={(e) => setEditedCommentText(e.target.value)}
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                              handleEditComment();
-                            }
-                          }}
-                        />
-                        <button
-                          className="text-white bg-gray-500 hover:bg-blue-500 focus:ring-4 focus:ring-blue-300 font-semibold rounded-2xl text-sm py-1 px-2 text-center mt-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg ml-3"
-                          onClick={handleEditComment}>Сохранить</button>
-                      </div>
-                    ) : (
-                      <>
-                        <div className="flex">
-                          <img src={comment.photo || '/default_avatar.jpg'} alt="User Avatar" className="w-10 h-10 rounded-full object-cover mr-3" />
-                          <div className="flex flex-col flex-grow">
-                            <p className="text-xs font-semibold text-gray-800">{comment?.userId === userId ? 'Вы' : comment?.name}</p>
-                            <p className="text-md text-gray-600 mt-1">{comment.content}</p>
+                <ul style={{ maxHeight: '500px', overflowY: 'auto' }}>
+                  {comments.map(comment => (
+                    <li className="flex flex-col p-3 bg-white shadow rounded-lg mb-3 mt-2" key={comment.id}>
+                      <div className="flex items-center space-x-3 justify-between">
+                        {editCommentId === comment.id ? (
+                          <div className="flex items-center justify-between">
+                            <input
+                              type="text"
+                              className="w-full font-semibold text-gray-500 text-md leading-6 mr-auto"
+                              value={editedCommentText}
+                              onChange={(e) => setEditedCommentText(e.target.value)}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                  handleEditComment();
+                                }
+                              }}
+                            />
+                            <button
+                              className="text-white bg-gray-500 hover:bg-blue-500 focus:ring-4 focus:ring-blue-300 font-semibold rounded-2xl text-sm py-1 px-2 text-center mt-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg ml-3"
+                              onClick={handleEditComment}>Сохранить</button>
                           </div>
-                        </div>
-                        {editCommentId !== comment.id && comment.userId === userId && (
+                        ) : (
                           <>
                             <div className="flex">
-                              <FaPen
-                                className='cursor-pointer mt-1 mr-3'
-                                onClick={() => { setEditCommentId(comment.id); setEditedCommentText(comment.content); }}
-                              />
-                              <div className='cursor-pointer mt-1 mr-5 ml-auto' onClick={() => handleDeleteComment(comment.id)}>
-                                <MdClose />
+                              <img src={comment.photo || '/default_avatar.jpg'} alt="User Avatar" className="w-10 h-10 rounded-full object-cover mr-3" />
+                              <div className="flex flex-col flex-grow">
+                                <p className="text-xs font-semibold text-gray-800">{comment?.userId === userId ? 'Вы' : comment?.name}</p>
+                                <p className="text-md text-gray-600 mt-1">{comment.content}</p>
                               </div>
                             </div>
+                            {editCommentId !== comment.id && comment.userId === userId && (
+                              <>
+                                <div className="flex">
+                                  <FaPen
+                                    className='cursor-pointer mt-1 mr-3'
+                                    onClick={() => { setEditCommentId(comment.id); setEditedCommentText(comment.content); }}
+                                  />
+                                  <div className='cursor-pointer mt-1 mr-5 ml-auto' onClick={() => handleDeleteComment(comment.id)}>
+                                    <MdClose />
+                                  </div>
+                                </div>
+                              </>
+                            )}
                           </>
                         )}
-                      </>
-                    )}
-                  </div>
-                </li>
-              ))}
-            </ul>
-            </>
-           )}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
           </div>
         </div>
         <div className="p-3 mx-auto mt-[-3px] bg-white rounded-2xl shadow-2xl border xs:py-3 my-5 md:py-0 md:py-3-lg xl:py-3-2xl " style={{ width: '300px', maxHeight: '800px', overflowY: 'auto' }}>
