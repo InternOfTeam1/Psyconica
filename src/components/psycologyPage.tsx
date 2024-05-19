@@ -206,7 +206,7 @@ const PsyAccount = () => {
     await sendTelegramMessage(userName, userEmail, psyName, telegramUserId);
   };
 
-  const getMyUserId = 'https://web.telegram.org/a/#460693903';
+
 
   return (
 
@@ -351,8 +351,7 @@ const PsyAccount = () => {
                     <p className="text-center">
                       UserId в телеграмме (Чтобы получить UserId перейдите по ссылке{' '}
                       <a
-                        https://web.telegram.org/a/#460693903
-                        "
+                        href="https://web.telegram.org/a/#460693903"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-500 underline"
