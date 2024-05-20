@@ -10,6 +10,7 @@ import Image from 'next/image';
 import PsychologistDashboard from './PsychologistVideoManager';
 import { FaPen } from 'react-icons/fa';
 import { MdClose } from 'react-icons/md';
+import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 import { useAppSelector } from '../redux/hooks';
 import { useRouter } from 'next/navigation';
 import RatingStars from './Rating';
@@ -47,11 +48,10 @@ const PsyAccount = () => {
   const userSlug: any = params.slug;
   const router = useRouter();
   const [rating, setRating] = useState(0);
-
-
-
-
-
+  const [showAbout, setShowAbout] = useState(true);
+  const [showContact, setShowContact] = useState(true);
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const [messageStatus, setMessageStatus] = useState<string | null>(null);
 
 
 
@@ -105,6 +105,20 @@ const PsyAccount = () => {
       console.error('Error updating user data:', error);
     }
   };
+
+  useEffect(() => {
+    const handleResize = () => {
+      const screenWidth = window.innerWidth;
+      setIsSmallScreen(screenWidth <= 768);
+      setShowAbout(screenWidth > 640);
+      setShowContact(screenWidth > 640);
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleComment = async () => {
     if (!commentText.trim()) return;
@@ -201,9 +215,13 @@ const PsyAccount = () => {
   };
 
 
-  const handleSendMessage = async (psyName: any, telegramUserId: any) => {
-    console.log('Sending message to Telegram...');
-    await sendTelegramMessage(userName, userEmail, psyName, telegramUserId);
+  const handleSendMessage = async (psyName: any, telegramUserId: any, email: any) => {
+    try {
+      await sendTelegramMessage(userName, userEmail, psyName, telegramUserId);
+      setMessageStatus('Уведомление успешно отправлено в Telegram психолога.');
+    } catch (error) {
+      setMessageStatus(`Психолог не может получать уведомления. Пожалуйста, пишите на почтовый адрес: ${email}`);
+    }
   };
 
 
@@ -316,42 +334,83 @@ const PsyAccount = () => {
                         disabled={!isEditing}
                         maxLength={30}
                       />
+                      <button
+                        onClick={() => handleSendMessage(userData?.name, userData?.telegramUserID, userData?.email)}
+                        className="bg-blue-500 text-white text-sm px-4 py-2 ml-2 my-2 rounded-md text-center hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 max-w-xs w-auto "
+                      >
+                        <div>Записаться на консультацию</div>
+                        <div>к {userData?.name}</div>
+                      </button>
+
+                      {messageStatus && (
+                        <p className={`text-center mt-2 text-sm ${messageStatus.includes('успешно') ? 'text-green-500' : 'text-red-500'}`}>
+                          {messageStatus}
+                        </p>
+                      )}
+
                     </div>
                   </div>
                 </div>
 
-                <div className="card-info lg:w-[90%] s:w-[100%] xs:w-[100%] md:w-[100%] mr-10" >
-                  <p className='font-bold text-gray-800 mt-1 ml-5 mr-5 info-block xs:text-lg sm:text-lg md:text-lg lg:text-lg'>Информация о психологе:</p>
-                  <textarea
-                    value={editedAbout}
-                    onChange={(e) => setEditedAbout(e.target.value)}
-                    className={`border ${isEditing ? 'border-green-500' : 'border-none'} text-gray-600 w-full mt-2 ml-4 p-2 rounded-md resize-none s:w-[100%] xs:w-[100%] md:w-[100%]`}
-                    disabled={!isEditing}
-                    rows={8}
-                    maxLength={500}
-                    placeholder="Введите информацию о cебе... (не более 570 символов)"
+                <div>
+                  <div className="card-info lg:w-[90%] s:w-[100%] xs:w-[100%] md:w-[100%] mr-10 pb-2">
+                    <div className="flex items-center justify-between">
+                      <p className='font-bold text-gray-800 mt-1 ml-5 mr-5 info-block xs:text-sm sm:text-sm md:text-base lg:text-lg'>Информация о психологе:</p>
+                      {isSmallScreen && (
+                        <button
+                          onClick={() => setShowAbout(!showAbout)}
+                          className=" text-gray-600 hover:text-blue-500 focus:outline-none px-3 py-1 mr-0 ml-2 text-lg lg:text-sm md:text-sm xs:text-xs sm:text-sm flex items-center"
+                        >
+                          {showAbout ? 'Скрыть' : 'Показать '}
+                          {showAbout ? <AiFillCaretUp className="ml-1" /> : <AiFillCaretDown className="ml-1" />}
+                        </button>
+                      )}
+                    </div>
+                    {showAbout && (
+                      <textarea
+                        value={editedAbout}
+                        onChange={(e) => setEditedAbout(e.target.value)}
+                        className={`border ${isEditing ? 'border-green-500' : 'border-none'} text-gray-600 w-full mt-2 ml-4 p-2 rounded-md resize-none s:w-[100%] xs:w-[100%] md:w-[100%]`}
+                        disabled={!isEditing}
+                        rows={8}
+                        maxLength={500}
+                        placeholder="Введите информацию о себе... (не более 570 символов)"
+                      />
+                    )}
+                  </div>
 
-                  />
+                  <div className="lg:w-[90%] s:w-[100%] xs:w-[100%] md:w-[100%] mb-0 mr-10 pb-2">
+                    <div className="flex items-center justify-between">
+                      <p className='font-bold text-gray-800 mt-1 ml-5 mr-5 info-block xs:text-sm sm:text-sm md:text-base lg:text-lg'>Контактная информация:</p>
+                      {isSmallScreen && (
+                        <button
+                          onClick={() => setShowContact(!showContact)}
+                          className="text-gray-600 hover:text-blue-500 focus:outline-none px-3 py-1 mr-4 text-lg ml-3 lg:text-sm md:text-sm xs:text-xs sm:text-sm mx-5 flex items-center"
+                        >
+                          {showContact ? 'Скрыть' : 'Показать'}
+                          {showContact ? <AiFillCaretUp className="ml-1" /> : <AiFillCaretDown className="ml-1" />}
+                        </button>
+                      )}
+                    </div>
+                    {showContact && (
+                      <textarea
+                        value={editedContact}
+                        onChange={(e) => setEditedContact(e.target.value)}
+                        className={`border ${isEditing ? 'border-green-500' : 'border-none'} text-gray-600 leading-6 mt-2 p-2 ml-4 rounded-md resize-none s:w-[100%] xs:w-[100%] md:w-[100%]`}
+                        disabled={!isEditing}
+                        rows={3}
+                        maxLength={100}
+                      />
+                    )}
+                  </div>
                 </div>
-                <div className=" lg:w-[90%] s:w-[100%] xs:w-[100%] md:w-[100%] mb-0 mr-10">
-                  <p className='font-bold text-gray-800 mt-1 ml-5 mr-5 info-block xs:text-lg sm:text-lg md:text-lg lg:text-lg'>Контактная информация:</p>
-                  <textarea
-                    value={editedContact}
-                    onChange={(e) => setEditedContact(e.target.value)}
-                    className={`border ${isEditing ? 'border-green-500' : 'border-none'} text-gray-600 leading-6 mt-2 p-2 ml-4 rounded-md resize-none s:w-[100%] xs:w-[100%] md:w-[100%]`}
-                    disabled={!isEditing}
-                    rows={3}
-                    maxLength={100}
-                  />
-                </div>
-
                 {userId === userData.slug && (
 
                   <div className="flex flex-col items-start p-6 rounded-2xl text-gray-800 leading-6 bg-gray-100 space-y-4">
                     <p className="text-center">
                       UserId в телеграмме (Чтобы получить UserId перейдите по ссылке{' '}
                       <a
-                        href="https://web.telegram.org/a/#460693903"
+                        href="https://t.me/getMyUserIdBot"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-500 underline"
@@ -369,9 +428,9 @@ const PsyAccount = () => {
                       className={`appearance-none border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${!isEditing ? 'bg-gray-200' : 'bg-white'}`}
                     />
                     <p className="text-center">
-                      Чтобы получать уведомления о клиенте в Telegram, начните переписку с ботом {' '}
+                      Чтобы получать уведомление о клиенте в Telegram, начните переписку с ботом {' '}
                       <a
-                        href="https://web.telegram.org/a/#7050284789"
+                        href="https://t.me/newPsy1bot"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-500 underline"
@@ -387,16 +446,8 @@ const PsyAccount = () => {
           }
 
 
-
-          <button
-            onClick={() => handleSendMessage(userData?.name, userData?.telegramUserID)}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md text-center hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-          >
-            Записаться на консультацию к {userData?.name}
-          </button>
-
           <hr className="mt-10 my-4 border-gray-400 xs:mt-0 sm:mt-0 md:mt-5 lg:mt-5" />
-          <div className="mt-5 ml-5 xs:mt-0 sm:mt-0 md:mt-0" style={{ maxHeight: '90vh', overflowY: 'auto', overflowX: 'hidden' }}>
+          <div className="mt-5 ml-5 xs:mt-0 sm:mt-0 md:mt-0">
             <div className="flex items-center justify-between">
               <p className='text-lg font-bold ml-2 lg:text-lg md:text-lg xs:text-xs sm:text-sm mx-5'>Комментарии</p>
               <button
@@ -430,9 +481,9 @@ const PsyAccount = () => {
                     }}>Сохранить</button>
                 </div>
 
-                <ul style={{ maxHeight: '500px', overflowY: 'auto' }}>
+                <ul className=" bg-gray-100" style={{ maxHeight: '500px', overflowY: 'auto' }}>
                   {comments.map(comment => (
-                    <li className="flex flex-col p-3 bg-white shadow rounded-lg mb-3 mt-2" key={comment.id}>
+                    <li className="flex flex-col p-3 bg-white shadow rounded-lg mb-3 mt-2 " key={comment.id}>
                       <div className="flex items-center space-x-3 justify-between">
                         {editCommentId === comment.id ? (
                           <div className="flex items-center justify-between">
@@ -483,7 +534,7 @@ const PsyAccount = () => {
             )}
           </div>
         </div>
-        <div className="p-3 mx-auto mt-[-3px] bg-white rounded-2xl shadow-2xl border xs:py-3 my-5 md:py-0 md:py-3-lg xl:py-3-2xl " style={{ width: '300px', maxHeight: '800px', overflowY: 'auto' }}>
+        <div className="p-3 mx-auto mt-[-3px] bg-white rounded-2xl shadow-2xl border xs:py-3 my-5 md:py-0 md:py-3-lg xl:py-3-2xl questions-lg questions-small">
           <div className="w-full p-1">
             <p className='font-semibold  text-gray-800 leading-6 mt-3 mx-3'>Вопросы, на которые ответил психолог:</p>
             {userData && userData.answeredQuestions && (
