@@ -323,7 +323,7 @@ const PsyAccount = () => {
                           maxLength={20}
                         />
                         <div className='mx-2 xs:w-[90%] profile-info name '>
-                          <RatingStars userSlug={userSlug} currentRating={rating} setRating={setRating} />
+                          <RatingStars userSlug={userSlug} currentRating={rating} setRating={setRating} userId={userId} />
                         </div>
                       </div>
                       <input
