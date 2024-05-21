@@ -1,9 +1,9 @@
 
 
-export const sendTelegramMessage = async (clientName: any, ClientEmail: any, psyName: any, userId: any) => {
+export const sendTelegramMessage = async (clientName: any, ClientEmail: any, psyName: any) => {
   const botToken = '7050284789:AAG_R5_OkZYbacR8FhzRCl33QGUYfNYH7RU';
-  // const chatId = '1006613072';
-  let chatId = userId;
+  const chatId = '-1002024817599';
+
 
   const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
