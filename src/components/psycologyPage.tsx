@@ -281,7 +281,7 @@ const PsyAccount = () => {
 
 
                 <div className="flex items-start ml-5 photo-block">
-                  <div className="relative mb-4">
+                  <div className="relative mb-4 w-[37%]">
                     <Image
                       src={imageUrl || (userData?.photo ? userData.photo : '/default_avatar.jpg')}
                       alt="User Avatar"
@@ -295,7 +295,7 @@ const PsyAccount = () => {
                           type="file"
                           accept="image/*"
                           onChange={(e) => setImage(e.target.files?.[0] || null)}
-                          className="border border-green-500 font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm leading-6 p-1 mb-2 w-full"
+                          className="border border-green-500 font-semibold text-[9px] leading-6 p-1 mb-2 w-full"
                           disabled={!isEditing}
                         />
                         <button
