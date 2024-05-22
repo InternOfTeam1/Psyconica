@@ -134,7 +134,6 @@ const PsyAccount = () => {
 
     setComments(newCommentsArray);
     setCommentText('');
-    setIsCommenting(false);
     await updateUser(userSlug, {
       ...userData,
       comments: newCommentsArray
