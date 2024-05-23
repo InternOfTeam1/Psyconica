@@ -166,7 +166,7 @@ const Header: React.FC = () => {
               </Link>
               <Link href="/questions">
                 <li onClick={() => setMenuOpen(false)}
-                  className='py-1.5 cursor-pointer text-black font-bold hover:text-white'>
+                  className='py-1.5  cursor-pointer text-black font-bold hover:text-white '>
                   Вопросы
                 </li>
               </Link>
@@ -180,7 +180,7 @@ const Header: React.FC = () => {
                 <li onClick={() => { handleOpenModal(); setMenuOpen(false); }} className="py-1.5 cursor-pointer text-black font-bold hover:text-white">Вход через социальные сети</li>
               ) : (
                 <>
-                  <li onClick={() => { setMenuOpen(false); handleClick(userId); }} className="py-1.5 cursor-pointer text-black font-bold hover:text-white">
+                  <li onClick={() => { setMenuOpen(false); handleClick(userId); }} className="py-1.5  cursor-pointer text-black font-bold hover:text-white">
                     Личный кабинет
                   </li>
                   <li onClick={() => { handleLogout(); setMenuOpen(false); }} className="py-1.5 cursor-pointer text-black font-bold hover:text-white">

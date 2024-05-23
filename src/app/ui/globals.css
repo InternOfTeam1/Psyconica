@@ -280,7 +280,7 @@
     @media (min-width: 990px) and (max-width: 1140px) {
       .containerPsy-laptop {
           overflow-y: auto;
-          width: 60пш0px;
+          width: 600px;
           max-width: 100%;
         }
     }
