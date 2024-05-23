@@ -280,8 +280,8 @@ const PsyAccount = () => {
 
 
                 <div className="flex items-start ml-5 photo-block">
-                  <div className="relative mb-4 w-[37%]">
-                    <div className="mt-2 mr-5 w-[180px] h-[180px]">
+                  <div className="relative mb-4">
+                    <div className="mt-2 mr-5 w-[180px] h-[180px] ">
                       <Image
                         src={imageUrl || (userData?.photo ? userData.photo : '/default_avatar.jpg')}
                         alt="User Avatar"
