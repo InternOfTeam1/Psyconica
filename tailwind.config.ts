@@ -22,7 +22,7 @@ const config: Config = {
         'lg': '1024px',
         'xl': '1200px',
         '2xl': '1536px',
-        'tablet': '1143px',     
+        'tablet': '1183px',     
         'laptop-small': '1075px', 
         'desktop': '1280px',    
         'phone': '2340px',      

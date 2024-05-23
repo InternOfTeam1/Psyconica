@@ -222,17 +222,17 @@ const PsyAccount = () => {
       setMessageStatus(`Психолог не может получать уведомления. Пожалуйста, пишите на почтовый адрес: ${email}`);
     }
   };
-
+  
 
 
   return (
 
     <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px] justify-center ">
       <div className="flex flex-wrap -mx-1 lg:-mx-1 xs:mx-1 s:mx-2 md:mx-3 ">
-        <div className="w-full md:mt-3 xl:mt-0 lg:w-1/4 px-1 lg:mb-0 order-last lg:order-first ">
+        <div className="w-full md:mt-3 xl:mt-0 lg:w-4/4 xl:w-1/4 px-1 lg:mb-0 order-last  tablet:order-last xl:order-first ">
           {userData && <PsychologistDashboard />}
         </div>
-        <div className="container md:ml-[20px] mx-auto mt-[-1px] sm:mx-2 md:mx-1 lg:mx-1 px-2 py-4 max-w-3xl bg-white shadow-xl rounded-2xl xs:container-min card-small containerPsy-laptop-small containerPsy-laptop-small-md " style={{ width: '600px' }}>
+        <div className="container  mx-auto mt-[-1px] md:ml-[20px]  lg:ml-[40px] xl:ml-0 sm:mx-2 md:mx-1 lg:mx-1 px-2 py-4 max-w-3xl bg-white shadow-xl rounded-2xl xs:container-min card-small xl:w-[600px] containerPsy-laptop containerPsy-laptop-small " >
           {
             userData && (
               <>
@@ -280,8 +280,8 @@ const PsyAccount = () => {
 
 
                 <div className="flex items-start ml-5 photo-block">
-                  <div className="relative mb-4 w-[37%]">
-                    <div className="mt-2 mr-5 w-[180px] h-[180px]">
+                  <div className="relative mb-4">
+                    <div className="mt-2 mr-5 w-[180px] h-[180px] ">
                       <Image
                         src={imageUrl || (userData?.photo ? userData.photo : '/default_avatar.jpg')}
                         alt="User Avatar"
@@ -315,27 +315,27 @@ const PsyAccount = () => {
 
                   <div className="flex ml-3 items-start">
                     <div className="flex flex-col flex-grow profile-info">
-                      <div className="flex justify-between items-center p-1 profile-info">
+                      <div className="flex justify-between items-center p-1 profile-info name">
                         <input
                           type="text"
                           value={editedName}
                           onChange={(e) => setEditedName(e.target.value)}
-                          className={`border ${isEditing ? 'border-green-500' : 'border-none'} font-semibold text-gray-800 p-1 bg-white xs:w-[90%] xs:text-lg sm:text-lg md:text-lg lg:text-lg `}
+                          className={`border ${isEditing ? 'border-green-500' : 'border-none'} font-semibold text-gray-800 p-1 bg-white xs:w-[90%] xs:text-base sm:text-lg md:text-lg lg:text-lg `}
                           disabled={!isEditing}
                           maxLength={20}
                         />
-                        <div className='mx-2 xs:w-[90%] profile-info name '>
-                          <RatingStars userSlug={userSlug} currentRating={rating} setRating={setRating} userId={userId} />
-                        </div>
                       </div>
                       <input
                         type="text"
                         value={editedExpert}
                         onChange={(e) => setEditedExpert(e.target.value)}
-                        className={`border ${isEditing ? 'border-green-500' : 'border-none'} bg-white font-semibold text-gray-800 py-2 xs:w-[90%] ml-2 xs:text-lg sm:text-lg md:text-lg lg:text-lg profile-info m-l `}
+                        className={`border ${isEditing ? 'border-green-500' : 'border-none'} bg-white font-semibold text-gray-800 py-2 xs:w-[90%] ml-2 xs:text-lg sm:text-lg md:text-lg lg:text-lg profile-info exp`}
                         disabled={!isEditing}
                         maxLength={30}
                       />
+                        <div className='my-1 ml-2 xs:w-[90%]'>
+                        <RatingStars userSlug={userSlug} currentRating={rating} setRating={setRating} userId={userId } />
+                        </div>
                       <button
                         onClick={() => handleSendMessage(userData?.name, userData?.email)}
                         className="bg-blue-500 text-white text-sm px-4 py-2 ml-2 my-2 rounded-md text-center hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 max-w-xs w-auto "
@@ -343,7 +343,6 @@ const PsyAccount = () => {
                         <div>Записаться на консультацию</div>
                         <div>к {userData?.name}</div>
                       </button>
-
                       {messageStatus && (
                         <p className={`text-center mt-2 text-sm ${messageStatus.includes('успешно') ? 'text-green-500' : 'text-red-500'}`}>
                           {messageStatus}
@@ -447,7 +446,7 @@ const PsyAccount = () => {
                     }}>Сохранить</button>
                 </div>
 
-                <ul className=" bg-gray-100" style={{ maxHeight: '500px', overflowY: 'auto' }}>
+                <ul className=" bg-gray-100 comment-lg comment-small">
                   {comments.map(comment => (
                     <li className="flex flex-col p-3 bg-white shadow rounded-lg mb-3 mt-2 " key={comment.id}>
                       <div className="flex items-center space-x-3 justify-between">

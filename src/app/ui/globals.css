@@ -151,7 +151,6 @@
 @media (max-width: 976px) and (min-width: 360px) {
   .card-small .flex {
     justify-content: flex-start;
-    margin-left: 5px;
   }
 }
 
@@ -175,26 +174,44 @@
   }
 }
 
-@media (min-width: 300px) and (max-width: 640px)  {
+@media (min-width: 300px) and (max-width: 640px) {
   .profile-info {
+    display: flex;
     flex-direction: column;
     align-items: center;
-    font-size: 1rem;
-    flex-wrap: wrap;
-    text-align: center;
-    margin-left: 1.75rem;
-  }
-  .profile-info .name {
-    margin-right: 2.50rem;
+    padding: 0; 
   }
 
-  .profile-info .m-l {
-    margin-left: -1rem;
-    margin-right: 0.75rem;
-    margin-bottom: 0.5rem;
-    font-style: italic;
+  .profile-info > * {
+    width: 90%; 
+    text-align: center; 
   }
+
+  .profile-info input {
+    margin-left:  -1rem;  
+    width: 100%;
+  }
+
+  .profile-info .my-1 {
+    margin-left: 0; 
+  }
+
+  .profile-info button {
+    width: 100%; 
+    margin-left: -1rem; 
+
+  }
+
+  .profile-info .name {
+    margin-left: -1rem; 
+  }
+
+  .profile-info .exp {
+    margin-left: -1.5rem; 
+  }
+
 }
+
 
 @media (min-width: 300px) and (max-width: 640px)  {
      .info-block {
@@ -206,6 +223,21 @@
       font-weight: 700; 
       justify-content: space-between;
      }
+}
+
+
+@media (min-width: 360px) and (max-width: 979px) {
+  .comment-small {
+    max-height: 300px;
+    overflow-y: auto;
+  }
+}
+
+@media (min-width: 979px) and (max-width: 1950px) {
+  .comment-lg {
+    max-height: 500px;
+    overflow-y: auto;
+  }
 }
 
 @media (max-width: 979px) and (min-width: 360px) {
@@ -236,31 +268,32 @@
 .overflow-y-auto {
   overflow-y: hidden;
 }
- @media (min-width: 1000px) and (max-width: 1240px) {
+ @media (min-width: 1200px) and (max-width: 1250px) {
    .questions-laptop-small {
      overflow-y: auto;
      width: 100%;
      max-width: 250px;
-     margin: 10px;
+     margin: 5px;
    }
-     .containerPsy-laptop-small {
-       overflow-y: auto;
-       width: 400px;
-       max-width: 100%;
-     }
+     
  }
-@media (min-width: 1000px) and (max-width: 1023px) {
- .containerPsy-laptop-small-md {
-   overflow-y: auto;
-   width: 600px;
-   max-width:100% ;
-   margin-left: 20px;
- }
-}
-/* @media (max-width: 979px) and (min-width: 876px){
+    @media (min-width: 990px) and (max-width: 1140px) {
+      .containerPsy-laptop {
+          overflow-y: auto;
+          width: 60пш0px;
+          max-width: 100%;
+        }
+    }
+
+@media (max-width: 989px) and (min-width: 876px){
   .questions-laptop {
       overflow-y: auto;
       width: 20%;
       max-height: 800px;
     }
-} */
+        .containerPsy-laptop-small {
+          overflow-y: auto;
+          width: 600px;
+          max-width: 100%;
+        }
+}
