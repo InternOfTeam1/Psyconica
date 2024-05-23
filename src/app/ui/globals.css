@@ -229,7 +229,6 @@
   }
 }
 
-
 .fixed.top-0 {
   top: 0;
 }
@@ -237,3 +236,31 @@
 .overflow-y-auto {
   overflow-y: hidden;
 }
+ @media (min-width: 1000px) and (max-width: 1240px) {
+   .questions-laptop-small {
+     overflow-y: auto;
+     width: 100%;
+     max-width: 250px;
+     margin: 10px;
+   }
+     .containerPsy-laptop-small {
+       overflow-y: auto;
+       width: 400px;
+       max-width: 100%;
+     }
+ }
+@media (min-width: 1000px) and (max-width: 1023px) {
+ .containerPsy-laptop-small-md {
+   overflow-y: auto;
+   width: 600px;
+   max-width:100% ;
+   margin-left: 20px;
+ }
+}
+/* @media (max-width: 979px) and (min-width: 876px){
+  .questions-laptop {
+      overflow-y: auto;
+      width: 20%;
+      max-height: 800px;
+    }
+} */

@@ -227,12 +227,12 @@ const PsyAccount = () => {
 
   return (
 
-    <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px]">
-      <div className="flex flex-wrap -mx-1 lg:-mx-1 xs:mx-1 s:mx-2 md:mx-3">
-        <div className="w-full lg:w-1/4 px-1 lg:mb-0 order-last lg:order-first">
+    <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px] justify-center ">
+      <div className="flex flex-wrap -mx-1 lg:-mx-1 xs:mx-1 s:mx-2 md:mx-3 ">
+        <div className="w-full md:mt-3 xl:mt-0 lg:w-1/4 px-1 lg:mb-0 order-last lg:order-first ">
           {userData && <PsychologistDashboard />}
         </div>
-        <div className="container mx-auto mt-[-1px] sm:mx-2 md:mx-3 lg:mx-1 px-2 py-4 max-w-3xl bg-white shadow-xl rounded-2xl xs:container-min card-small" style={{ maxWidth: '600px' }}>
+        <div className="container md:ml-[20px] mx-auto mt-[-1px] sm:mx-2 md:mx-1 lg:mx-1 px-2 py-4 max-w-3xl bg-white shadow-xl rounded-2xl xs:container-min card-small containerPsy-laptop-small containerPsy-laptop-small-md " style={{ width: '600px' }}>
           {
             userData && (
               <>
@@ -500,8 +500,8 @@ const PsyAccount = () => {
             )}
           </div>
         </div>
-        <div className="p-3 mx-auto mt-[-3px] bg-white rounded-2xl shadow-2xl border xs:py-3 my-5 md:py-0 md:py-3-lg xl:py-3-2xl questions-lg questions-small">
-          <div className="w-full p-1">
+        <div className="w-full p-3 mx-auto mt-[-3px] lg:mt-[-3px]  bg-white rounded-2xl shadow-2xl border xs:py-3 my-5 m-0 md:py-0 md:py-3-lg lg:py-3-md xl:py-3-2xl questions-lg questions-small questions-laptop questions-laptop-small ">
+          <div className="w-full p-1 ">
             <p className='font-semibold  text-gray-800 leading-6 mt-3 mx-3'>Вопросы, на которые ответил психолог:</p>
             {userData && userData.answeredQuestions && (
               <ul className='text-gray-600 leading-6 mt-2 mx-3'>
