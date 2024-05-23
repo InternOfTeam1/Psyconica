@@ -471,7 +471,7 @@ const PsyAccount = () => {
                         ) : (
                           <>
                             <div className="flex">
-                              <img src={comment.photo || '/default_avatar.jpg'} alt="User Avatar" className="w-10 h-10 rounded-full object-cover mr-3" />
+                              <img src={imageUrl || (userData?.photo ? userData.photo : '/default_avatar.jpg')} alt="User Avatar" className="w-10 h-10 rounded-full object-cover mr-3" />
                               <div className="flex flex-col flex-grow">
                                 <p className="text-xs font-semibold text-gray-800">{comment?.userId === userId ? 'Вы' : comment?.name}</p>
                                 <p className="text-md text-gray-600 mt-1">{comment.content}</p>
