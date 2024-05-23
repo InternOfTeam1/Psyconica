@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useState, useEffect } from 'react';
 import Link from "next/link";
 import Social from "@/components/Social";
@@ -6,32 +6,29 @@ import Image from 'next/image';
 import { HOME_ROUTE } from "@/constants/routes";
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store';
-import { login, logout } from '@/redux/slices/authSlice';
+import { login, logout, setUserState } from '@/redux/slices/authSlice';
 import { useRouter } from 'next/navigation';
-import { setUserState } from "@/redux/slices/authSlice";
 import Cookies from 'js-cookie';
 import PsychologistModal from './PsychologistCheckbox';
 import { openModal, closeModal } from '@/redux/slices/modalSlice';
-import { PiXBold, PiListBold } from "react-icons/pi";
-import { getVideosById } from '@/lib/firebase/firebaseFunctions';
+import { getVideosById, getUserData } from '@/lib/firebase/firebaseFunctions';
 import { useAppSelector } from '../redux/hooks';
-
+import { PiListBold } from 'react-icons/pi';
 
 const Header: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
-  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
-  // const userPhoto = useSelector((state: RootState) => state.auth.user?.photo || '');
-  const userPhoto = useAppSelector((state) => state.auth.user?.photo);
-  const user: any = useSelector((state: RootState) => state.auth.user || '');
+  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
+  const user = useAppSelector((state) => state.auth.user);
   const isModalOpen = useSelector((state: any) => state.modal.isModalOpen);
   const [isModalOpenPsy, setIsModalOpenPsy] = useState(false);
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
-  const userId = useAppSelector((state) => state.auth.user?.id);
+  const userId = user?.id;
+  const [userPhoto, setUserPhoto] = useState<string | null>(null);
 
   const handleNav = () => {
-    setMenuOpen(!menuOpen)
-  }
+    setMenuOpen(!menuOpen);
+  };
 
   useEffect(() => {
     function handleScroll() {
@@ -58,26 +55,29 @@ const Header: React.FC = () => {
   useEffect(() => {
     const userCookie = Cookies.get('user');
     if (userCookie) {
-      dispatch(setUserState(JSON.parse(userCookie as string)));
+      const userData = JSON.parse(userCookie as string);
+      dispatch(setUserState(userData));
     }
-  }, [dispatch])
+  }, [dispatch]);
 
   useEffect(() => {
-    getVideosById(user.id);
-  }, [])
+    if (userId) {
+      getVideosById(userId);
+      getUserData(userId).then((userData) => {
+        setUserPhoto(userData.photo || '/defaultPhoto.jpg');
+      });
+    }
+  }, [userId]);
 
-  const handleClick = async (user: string) => {
-    if (!user) {
-      handleOpenModal()
-
+  const handleClick = async (userId: string | undefined) => {
+    if (!userId) {
+      handleOpenModal();
       console.error("User ID is undefined.");
       return;
     }
 
     try {
-
-      await router.push(`/profile/${user}`);
-
+      await router.push(`/profile/${userId}`);
     } catch (error) {
       console.error('Ошибка навигации:', error);
     }
@@ -86,7 +86,7 @@ const Header: React.FC = () => {
   const handleLogin = async (provider: 'google' | 'facebook') => {
     try {
       await dispatch(login(provider));
-      setIsModalOpenPsy(true)
+      setIsModalOpenPsy(true);
     } catch (error) {
       console.error(error);
     } finally {
@@ -117,13 +117,13 @@ const Header: React.FC = () => {
     <>
       <header className="flex flex-wrap mx-auto max-w-[1200px] bg-transparent justify-between items-center xs:mb-[50px] mt-5 mb-[100px] header">
         {!menuOpen && (
-          <div onClick={handleNav} className='sm:hidden cursor-pointer pl-5 pt-5 absolute top-0 left-0 text-gray-500  hover:text-white'>
+          <div onClick={handleNav} className='sm:hidden cursor-pointer pl-5 pt-5 absolute top-0 left-0 text-gray-500 hover:text-white'>
             <PiListBold size={25} />
           </div>
         )}
         <nav className="gap-2 hidden sm:flex">
-          <Link href="/questions" className=" cursor-pointer text-gray-500  hover:bg-neutral-500  hover:rounded-full hover:text-white font-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 mt-5 py-1 px-5 hidden sm:flex">Вопросы</Link>
-          <Link href="/articles" className="cursor-pointer text-gray-500  hover:bg-neutral-500  hover:rounded-full hover:text-white font-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 mt-5 py-1 px-5 hidden sm:flex">Статьи</Link>
+          <Link href="/questions" className="cursor-pointer text-gray-500 hover:bg-neutral-500 hover:rounded-full hover:text-white font-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 mt-5 py-1 px-5 hidden sm:flex">Вопросы</Link>
+          <Link href="/articles" className="cursor-pointer text-gray-500 hover:bg-neutral-500 hover:rounded-full hover:text-white font-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 mt-5 py-1 px-5 hidden sm:flex">Статьи</Link>
         </nav>
         <div className="flex items-center justify-center">
           <Link href={HOME_ROUTE} className="flex items-center mt-5 lg:order-3 md:order-3 text-center xs:max-w-[80%] lg:max-w-[100%]">
@@ -146,40 +146,27 @@ const Header: React.FC = () => {
               <li onClick={handleOpenModal} className="flex cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 border-solid border-2 border-gray-400 whitespace-nowrap rounded-[20px] mt-5 mb-5 py-1 px-5">Вход через социальные сети</li>
             ) : (
               <>
-                <Image src={userPhoto} alt="User Profile" width={30} height={30} className="w-8 h-8 rounded-full border-2 border-gray-400 shadow-sm xs:w-6 xs:h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 mt-5 mb-5 " />
-
-                <li className=" list-item cursor-pointer text-gray-500 hover:text-neutral-600 font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-base border-solid border-2 border-gray-400 whitespace-nowrap rounded-[20px] mt-5 mb-5 px-5 py-1 hover:bg-gray-200 " onClick={() => handleClick(userId)} >
+                <Image src={userPhoto || '/defaultPhoto.jpg'} alt="User Photo" width={50} height={50} className="w-12 h-12 rounded-full cursor-pointer" />
+                <li onClick={() => handleClick(userId)} className="flex cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 whitespace-nowrap border-solid border-2 border-gray-400 rounded-[20px] mt-5 mb-5 py-1 px-5">
                   Личный кабинет
                 </li>
-
-                <li onClick={handleLogout} className=" list-item cursor-pointer text-gray-500 hover:text-neutral-600 font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-base border-solid border-2 border-gray-400 whitespace-nowrap rounded-[20px] mt-5 mb-5 px-5 py-1 hover:bg-gray-200">
+                <li onClick={handleLogout} className="flex cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 whitespace-nowrap border-solid border-2 border-gray-400 rounded-[20px] mt-5 mb-5 py-1 px-5">
                   Выйти
                 </li>
               </>
             )}
           </ul>
-        </div>
-        <div className={
-          menuOpen
-            ? "fixed top-0 left-0 w-[75%] sm:hidden p-7 ease-in duration-500 max-h-screen overflow-hidden bg-gradient-to-r from-purple-300 to-transparent z-50"
-            : "fixed left-[-100%] top-0 p-10 ease-in duration-500 bg-gradient-to-r from-purple-300 to-transparent z-0"
-        }>
-          <div className='flex w-full items-center justify-start'>
-            <div onClick={handleNav} className='cursor-pointer text-black hover:text-white'>
-              <PiXBold size={25} />
-            </div>
-          </div>
-          <div className='flex-col py-1.5'>
-            <ul>
-              <Link href={HOME_ROUTE} className='py-1.5 cursor-pointer text-black font-bold  hover:text-white'>
+          <div className='lg:hidden flex flex-col lg:order-3 xl:order-3 '>
+            <ul className={`${menuOpen ? 'flex flex-col items-center' : 'hidden'} bg-gray-200 py-2 rounded-lg`}>
+              <Link href="/">
                 <li onClick={() => setMenuOpen(false)}
-                  className='py-1.5 cursor-pointer text-black font-bold  hover:text-white'>
+                  className='py-1.5 cursor-pointer text-black font-bold hover:text-white'>
                   Главная
                 </li>
               </Link>
               <Link href="/questions">
                 <li onClick={() => setMenuOpen(false)}
-                  className='py-1.5 cursor-pointer text-black font-bold  hover:text-white'>
+                  className='py-1.5 cursor-pointer text-black font-bold hover:text-white'>
                   Вопросы
                 </li>
               </Link>
@@ -190,15 +177,13 @@ const Header: React.FC = () => {
                 </li>
               </Link>
               {!isAuthenticated ? (
-                <li onClick={() => { handleOpenModal(); setMenuOpen(false); }} className="py-1.5 cursor-pointer text-black font-bold  hover:text-white">Вход через социальные сети</li>
+                <li onClick={() => { handleOpenModal(); setMenuOpen(false); }} className="py-1.5 cursor-pointer text-black font-bold hover:text-white">Вход через социальные сети</li>
               ) : (
                 <>
-
-                  <li onClick={() => { setMenuOpen(false); handleClick(userId); }} className="py-1.5 cursor-pointer text-black font-bold  hover:text-white" >
+                  <li onClick={() => { setMenuOpen(false); handleClick(userId); }} className="py-1.5 cursor-pointer text-black font-bold hover:text-white">
                     Личный кабинет
                   </li>
-
-                  <li onClick={() => { handleLogout(); setMenuOpen(false); }} className="py-1.5 cursor-pointer text-black font-bold  hover:text-white">
+                  <li onClick={() => { handleLogout(); setMenuOpen(false); }} className="py-1.5 cursor-pointer text-black font-bold hover:text-white">
                     Выйти
                   </li>
                 </>
@@ -206,51 +191,46 @@ const Header: React.FC = () => {
             </ul>
           </div>
         </div>
-      </header >
+      </header>
       {isModalOpenPsy && userId && (
         <PsychologistModal
           isOpen={isModalOpenPsy}
           onClose={() => setIsModalOpenPsy(false)}
         />
-      )
-      }
-
-      {
-        isModalOpen && (
-          <div className="fixed inset-0 z-50 overflow-y-auto">
-            <div className="flex items-center justify-center min-h-screen">
-              <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onClick={handleCloseModal}></div>
-
-              <div className="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full">
-                <div className="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                  <div className="sm:flex sm:items-start">
-                    <div className="mt-3 text-center sm:mt-0 sm:text-left w-full">
-                      <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">Вход</h3>
-                      <div className="mt-2">
-                        <p className="text-sm text-gray-500">Выберите способ входа:</p>
-                      </div>
-                      <div className="mt-4">
-                        <button
-                          onClick={() => handleLogin('google')}
-                          className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm"
-                        >
-                          Вход через Google
-                        </button>
-                        <button
-                          onClick={() => handleLogin('facebook')}
-                          className="mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm"
-                        >
-                          Вход через Twitter
-                        </button>
-                      </div>
+      )}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 overflow-y-auto">
+          <div className="flex items-center justify-center min-h-screen">
+            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onClick={handleCloseModal}></div>
+            <div className="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full">
+              <div className="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div className="sm:flex sm:items-start">
+                  <div className="mt-3 text-center sm:mt-0 sm:text-left w-full">
+                    <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">Вход</h3>
+                    <div className="mt-2">
+                      <p className="text-sm text-gray-500">Выберите способ входа:</p>
+                    </div>
+                    <div className="mt-4">
+                      <button
+                        onClick={() => handleLogin('google')}
+                        className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm"
+                      >
+                        Вход через Google
+                      </button>
+                      <button
+                        onClick={() => handleLogin('facebook')}
+                        className="mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm"
+                      >
+                        Вход через Twitter
+                      </button>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        )
-      }
+        </div>
+      )}
     </>
   );
 };
