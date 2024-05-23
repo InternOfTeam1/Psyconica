@@ -134,7 +134,6 @@ const PsyAccount = () => {
 
     setComments(newCommentsArray);
     setCommentText('');
-    setIsCommenting(false);
     await updateUser(userSlug, {
       ...userData,
       comments: newCommentsArray
@@ -215,9 +214,9 @@ const PsyAccount = () => {
   };
 
 
-  const handleSendMessage = async (psyName: any, telegramUserId: any, email: any) => {
+  const handleSendMessage = async (psyName: any, email: any) => {
     try {
-      await sendTelegramMessage(userName, userEmail, psyName, telegramUserId);
+      await sendTelegramMessage(userName, userEmail, psyName);
       setMessageStatus('Уведомление успешно отправлено в Telegram психолога.');
     } catch (error) {
       setMessageStatus(`Психолог не может получать уведомления. Пожалуйста, пишите на почтовый адрес: ${email}`);
@@ -281,21 +280,24 @@ const PsyAccount = () => {
 
 
                 <div className="flex items-start ml-5 photo-block">
-                  <div className="relative mb-4">
-                    <Image
-                      src={imageUrl || (userData?.photo ? userData.photo : '/default_avatar.jpg')}
-                      alt="User Avatar"
-                      width={180}
-                      height={180}
-                      className="user-photo-container mt-2 mr-5"
-                    />
+                  <div className="relative mb-4 w-[37%]">
+                    <div className="mt-2 mr-5 w-[180px] h-[180px]">
+                      <Image
+                        src={imageUrl || (userData?.photo ? userData.photo : '/default_avatar.jpg')}
+                        alt="User Avatar"
+                        width={180}
+                        height={180}
+                        className="object-cover w-full h-full"
+                      />
+                    </div>
+
                     {isEditing && (
                       <>
                         <input
                           type="file"
                           accept="image/*"
                           onChange={(e) => setImage(e.target.files?.[0] || null)}
-                          className="border border-green-500 font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm leading-6 p-1 mb-2 w-full"
+                          className="border border-green-500 font-semibold text-[9px] leading-6 p-1 mb-2 w-[11.2rem] "
                           disabled={!isEditing}
                         />
                         <button
@@ -335,7 +337,7 @@ const PsyAccount = () => {
                           <RatingStars userSlug={userSlug} currentRating={rating} setRating={setRating} />
                         </div>
                       <button
-                        onClick={() => handleSendMessage(userData?.name, userData?.telegramUserID, userData?.email)}
+                        onClick={() => handleSendMessage(userData?.name, userData?.email)}
                         className="bg-blue-500 text-white text-sm px-4 py-2 ml-2 my-2 rounded-md text-center hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 max-w-xs w-auto "
                       >
                         <div>Записаться на консультацию</div>
@@ -403,43 +405,7 @@ const PsyAccount = () => {
                     )}
                   </div>
                 </div>
-                {userId === userData.slug && (
 
-                  <div className="flex flex-col items-start p-6 rounded-2xl text-gray-800 leading-6 bg-gray-100 space-y-4">
-                    <p className="text-center">
-                      UserId в телеграмме (Чтобы получить UserId перейдите по ссылке{' '}
-                      <a
-                        href="https://t.me/getmyid_bot"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-500 underline"
-                      >
-                        getMyUserId
-                      </a>
-                      {' '}и отправьте сообщение /start)
-                    </p>
-                    <input
-                      type="text"
-                      value={telegramUserID}
-                      onChange={(e) => setTelegramUserID(e.target.value)}
-                      disabled={!isEditing}
-                      placeholder="Введите userId"
-                      className={`appearance-none border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${!isEditing ? 'bg-gray-200' : 'bg-white'}`}
-                    />
-                    <p className="text-center">
-                      Чтобы получать уведомление о клиенте в Telegram, начните переписку с ботом {' '}
-                      <a
-                        href="https://t.me/newPsy1bot"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-500 underline"
-                      >
-                        psyBot
-                      </a>
-                    </p>
-                  </div>
-
-                )}
               </>
             )
           }
@@ -504,7 +470,7 @@ const PsyAccount = () => {
                         ) : (
                           <>
                             <div className="flex">
-                              <img src={comment.photo || '/default_avatar.jpg'} alt="User Avatar" className="w-10 h-10 rounded-full object-cover mr-3" />
+                              <img src={imageUrl || (userData?.photo ? userData.photo : '/default_avatar.jpg')} alt="User Avatar" className="w-10 h-10 rounded-full object-cover mr-3" />
                               <div className="flex flex-col flex-grow">
                                 <p className="text-xs font-semibold text-gray-800">{comment?.userId === userId ? 'Вы' : comment?.name}</p>
                                 <p className="text-md text-gray-600 mt-1">{comment.content}</p>

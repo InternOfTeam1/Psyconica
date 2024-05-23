@@ -145,3 +145,20 @@ export const updateUser = async (slug: string, data: UserDataUpdate) => {
     console.error("Error updating user:", error);
   }
 };
+
+export const getUserData = async (userId: string) => {
+  try {
+    const userRef = doc(db, "users", userId);
+    const userSnap = await getDoc(userRef);
+
+    if (userSnap.exists()) {
+      return userSnap.data();
+    } else {
+      console.error("No such user!");
+      return {};
+    }
+  } catch (error) {
+    console.error("Error getting user data: ", error);
+    return {};
+  }
+};

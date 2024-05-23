@@ -21,7 +21,13 @@ const config: Config = {
         'md': '768px',
         'lg': '1024px',
         'xl': '1200px',
-        '2xl': '1536px'
+        '2xl': '1536px',
+        'tablet': '1143px',     
+        'laptop-small': '1075px', 
+        'desktop': '1280px',    
+        'phone': '2340px',      
+        'laptop-lg': '2560px',  
+        'laptop-md': '1920px', 
       },
       fontSize: {
         'custom': '22px',
@@ -53,5 +59,6 @@ const config: Config = {
     },
   ],
 };
+
 
 export default config;

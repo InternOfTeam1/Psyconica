@@ -19,6 +19,7 @@ import Image from 'next/image';
 import { FaPen } from "react-icons/fa";
 import { addDocumentWithSlug } from "@/lib/firebase/firebaseAdddoc";
 import { useRouter } from 'next/navigation';
+import { getUserData } from '@/lib/firebase/firebaseFunctions';
 
 function fetchQuestionData(slug: any) {
   return fetchDoc('questions', slug);
@@ -45,7 +46,7 @@ const QuestionDetail = (props: Props) => {
   const userId = useAppSelector((state) => state.auth.user?.id);
   const userRole = useAppSelector((state) => state.auth.user?.role);
   const userName = useAppSelector((state) => state.auth.user?.name);
-  const userPhoto = useAppSelector((state) => state.auth.user?.photo);
+  const [userPhoto, setUserPhoto] = useState<string | null>(null);
   const MAX_LIKES = 100;
   const dispatch: AppDispatch = useDispatch();
   const [userData, setUserData] = useState<any>(null);
@@ -56,6 +57,21 @@ const QuestionDetail = (props: Props) => {
     dispatch(openModal());
   };
 
+ useEffect(() => {
+  const getUserInfo = async () => {
+    try {
+      const userData = await getUserData(userId); 
+      setUserData(userData); 
+      setUserPhoto(userData?.photo); 
+    } catch (error) {
+      console.error('Ошибка получения данных пользователя:', error);
+    }
+  };
+
+  if (userId) {
+    getUserInfo();
+  }
+}, [userId]);
 
   const handleLikeClick = async (answerNum: any, answerLikes: string[]) => {
     const isLiked = answerLikes.includes(userId);
@@ -371,7 +387,7 @@ const QuestionDetail = (props: Props) => {
                       опубликовать
                     </button>
                   </>
-                  : (<button className='text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs xs:normal-case xs:mt-3 xs:ml-0 sm:text-xs sm:normal-case sm:mt-3 sm:ml-0 md:text-xs lg:text-xs lg:uppercase xl:text-xs xl:uppercase my-5 mt-5 ml-3'
+                  : (<button className='text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs xs:normal-case xs:mt-3 xs:ml-0 sm:text-xs sm:normal-case sm:mt-3 sm:ml-0 md:text-xs lg:text-xs lg:uppercase xl:text-xs xl:uppercase mt-5 ml-3'
                     onClick={onAnswerAdd}>ответить</button>)
               ) : null}
 
@@ -384,12 +400,12 @@ const QuestionDetail = (props: Props) => {
 
                       className="flex items-center cursor-pointer">
 
-                      {answer.psyPhoto && (
-                        <img
-                          src={answer.psyPhoto}
-                          alt="User Avatar"
-                          className="w-10 h-10 rounded-full object-cover mr-3"
-                        />
+                     {answer.psyPhoto && (
+                       <img
+                         src={(userRole === 'psy' && answer.userId === userId) ? userPhoto : answer.psyPhoto}
+                         alt="User Avatar"
+                         className="w-10 h-10 rounded-full object-cover mr-3"
+                         />
                       )}
 
                       <p className="font-semibold text-black flex items-center bg-gray-200 rounded-2xl p-1">

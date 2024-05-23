@@ -32,17 +32,18 @@ const PsychologistDashboard = () => {
   }, [userSlug]);
 
   const addVideo = async () => {
-    if (videoUrl.trim() !== '') {
-      const embedUrl = transformYouTubeUrl(videoUrl);
+  if (videoUrl.trim() !== '') {
+    const embedUrl = transformYouTubeUrl(videoUrl);
 
-      try {
-        await addVideoToCollection(embedUrl, userId);
-        setVideoUrl('');
-      } catch (error) {
-        console.error('Не удалось добавить видео:', error);
-      }
+    try {
+      await addVideoToCollection(embedUrl, userId);
+      setVideoUrl('');
+      setUsers(prevUsers => [...prevUsers, embedUrl]);
+    } catch (error) {
+      console.error('Не удалось добавить видео:', error);
     }
-  };
+  }
+};
 
   const removeVideo = async (url: string) => {
     try {
