@@ -236,8 +236,8 @@ const PsyAccount = () => {
           {
             userData && (
               <>
-                <div className="text-center mb-5">
-                  <p className=' flex items-center justify-start bg-amber-300 pl-6 py-1 rounded-2xl text-center text-gray-800 leading-6 w-full '>
+                <div className="text-center mb-5 w-full">
+                  <p className=' flex items-center justify-start bg-amber-300 pl-6 py-1 rounded-2xl text-center text-gray-800 leading-6'>
                     <Image
                       src="/bigLogo.webp"
                       alt="logo"
@@ -249,7 +249,7 @@ const PsyAccount = () => {
                       type="text"
                       value={editedSlogan}
                       onChange={(e) => setEditedSlogan(e.target.value)}
-                      className={`border ${isEditing ? 'border-green-500' : 'border-none'} block xl:w-[470px] w-full  font-semibold italic text-gray-800 bg-transparent text-center`}
+                      className={`border ${isEditing ? 'border-green-500' : 'border-none'} block xl:w-[470px] w-full  font-semibold italic text-gray-800 bg-transparent text-center ml-[-3px]`}
                       maxLength={40}
                       placeholder="Введите ваш девиз (не более 25 символов)"
                       disabled={!isEditing}

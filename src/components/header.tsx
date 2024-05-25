@@ -146,11 +146,11 @@ const Header: React.FC = () => {
               <li onClick={handleOpenModal} className="flex cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 border-solid border-2 border-gray-400 whitespace-nowrap rounded-[20px] mt-5 mb-5 py-1 px-5">Вход через социальные сети</li>
             ) : (
               <>
-                <Image src={userPhoto || '/defaultPhoto.jpg'} alt="User Photo" width={50} height={50} className="w-12 h-12 rounded-full cursor-pointer" />
+                <Image src={userPhoto || '/defaultPчhoto.jpg'} alt="User Photo" width={50} height={50} className="w-12 h-12 rounded-full cursor-pointer" />
                 <li onClick={() => handleClick(userId)} className="flex cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 whitespace-nowrap border-solid border-2 border-gray-400 rounded-[20px] mt-5 mb-5 py-1 px-5">
                   Личный кабинет
                 </li>
-                <li onClick={handleLogout} className="flex cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 whitespace-nowrap border-solid border-2 border-gray-400 rounded-[20px] mt-5 mb-5 py-1 px-5">
+                <li onClick={handleLogout} className="flex cursor-pointer text-gray-400 hover:text-neutral-600 fonчt-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 whitespace-nowrap border-solid border-2 border-gray-400 rounded-[20px] mt-5 mb-5 py-1 px-5">
                   Выйти
                 </li>
               </>
