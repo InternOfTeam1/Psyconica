@@ -13,7 +13,8 @@ import PsychologistModal from './PsychologistCheckbox';
 import { openModal, closeModal } from '@/redux/slices/modalSlice';
 import { getVideosById, getUserData } from '@/lib/firebase/firebaseFunctions';
 import { useAppSelector } from '../redux/hooks';
-import { PiListBold } from 'react-icons/pi';
+import { PiListBold, PiXBold } from 'react-icons/pi';
+import { useRef } from 'react';
 
 const Header: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -25,6 +26,7 @@ const Header: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const userId = user?.id;
   const [userPhoto, setUserPhoto] = useState<string | null>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const handleNav = () => {
     setMenuOpen(!menuOpen);
@@ -50,6 +52,12 @@ const Header: React.FC = () => {
 
   const handleCloseModal = () => {
     dispatch(closeModal());
+  };
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+      setMenuOpen(false);
+    }
   };
 
   useEffect(() => {
@@ -112,6 +120,18 @@ const Header: React.FC = () => {
     checkUserLoginStatus();
   }, []);
 
+  useEffect(() => {
+    if (menuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [menuOpen]);
+
   return (
     <>
       <header className="flex flex-wrap mx-auto max-w-[1200px] bg-transparent justify-between items-center xs:mb-[50px] mt-5 mb-[100px] header">
@@ -149,23 +169,37 @@ const Header: React.FC = () => {
                 <li onClick={() => handleClick(userId)} className="flex cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 whitespace-nowrap border-solid border-2 border-gray-400 rounded-[20px] mt-5 mb-5 py-1 px-5">
                   Личный кабинет
                 </li>
-                <li onClick={handleLogout} className="flex cursor-pointer text-gray-400 hover:text-neutral-600 fonnpm run buildt-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 whitespace-nowrap border-solid border-2 border-gray-400 rounded-[20px] mt-5 mb-5 py-1 px-5">
+                <li onClick={handleLogout} className="flex cursor-pointer text-gray-400 hover:text-neutral-600 font-semibold xs:text-xs sm:text-sm md:text-sm lg:order-3 lg:text-base xl:order-3 whitespace-nowrap border-solid border-2 border-gray-400 rounded-[20px] mt-5 mb-5 py-1 px-5">
                   Выйти
                 </li>
               </>
             )}
           </ul>
-          <div className='lg:hidden flex flex-col lg:order-3 xl:order-3 '>
-            <ul className={`${menuOpen ? 'flex flex-col items-center' : 'hidden'} bg-gray-200 py-2 rounded-lg`}>
-              <Link href="/">
+        </div>
+
+        <div
+          ref={menuRef}
+          className={
+            menuOpen
+              ? "fixed top-0 left-0 w-[75%] sm:hidden p-7 ease-in duration-500 max-h-screen overflow-hidden bg-gradient-to-r from-purple-300 to-transparent z-50"
+              : "fixed left-[-100%] top-0 p-10 ease-in duration-500 bg-gradient-to-r from-purple-300 to-transparent z-0"
+          }>
+          <div className='flex w-full items-center justify-start'>
+            <div onClick={handleNav} className='cursor-pointer text-black hover:text-white'>
+              <PiXBold size={25} />
+            </div>
+          </div>
+          <div className='flex-col py-1.5'>
+            <ul>
+              <Link href={HOME_ROUTE} className='py-1.5 cursor-pointer text-black font-bold  hover:text-white'>
                 <li onClick={() => setMenuOpen(false)}
-                  className='py-1.5 cursor-pointer text-black font-bold hover:text-white'>
+                  className='py-1.5 cursor-pointer text-black font-bold  hover:text-white'>
                   Главная
                 </li>
               </Link>
               <Link href="/questions">
                 <li onClick={() => setMenuOpen(false)}
-                  className='py-1.5  cursor-pointer text-black font-bold hover:text-white '>
+                  className='py-1.5 cursor-pointer text-black font-bold  hover:text-white'>
                   Вопросы
                 </li>
               </Link>
@@ -176,13 +210,15 @@ const Header: React.FC = () => {
                 </li>
               </Link>
               {!isAuthenticated ? (
-                <li onClick={() => { handleOpenModal(); setMenuOpen(false); }} className="py-1.5 cursor-pointer text-black font-bold hover:text-white">Вход через социальные сети</li>
+                <li onClick={() => { handleOpenModal(); setMenuOpen(false); }} className="py-1.5 cursor-pointer text-black font-bold  hover:text-white">Вход через социальные сети</li>
               ) : (
                 <>
-                  <li onClick={() => { setMenuOpen(false); handleClick(userId); }} className="py-1.5  cursor-pointer text-black font-bold hover:text-white">
+
+                  <li onClick={() => { setMenuOpen(false); handleClick(userId); }} className="py-1.5 cursor-pointer text-black font-bold  hover:text-white" >
                     Личный кабинет
                   </li>
-                  <li onClick={() => { handleLogout(); setMenuOpen(false); }} className="py-1.5 cursor-pointer text-black font-bold hover:text-white">
+
+                  <li onClick={() => { handleLogout(); setMenuOpen(false); }} className="py-1.5 cursor-pointer text-black font-bold  hover:text-white">
                     Выйти
                   </li>
                 </>
@@ -190,6 +226,7 @@ const Header: React.FC = () => {
             </ul>
           </div>
         </div>
+
       </header>
       {isModalOpenPsy && userId && (
         <PsychologistModal
