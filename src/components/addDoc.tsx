@@ -27,7 +27,9 @@ const Question: Question = {
     num: 1,
     psyPhoto: undefined,
     name: undefined,
-    userId: ''
+    userId: '',
+    photo: '', 
+    userData: {} 
   }],
   video: [],
   topics: [],

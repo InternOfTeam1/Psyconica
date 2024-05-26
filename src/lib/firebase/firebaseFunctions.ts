@@ -4,7 +4,7 @@ import { doc, updateDoc, getDoc, arrayUnion, arrayRemove } from 'firebase/firest
 
 interface UserDataUpdate {
   [key: string]: any; 
-  ratings?: number[];
+  ratings?: Record<string, number>;
   averageRating?: number;
   comments?: Comments[];
 }
@@ -132,10 +132,15 @@ export const updateUser = async (slug: string, data: UserDataUpdate) => {
     const userData = await getDoc(userDocRef);
 
     if (userData.exists()) {
+      const userDocData = userData.data() as UserDataUpdate;
+
       if (data.ratings) {
-        const ratings = [...userData.data().ratings || [], ...data.ratings];
+        const userDataRatings = Object.values(userDocData.ratings || {}) as number[];
+        const dataRatings = Object.values(data.ratings || {}) as number[];
+        const ratings = [...userDataRatings, ...dataRatings];
         data.averageRating = ratings.reduce((acc, cur) => acc + cur, 0) / ratings.length;
       }
+      
       await updateDoc(userDocRef, data);
       console.log("User updated successfully");
     } else {
@@ -152,7 +157,8 @@ export const getUserData = async (userId: string) => {
     const userSnap = await getDoc(userRef);
 
     if (userSnap.exists()) {
-      return userSnap.data();
+      const userData = userSnap.data();
+      return userData;
     } else {
       console.error("No such user!");
       return {};
@@ -162,3 +168,4 @@ export const getUserData = async (userId: string) => {
     return {};
   }
 };
+

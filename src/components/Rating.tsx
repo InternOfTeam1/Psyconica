@@ -50,7 +50,6 @@ const RatingStars: React.FC<RatingStarsProps> = ({ userSlug, currentRating, setR
         setShowRemoveRatingModal(true);
         return;
       }
-      
       userRatings[userId] = newRating;
       const ratingsArray = Object.values(userRatings) as number[];
       const averageRating = ratingsArray.reduce((acc: number, cur: number) => acc + cur, 0) / ratingsArray.length;

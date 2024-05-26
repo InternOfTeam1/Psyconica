@@ -69,6 +69,8 @@ export interface Users {
 }
 
 export interface Answers {
+  photo: string;
+  userData: any;
   slug: string;
   content: string,
   num: number,

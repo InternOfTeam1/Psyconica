@@ -1,6 +1,6 @@
 "use client";
 import { fetchDoc } from '@/lib/firebase/firebaseGetDocs';
-import { updateUser } from '@/lib/firebase/firebaseFunctions';
+import { getUserData, getVideosById, updateUser } from '@/lib/firebase/firebaseFunctions';
 import { Comments } from '@/interfaces/collections';
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -41,7 +41,7 @@ const PsyAccount = () => {
   const [telegramUserID, setTelegramUserID] = useState<string>('');
   const userId = useAppSelector((state) => state.auth.user?.id);
   const userName = useAppSelector((state) => state.auth.user?.name);
-  const userPhoto = useAppSelector((state) => state.auth.user?.photo);
+  const [userPhoto, setUserPhoto] = useState('/default_avatar.jpg');
   const userRole = useAppSelector((state) => state.auth.user?.role);
   const userEmail = useAppSelector((state) => state.auth.user?.mail);
   const params = useParams();
@@ -52,6 +52,7 @@ const PsyAccount = () => {
   const [showContact, setShowContact] = useState(true);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [messageStatus, setMessageStatus] = useState<string | null>(null);
+  
 
 
 
@@ -62,7 +63,6 @@ const PsyAccount = () => {
         setUserData(fetchedUserData);
         setComments(fetchedUserData?.comments ?? [])
         setRating(fetchedUserData.averageRating || 0);
-
         setEditedAbout(fetchedUserData.aboutUser || '');
         setEditedContact(fetchedUserData.contactUser || '');
         setEditedSlogan(fetchedUserData.slogan || '');
@@ -80,6 +80,14 @@ const PsyAccount = () => {
 
   }, [userSlug]);
 
+ useEffect(() => {
+    if (userId) {
+      getUserData(userId).then((userData) => {
+        setUserPhoto(userData.photo || '/defaultPhoto.jpg');
+      });
+    }
+  }, [userId]);
+    
   const handleSaveChanges = async () => {
     try {
       await updateUser(userSlug, {
@@ -124,11 +132,11 @@ const PsyAccount = () => {
     if (!commentText.trim()) return;
 
     const newComment: Comments = {
-      id: Math.random().toString(36).substring(7),
-      content: commentText,
-      name: userName,
-      photo: userPhoto,
-      userId,
+  id: Math.random().toString(36).substring(7),
+  content: commentText,
+  name: userName,
+  photo: userPhoto || '/default_avatar.jpg', 
+  userId,
     };
     const newCommentsArray = [...comments, newComment]
 
@@ -184,13 +192,15 @@ const PsyAccount = () => {
 
 
   };
-  const handleUpdateRating = async (newRating: number) => {
-    try {
-      await updateUser(userSlug, { ratings: [newRating] });
-    } catch (error) {
-      console.error('Error updating rating:', error);
-    }
-  };
+
+ const handleUpdateRating = async (newRating: number) => {
+  try {
+    const ratingId = new Date().toISOString(); 
+    await updateUser(userSlug, { ratings: { [ratingId]: newRating } });
+  } catch (error) {
+    console.error('Error updating rating:', error);
+  }
+};
 
 
   const handleUploadImage = async () => {
@@ -283,7 +293,7 @@ const PsyAccount = () => {
                   <div className="relative mb-4">
                     <div className="mt-2 mr-5 w-[180px] h-[180px] ">
                       <Image
-                        src={imageUrl || (userData?.photo ? userData.photo : '/default_avatar.jpg')}
+                         src={isEditing ? (imageUrl || userData?.photo || '/default_avatar.jpg') : (userData?.photo || '/default_avatar.jpg')}
                         alt="User Avatar"
                         width={180}
                         height={180}
@@ -470,7 +480,7 @@ const PsyAccount = () => {
                         ) : (
                           <>
                             <div className="flex">
-                              <img src={imageUrl || (userData?.photo ? userData.photo : '/default_avatar.jpg')} alt="User Avatar" className="w-10 h-10 rounded-full object-cover mr-3" />
+                              <img src={comment.photo || '/default_avatar.jpg'} alt="User Avatar" className="w-10 h-10 rounded-full object-cover mr-3" />
                               <div className="flex flex-col flex-grow">
                                 <p className="text-xs font-semibold text-gray-800">{comment?.userId === userId ? 'Вы' : comment?.name}</p>
                                 <p className="text-md text-gray-600 mt-1">{comment.content}</p>
