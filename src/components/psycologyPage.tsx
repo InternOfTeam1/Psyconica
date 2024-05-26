@@ -374,14 +374,14 @@ const PsyAccount = () => {
                   </div>
                 </div>
 
-                <div>
-                  <div className="card-info lg:w-[90%] s:w-[100%] xs:w-[100%] md:w-[100%] mr-10 pb-2">
+                <div className="w-full px-2">
+                  <div className="card-info xs:w-[100%] sm:w-[100%] md:w-[100%] lg:w-[100%] px-4 pb-2">
                     <div className="flex items-center justify-between">
-                      <p className='font-bold text-gray-800 mt-1 ml-5 mr-5 info-block xs:text-sm sm:text-sm md:text-base lg:text-lg'>Информация о психологе:</p>
+                      <p className='font-bold text-gray-800 mt-1 ml-2 mr-2 info-block xs:text-sm sm:text-sm md:text-base lg:text-lg'>Информация о психологе:</p>
                       {isSmallScreen && (
                         <button
                           onClick={() => setShowAbout(!showAbout)}
-                          className=" text-gray-600 hover:text-blue-500 focus:outline-none px-3 py-1 mr-0 ml-2 text-lg lg:text-sm md:text-sm xs:text-xs sm:text-sm flex items-center"
+                          className="text-gray-600 hover:text-blue-500 focus:outline-none px-3 py-1 mr-0 ml-auto text-lg ml-3 lg:text-sm md:text-sm xs:text-xs sm:text-sm mx-5 flex items-center"
                         >
                           {showAbout ? 'Скрыть' : 'Показать '}
                           {showAbout ? <AiFillCaretUp className="ml-1" /> : <AiFillCaretDown className="ml-1" />}
@@ -392,7 +392,7 @@ const PsyAccount = () => {
                       <textarea
                         value={editedAbout}
                         onChange={(e) => setEditedAbout(e.target.value)}
-                        className={`border ${isEditing ? 'border-green-500' : 'border-none'} text-gray-600 w-full mt-2 ml-4 p-2 rounded-md resize-none s:w-[100%] xs:w-[100%] md:w-[100%]`}
+                        className={`border ${isEditing ? 'border-green-500' : 'border-none'} text-gray-600 mt-2 p-2 rounded-md resize-none xs:w-[100%] sm:w-[100%] md:w-[100%] lg:w-[100%] xl:w-[100%]`}
                         disabled={!isEditing}
                         rows={8}
                         maxLength={500}
@@ -401,13 +401,13 @@ const PsyAccount = () => {
                     )}
                   </div>
 
-                  <div className="lg:w-[90%] s:w-[100%] xs:w-[100%] md:w-[100%] mb-0 mr-10 pb-2">
+                  <div className="xs:w-[100%] sm:w-[100%] md:w-[100%] lg:w-[100%] mb-0 px-4 pb-2">
                     <div className="flex items-center justify-between">
-                      <p className='font-bold text-gray-800 mt-1 ml-5 mr-5 info-block xs:text-sm sm:text-sm md:text-base lg:text-lg'>Контактная информация:</p>
+                      <p className='font-bold text-gray-800 mt-1 ml-2 mr-2 info-block xs:text-sm sm:text-sm md:text-base lg:text-lg'>Контактная информация:</p>
                       {isSmallScreen && (
                         <button
                           onClick={() => setShowContact(!showContact)}
-                          className="text-gray-600 hover:text-blue-500 focus:outline-none px-3 py-1 mr-4 text-lg ml-3 lg:text-sm md:text-sm xs:text-xs sm:text-sm mx-5 flex items-center"
+                          className="text-gray-600 hover:text-blue-500 focus:outline-none px-3 py-1 mr-0 ml-auto text-lg ml-3 lg:text-sm md:text-sm xs:text-xs sm:text-sm mx-5 flex items-center"
                         >
                           {showContact ? 'Скрыть' : 'Показать'}
                           {showContact ? <AiFillCaretUp className="ml-1" /> : <AiFillCaretDown className="ml-1" />}
@@ -418,7 +418,7 @@ const PsyAccount = () => {
                       <textarea
                         value={editedContact}
                         onChange={(e) => setEditedContact(e.target.value)}
-                        className={`border ${isEditing ? 'border-green-500' : 'border-none'} text-gray-600 leading-6 mt-2 p-2 ml-4 rounded-md resize-none s:w-[100%] xs:w-[100%] md:w-[100%]`}
+                        className={`border ${isEditing ? 'border-green-500' : 'border-none'} text-gray-600 leading-6 w-full mt-2 p-2 rounded-md resize-none s:w-[100%] xs:w-[100%] md:w-[100%]`}
                         disabled={!isEditing}
                         rows={3}
                         maxLength={100}
@@ -433,11 +433,11 @@ const PsyAccount = () => {
 
 
           <hr className="mt-10 my-4 border-gray-400 xs:mt-0 sm:mt-0 md:mt-5 lg:mt-5" />
-          <div className="mt-5 ml-5 xs:mt-0 sm:mt-0 md:mt-0">
-            <div className="flex items-center justify-between">
+          <div className="w-full mt-5 px-3 xs:mt-0 sm:mt-0 md:mt-0">
+            <div className="flex w-full items-center justify-between">
               <p className='text-lg font-bold ml-2 lg:text-lg md:text-lg xs:text-xs sm:text-sm mx-5'>Комментарии</p>
               <button
-                className="text-gray-600 hover:text-blue-500 focus:outline-none border border-gray-300 rounded-2xl px-3 py-1 mr-5 text-lg ml-2 lg:text-sm md:text-sm xs:text-xs sm:text-sm mx-5"
+                className="text-gray-600 hover:text-blue-500 focus:outline-none border border-gray-300 rounded-2xl px-3 py-1 mr-5 text-lg ml-2 lg:text-sm md:text-sm xs:text-xs sm:text-sm mx-5 ml-auto"
                 onClick={() => setIsCommenting(!isCommenting)}
               >
                 {isCommenting ? 'Скрыть комментарии' : 'Показать комментарии'}
@@ -460,7 +460,7 @@ const PsyAccount = () => {
                     }}
                   />
                   <button
-                    className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold lg:text-sm md:text-sm xs:text-xs sm:text-sm mx-5"
+                    className="text-white text-lg bg-gray-500 hover:bg-blue-500 mr-5 py-1 px-2 rounded-2xl font-semibold xs:text-xs xs:lowercase sm:text-xs md:text-sm lg:text-base"
                     onClick={() => {
                       handleComment();
                       setIsCommenting(true);
