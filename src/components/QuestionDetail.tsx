@@ -384,7 +384,7 @@ console.log(user, 'DIIIIMAAA');
                       опубликовать
                     </button>
                   </>
-                  : (<button className='text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs xs:normal-case xs:mt-3 xs:ml-0 sm:text-xs sm:normal-case sm:mt-3 sm:ml-0 md:text-xs lg:text-xs lg:uppercase xl:text-xs xl:uppercase my-5 mt-5 ml-3'
+                  : (<button className='text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs xs:normal-case xs:mt-3 xs:ml-0 sm:text-xs sm:normal-case sm:mt-3 sm:ml-0 md:text-xs lg:text-xs lg:uppercase xl:text-xs xl:uppercase mt-5 ml-3'
                     onClick={onAnswerAdd}>ответить</button>)
               ) : null}
 

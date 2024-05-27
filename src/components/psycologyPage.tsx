@@ -489,8 +489,8 @@ const PsyAccount = () => {
                               onClick={handleEditComment}>Сохранить</button>
                           </div>
                         ) : (
-                          <>
-                            <div className="flex">
+                          <div className="flex w-full justify-between">
+                            <div className="flex items-center">
                               <img src={comment.photo || '/default_avatar.jpg'} alt="User Avatar" className="w-10 h-10 rounded-full object-cover mr-3" />
                               <div className="flex flex-col flex-grow">
                                 <p className="text-xs font-semibold text-gray-800">{comment?.userId === userId ? 'Вы' : comment?.name}</p>
@@ -499,18 +499,18 @@ const PsyAccount = () => {
                             </div>
                             {editCommentId !== comment.id && comment.userId === userId && (
                               <>
-                                <div className="flex">
+                                <div className="flex ml-auto">
                                   <FaPen
                                     className='cursor-pointer mt-1 mr-3'
                                     onClick={() => { setEditCommentId(comment.id); setEditedCommentText(comment.content); }}
                                   />
-                                  <div className='cursor-pointer mt-1 mr-5 ml-auto' onClick={() => handleDeleteComment(comment.id)}>
+                                  <div className='cursor-pointer mt-1 mr-5' onClick={() => handleDeleteComment(comment.id)}>
                                     <MdClose />
                                   </div>
                                 </div>
                               </>
                             )}
-                          </>
+                          </div>
                         )}
                       </div>
                     </li>
