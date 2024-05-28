@@ -91,6 +91,25 @@ const PsyAccount = () => {
 
   const handleSaveChanges = async () => {
     try {
+
+      if (image) {
+        const imageUrl = await uploadImageToStorage(image);
+        if (imageUrl) {
+
+          try {
+            await updateUser(userSlug, { photo: imageUrl });
+            setUserData((prevUserData: any) => ({
+              ...prevUserData,
+              photo: imageUrl
+            }));
+            setImageUrl(imageUrl);
+            console.log('Изображение загружено:', imageUrl);
+          } catch (error) {
+            console.error('Ошибка при обновлении фотографии:', error);
+          }
+        }
+      }
+
       await updateUser(userSlug, {
         aboutUser: editedAbout,
         contactUser: editedContact,
@@ -204,25 +223,7 @@ const PsyAccount = () => {
   };
 
 
-  const handleUploadImage = async () => {
-    if (image) {
-      const imageUrl = await uploadImageToStorage(image);
-      if (imageUrl) {
 
-        try {
-          await updateUser(userSlug, { photo: imageUrl });
-          setUserData((prevUserData: any) => ({
-            ...prevUserData,
-            photo: imageUrl
-          }));
-          setImageUrl(imageUrl);
-          console.log('Изображение загружено:', imageUrl);
-        } catch (error) {
-          console.error('Ошибка при обновлении фотографии:', error);
-        }
-      }
-    }
-  };
 
 
   const handleSendMessage = async (psyName: any, email: any) => {
@@ -321,15 +322,9 @@ const PsyAccount = () => {
                           className="border border-green-500 font-semibold text-[9px] leading-6 p-1 mb-2 w-[11.2rem] "
                           disabled={!isEditing}
                         />
-                        <button
-                          onClick={handleUploadImage}
-                          className="bg-blue-500 text-white xs:text-xs sm:text-sm md:text-sm lg:text-sm px-4 py-2 rounded-full shadow hover:bg-blue-600 focus:outline-none"
-                          disabled={!image}
-                        >
-                          Загрузить изображение
-                        </button>
 
-                        </div>
+
+                      </div>
                     )}
                   </div>
 
@@ -359,7 +354,7 @@ const PsyAccount = () => {
                       </div>
                       <button
                         onClick={() => handleSendMessage(userData?.name, userData?.email)}
-                        className= "bg-blue-500 text-white text-sm px-4 py-2 ml-2 my-2 rounded-md text-center hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 max-w-xs w-auto "
+                        className="bg-blue-500 text-white text-sm px-4 py-2 ml-2 my-2 rounded-md text-center hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 max-w-xs w-auto "
                       >
                         <div>Записаться на консультацию</div>
                         <div>к {userData?.name}</div>
