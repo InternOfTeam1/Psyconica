@@ -376,8 +376,8 @@ const PsyAccount = () => {
 
                 <div className="w-full px-2">
                   <div className="card-info xs:w-[100%] sm:w-[100%] md:w-[100%] lg:w-[100%] px-4 pb-2">
-                    <div className="flex items-center justify-between">
-                      <p className='font-bold text-gray-800 mt-1 ml-2 mr-2 info-block xs:text-sm sm:text-sm md:text-base lg:text-lg'>Информация о психологе:</p>
+                    <div className="flex items-center justify-between mt-5 xs:mt-5 sm:mt-0 md:mt-0 lg:mt-0 xl:mt-0">
+                      <p className='font-bold text-gray-800 mt-1 ml-2 mr-2 info-block xs:text-base sm:text-base md:text-base lg:text-lg'>Информация о психологе:</p>
                       {isSmallScreen && (
                         <button
                           onClick={() => setShowAbout(!showAbout)}
@@ -402,8 +402,8 @@ const PsyAccount = () => {
                   </div>
 
                   <div className="xs:w-[100%] sm:w-[100%] md:w-[100%] lg:w-[100%] mb-0 px-4 pb-2">
-                    <div className="flex items-center justify-between">
-                      <p className='font-bold text-gray-800 mt-1 ml-2 mr-2 info-block xs:text-sm sm:text-sm md:text-base lg:text-lg'>Контактная информация:</p>
+                    <div className="flex items-center justify-between mt-3 xs:mt-3 sm:mt-0 md:mt-0 lg:mt-0 xl:mt-0">
+                      <p className='font-bold text-gray-800 mt-1 ml-2 mr-2 info-block xs:text-base sm:text-base md:text-base lg:text-lg'>Контактная информация:</p>
                       {isSmallScreen && (
                         <button
                           onClick={() => setShowContact(!showContact)}
@@ -435,7 +435,7 @@ const PsyAccount = () => {
           <hr className="mt-10 my-4 border-gray-400 xs:mt-0 sm:mt-0 md:mt-5 lg:mt-5" />
           <div className="w-full mt-5 px-3 xs:mt-0 sm:mt-0 md:mt-0">
             <div className="flex w-full items-center justify-between">
-              <p className='text-lg font-bold ml-2 lg:text-lg md:text-lg xs:text-xs sm:text-sm mx-5'>Комментарии</p>
+              <p className='text-lg font-bold ml-5 lg:text-lg md:text-lg xs:text-xs sm:text-sm mx-5'>Комментарии</p>
               <button
                 className="text-gray-600 hover:text-blue-500 focus:outline-none border border-gray-300 rounded-2xl px-3 py-1 mr-5 text-lg ml-2 lg:text-sm md:text-sm xs:text-xs sm:text-sm mx-5 ml-auto"
                 onClick={() => setIsCommenting(!isCommenting)}
