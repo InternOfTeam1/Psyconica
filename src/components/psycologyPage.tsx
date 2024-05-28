@@ -291,7 +291,7 @@ const PsyAccount = () => {
 
 
                 <div className="flex items-start ml-5 photo-block">
-                  <div className="relative mb-4">
+                  <div className={`relative mb-4 ${isEditing ? 'flex-items-photo' : '' }`}>
                     <div className="mt-2 mr-5 w-[180px] h-[180px] ">
                       {isLoading ? (
                         <div className="flex justify-center items-center w-full h-full">
@@ -334,14 +334,14 @@ const PsyAccount = () => {
                   </div>
 
 
-                  <div className="flex ml-3 items-start">
+                  <div className={`flex ml-3 items-start ${isEditing ? 'flex-items-start' : ''}`}>
                     <div className="flex flex-col flex-grow profile-info">
                       <div className="flex justify-between items-center p-1 profile-info name">
                         <input
                           type="text"
                           value={editedName}
                           onChange={(e) => setEditedName(e.target.value)}
-                          className={`border ${isEditing ? 'border-green-500' : 'border-none'} font-semibold text-gray-800 p-1 bg-white xs:w-[90%] xs:text-base sm:text-lg md:text-lg lg:text-lg `}
+                          className={`border ${isEditing ? 'border-green-500 ml-[5px]' : 'border-none'} font-semibold text-gray-800 p-1 bg-white xs:w-[90%] xs:text-base sm:text-lg md:text-lg lg:text-lg `}
                           disabled={!isEditing}
                           maxLength={20}
                         />
@@ -359,7 +359,7 @@ const PsyAccount = () => {
                       </div>
                       <button
                         onClick={() => handleSendMessage(userData?.name, userData?.email)}
-                        className="bg-blue-500 text-white text-sm px-4 py-2 ml-2 my-2 rounded-md text-center hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 max-w-xs w-auto "
+                        className= "bg-blue-500 text-white text-sm px-4 py-2 ml-2 my-2 rounded-md text-center hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 max-w-xs w-auto "
                       >
                         <div>Записаться на консультацию</div>
                         <div>к {userData?.name}</div>
