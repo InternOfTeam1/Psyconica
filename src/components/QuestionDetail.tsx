@@ -70,11 +70,8 @@ const QuestionDetail = (props: Props) => {
     }
   }, [userId]);
 
-  useEffect(() => {
-    if (userId) {
-      fetchPhoto();
-    }
-  }, []);
+
+  fetchPhoto();
 
 
   function fetchPhoto() {
@@ -83,6 +80,8 @@ const QuestionDetail = (props: Props) => {
       updateExistingData(userData.photo);
     });
   }
+
+  fetchPhoto()
 
   function updateExistingData(photo: string) {
     if (!questionData) return;
