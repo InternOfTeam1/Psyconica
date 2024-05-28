@@ -294,14 +294,3 @@
         }
 }
 
-@media (max-width: 2000px) and (min-width: 640px) {
-  .flex-items-start {
-    margin-left: -150px;
-  }
-}
-
-@media (min-width: 360px) and (max-width: 640px) {
-  .flex-items-photo {
-    margin-left: 30px;
-  }
-}

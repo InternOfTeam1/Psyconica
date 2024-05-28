@@ -291,7 +291,7 @@ const PsyAccount = () => {
 
 
                 <div className="flex items-start ml-5 photo-block">
-                  <div className={`relative mb-4 ${isEditing ? 'flex-items-photo' : '' }`}>
+                  <div className='relative mb-4'>
                     <div className="mt-2 mr-5 w-[180px] h-[180px] ">
                       {isLoading ? (
                         <div className="flex justify-center items-center w-full h-full">
@@ -313,7 +313,7 @@ const PsyAccount = () => {
                     </div>
 
                     {isEditing && (
-                      <>
+                      <div className="flex flex-col">
                         <input
                           type="file"
                           accept="image/*"
@@ -329,19 +329,19 @@ const PsyAccount = () => {
                           Загрузить изображение
                         </button>
 
-                      </>
+                        </div>
                     )}
                   </div>
 
 
-                  <div className={`flex ml-3 items-start ${isEditing ? 'flex-items-start' : ''}`}>
+                  <div className='flex ml-3 items-start'>
                     <div className="flex flex-col flex-grow profile-info">
                       <div className="flex justify-between items-center p-1 profile-info name">
                         <input
                           type="text"
                           value={editedName}
                           onChange={(e) => setEditedName(e.target.value)}
-                          className={`border ${isEditing ? 'border-green-500 ml-[5px]' : 'border-none'} font-semibold text-gray-800 p-1 bg-white xs:w-[90%] xs:text-base sm:text-lg md:text-lg lg:text-lg `}
+                          className={`border ${isEditing ? 'border-green-500 ml-[3px]' : 'border-none'} font-semibold text-gray-800 p-1 bg-white xs:w-[90%] xs:text-base sm:text-lg md:text-lg lg:text-lg `}
                           disabled={!isEditing}
                           maxLength={20}
                         />
