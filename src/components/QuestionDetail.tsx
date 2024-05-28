@@ -20,7 +20,7 @@ import { FaPen } from "react-icons/fa";
 import { addDocumentWithSlug } from "@/lib/firebase/firebaseAdddoc";
 import { useRouter } from 'next/navigation';
 import { getUserData } from '@/lib/firebase/firebaseFunctions';
-import { log } from "console";
+
 
 function fetchQuestionData(slug: any) {
   return fetchDoc('questions', slug);
@@ -30,6 +30,8 @@ function fetchQuestionData(slug: any) {
 type Props = {
   rawData: any
 }
+
+
 
 const QuestionDetail = (props: Props) => {
   const { rawData } = props
@@ -54,21 +56,52 @@ const QuestionDetail = (props: Props) => {
   const [userData, setUserData] = useState<any>(null);
   const router = useRouter();
 
-console.log(user, 'DIIIIMAAA');
 
   const handleOpenModal = () => {
     dispatch(openModal());
   };
 
- useEffect(() => {
-  if (userId) {
+  useEffect(() => {
+    if (userId) {
+      getUserData(userId).then((userData) => {
+        setUserData(userData);
+        setUserPhoto(userData.photo);
+      });
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    if (userId) {
+      fetchPhoto();
+    }
+  }, []);
+
+
+  function fetchPhoto() {
     getUserData(userId).then((userData) => {
-      setUserData(userData);
+      setUserPhoto(userData.photo);
+      updateExistingData(userData.photo);
     });
   }
- }, [userId]);
-  
-  
+
+  function updateExistingData(photo: string) {
+    if (!questionData) return;
+
+    const updatedQuestionData = {
+      ...questionData,
+      answers: questionData.answers.map((answer) =>
+        answer.userId === userId ? { ...answer, psyPhoto: photo } : answer
+      ),
+      comments: questionData?.comments?.map((comment) =>
+        comment.userId === userId ? { ...comment, photo: photo } : comment
+      ),
+    };
+
+    setQuestionData(updatedQuestionData);
+    updateQuestion(questionSlug, updatedQuestionData);
+  }
+
+
 
   const handleLikeClick = async (answerNum: any, answerLikes: string[]) => {
     const isLiked = answerLikes.includes(userId);
@@ -168,7 +201,7 @@ console.log(user, 'DIIIIMAAA');
       const updatedNewAnswer = {
         ...newAnswer,
         name: nameToAdd,
-        psyPhoto: userRole === 'psy' ? user.photo : '/psy_avatar.jpg',
+        psyPhoto: userRole === 'psy' ? userPhoto : '/psy_avatar.jpg',
       };
 
       const newQuestionData = {
@@ -391,7 +424,7 @@ console.log(user, 'DIIIIMAAA');
               {sortedAnswers.map((answer: Answers, index: number) => {
                 const progressWidth = (answer.likes.length / MAX_LIKES) * 100;
                 console.log(answer, 'fghjkl;');
-                
+
                 return (
                   <div key={index} className="mt-4 w-full ">
 
