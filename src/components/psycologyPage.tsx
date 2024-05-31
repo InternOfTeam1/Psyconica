@@ -53,6 +53,7 @@ const PsyAccount = () => {
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [messageStatus, setMessageStatus] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  
 
 
 
@@ -104,9 +105,11 @@ const PsyAccount = () => {
             }));
             setImageUrl(imageUrl);
             console.log('Изображение загружено:', imageUrl);
+            updateCommentsData(imageUrl || userData?.photo, editedName); 
           } catch (error) {
             console.error('Ошибка при обновлении фотографии:', error);
           }
+          
         }
       }
 
@@ -168,6 +171,7 @@ const PsyAccount = () => {
     })
   };
 
+  
   const handleEditComment = async () => {
     if (!editedCommentText.trim() || !editCommentId) return;
 
@@ -197,6 +201,16 @@ const PsyAccount = () => {
     }
   };
 
+  function updateCommentsData(photo: string, name: string) {
+    if (!comments || !comments.length) return;
+  
+    const updatedComments = comments.map(comment =>
+      comment.userId === userId ? { ...comment, name: name, photo: photo } : comment
+    );
+  
+    setComments(updatedComments);
+  }
+  
 
   const handleClick = async (url: string) => {
 

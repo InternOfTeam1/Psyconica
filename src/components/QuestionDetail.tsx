@@ -77,25 +77,25 @@ const QuestionDetail = (props: Props) => {
   function fetchPhoto() {
     getUserData(userId).then((userData) => {
       setUserPhoto(userData.photo);
-      updateExistingData(userData.photo);
+      updateExistingData(userData.photo, userData.name);
     });
   }
-
-  fetchPhoto()
-
-  function updateExistingData(photo: string) {
+  
+  fetchPhoto();
+  
+  function updateExistingData(photo: string, name: string) {
     if (!questionData) return;
-
+  
     const updatedQuestionData = {
       ...questionData,
       answers: questionData.answers.map((answer) =>
-        answer.userId === userId ? { ...answer, psyPhoto: photo } : answer
+        answer.userId === userId ? { ...answer, psyPhoto: photo, name: name } : answer
       ),
       comments: questionData?.comments?.map((comment) =>
         comment.userId === userId ? { ...comment, photo: photo } : comment
       ),
     };
-
+  
     setQuestionData(updatedQuestionData);
     updateQuestion(questionSlug, updatedQuestionData);
   }
