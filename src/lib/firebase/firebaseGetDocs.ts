@@ -89,6 +89,22 @@ export const fetchDoc = async (collectionName: string, slug: any) => {
     throw error;
   }
 };
+
+export const fetchAllUsers = async () => {
+  try {
+    const querySnapshot = await getDocs(collection(db, "users"));
+    const usersList = querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+    
+    return usersList;
+  } catch (error) {
+    console.error("Error fetching document:", error);
+    throw error;
+  }
+};
+
 export const fetchVideosFromQuestion = async (docId: string): Promise<Video[]> => {
   try {
     const docRef = doc(db, 'questions', docId);

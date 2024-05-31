@@ -1,8 +1,8 @@
 "use client";
-import { fetchDoc } from '@/lib/firebase/firebaseGetDocs';
+import { fetchAllUsers, fetchDoc } from '@/lib/firebase/firebaseGetDocs';
 import { getUserData, getVideosById, updateUser } from '@/lib/firebase/firebaseFunctions';
 import { Comments } from '@/interfaces/collections';
-import React, { useEffect, useState } from 'react';
+import React, { ChangeEventHandler, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
 import { useParams } from 'next/navigation';
@@ -18,6 +18,10 @@ import { uploadImageToStorage } from '@/lib/firebase/firebaseConfig';
 import { sendTelegramMessage } from '../app/script/telegram';
 
 
+interface User {
+  id: string;
+  photo?: string;
+}
 
 export function fetchUserData(slug: any) {
   return fetchDoc('users', slug);
@@ -53,10 +57,21 @@ const PsyAccount = () => {
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [messageStatus, setMessageStatus] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [filePreview, setFilePreview] = useState<string | ArrayBuffer | null>(null);
+  const [allUsers, setAllUsers] = useState<User[]>([]);
   
+  
+  useEffect(() => {
+    fetchAllUsers().then((usersData) => {
+      setAllUsers(usersData);
+    });
+  }, []);
+  
+  const getCommentPhoto = (commentUserId: string) => {
+    return allUsers.find((item) => item.id.toLowerCase() === commentUserId.toLowerCase())?.photo;
+};
 
-
-
+ 
   useEffect(() => {
     async function fetchUserData(userId: any) {
       try {
@@ -103,6 +118,7 @@ const PsyAccount = () => {
               ...prevUserData,
               photo: imageUrl
             }));
+            
             setImageUrl(imageUrl);
             console.log('Изображение загружено:', imageUrl);
             updateCommentsData(imageUrl || userData?.photo, editedName); 
@@ -248,6 +264,19 @@ const PsyAccount = () => {
       setMessageStatus(`Психолог не может получать уведомления. Пожалуйста, пишите на почтовый адрес: ${email}`);
     }
   };
+   
+  const onChangeImage: ChangeEventHandler<HTMLInputElement> = (e) => {
+    const file = e.target?.files?.[0]; 
+    if (file) {
+        setImage(file);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setFilePreview(reader.result);
+        };
+        reader.readAsDataURL(file);
+    }
+};
+
 
 
 
@@ -318,7 +347,7 @@ const PsyAccount = () => {
                         </div>
                       ) : (
                         <Image
-                          src={isEditing ? (imageUrl || userData?.photo || '/default_avatar.jpg') : (userData?.photo || '/default_avatar.jpg')}
+                          src={isEditing ? (filePreview || imageUrl || userData?.photo || '/default_avatar.jpg') : (userData?.photo || '/default_avatar.jpg')}
                           alt="User Avatar"
                           width={180}
                           height={180}
@@ -332,7 +361,7 @@ const PsyAccount = () => {
                         <input
                           type="file"
                           accept="image/*"
-                          onChange={(e) => setImage(e.target.files?.[0] || null)}
+                          onChange={onChangeImage}
                           className="border border-green-500 font-semibold text-[9px] leading-6 p-1 mb-2 w-[11.2rem] "
                           disabled={!isEditing}
                         />
@@ -477,7 +506,8 @@ const PsyAccount = () => {
                 </div>
 
                 <ul className=" bg-gray-100 comment-lg comment-small">
-                  {comments.map(comment => (
+                  
+                  {allUsers.length > 0 && comments &&  comments.map(comment => (
                     <li className="flex flex-col p-3 bg-white shadow rounded-lg mb-3 mt-2 " key={comment.id}>
                       <div className="flex items-center space-x-3 justify-between">
                         {editCommentId === comment.id ? (
@@ -500,7 +530,7 @@ const PsyAccount = () => {
                         ) : (
                           <div className="flex w-full justify-between">
                             <div className="flex items-center">
-                              <img src={comment.photo || '/default_avatar.jpg'} alt="User Avatar" className="w-10 h-10 rounded-full object-cover mr-3" />
+                              <img src={ getCommentPhoto(comment.userId) || userData?.photo  || '/default_avatar.jpg'} alt="User Avatar" className="w-10 h-10 rounded-full object-cover mr-3" />
                               <div className="flex flex-col flex-grow">
                                 <p className="text-xs font-semibold text-gray-800">{comment?.userId === userId ? 'Вы' : comment?.name}</p>
                                 <p className="text-md text-gray-600 mt-1">{comment.content}</p>
