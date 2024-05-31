@@ -48,13 +48,13 @@ const TopicDetail = () => {
     <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px] justify-center" >
       <div className="flex flex-wrap -mx-1 lg:-mx-1 xs:mx-1 s:mx-2 md:mx-3">
 
-        <div className="w-full md:mt-3 xl:mt-0 lg:w-4/4 xl:w-1/4 px-1 lg:mb-0 order-last  tablet:order-last xl:order-first">
-          <VideoGallery />
+  <div className="w-full md:mt-3 xl:mt-0 lg:w-4/4 xl:w-1/4 px-1 lg:mb-0 order-last  tablet:order-last xl:order-first">
+              <VideoGallery />
         </div>
 
         <div className="container max-w-3xl mx-auto mt-[-1px] md:ml-[20px] lg:ml-[20px] xl:ml-0 md:mx-1 lg:mx-1 px-2 py-4 shadow-xl rounded-2xl xs:container-min card-small xl:w-[600px] containerPsy-laptop containerPsy-laptop-small">
           <h2 className="font-semibold bg-amber-300 text-gray-600 px-7 py-3 rounded-2xl leading-6 text-center">{topicData.title}</h2>
-          <h1 className="font-semibold text-black-600 text-xl  text-center mt-5 mb-5">Вопросы</h1>
+          <h1 className="font-semibold text-black-600 text-xl text-center mt-5 mb-5">Вопросы</h1>
           <div className="flex flex-col space-y-4">
             {topicData.questions.map((question) => (
               <Link key={question} href={`/questions/${encodeURIComponent(question)}`}>
