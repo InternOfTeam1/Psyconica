@@ -1,15 +1,16 @@
 
 import slugify from 'slugify';
+import { transliterate } from 'transliteration';
 import { setDoc, doc } from 'firebase/firestore';
 import { db } from './firebaseConfig';
 
 export const addDocumentWithSlug = async <T extends { [key: string]: any }>(
   collectionName: string,
   data: T,
-  slugField: string = 'title'
+  nameField: any
 ) => {
-  const slugValue = data[slugField] ? data[slugField] : (Math.floor(Math.random() * 9000000) + 1000000).toString();
-  const slug = slugify(slugValue, { lower: true, strict: true, remove: /[*+~.()'"!:@]/g });
+  const nameValue = data[nameField];
+  const slug = slugify(transliterate(nameValue, { unknown: '-' }), { lower: true, strict: true, remove: /[*+~.()'"!:@]/g });
   try {
     await setDoc(doc(db, collectionName, slug), { ...data, slug });
     console.log(`${collectionName} document successfully added with slug: ${slug}`);

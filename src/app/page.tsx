@@ -1,6 +1,10 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import TopicsComponent from '@/components/topics';
+// import { addEntities } from '@/components/addDoc';
+
+
+// addEntities()
 
 const Home: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -27,7 +31,6 @@ const Home: React.FC = () => {
       </div>
     );
   }
-
 
   return (
     <div className="flex flex-col items-center justify-center mx-auto">
