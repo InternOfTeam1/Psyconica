@@ -237,7 +237,194 @@ const questionsData = [
     SEOTitle: "",
     SEODesc: "",
     canonical: ""
-  }
+  },
+  {
+    slug: "How to use networking and contacts to advance your career?",
+    comments: [],
+    answers: [],
+    video: [],
+    topics: ["Профессиональный рост: ключи к успеху на работе"],
+    title: "Как использовать сетевые связи и контакты для продвижения по карьерной лестнице?",
+    SEOTitle: "",
+    SEODesc: "",
+    canonical: ""
+  },
+  {
+    slug: "How to develop leadership skills and effectively manage a team?",
+    comments: [],
+    answers: [],
+    video: [],
+    topics: ["Профессиональный рост: ключи к успеху на работе"],
+    title: "Как развивать лидерские качества и эффективно управлять командой?",
+    SEOTitle: "",
+    SEODesc: "",
+    canonical: ""
+  },
+  {
+    slug: "What strategies help develop professional skills?",
+    comments: [],
+    answers: [],
+    video: [],
+    topics: ["Профессиональный рост: ключи к успеху на работе"],
+    title: "Какие стратегии помогают развивать профессиональные навыки?",
+    SEOTitle: "",
+    SEODesc: "",
+    canonical: ""
+  },
+  {
+    slug: "How to use feedback to improve professional performance?",
+    comments: [],
+    answers: [],
+    video: [],
+    topics: ["Профессиональный рост: ключи к успеху на работе"],
+    title: "Как использовать обратную связь для улучшения профессиональной эффективности?",
+    SEOTitle: "",
+    SEODesc: "",
+    canonical: ""
+  },
+  {
+    slug: "How to create a positive atmosphere and maintain romance in family life?",
+    comments: [],
+    answers: [],
+    video: [],
+    topics: ["Семейные узы: крепкие связи, счастливые отношения"],
+    title: "Как создать положительную атмосферу и поддерживать романтику в семейной жизни?",
+    SEOTitle: "",
+    SEODesc: "",
+    canonical: ""
+  },
+  {
+    slug: "How to develop emotional intimacy and understanding in the family?",
+    comments: [],
+    answers: [],
+    video: [],
+    topics: ["Семейные узы: крепкие связи, счастливые отношения"],
+    title: "Как развивать эмоциональную близость и понимание в семье?",
+    SEOTitle: "",
+    SEODesc: "",
+    canonical: ""
+  },
+  {
+    slug: "How to resolve disagreements and accept compromises in family relationships?",
+    comments: [],
+    answers: [],
+    video: [],
+    topics: ["Семейные узы: крепкие связи, счастливые отношения"],
+    title: "Как решать разногласия и принимать компромиссы в семейных отношениях?",
+    SEOTitle: "",
+    SEODesc: "",
+    canonical: ""
+  },
+  {
+    slug: "How important is the joint implementation of goals and interests for family happiness?",
+    comments: [],
+    answers: [],
+    video: [],
+    topics: ["Семейные узы: крепкие связи, счастливые отношения"],
+    title: "Как важна совместная реализация целей и интересов для семейного счастья?",
+    SEOTitle: "",
+    SEODesc: "",
+    canonical: ""
+  },
+  {
+    slug: "How to develop emotional resilience in everyday life?",
+    comments: [],
+    answers: [],
+    video: [],
+    topics: ["Управление эмоциями: крепкий дух, ясный разум"],
+    title: "Как развивать эмоциональную стойкость в повседневной жизни?",
+    SEOTitle: "",
+    SEODesc: "",
+    canonical: ""
+  },
+  {
+    slug: "What is the role of emotional intelligence in managing emotions and making decisions?",
+    comments: [],
+    answers: [],
+    video: [],
+    topics: ["Управление эмоциями: крепкий дух, ясный разум"],
+    title: "Какова роль эмоционального интеллекта в управлении эмоциями и принятии решений?",
+    SEOTitle: "",
+    SEODesc: "",
+    canonical: ""
+  },
+  {
+    slug: "How to distinguish between emotions and respond to them appropriately?",
+    comments: [],
+    answers: [],
+    video: [],
+    topics: ["Управление эмоциями: крепкий дух, ясный разум"],
+    title: "Как различать эмоции и реагировать на них адекватно?",
+    SEOTitle: "",
+    SEODesc: "",
+    canonical: ""
+  },
+  {
+    slug: "What methods are effective for managing anger and irritation?",
+    comments: [],
+    answers: [],
+    video: [],
+    topics: ["Управление эмоциями: крепкий дух, ясный разум"],
+    title: "Какие методы эффективны для управления гневом и раздражением?",
+    SEOTitle: "",
+    SEODesc: "",
+    canonical: ""
+  },
+  {
+    slug: "How to balance work, personal life and time for yourself?",
+    comments: [],
+    answers: [],
+    video: [],
+    topics: ["Управление временем и стрессом: баланс в жизни"],
+    title: "Как сбалансировать работу, личную жизнь и время для себя?",
+    SEOTitle: "",
+    SEODesc: "",
+    canonical: ""
+  },
+  {
+    slug: "How important is it to set boundaries and learn to say “no” to prevent overwhelm?",
+    comments: [],
+    answers: [],
+    video: [],
+    topics: ["Управление временем и стрессом: баланс в жизни"],
+    title: "Как важно установить границы и научиться говорить “нет” для предотвращения перегрузки?",
+    SEOTitle: "",
+    SEODesc: "",
+    canonical: ""
+  },
+  {
+    slug: "How to develop effective time management skills?",
+    comments: [],
+    answers: [],
+    video: [],
+    topics: ["Управление временем и стрессом: баланс в жизни"],
+    title: "Как развить навыки эффективного планирования времени?",
+    SEOTitle: "",
+    SEODesc: "",
+    canonical: ""
+  },
+  {
+    slug: "How to determine priorities and avoid confusion?",
+    comments: [],
+    answers: [],
+    video: [],
+    topics: ["Управление временем и стрессом: баланс в жизни"],
+    title: "Как определить приоритеты и избежать растерянности?",
+    SEOTitle: "",
+    SEODesc: "",
+    canonical: ""
+  },
+  {
+    slug: "What methods can effectively delegate tasks and reduce stress?",
+    comments: [],
+    answers: [],
+    video: [],
+    topics: ["Управление временем и стрессом: баланс в жизни"],
+    title: "Какие методы позволяют эффективно делегировать задачи и сократить уровень стресса?",
+    SEOTitle: "",
+    SEODesc: "",
+    canonical: ""
+  },
 ];
 
 // const Comment: Comment = {
