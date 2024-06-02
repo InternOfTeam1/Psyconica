@@ -7,15 +7,16 @@ import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
 import { useParams } from 'next/navigation';
 import VideoGallery from './VideoGallery';
+import router from 'next/router';
 
-function fetchTopicData(slug: {}) {
+function fetchTopicData(slug: string) {
   return fetchDoc('topics', slug);
 }
 
 const TopicDetail = () => {
   const [topicData, setTopicData] = useState<Topic | null>(null);
-  const params = useParams();
-  const topicSlug: any = params.slug;
+  const params = useParams<{ slug: string }>();
+  const topicSlug = params.slug;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,11 +29,11 @@ const TopicDetail = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [topicSlug]);
 
   useEffect(() => {
     document.title = `${topicData?.title}`;
-  }, [topicData])
+  }, [topicData]);
 
   if (!topicData) {
     return <div>
@@ -44,43 +45,60 @@ const TopicDetail = () => {
     </div>;
   }
 
-  return (
-    <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px] justify-center" >
-      <div className="flex flex-wrap -mx-1 lg:-mx-1 xs:mx-1 s:mx-2 md:mx-3">
+  const handleClick = async (slug: string, type: string) => {
+    const path = type === 'question' ? `/questions/${slug}` : `/articles/${slug}`;
+    try {
+      await router.push(path);
+    } catch (error) {
+      console.error('Navigation error:', error);
+    }
+  };
 
-  <div className="w-full md:mt-3 xl:mt-0 lg:w-4/4 xl:w-1/4 px-1 lg:mb-0 order-last  tablet:order-last xl:order-first">
-              <VideoGallery />
+  return (
+    <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px] justify-center">
+      <div className="flex flex-wrap -mx-1 lg:-mx-1 xs:mx-1 s:mx-2 md:mx-3">
+        <div className="w-full md:mt-3 xl:mt-0 lg:w-4/4 xl:w-1/4 px-1 lg:mb-0 order-last tablet:order-last xl:order-first">
+          <VideoGallery />
         </div>
 
         <div className="container max-w-3xl mx-auto mt-[-1px] md:ml-[20px] lg:ml-[20px] xl:ml-0 md:mx-1 lg:mx-1 px-2 py-4 shadow-xl rounded-2xl xs:container-min card-small xl:w-[600px] containerPsy-laptop containerPsy-laptop-small">
           <h2 className="font-semibold bg-amber-300 text-gray-600 px-7 py-3 rounded-2xl leading-6 text-center">{topicData.title}</h2>
           <h1 className="font-semibold text-black-600 text-xl text-center mt-5 mb-5">Вопросы</h1>
           <div className="flex flex-col space-y-4">
-            {topicData.questions.map((question) => (
-              <Link key={question} href={`/questions/${encodeURIComponent(question)}`}>
-              <div className="bg-white p-3 rounded-lg shadow-md cursor-pointer hover:bg-gray-100 focus:bg-gray-100">
-                <h2 className="text-base font-semibold">{question}</h2>
+            {topicData.questions.map((question: any) => (
+              <div
+                key={question.slug}
+                onClick={() => handleClick(question.slug, 'question')}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => e.key === 'Enter' && handleClick(question.slug, 'question')}
+                className="bg-white p-3 rounded-lg shadow-md cursor-pointer hover:bg-gray-100 focus:bg-gray-100"
+              >
+                <h2 className="text-base font-semibold">{question.title}</h2>
               </div>
-            </Link>
             ))}
           </div>
 
-          <h1 className="font-semibold text-black-600 text-xl  text-center mt-5 mb-6">Статьи</h1>
+          <h1 className="font-semibold text-black-600 text-xl text-center mt-5 mb-6">Статьи</h1>
           <div className="flex flex-col space-y-4">
-            {topicData.articles.map((article) => (
-              <Link key={article} href={`/articles/${encodeURIComponent(article)}`}>
-              <div className="bg-white p-3 rounded-lg shadow-md cursor-pointer hover:bg-gray-100 focus:bg-gray-100">
-                <h2 className="text-base font-semibold">{article.split('. ')[0] + '.'}</h2>
+            {topicData.articles.map((article: any) => (
+              <div
+                key={article.slug}
+                onClick={() => handleClick(article.slug, 'article')}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => e.key === 'Enter' && handleClick(article.slug, 'article')}
+                className="bg-white p-3 rounded-lg shadow-md cursor-pointer hover:bg-gray-100 focus:bg-gray-100"
+              >
+                <h2 className="text-base font-semibold">{article.title}</h2>
               </div>
-            </Link>
             ))}
           </div>
         </div>
 
-        <div className="w-full p-3 mx-auto mt-[-3px] lg:mt-[-3px]  bg-white rounded-2xl shadow-2xl border xs:py-3 m-0 md:py-0 md:py-3-lg lg:py-3-md xl:py-3-2xl questions-lg questions-small questions-laptop questions-laptop-small">
+        <div className="w-full p-3 mx-auto mt-[-3px] lg:mt-[-3px] bg-white rounded-2xl shadow-2xl border xs:py-3 m-0 md:py-0 md:py-3-lg lg:py-3-md xl:py-3-2xl questions-lg questions-small questions-laptop questions-laptop-small">
           <p className='font-semibold text-center text-gray-800 leading-6 mt-3 mx-3'>Блок психологов</p>
         </div>
-        
       </div>
       <div className='text-center'>
         <Link href={HOME_ROUTE}>
