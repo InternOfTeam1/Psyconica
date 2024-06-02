@@ -71,20 +71,16 @@ const QuestionDetail = (props: Props) => {
   }, [userId]);
 
 
-
-
-  function fetchPhoto() {
-    getUserData(userId).then((userData) => {
+  useEffect(() => {
+    async function fetchPhoto() {
+      const userData = await getUserData(userId);
       setUserPhoto(userData.photo);
       updateExistingData(userData.photo, userData.name);
-    });
-  }
-
-  useEffect(() => {
-    if (userId) {
-      fetchPhoto();
     }
-  }, [userId]);
+
+    fetchPhoto();
+  }, []);
+
 
 
   function updateExistingData(photo: string, name: string) {
