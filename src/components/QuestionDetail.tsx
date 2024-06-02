@@ -71,21 +71,21 @@ const QuestionDetail = (props: Props) => {
   }, [userId]);
 
 
-  fetchPhoto();
-
-
-  function fetchPhoto() {
-    getUserData(userId).then((userData) => {
+  useEffect(() => {
+    async function fetchPhoto() {
+      const userData = await getUserData(userId);
       setUserPhoto(userData.photo);
       updateExistingData(userData.photo, userData.name);
-    });
-  }
-  
-  fetchPhoto();
-  
+    }
+
+    fetchPhoto();
+  }, []);
+
+
+
   function updateExistingData(photo: string, name: string) {
     if (!questionData) return;
-  
+
     const updatedQuestionData = {
       ...questionData,
       answers: questionData.answers.map((answer) =>
@@ -95,7 +95,7 @@ const QuestionDetail = (props: Props) => {
         comment.userId === userId ? { ...comment, photo: photo } : comment
       ),
     };
-  
+
     setQuestionData(updatedQuestionData);
     updateQuestion(questionSlug, updatedQuestionData);
   }
