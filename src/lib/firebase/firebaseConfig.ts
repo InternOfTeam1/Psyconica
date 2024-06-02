@@ -87,11 +87,11 @@ async function addUserDocument(user: User) {
     slug: user.displayName,
     userId: user.uid,
     answeredQuestions: [],
-    aboutUser: 'more',
-    contactUser: 'contact',
+    aboutUser: '',
+    contactUser: '',
     video: [],
-    slogan: "Psychology should be simple...",
-    expert: "Clinical psychologist",
+    slogan: "",
+    expert: "",
     comments: []
   };
   localStorage.setItem('userPhoto', JSON.stringify(user.photoURL));
