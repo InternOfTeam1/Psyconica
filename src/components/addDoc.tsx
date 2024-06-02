@@ -427,6 +427,21 @@ const questionsData = [
   },
 ];
 
+const articlessData = [
+  {
+    SEODesc: "",
+    SEOTitle: "",
+    canonical: "",
+    comments: [],
+    likes: [],
+    slug: "The importance of active listening in communication",
+    title: 'Значение активного слушания в общении',
+    article: 'Активное слушание – это не только процесс, в ходе которого вы просто слушаете слова собеседника, но и способность участвовать в диалоге, проявлять интерес и внимание к мнению другого человека. Этот навык важен для создания глубоких и доверительных отношений. Он позволяет не только понять точку зрения собеседника, но и ощутить его эмоциональное состояние и мотивы. Активное слушание включает в себя не только внимательное восприятие слов, но и использование невербальных сигналов, таких как жесты и мимика, для более полного понимания. Практикуя активное слушание, мы улучшаем свои коммуникативные навыки, укрепляем отношения и создаем условия для глубокого взаимопонимания.',
+    video: [],
+    topics: ["Глубокие связи: искусство эффективного общения"],
+  },
+]
+
 // const Comment: Comment = {
 //   slug: "",
 //   content: "hi",
@@ -461,6 +476,11 @@ export const addEntities = async () => {
   for (const data of questionsData) {
     const slug = data.slug
     await addDocumentWithSlug("questions", data, 'slug');
+  }
+
+  for (const data of articlessData) {
+    const slug = data.slug
+    await addDocumentWithSlug("articles", data, 'slug');
   }
 
   // await addDocumentWithSlug("comments", Comment);
