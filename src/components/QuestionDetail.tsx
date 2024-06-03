@@ -21,7 +21,6 @@ import { addDocumentWithSlug } from "@/lib/firebase/firebaseAdddoc";
 import { useRouter } from 'next/navigation';
 import { getUserData } from '@/lib/firebase/firebaseFunctions';
 
-
 function fetchQuestionData(slug: any) {
   return fetchDoc('questions', slug);
 }
@@ -224,7 +223,7 @@ const QuestionDetail = (props: Props) => {
           if (
             questionTitle &&
             questionSlug &&
-            !answeredQuestions.some((q: { title: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | React.PromiseLikeOfReactNode; slug: any; }) => q.title === questionTitle && q.slug === questionSlug)
+            !answeredQuestions.some((q: any) => q.title === questionTitle && q.slug === questionSlug)
           ) {
             const updatedUserDoc = {
               ...userDocs,
@@ -258,7 +257,7 @@ const QuestionDetail = (props: Props) => {
 
       const answeredQuestions = userDocs.answeredQuestions || [];
 
-      const updatedAnsweredQuestions = answeredQuestions.filter((question: { slug: string; title: string }) => {
+      const updatedAnsweredQuestions = answeredQuestions.filter((question: any) => {
         return !(question.slug === questionSlug && question.title === newQuestionData.title)
       })
 

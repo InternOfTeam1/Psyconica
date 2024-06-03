@@ -58,7 +58,7 @@ export interface Users {
   video?: string[];
   articles?: string[];
   userId: any,
-  answeredQuestions?: any,
+  answeredQuestions?: { question: string }[];
   aboutUser?: any,
   contactUser?: any
   slogan?: string;

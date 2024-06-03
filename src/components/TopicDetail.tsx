@@ -2,12 +2,14 @@
 
 import { useEffect, useState } from 'react';
 import { fetchDoc } from '@/lib/firebase/firebaseGetDocs';
-import { Topic } from '@/interfaces/collections';
+import { Topic, Users } from '@/interfaces/collections';
 import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
 import { useParams } from 'next/navigation';
 import VideoGallery from './VideoGallery';
 import router from 'next/router';
+import { getUsersWithMatchingQuestions } from '@/lib/firebase/firebaseFunctions';
+
 
 function fetchTopicData(slug: string) {
   return fetchDoc('topics', slug);
@@ -15,6 +17,7 @@ function fetchTopicData(slug: string) {
 
 const TopicDetail = () => {
   const [topicData, setTopicData] = useState<Topic | null>(null);
+  const [matchingUsers, setMatchingUsers] = useState<Users[]>([]);
   const params = useParams<{ slug: string }>();
   const topicSlug = params.slug;
 
@@ -22,8 +25,13 @@ const TopicDetail = () => {
     const fetchData = async () => {
       try {
         const data: any = await fetchTopicData(topicSlug);
-        console.log(data);
         setTopicData(data);
+        console.log(data, '2024')
+        if (data && data.questions) {
+          const users: any = await getUsersWithMatchingQuestions(data.questions);
+          setMatchingUsers(users);
+        }
+
       } catch (error) {
         console.error('Ошибка загрузки вопросов: ', error);
       }
@@ -46,13 +54,28 @@ const TopicDetail = () => {
   }
 
   const handleClick = async (slug: string, type: string) => {
-    const path = type === 'question' ? `/questions/${slug}` : `/articles/${slug}`;
+    let path: string;
+    switch (type) {
+      case 'question':
+        path = `/questions/${slug}`;
+        break;
+      case 'article':
+        path = `/articles/${slug}`;
+        break;
+      case 'profile':
+        path = `/profile/${slug}`;
+        break;
+      default:
+        console.error('Unknown type:', type);
+        return;
+    }
     try {
       await router.push(path);
     } catch (error) {
       console.error('Navigation error:', error);
     }
   };
+
 
   return (
     <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px] justify-center">
@@ -74,7 +97,7 @@ const TopicDetail = () => {
                 onKeyDown={(e) => e.key === 'Enter' && handleClick(question.slug, 'question')}
                 className="bg-white p-3 rounded-lg shadow-md cursor-pointer hover:bg-gray-100 focus:bg-gray-100"
               >
-                <h2 className="text-base font-semibold">{question.title}</h2>
+                <h2 className="text-base font-semibold">{question}</h2>
               </div>
             ))}
           </div>
@@ -90,7 +113,7 @@ const TopicDetail = () => {
                 onKeyDown={(e) => e.key === 'Enter' && handleClick(article.slug, 'article')}
                 className="bg-white p-3 rounded-lg shadow-md cursor-pointer hover:bg-gray-100 focus:bg-gray-100"
               >
-                <h2 className="text-base font-semibold">{article.title}</h2>
+                <h2 className="text-base font-semibold">{article}</h2>
               </div>
             ))}
           </div>
@@ -98,6 +121,21 @@ const TopicDetail = () => {
 
         <div className="w-full p-3 mx-auto mt-[-3px] lg:mt-[-3px] bg-white rounded-2xl shadow-2xl border xs:py-3 m-0 md:py-0 md:py-3-lg lg:py-3-md xl:py-3-2xl questions-lg questions-small questions-laptop questions-laptop-small">
           <p className='font-semibold text-center text-gray-800 leading-6 mt-3 mx-3'>Блок психологов</p>
+          <div className='flex flex-col space-y-2'>
+            {matchingUsers.map(user => (
+              <div key={user.userId} className='text-center'>
+
+                <div onClick={() => handleClick(user.userId, 'profile')}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => e.key === 'Enter' && handleClick(user.userId, 'profile')}
+                  className="flex items-center cursor-pointer">
+                  <p>{user.name}</p>
+
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
       <div className='text-center'>

@@ -1,9 +1,9 @@
-import { Comments } from '@/interfaces/collections';
+import { Comments, Users } from '@/interfaces/collections';
 import { db } from './firebaseConfig';
-import { doc, updateDoc, getDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
+import { doc, updateDoc, getDoc, arrayUnion, arrayRemove, collection, getDocs } from 'firebase/firestore';
 
 interface UserDataUpdate {
-  [key: string]: any; 
+  [key: string]: any;
   ratings?: Record<string, number>;
   averageRating?: number;
   comments?: Comments[];
@@ -56,7 +56,7 @@ export const updateUserDataInFirebase = async (userId: string, data: object) => 
 
 export const removeVideoFromCollection = async (videoUrl: string, userId: string) => {
   try {
-    const userDocRef = doc(db, 'users', userId); 
+    const userDocRef = doc(db, 'users', userId);
     await updateDoc(userDocRef, {
       video: arrayRemove(videoUrl)
     });
@@ -140,7 +140,7 @@ export const updateUser = async (slug: string, data: UserDataUpdate) => {
         const ratings = [...userDataRatings, ...dataRatings];
         data.averageRating = ratings.reduce((acc, cur) => acc + cur, 0) / ratings.length;
       }
-      
+
       await updateDoc(userDocRef, data);
       console.log("User updated successfully");
     } else {
@@ -169,3 +169,23 @@ export const getUserData = async (userId: string) => {
   }
 };
 
+
+
+export async function getUsersWithMatchingQuestions(topicQuestions: { question: string }[]): Promise<Users[]> {
+  try {
+    const usersCollection = collection(db, 'users');
+    const usersDocs = await getDocs(usersCollection);
+    const users: Users[] = usersDocs.docs.map(doc => ({ id: doc.id, ...doc.data() } as unknown as Users));
+
+    const matchingUsers = users.filter(user =>
+      user.answeredQuestions && user.answeredQuestions.some((question: any) =>
+        topicQuestions.some(topicQuestion => topicQuestion === question.title)
+      )
+    );
+
+    return matchingUsers;
+  } catch (error) {
+    console.error('Ошибка получения пользователей:', error);
+    return [];
+  }
+}
