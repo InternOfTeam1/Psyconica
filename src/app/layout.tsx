@@ -8,11 +8,12 @@ import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://psyconica.vercel.app'),
   title: {
     default: "Psyconica",
     template: "%s - Psyconica"
   }, 
-  description: "Find answers to your psychological questions that interest you",
+  description: "Ваша поддержка рядом - найдите своего психолога онлайн!",
   twitter: {
     card: "summary_large_image"
   }

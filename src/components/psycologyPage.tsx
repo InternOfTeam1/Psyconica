@@ -9,6 +9,7 @@ import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import PsychologistDashboard from './PsychologistVideoManager';
 import { FaPen } from 'react-icons/fa';
+import Head from 'next/head'
 import { MdClose } from 'react-icons/md';
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 import { useAppSelector } from '../redux/hooks';
@@ -281,7 +282,17 @@ const PsyAccount = () => {
 
 
   return (
-
+<>
+    <Head>
+        <title>{editedName}</title>
+        <meta name="description" content={editedAbout} />
+        <meta property="og:title" content={editedName} />
+        <meta property="og:description" content={editedAbout} />
+        <meta property="og:image" content={imageUrl || userData?.photo || '/opengraph-image.png'} />
+        <meta property="og:url" content={`https://psyconica.vercel.app/${userSlug}`} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content={imageUrl || userData?.photo || '/opengraph-image.png'} />
+      </Head>
     <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px] justify-center ">
       <div className="flex flex-wrap -mx-1 lg:-mx-1 xs:mx-1 s:mx-2 md:mx-3 ">
         <div className="w-full md:mt-3 xl:mt-0 lg:w-4/4 xl:w-1/4 px-1 lg:mb-0 order-last  tablet:order-last xl:order-first ">
@@ -597,8 +608,9 @@ const PsyAccount = () => {
         )}
       </div >
     </div>
-
+    </>
   );
 };
+
 
 export default PsyAccount;
