@@ -84,10 +84,10 @@ const TopicDetail = () => {
           <VideoGallery />
         </div>
 
-        <div className="container max-w-3xl mx-auto mt-[-1px] md:ml-[20px] lg:ml-[20px] xl:ml-0 md:mx-1 lg:mx-1 px-2 py-4 shadow-xl rounded-2xl xs:container-min card-small xl:w-[600px] containerPsy-laptop containerPsy-laptop-small">
-          <h2 className="font-semibold bg-amber-300 text-gray-600 px-7 py-3 rounded-2xl leading-6 text-center">{topicData.title}</h2>
-          <h1 className="font-semibold text-black-600 text-xl text-center mt-5 mb-5">Вопросы</h1>
-          <div className="flex flex-col space-y-4">
+        <div className="container max-w-3xl mx-auto mt-[-10px] xs:mx-auto sm:mx-auto md:ml-[20px] lg:mx-auto lg:mx-auto lg:ml-[20px] xl:ml-0 md:mx-auto px-2 py-4 shadow-xl rounded-2xl xs:container-min card-small xl:w-[600px] containerPsy-laptop containerPsy-laptop-small">
+          <h2 className="w-full font-semibold bg-amber-300 text-gray-600 text-base px-7 py-3 rounded-2xl leading-6 text-center">{topicData.title}</h2>
+          <h1 className="font-semibold text-black-600 text-lg text-center mt-5 mb-5">Вопросы</h1>
+          <div className="flex flex-col space-y-4" style={{maxHeight: '290px', overflowY: 'auto', paddingBottom: '10px'}}>
             {topicData.questions.map((question: any) => (
               <div
                 key={question.slug}
@@ -95,15 +95,15 @@ const TopicDetail = () => {
                 role="button"
                 tabIndex={0}
                 onKeyDown={(e) => e.key === 'Enter' && handleClick(question.slug, 'question')}
-                className="bg-white p-3 rounded-lg shadow-md cursor-pointer hover:bg-gray-100 focus:bg-gray-100"
+                className="bg-white mx-1 p-3 rounded-lg shadow-md cursor-pointer hover:bg-gray-100 focus:bg-gray-100"
               >
                 <h2 className="text-base font-semibold">{question}</h2>
               </div>
             ))}
           </div>
 
-          <h1 className="font-semibold text-black-600 text-xl text-center mt-5 mb-6">Статьи</h1>
-          <div className="flex flex-col space-y-4">
+          <h1 className="font-semibold text-black-600 text-lg text-center mt-5 mb-6">Статьи</h1>
+          <div className="flex flex-col space-y-4" style={{maxHeight: '290px', overflowY: 'auto', paddingBottom: '10px'}}>
             {topicData.articles.map((article: any) => (
               <div
                 key={article.slug}
@@ -111,9 +111,9 @@ const TopicDetail = () => {
                 role="button"
                 tabIndex={0}
                 onKeyDown={(e) => e.key === 'Enter' && handleClick(article.slug, 'article')}
-                className="bg-white p-3 rounded-lg shadow-md cursor-pointer hover:bg-gray-100 focus:bg-gray-100"
+                className="bg-white mx-1 p-3 rounded-lg shadow-md cursor-pointer hover:bg-gray-100 focus:bg-gray-100"
               >
-                <h2 className="text-base font-semibold">{article}</h2>
+                <h2 className="text-base font-semibold">{article.split('. ')[0] + '.'}</h2>
               </div>
             ))}
           </div>
@@ -121,7 +121,7 @@ const TopicDetail = () => {
 
         <div className="w-full p-3 mx-auto mt-[-3px] lg:mt-[-3px] bg-white rounded-2xl shadow-2xl border xs:py-3 m-0 md:py-0 md:py-3-lg lg:py-3-md xl:py-3-2xl questions-lg questions-small questions-laptop questions-laptop-small">
           <p className='font-semibold text-center text-gray-800 leading-6 mt-3 mx-3'>Блок психологов</p>
-          <div className='flex flex-col space-y-2'>
+          <div className='w-full flex flex-col space-y-2'>
             {matchingUsers.map(user => (
               <div key={user.userId} className='text-center'>
 
