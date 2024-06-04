@@ -72,13 +72,16 @@ const QuestionDetail = (props: Props) => {
 
   useEffect(() => {
     async function fetchPhoto() {
-      const userData = await getUserData(userId);
-      setUserPhoto(userData.photo);
-      updateExistingData(userData.photo, userData.name);
+      try {
+        const userData = await getUserData(userId);
+        setUserPhoto(userData.photo);
+        updateExistingData(userData.photo, userData.name);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
     }
-
     fetchPhoto();
-  }, []);
+  }, [userPhoto]);
 
 
 
