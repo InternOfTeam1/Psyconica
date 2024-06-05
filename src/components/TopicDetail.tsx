@@ -9,6 +9,8 @@ import { useParams } from 'next/navigation';
 import VideoGallery from './VideoGallery';
 import router from 'next/router';
 import { getUsersWithMatchingQuestions } from '@/lib/firebase/firebaseFunctions';
+import Image from 'next/image';
+import icon from '../../public/iconPsy.png';
 
 
 function fetchTopicData(slug: string) {
@@ -87,7 +89,7 @@ const TopicDetail = () => {
         <div className="container max-w-3xl mx-auto mt-[-10px] xs:mx-auto sm:mx-auto md:ml-[20px] lg:mx-auto lg:mx-auto lg:ml-[20px] xl:ml-0 md:mx-auto px-2 py-4 shadow-xl rounded-2xl xs:container-min card-small xl:w-[600px] containerPsy-laptop containerPsy-laptop-small">
           <h2 className="w-full font-semibold bg-amber-300 text-gray-600 text-base px-7 py-3 rounded-2xl leading-6 text-center">{topicData.title}</h2>
           <h1 className="font-semibold text-black-600 text-lg text-center mt-5 mb-5">Вопросы</h1>
-          <div className="flex flex-col space-y-4" style={{maxHeight: '290px', overflowY: 'auto', paddingBottom: '10px'}}>
+          <div className="flex flex-col space-y-4" style={{ maxHeight: '290px', overflowY: 'auto', paddingBottom: '10px' }}>
             {topicData.questions.map((question: any) => (
               <div
                 key={question.slug}
@@ -103,7 +105,7 @@ const TopicDetail = () => {
           </div>
 
           <h1 className="font-semibold text-black-600 text-lg text-center mt-5 mb-6">Статьи</h1>
-          <div className="flex flex-col space-y-4" style={{maxHeight: '290px', overflowY: 'auto', paddingBottom: '10px'}}>
+          <div className="flex flex-col space-y-4" style={{ maxHeight: '290px', overflowY: 'auto', paddingBottom: '10px' }}>
             {topicData.articles.map((article: any) => (
               <div
                 key={article.slug}
@@ -130,7 +132,9 @@ const TopicDetail = () => {
                   tabIndex={0}
                   onKeyDown={(e) => e.key === 'Enter' && handleClick(user.userId, 'profile')}
                   className="flex items-center cursor-pointer">
-                  <p>{user.name}</p>
+                  <Image src={user.photo || '/defaultPhoto.jpg'} alt="User Photo" width={50} height={50} className="w-10 h-10 rounded-full object-cover mr-3" />
+                  <p className="font-semibold text-black flex items-center bg-gray-200 rounded-2xl p-1">{user.name}
+                    <Image src={icon} alt="Psy Icon" width={20} height={20} /></p>
 
                 </div>
               </div>
