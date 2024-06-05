@@ -1,6 +1,7 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import TopicsComponent from '@/components/topics';
+import MetaData from '@/components/MetaData';
 // import { addEntities } from '@/components/addDoc';
 
 
@@ -34,11 +35,10 @@ const Home: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center justify-center mx-auto">
+      <MetaData title="Home Page" description="Welcome to the home page" />
       <h1 className="sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 leading-none text-center ">
         Психология должна быть простой!
       </h1>
-
-
       <div className="z-30 mx-auto flex flex-col items-center min-w-full ">
         <div className="z-30 flex flex-col lg:flex-row items-center justify-center ">
           <div className="z-30 mt-[8%] lg:mt-[-2%] xl:mt-[8%]">

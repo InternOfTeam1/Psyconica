@@ -1,14 +1,18 @@
 'use client'
+
+import MetaData from '@/components/MetaData';
 import { HOME_ROUTE } from '@/constants/routes';
 import Image from 'next/image'
 import Link from 'next/link';
 import VideoGallery from '@/components/VideoGallery';
 
 const Articles: React.FC = () => {
-
+  const title = "Как справиться с выгоранием: 6 советов психолога";
+  const description = "Узнайте 6 советов от психолога о том, как справиться с выгоранием и развить эмоциональный интеллект.";
 
   return (
    <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px] justify-center">
+         <MetaData title={title} description={description} />
       <div className=" w-full flex flex-wrap -mx-1 xs:flex-col s:flex-row-reverse justify-center lg:-mx-1 xs:mx-1 s:mx-2 md:mx-3">
 
         <div className="container ml-3 px-2 py-4 max-w-2xl bg-white shadow-xl rounded-2xl mb-4 lg:w-3/4 md:w-3/4 xs:w-3/4 " style={{ maxWidth: '800px' }}>
