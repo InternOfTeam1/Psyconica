@@ -37,6 +37,7 @@ export interface Article {
 }
 
 export interface Topic {
+  map(arg0: (question: any) => import("react").JSX.Element): ReactNode;
   slug: string;
   questions: string[];
   articles: string[];

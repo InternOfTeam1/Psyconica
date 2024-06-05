@@ -17,6 +17,7 @@ export const fetchDataFromCollection = async (collectionName: string): Promise<D
       if (collectionName === 'users') {
         data.push({
           id: doc.id,
+          slug: docData.slug, 
           name: docData.name || "No Name",
           description: docData.desc || "No Description",
           mail: docData.mail,
@@ -43,11 +44,12 @@ export const fetchDataFromCollection = async (collectionName: string): Promise<D
           canonical: docData.canonical || "No canonical",
           comments: docData.comments,
           likes: docData.likes,
-          url: docData.url
+          url: docData.url,
         });
       } else if (collectionName === 'questions') {
         data.push({
           id: doc.id,
+          slug: docData.slug, 
           title: docData.title || "No Title",
           canonical: docData.canonical || "No canonical",
           comments: docData.comments,
@@ -76,9 +78,12 @@ export const fetchDoc = async (collectionName: string, slug: any) => {
   try {
     const docRef = doc(db, collectionName, slug);
 
+    console.log(`Fetching document from collection: ${collectionName} with slug: ${slug}`);
+
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
+      console.log("Document found:", docSnap.data());
       return { id: docSnap.id, ...docSnap.data() };
     } else {
       console.log("No such document!");
