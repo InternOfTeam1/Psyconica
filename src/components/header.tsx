@@ -77,7 +77,7 @@ const Header: React.FC = () => {
         setIsLoading(false);
       });
     }
-  }, [userPhoto]);
+  }, [userId, userPhoto]);
 
   const handleClick = async (userId: string | undefined) => {
     if (!userId) {
