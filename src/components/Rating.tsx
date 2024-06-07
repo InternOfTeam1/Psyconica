@@ -83,8 +83,9 @@ const RatingStars: React.FC<RatingStarsProps> = ({ userSlug, currentRating, setR
         ratings: userRatings,
         averageRating
       });
-      setRating(averageRating);
+      setRating(averageRating);  // обновление состояния currentRating
       setUserHasRated(false);
+      setHoverRating(0);  // сброс состояния hoverRating
       setShowRemoveRatingModal(false);
     } else {
       console.error("Document does not exist!");
@@ -129,52 +130,52 @@ const RatingStars: React.FC<RatingStarsProps> = ({ userSlug, currentRating, setR
       <span className="text-lg font-medium">({currentRating.toFixed(1)})</span>
 
       {showThankYouModal && (
-  <Modal onClose={() => setShowThankYouModal(false)}>
-    <div className="p-6 bg-white rounded-lg shadow-lg relative">
-      <button
-        className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
-        onClick={() => setShowThankYouModal(false)}
-      >
-        ✖
-      </button>
-      <h2 className="text-xl font-bold mb-4">Спасибо за ваш отзыв!</h2>
-      <button
-        className="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-        onClick={() => setShowThankYouModal(false)}
-      >
-        Закрыть
-      </button>
-    </div>
-  </Modal>
-)}
+        <Modal onClose={() => setShowThankYouModal(false)}>
+          <div className="p-6 bg-white rounded-lg shadow-lg relative">
+            <button
+              className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
+              onClick={() => setShowThankYouModal(false)}
+            >
+              ✖
+            </button>
+            <h2 className="text-xl font-bold mb-4">Спасибо за ваш отзыв!</h2>
+            <button
+              className="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+              onClick={() => setShowThankYouModal(false)}
+            >
+              Закрыть
+            </button>
+          </div>
+        </Modal>
+      )}
 
-{showRemoveRatingModal && (
-  <Modal onClose={() => setShowRemoveRatingModal(false)}>
-    <div className="p-6 bg-white rounded-lg shadow-lg relative">
-      <button
-        className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
-        onClick={() => setShowRemoveRatingModal(false)}
-      >
-        ✖
-      </button>
-      <h2 className="text-xl font-bold mb-4">Вы хотите отменить свой отзыв?</h2>
-      <div className="flex space-x-4 mt-6">
-        <button
-          className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
-          onClick={handleRemoveRating}
-        >
-          Да
-        </button>
-        <button
-          className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
-          onClick={() => setShowRemoveRatingModal(false)}
-        >
-          Нет
-        </button>
-      </div>
-    </div>
-  </Modal>
-)}
+      {showRemoveRatingModal && (
+        <Modal onClose={() => setShowRemoveRatingModal(false)}>
+          <div className="p-6 bg-white rounded-lg shadow-lg relative">
+            <button
+              className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
+              onClick={() => setShowRemoveRatingModal(false)}
+            >
+              ✖
+            </button>
+            <h2 className="text-xl font-bold mb-4">Вы хотите отменить свой отзыв?</h2>
+            <div className="flex space-x-4 mt-6">
+              <button
+                className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
+                onClick={handleRemoveRating}
+              >
+                Да
+              </button>
+              <button
+                className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
+                onClick={() => setShowRemoveRatingModal(false)}
+              >
+                Нет
+              </button>
+            </div>
+          </div>
+        </Modal>
+      )}
 
     </div>
   );
