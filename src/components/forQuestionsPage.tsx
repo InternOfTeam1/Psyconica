@@ -85,25 +85,25 @@ const QuestionsComponent: React.FC<Props> = ({ videos }) => {
   };
 
   return (
-    <div className="container mx-auto max-w-7xl px-4 py-6 mt-[-50px]">
+    <div className="container mx-auto max-w-7xl px-2 py-3 mt-[-50px]">
       <h1 className="text-2xl font-bold text-center mb-6">Вопросы</h1>
-      <div className="flex flex-wrap -mx-4 xs:flex-col-reverse lg:flex-row">
+      <div className="flex flex-wrap xs:flex-col-reverse lg:flex-row mt-10">
         <div className="w-full lg:w-1/4 px-1 mb-4 lg:mb-0  xs:mt-2 xs:mx-auto lg:mx-0 lg:mt-0">
           <VideoGallery />
         </div>
-        <div className="w-full mx-auto lg:w-3/4 lg:ml-0 xl:ml-0 px-4" style={{ maxWidth: '870px' }}>
-          <div className="flex flex-col space-y-4">
+        <div className="w-full mx-auto lg:w-3/4 lg:ml-0 xl:ml-0 mb-8 px-4 pb-3" style={{ maxWidth: '870px' }}>
+          <div className="flex flex-col space-y-4" style={{ maxHeight: '788px', overflowY: 'auto', paddingBottom: '10px' }}>
             {questions.map((question) => (
               <div key={question.id} onClick={(e) => handleClick(`/questions/${question.slug || question.id}`, e)}
-                className="bg-white p-6 rounded-lg shadow-md cursor-pointer hover:bg-gray-100 focus:bg-gray-100">
-                <h2 className="text-xl font-semibold">{question.title}</h2>
+                className="bg-white mx-2 p-5 rounded-lg shadow-md cursor-pointer hover:bg-gray-100 focus:bg-gray-100">
+                <h2 className="text-xl font-semibold leading-6">{question.title}</h2>
               </div>
             ))}
           </div>
         </div>
       </div>
       <Link href={HOME_ROUTE}>
-        <button className="inline-block mt-4 mb-10 px-6 py-2 text-sm font-medium leading-6 text-center text-white uppercase transition bg-blue-500 rounded-full shadow ripple hover:shadow-lg focus:outline-none hover:bg-blue-600">
+        <button className="inline-block mt-4 mb-10 ml-5 px-6 py-2 text-sm font-medium leading-6 text-center text-white uppercase transition bg-blue-500 rounded-full shadow ripple hover:shadow-lg focus:outline-none hover:bg-blue-600">
           Вернуться на главную
         </button>
       </Link>

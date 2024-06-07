@@ -119,13 +119,13 @@ useEffect(() => {
   return (
     <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px] justify-center">
       <div className="flex flex-wrap -mx-1 lg:-mx-1 xs:mx-1 s:mx-2 md:mx-3">
-        <div className="w-full md:mt-3 xl:mt-0 lg:w-4/4 xl:w-1/4 px-1 lg:mb-0 order-last tablet:order-last xl:order-first">
+        <div className="w-full mt-3 md:mt-3 xl:mt-0 lg:w-4/4 xl:w-1/4 px-1 lg:mb-0 order-last tablet:order-last xl:order-first">
           <VideoGallery />
         </div>
 
-        <div className="container max-w-3xl mx-auto mt-[-10px] xs:mx-auto sm:mx-auto md:ml-[20px] lg:mx-auto lg:mx-auto lg:ml-[20px] xl:ml-0 md:mx-auto px-2 py-4 shadow-xl rounded-2xl xs:container-min card-small xl:w-[600px] containerPsy-laptop containerPsy-laptop-small">
+        <div className="container w-full mx-auto mt-[-10px] xs:w-full xs:mx-auto sm:w-full sm:mx-auto md:w-full md:mx-auto md:mx-5 lg:w-2/3 lg:mx-auto xl:ml-0 px-2 py-4 shadow-xl rounded-2xl xs:container-min card-small xl:w-[600px] containerPsy-laptop containerPsy-laptop-small" style={{ maxHeight: '790px' }}>
           <h2 className="w-full font-semibold bg-amber-300 text-gray-600 text-base px-7 py-3 rounded-2xl leading-6 text-center">{topicData.title}</h2>
-          <h1 className="font-semibold text-black-600 text-lg text-center mt-5 mb-5">Вопросы</h1>
+          <h1 className="font-bold text-black-600 text-lg text-center mt-5 mb-5">Вопросы</h1>
           <div className="flex flex-col space-y-4" style={{ maxHeight: '290px', overflowY: 'auto', paddingBottom: '10px' }}>
             {topicData.questions.map((question: any, index: number) => (
               <div
@@ -141,7 +141,7 @@ useEffect(() => {
             ))}
           </div>
 
-          <h1 className="font-semibold text-black-600 text-lg text-center mt-5 mb-6">Статьи</h1>
+          <h1 className="font-bold text-black-600 text-lg text-center mt-5 mb-6">Статьи</h1>
           <div className="flex flex-col space-y-4" style={{ maxHeight: '290px', overflowY: 'auto', paddingBottom: '10px' }}>
             {topicData.articles.map((article: any, index: number) => (
               <div
@@ -158,8 +158,8 @@ useEffect(() => {
           </div>
         </div>
 
-        <div className="w-full p-3 mx-auto mt-[-3px] lg:mt-[-3px] bg-white rounded-2xl shadow-2xl border xs:py-3 m-0 md:py-0 md:py-3-lg lg:py-3-md xl:py-3-2xl questions-lg questions-small questions-laptop questions-laptop-small">
-          <p className='font-semibold text-center text-gray-800 leading-6 mt-3 mx-3'>Блок психологов</p>
+        <div className="w-full p-5 mx-auto mt-3 lg:mt-[-3px] bg-white rounded-2xl shadow-2xl border xs:py-3 m-0 md:w-full md:mx-auto md:mx-5 md:pb-5 md:py-0 md:py-3-lg lg:w-1/4 lg:mx-auto lg:py-3-md xl:py-3-2xl questions-lg questions-small questions-laptop questions-laptop-small" style={{ minWidth: '250px', maxHeight: '785px' }}>
+          <p className='font-bold text-center text-gray-800 leading-6 mt-3 mx-3 pb-4'>Блок психологов</p>
           <div className='w-full flex flex-col space-y-2'>
             {matchingUsers.map((user) => (
               <div key={user.userId} className="text-center">
