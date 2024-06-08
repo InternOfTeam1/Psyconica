@@ -8,7 +8,7 @@ import { HOME_ROUTE } from '@/constants/routes';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import PsychologistDashboard from './PsychologistVideoManager';
-import { FaPen } from 'react-icons/fa';
+import { FaCheck, FaPen, FaSpinner } from 'react-icons/fa';
 import Head from 'next/head'
 import { MdClose } from 'react-icons/md';
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
@@ -17,8 +17,9 @@ import { useRouter } from 'next/navigation';
 import RatingStars from './Rating';
 import { uploadImageToStorage } from '@/lib/firebase/firebaseConfig';
 import { sendTelegramMessage } from '../app/script/telegram';
-
-
+import { AppDispatch } from '@/redux/store';
+import { useDispatch } from 'react-redux';
+import { falseToggle, trueToggle } from '@/redux/slices/toggleSlice';
 interface User {
   id: string;
   photo?: string;
@@ -57,9 +58,11 @@ const PsyAccount = () => {
   const [showContact, setShowContact] = useState(true);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [messageStatus, setMessageStatus] = useState<string | null>(null);
+  const [loadStatus, setLoadStatus] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [filePreview, setFilePreview] = useState<string | ArrayBuffer | null>(null);
   const [allUsers, setAllUsers] = useState<User[]>([]);
+  const dispatch = useDispatch<AppDispatch>();
 
 
   useEffect(() => {
@@ -112,6 +115,8 @@ const PsyAccount = () => {
 
       if (image) {
         try {
+          dispatch(trueToggle());
+          setLoadStatus('Изображение загружается. Пожалуйста, подождите...');
           const imageUrl = await uploadImageToStorage(image);
           if (imageUrl) {
             newImageUrl = imageUrl;
@@ -122,7 +127,12 @@ const PsyAccount = () => {
             }));
 
             setImageUrl(imageUrl);
-            console.log('Изображение загружено:', imageUrl);
+            dispatch(falseToggle());
+            setLoadStatus('Изображение загружено.');
+
+            setTimeout(() => {
+              setLoadStatus(null);
+            }, 3000);
           }
         } catch (error) {
           console.error('Ошибка при обновлении фотографии:', error);
@@ -344,10 +354,22 @@ const PsyAccount = () => {
                           >
                             Редактировать личный кабинет
                           </button>
-                        )}
-                      </>
-                    )}
 
+                        )}
+
+                      </>
+
+                    )}
+                    {loadStatus && (
+                      <p className="text-gray-500 text-sm mt-2 flex items-center">
+                        {loadStatus === 'Изображение загружается. Пожалуйста, подождите...' ? (
+                          <FaSpinner className="animate-spin mr-2" />
+                        ) : (
+                          <FaCheck className="text-green-500 mr-2" />
+                        )}
+                        {loadStatus}
+                      </p>
+                    )}
                   </div>
 
 

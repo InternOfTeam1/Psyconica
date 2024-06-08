@@ -29,6 +29,7 @@ const Header: React.FC = () => {
   const [userPhoto, setUserPhoto] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const isToggle = useSelector((state: RootState) => state.toggle.isToggle);
 
   const handleNav = () => {
     setMenuOpen(!menuOpen);
@@ -77,7 +78,7 @@ const Header: React.FC = () => {
         setIsLoading(false);
       });
     }
-  }, [userId, userPhoto]);
+  }, [userId, isToggle]);
 
   const handleClick = async (userId: string | undefined) => {
     if (!userId) {
