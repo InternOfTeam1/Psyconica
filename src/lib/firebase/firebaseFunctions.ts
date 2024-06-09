@@ -48,7 +48,6 @@ export const updateUserDataInFirebase = async (userId: string, data: object) => 
   const userRef = doc(db, "users", userId);
   try {
     await updateDoc(userRef, data);
-    console.log("Данные пользователя успешно обновлены.");
   } catch (error) {
     console.error("Ошибка при обновлении данных пользователя:", error);
   }
@@ -60,7 +59,6 @@ export const removeVideoFromCollection = async (videoUrl: string, userId: string
     await updateDoc(userDocRef, {
       video: arrayRemove(videoUrl)
     });
-    console.log('Видео успешно удалено');
   } catch (error) {
     console.error('Ошибка при удалении видео:', error);
     throw new Error('Не удалось удалить видео');
@@ -82,7 +80,6 @@ export const updateAnswerLikes = async (answerNum: number, updatedLikes: string[
       }
       return answer;
     });
-    console.log("Updating with:", updatedAnswers);
     await updateDoc(questionDocRef, {
       answers: updatedAnswers
     });
@@ -142,7 +139,6 @@ export const updateUser = async (slug: string, data: UserDataUpdate) => {
       }
 
       await updateDoc(userDocRef, data);
-      console.log("User updated successfully");
     } else {
       console.error("Document does not exist!");
     }

@@ -104,7 +104,6 @@ const TopicDetail = () => {
     }
 
     try {
-      console.log(`Navigating to ${path}`);
       await router.push(path);
     } catch (error) {
       console.error('Navigation error:', error);

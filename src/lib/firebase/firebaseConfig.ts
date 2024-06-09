@@ -44,8 +44,6 @@ export const signInWithGoogle = async (): Promise<User2 | null> => {
       return user as User2
     }
 
-
-    console.log('Успешный вход:', user);
     return firebaseUser as unknown as User2;
   } catch (error) {
     console.error('Ошибка аутентификации:', error);
@@ -67,9 +65,6 @@ export const signInWithTwitter = async (): Promise<User2 | null> => {
       return user as User2
     }
 
-
-
-    console.log('Успешный вход:', user);
     return firebaseUser as unknown as User2;
   } catch (error) {
     console.error('Ошибка аутентификации:', error);
@@ -80,7 +75,6 @@ export const signInWithTwitter = async (): Promise<User2 | null> => {
 async function addUserDocument(user: User) {
   const userData: Users = {
     name: user.displayName,
-    telegramUserID: '',
     mail: user.email,
     photo: user.photoURL,
     role: 'user',
@@ -101,7 +95,6 @@ async function addUserDocument(user: User) {
 export const signOutUser = async (): Promise<void> => {
   try {
     await signOut(auth);
-    console.log('Successfully signed out');
   } catch (error) {
     console.error('Error signing out:', error);
   }

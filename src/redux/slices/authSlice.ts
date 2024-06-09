@@ -5,9 +5,9 @@ import { updateUserDataInFirebase } from "@/lib/firebase/firebaseFunctions";
 import Cookies from 'js-cookie';
 
 
-export const getUser = async (id : string ) =>{
+export const getUser = async (id: string) => {
   const usersData = await fetchDataFromCollection('users');
-   return usersData.find(u => u.mail === id);
+  return usersData.find(u => u.mail === id);
 }
 
 
@@ -19,7 +19,7 @@ export const login = createAsyncThunk(
     if (user) {
       const usersData = await fetchDataFromCollection('users');
       const loggedInUser = await getUser((user.mail || user.email) as string);
-      if (loggedInUser) { 
+      if (loggedInUser) {
         Cookies.set('user', JSON.stringify(loggedInUser), { expires: 7 });
         return { isAuthenticated: true, user: loggedInUser };
       }
@@ -48,7 +48,6 @@ export const updateUserProfile = createAsyncThunk(
   'auth/updateUserProfile',
   async ({ userId, isPsychologist }: { userId: string; isPsychologist: boolean }, thunkAPI) => {
     const role = isPsychologist ? 'psy' : 'user';
-    console.log(`Обновление профиля пользователя ${userId} на роль ${isPsychologist ? 'psy' : 'user'}`);
     await updateUserDataInFirebase(userId, { role: isPsychologist ? 'psy' : 'user' });
     thunkAPI.dispatch(setUserRole(role))
   }

@@ -9,7 +9,6 @@ export interface Video {
 
 export const fetchDataFromCollection = async (collectionName: string): Promise<Data[]> => {
   try {
-    console.log(`Fetching data from collection: ${collectionName}`);
     const querySnapshot = await getDocs(collection(db, collectionName));
     const data: Data[] = [];
     querySnapshot.forEach((doc) => {
@@ -17,7 +16,7 @@ export const fetchDataFromCollection = async (collectionName: string): Promise<D
       if (collectionName === 'users') {
         data.push({
           id: doc.id,
-          slug: docData.slug, 
+          slug: docData.slug,
           name: docData.name || "No Name",
           description: docData.desc || "No Description",
           mail: docData.mail,
@@ -49,7 +48,7 @@ export const fetchDataFromCollection = async (collectionName: string): Promise<D
       } else if (collectionName === 'questions') {
         data.push({
           id: doc.id,
-          slug: docData.slug, 
+          slug: docData.slug,
           title: docData.title || "No Title",
           canonical: docData.canonical || "No canonical",
           comments: docData.comments,
@@ -78,12 +77,9 @@ export const fetchDoc = async (collectionName: string, slug: any) => {
   try {
     const docRef = doc(db, collectionName, slug);
 
-    console.log(`Fetching document from collection: ${collectionName} with slug: ${slug}`);
-
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      console.log("Document found:", docSnap.data());
       return { id: docSnap.id, ...docSnap.data() };
     } else {
       console.log("No such document!");
@@ -102,7 +98,7 @@ export const fetchAllUsers = async () => {
       id: doc.id,
       ...doc.data()
     }));
-    
+
     return usersList;
   } catch (error) {
     console.error("Error fetching document:", error);

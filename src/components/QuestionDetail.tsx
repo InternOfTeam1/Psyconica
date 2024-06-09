@@ -424,7 +424,6 @@ const QuestionDetail = (props: Props) => {
 
               {sortedAnswers.map((answer: Answers, index: number) => {
                 const progressWidth = (answer.likes.length / MAX_LIKES) * 100;
-                console.log(answer, 'fghjkl;');
 
                 return (
                   <div key={index} className="mt-4 w-full ">

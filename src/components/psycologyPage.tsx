@@ -44,7 +44,6 @@ const PsyAccount = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [image, setImage] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [telegramUserID, setTelegramUserID] = useState<string>('');
   const userId = useAppSelector((state) => state.auth.user?.id);
   const userName = useAppSelector((state) => state.auth.user?.name);
   const [userPhoto, setUserPhoto] = useState('/default_avatar.jpg');
@@ -88,7 +87,6 @@ const PsyAccount = () => {
         setEditedSlogan(fetchedUserData.slogan || '');
         setEditedExpert(fetchedUserData.expert || '');
         setEditedName(fetchedUserData.name || '');
-        setTelegramUserID(fetchedUserData.telegramUserID || '');
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
@@ -140,27 +138,20 @@ const PsyAccount = () => {
         }
 
       }
-
-
-      await updateUser(userSlug, {
+      const updatedUserData = {
         aboutUser: editedAbout,
         contactUser: editedContact,
         slogan: editedSlogan,
         expert: editedExpert,
         name: editedName,
-        telegramUserID: telegramUserID,
         photo: newImageUrl,
-      });
+      };
+
+      await updateUser(userSlug, updatedUserData);
 
       setUserData({
         ...userData,
-        aboutUser: editedAbout,
-        contactUser: editedContact,
-        slogan: editedSlogan,
-        expert: editedExpert,
-        name: editedName,
-        telegramUserID: telegramUserID,
-        photo: newImageUrl,
+        ...updatedUserData,
       });
 
       updateCommentsData(imageUrl || userData?.photo, editedName);
@@ -268,9 +259,6 @@ const PsyAccount = () => {
       console.error('Error updating rating:', error);
     }
   };
-
-
-
 
 
   const handleSendMessage = async (psyName: any, email: any) => {
