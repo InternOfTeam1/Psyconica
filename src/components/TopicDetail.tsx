@@ -20,26 +20,25 @@ const TopicDetail = () => {
 
   const topicSlug = params?.slug ? encodeURIComponent(params.slug) : null;
 
-useEffect(() => {
-  // Проверка на существование topicSlug
-  if (topicSlug) {
-    const fetchData = async () => {
-      try {
-        console.log('Fetching data for slug:', topicSlug);
-        const data: any = await fetchDoc('topics', topicSlug);
-        console.log('Fetched data:', data);
-        setTopicData(data);
-        if (data && data.questions) {
-          const users: any = await getUsersWithMatchingQuestions(data.questions);
-          setMatchingUsers(users);
+  useEffect(() => {
+    if (topicSlug) {
+      const fetchData = async () => {
+        try {
+          console.log('Fetching data for slug:', topicSlug);
+          const data: any = await fetchDoc('topics', topicSlug);
+          console.log('Fetched data:', data);
+          setTopicData(data);
+          if (data && data.questions) {
+            const users: any = await getUsersWithMatchingQuestions(data.questions);
+            setMatchingUsers(users);
+          }
+        } catch (error) {
+          console.error('Ошибка загрузки данных:', error);
         }
-      } catch (error) {
-        console.error('Ошибка загрузки данных:', error);
-      }
-    };
-    fetchData();
-  }
-}, [topicSlug]);
+      };
+      fetchData();
+    }
+  }, [topicSlug]);
 
   useEffect(() => {
     if (topicData?.title) {
@@ -75,47 +74,45 @@ useEffect(() => {
     let path: any;
 
     switch (type) {
-        case 'question': {
-            const questionsData = await fetchDataFromCollection('questions') as Data[];
-            const foundQuestion = questionsData
-                .filter(question => question.title !== undefined)
-                .find((question) => item.includes(question.title));
-            console.log(foundQuestion, 'VAVAVAV');
+      case 'question': {
+        const questionsData = await fetchDataFromCollection('questions') as Data[];
+        const foundQuestion = questionsData
+          .filter(question => question.title !== undefined)
+          .find((question) => item.includes(question.title));
 
-            path = `/questions/${foundQuestion?.slug}`;
-            break;
-        }
-        case 'article': {
-            path = `/articles/`;
-            break;
-        }
-        case 'profile': {
-            const usersData = await fetchDataFromCollection('users') as Data[];
-            const foundUser = usersData.find(user => user.userId === item);
-            console.log(foundUser, 'User Found');
+        path = `/questions/${foundQuestion?.slug}`;
+        break;
+      }
+      case 'article': {
+        path = `/articles/`;
+        break;
+      }
+      case 'profile': {
+        const usersData = await fetchDataFromCollection('users') as Data[];
+        const foundUser = usersData.find(user => user.userId === item);
 
-            if (foundUser) {
-                path = `/profile/${foundUser.slug}`;
-            } else {
-                console.error('User not found');
-            }
-            break;
+        if (foundUser) {
+          path = `/profile/${foundUser.slug}`;
+        } else {
+          console.error('User not found');
         }
-        default:
-            console.error('Unknown type:', type);
-            return;
+        break;
+      }
+      default:
+        console.error('Unknown type:', type);
+        return;
     }
 
     try {
-        console.log(`Navigating to ${path}`);
-        await router.push(path);
+      console.log(`Navigating to ${path}`);
+      await router.push(path);
     } catch (error) {
-        console.error('Navigation error:', error);
+      console.error('Navigation error:', error);
     }
-};
+  };
 
-  
-  
+
+
   return (
     <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px] justify-center">
       <div className="flex flex-wrap -mx-1 lg:-mx-1 xs:mx-1 s:mx-2 md:mx-3">

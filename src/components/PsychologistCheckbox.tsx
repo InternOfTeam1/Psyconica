@@ -4,7 +4,7 @@ import { updateUserProfile, setUserRole } from '../redux/slices/authSlice';
 import { AppDispatch } from '../redux/store';
 import { useAppSelector } from '../redux/hooks';
 import Cookies from 'js-cookie';
-import { updateUserDataInFirebase } from '../lib/firebase/firebaseFunctions'; 
+import { updateUserDataInFirebase } from '../lib/firebase/firebaseFunctions';
 import { setUserState } from '../redux/slices/authSlice';
 
 const PsychologistModal: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ isOpen, onClose }) => {
@@ -14,13 +14,12 @@ const PsychologistModal: React.FC<{ isOpen: boolean, onClose: () => void }> = ({
 
   useEffect(() => {
     const isPsychologistCookie = Cookies.get("isPsychologist");
-    debugger
     if (userId && isPsychologistCookie) {
       setIsChecked(isPsychologistCookie === "true");
     } else {
       setIsChecked(false);
     }
-    dispatch(setUserRole(isPsychologistCookie === "true" ? 'psy': 'user')) 
+    dispatch(setUserRole(isPsychologistCookie === "true" ? 'psy' : 'user'))
   }, [isOpen, userId]);
 
   const handleCheckboxChange = async () => {
@@ -30,14 +29,14 @@ const PsychologistModal: React.FC<{ isOpen: boolean, onClose: () => void }> = ({
     }
     const newIsPsychologistValue = !isChecked;
     setIsChecked(newIsPsychologistValue);
-  
+
     const expirationDays = 7;
     Cookies.set('isPsychologist', String(newIsPsychologistValue), { expires: expirationDays });
-  
+
     await updateUserDataInFirebase(userId, { role: newIsPsychologistValue ? 'psy' : 'user' });
-  
+
     dispatch(updateUserProfile({ userId, isPsychologist: newIsPsychologistValue }));
-  
+
     const userCookie = Cookies.get('user');
     if (userCookie) {
       const user = JSON.parse(userCookie);
@@ -54,15 +53,15 @@ const PsychologistModal: React.FC<{ isOpen: boolean, onClose: () => void }> = ({
   return (
     <>
       <div className="fixed inset-0 bg-black bg-opacity-50 z-40" onClick={onClose}></div>
-      
+
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-lg shadow-xl p-6 max-w-sm mx-auto">
           <h3 className="font-semibold text-lg">Вы психолог?</h3>
           <p className="text-gray-700">Если вы являетесь психологом, отметьте пожалуйста:</p>
-          
+
           <div className="mt-4">
             <label className="inline-flex items-center">
-              <input type="checkbox" className="form-checkbox text-indigo-600" checked={isChecked} onChange={handleCheckboxChange}/>
+              <input type="checkbox" className="form-checkbox text-indigo-600" checked={isChecked} onChange={handleCheckboxChange} />
               <span className="ml-2">Я психолог</span>
             </label>
           </div>

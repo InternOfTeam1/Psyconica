@@ -6,7 +6,7 @@ import { Metadata } from "next";
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: 'Questions Page',
-    description: 'Page showing a list of questions', 
+    description: 'Page showing a list of questions',
   };
 }
 
@@ -31,9 +31,6 @@ const Questions: React.FC = async () => {
   const videos = rawData as Video[];
 
   let data = shuffleAndTrimVideos(videos, 4)
-
-
-  console.log(data);
 
 
   return (

@@ -31,7 +31,6 @@ Email: ${ClientEmail}`;
     if (!response.ok) {
       throw new Error(`Failed to send message to Telegram: ${responseData.description}`);
     }
-    console.log('Message sent to Telegram!', responseData);
   } catch (error) {
     console.error('Error sending message to Telegram:', error);
   }
