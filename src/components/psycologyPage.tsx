@@ -422,7 +422,7 @@ const PsyAccount = () => {
                         <div className='my-1 ml-2 xs:w-[90%]'>
                           <RatingStars userSlug={userSlug} currentRating={rating} setRating={setRating} userId={userId} />
                         </div>
-                        {!userId && (
+                        {userId !== userData.slug && (
                           <button
                             onClick={() => handleSendMessage(userData?.name, userData?.email)}
                             className="bg-blue-500 text-white text-sm px-4 py-2 ml-2 my-2 rounded-md text-center hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 max-w-xs w-auto "
