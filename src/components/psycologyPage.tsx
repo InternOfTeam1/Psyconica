@@ -422,13 +422,15 @@ const PsyAccount = () => {
                         <div className='my-1 ml-2 xs:w-[90%]'>
                           <RatingStars userSlug={userSlug} currentRating={rating} setRating={setRating} userId={userId} />
                         </div>
-                        <button
-                          onClick={() => handleSendMessage(userData?.name, userData?.email)}
-                          className="bg-blue-500 text-white text-sm px-4 py-2 ml-2 my-2 rounded-md text-center hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 max-w-xs w-auto "
-                        >
-                          <div>Записаться на консультацию</div>
-                          <div>к {userData?.name}</div>
-                        </button>
+                        {!userId && (
+                          <button
+                            onClick={() => handleSendMessage(userData?.name, userData?.email)}
+                            className="bg-blue-500 text-white text-sm px-4 py-2 ml-2 my-2 rounded-md text-center hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 max-w-xs w-auto "
+                          >
+                            <div>Записаться на консультацию</div>
+                            <div>к {userData?.name}</div>
+                          </button>
+                        )}
                         {messageStatus && (
                           <p className={`text-center mt-2 text-sm ${messageStatus.includes('успешно') ? 'text-green-500' : 'text-red-500'}`}>
                             {messageStatus}
