@@ -1,54 +1,37 @@
-'use client'
+import ArticlesComponent from '@/components/ArticlesComponent';
+import { Video } from "@/interfaces/collections";
+import { fetchDataFromCollection } from "@/lib/firebase/firebaseGetDocs";
+import { Metadata } from "next";
 
-import MetaData from '@/components/MetaData';
-import { HOME_ROUTE } from '@/constants/routes';
-import Image from 'next/image'
-import Link from 'next/link';
-import VideoGallery from '@/components/VideoGallery';
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: 'Articles Page',
+    description: 'Page showing a list of articles',
+  };
+}
 
-const Articles: React.FC = () => {
-  const title = "Как справиться с выгоранием: 6 советов психолога";
-  const description = "Узнайте 6 советов от психолога о том, как справиться с выгоранием и развить эмоциональный интеллект.";
+function shuffleAndTrimVideos(videos: Video[], maxLength: number): Video[] {
+  let shuffledVideos = videos.slice();
 
-  return (
-   <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px] justify-center">
-         <MetaData title={title} description={description} />
-      <div className=" w-full flex flex-wrap -mx-1 xs:flex-col s:flex-row-reverse justify-center lg:-mx-1 xs:mx-1 s:mx-2 md:mx-3">
+  for (let i = shuffledVideos.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffledVideos[i], shuffledVideos[j]] = [shuffledVideos[j], shuffledVideos[i]];
+  }
+  return shuffledVideos.filter(v => v.video).slice(0, maxLength);
+}
 
-        <div className="container ml-3 px-2 py-4 max-w-2xl bg-white shadow-xl rounded-2xl mb-4 lg:w-3/4 md:w-3/4 xs:w-3/4 " style={{ maxWidth: '800px' }}>
-          <h2 className="font-semibold bg-amber-300 text-gray-600 px-7 py-3 rounded-2xl leading-6 text-center">
-            Как справиться с выгоранием: 6 советов психолога
-          </h2>
+const Articles: React.FC = async () => {
+  const rawData = await fetchDataFromCollection('videos');
+  const articlesData = await fetchDataFromCollection('articles');
 
-          <p className="font-semibold text-gray-600 mt-2 pr-5 leading-5 w-full sm:text-sm md:text-md lg:text-lg text-center">
-            
-            Эмоциональным интеллектом современная психология называет умение человека распознавать, понимать и управлять собственными эмоциями, а также его способность считывать, понимать и влиять на эмоции другого человека. В практическом смысле это совокупность навыков, благодаря которым человек понимает, что его эмоции могут управлять его поведением и влиять на окружающих — причем не только позитивно, но и негативно. Умение контролировать и сдерживать собственные чувства и не давать им брать верх над тем, как человек ведет себя и какое влияние он оказывает на близких, важно во многих случаях — при обычном общении, нехватке ресурсов, трудностях или успехах в работе, планировании перемен в жизни и не только. В английском языке для обозначения эмоционального интеллекта по аналогии с IQ используется аббревиатура EQ — «emotional quotient», или «эмоциональный коэффициент», а также сокращение EI — «emotional intelligence».
-            Чтобы развить собственный эмоциональный интеллект, психологи рекомендуют чаще заниматься самоанализом. Определить уровень развития EQ, по словам экспертов, можно благодаря онлайн-тестам, однако забывать о необходимости его повышения все равно не рекомендуется. Специалисты медицинского портала MindTools советуют чаще прибегать к следующим практикам, помогающим лучше осознать свою эмоциональность и научиться распознавать собственные психоэмоциональные состояния:
-            1. Наблюдайте за своей реакцией на окружающих: проанализируйте, какие эмоции у вас возникают от коммуникации с ними, попробуйте поставить себя на место другого человека и понять, какие эмоции он испытывает, что чувствует и каких целей пытается достигнуть;
-            2. Проследите, как вы реагируете на стрессовые ситуации. Старайтесь сдерживать свои эмоции или, по крайней мере, не давать им брать верх над вами и толкать к импульсивным поступкам;
-            3. Принимайте ответственность за свои действия. Учитесь понимать, что ваши поступки могут оказывать влияние на окружающих, и, если они приносят отрицательный эффект, постарайтесь честно признаться в собственной ошибке;
-            4. Распознавайте свои эмоции и обозначайте их. Проследите, какие чувства у вас возникают при стрессе, к каким действиям они приводят, насколько эффективны эти действия и как их можно изменить так, чтобы они принесли положительный результат;
-            5. Не бойтесь спрашивать мнения окружающих. Коллеги, друзья или родственники могут подсказать вам, как со стороны выглядит ваши действия и как на них влияет ваша эмоциональность, насколько вы эмпатичны, как ведете себя во время конфликтов.
-           </p>
-          <div className="mx-auto">
-            <Image src="/article2.jpeg" alt="img" width={500} height={500} className="block" />
-          </div>
-        </div>
+  if (!rawData || !articlesData) {
+    return null;
+  }
 
-        <div className="w-full lg:w-3/4 md:w-3/4 s:w-3/4 xl:w-1/4 px-1 xs:mt-2 xs:mx-auto lg:mx-0 lg:mt-0">
-          <VideoGallery />
-        </div>
+  const videos = rawData as Video[];
+  const shuffledVideos = shuffleAndTrimVideos(videos, 10); 
 
-      </div>
-      <div className='text-center'>
-        <Link href={HOME_ROUTE}>
-          <button className="inline-block mt-4 mb-10 px-6 py-2 text-sm font-medium leading-6 text-center text-white uppercase transition bg-blue-500 rounded-full shadow ripple hover:shadow-lg focus:outline-none hover:bg-blue-600">
-            Вернуться на главную
-          </button>
-        </Link>
-      </div>
-    </div>
-  );
-};
+  return <ArticlesComponent videos={shuffledVideos} />;
+}
 
 export default Articles;
