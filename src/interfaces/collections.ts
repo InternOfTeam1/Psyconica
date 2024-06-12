@@ -111,6 +111,7 @@ export interface Comments {
 }
 
 export interface Data {
+  savedVideos: never[];
   id: string;
   title?: string;
   description?: string;

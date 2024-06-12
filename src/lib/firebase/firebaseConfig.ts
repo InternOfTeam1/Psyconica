@@ -1,11 +1,10 @@
 import { initializeApp, getApp, getApps, FirebaseApp } from 'firebase/app';
 import { Firestore, getFirestore } from 'firebase/firestore';
 import { getAuth, GoogleAuthProvider, signInWithPopup, User, signOut, TwitterAuthProvider } from 'firebase/auth';
+import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { Users } from '@/interfaces/collections';
 import { addDocumentWithSlug } from '@/lib/firebase/firebaseAdddoc';
 import { getUser } from '@/redux/slices/authSlice';
-import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
-
 
 const firebaseConfig = {
   apiKey: "AIzaSyCPP1vFH-j44dTveCE_YaClsPooUk38G90",
@@ -18,22 +17,17 @@ const firebaseConfig = {
 
 const firebaseApp: FirebaseApp = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
-
 export const db: Firestore = getFirestore(firebaseApp);
-const storage = getStorage(firebaseApp);
-
-const auth = getAuth(firebaseApp);
+export const storage = getStorage(firebaseApp);
+export const auth = getAuth(firebaseApp);
 
 type User2 = User & {
-  mail?: string
-  email?: string
-}
+  mail?: string;
+  email?: string;
+};
 
 export const signInWithGoogle = async (): Promise<User2 | null> => {
-
-
   try {
-
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
@@ -41,9 +35,8 @@ export const signInWithGoogle = async (): Promise<User2 | null> => {
     const firebaseUser = await getUser(user.email as string);
     if (!firebaseUser) {
       await addUserDocument(user);
-      return user as User2
+      return user as User2;
     }
-
     return firebaseUser as unknown as User2;
   } catch (error) {
     console.error('Ошибка аутентификации:', error);
@@ -51,10 +44,8 @@ export const signInWithGoogle = async (): Promise<User2 | null> => {
   }
 };
 
-
 export const signInWithTwitter = async (): Promise<User2 | null> => {
   try {
-
     const provider = new TwitterAuthProvider();
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
@@ -62,9 +53,8 @@ export const signInWithTwitter = async (): Promise<User2 | null> => {
     const firebaseUser = await getUser(user.email as string);
     if (!firebaseUser) {
       await addUserDocument(user);
-      return user as User2
+      return user as User2;
     }
-
     return firebaseUser as unknown as User2;
   } catch (error) {
     console.error('Ошибка аутентификации:', error);

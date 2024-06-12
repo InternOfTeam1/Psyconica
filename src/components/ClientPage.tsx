@@ -42,8 +42,6 @@ const ClientAccount = () => {
   const [filePreview, setFilePreview] = useState<string | ArrayBuffer | null>(null);
   const dispatch = useDispatch<AppDispatch>();
 
-
-
   useEffect(() => {
     async function fetchUserData(userId: any) {
       try {
@@ -58,7 +56,6 @@ const ClientAccount = () => {
     if (userSlug) {
       fetchUserData(userSlug);
     }
-
   }, [userSlug]);
 
   useEffect(() => {
@@ -84,7 +81,7 @@ const ClientAccount = () => {
             await updateUser(userSlug, { photo: imageUrl });
             setUserData((prevUserData: any) => ({
               ...prevUserData,
-              photo: imageUrl
+              photo: imageUrl,
             }));
 
             setImageUrl(imageUrl);
@@ -97,9 +94,8 @@ const ClientAccount = () => {
           }
         } catch (error) {
           console.error('Ошибка при обновлении фотографии:', error);
-          return
+          return;
         }
-
       }
       const updatedUserData = {
         photo: newImageUrl,
@@ -117,10 +113,8 @@ const ClientAccount = () => {
     }
   };
 
-
   const changeNickName = async () => {
     try {
-
       const updatedUserData = {
         name: editedName,
       };
@@ -149,28 +143,6 @@ const ClientAccount = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-
-
-
-
-  // const handleClick = async (url: string) => {
-
-
-  //   if (userData?.answeredQuestions && userData.answeredQuestions.length > 0) {
-  //     const questionSlugs = `/questions/${url}`;
-  //     try {
-  //       await router.push(questionSlugs);
-  //     } catch (error) {
-  //       console.error('Navigation error:', error);
-  //     }
-  //   }
-
-
-  // };
-
-
-
-
   const onChangeImage: ChangeEventHandler<HTMLInputElement> = (e) => {
     const file = e.target?.files?.[0];
     if (file) {
@@ -183,31 +155,75 @@ const ClientAccount = () => {
     }
   };
 
+  console.log(userData, 'DDDD');
+  
 
   return (
-
     userData && userData?.role == 'user' && (
       <>
-
         <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px] justify-center ">
           <div className="flex flex-wrap -mx-1 lg:-mx-1 xs:mx-1 s:mx-2 md:mx-3 ">
-
-            <div className="container  mx-auto mt-[-1px] md:ml-[20px]  lg:ml-[40px] xl:ml-0 sm:mx-2 md:mx-1 lg:mx-1 px-2 py-4 max-w-3xl bg-white shadow-xl rounded-2xl xs:container-min card-small xl:w-[600px] containerPsy-laptop containerPsy-laptop-small " >
-
+            <div className="w-full p-3 mx-auto mt-[-3px] lg:mt-[-3px] bg-white rounded-2xl shadow-2xl border xs:py-3 my-5 m-0 md:py-0 md:py-3-lg lg:py-3-md xl:py-3-2xl questions-lg questions-small questions-laptop questions-laptop-small ">
+              <div className="w-full p-1 ">
+                <p className="font-semibold text-gray-800 leading-6 mt-3 mx-3 ">
+                  Сохраненные видео:
+                </p>
+                {userData && userData.savedVideos && (
+                  <div className="flex flex-wrap justify-center gap-2">
+    {userData.savedVideos.length > 0 ? (
+      userData.savedVideos.map((video: any, index: number) => (
+        <div key={index} className="cursor-pointer border-2 rounded-2xl overflow-hidden pb-3 bg-gray-200 h-[150px]"
+                   style={{ boxShadow: '0 2px 6px rgba(0,0,0,0.4)' }}>
+          <iframe
+            width="100%"
+            height="100px"
+            src={video}
+            title={video.title}
+            className="w-full h-1 sm:h-56 md:h-64 lg:h-72 xl:h-[200px]"
+            allowFullScreen
+          ></iframe>
+          <p className="text-sm mt-2">{video.title}</p>
+        </div>
+      ))
+    ) : (
+      <p className="text-gray-600">Пока нет сохраненных видео.</p>
+    )}
+  </div>
+)}
+              </div>
+            </div>
+            <br />
+            <div className="container  mx-auto mt-[-1px] md:ml-[20px]  lg:ml-[40px] xl:ml-0 sm:mx-2 md:mx-1 lg:mx-1 px-2 py-4 max-w-3xl bg-white shadow-xl rounded-2xl xs:container-min card-small xl:w-[600px] containerPsy-laptop containerPsy-laptop-small ">
               <div className="flex items-start ml-5 photo-block">
-                <div className='relative mb-4'>
-                  <div className="mt-2 mr-5 w-[180px] h-[180px] ">
+                <div className="relative mb-4">
+                  <div className="mt-2 mr-5 w-[180px] h-[180px]">
                     {isLoading ? (
                       <div className="flex justify-center items-center w-full h-full">
-                        <svg aria-hidden="true" className="inline w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
-                          <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
+                        <svg
+                          aria-hidden="true"
+                          className="inline w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+                          viewBox="0 0 100 101"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                            fill="currentColor"
+                          />
+                          <path
+                            d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.195 1.69328 37.7584 4.19778 38.3955 6.62326C39.0327 9.04873 41.5052 10.4715 44.0646 10.1071C47.8223 9.56811 51.6279 9.52643 55.4218 10.0007C60.6271 10.6598 65.6269 12.4122 70.1061 15.1917C74.5854 17.9712 78.4486 21.716 81.524 26.207C83.7975 29.4527 85.4933 33.0629 86.5483 36.8895C87.3195 39.4934 89.9678 40.8845 92.4111 40.1664C92.4703 40.1486 92.5292 40.1301 92.5877 40.1109C93.0689 39.9506 93.5218 39.7318 93.9676 39.0409Z"
+                            fill="currentFill"
+                          />
                         </svg>
                         <span className="sr-only">Loading...</span>
                       </div>
                     ) : (
                       <Image
-                        src={isEditingImage ? (filePreview || imageUrl || userData?.photo || '/default_avatar.jpg') : (userData?.photo || '/default_avatar.jpg')}
+                        src={
+                          isEditingImage
+                            ? filePreview || imageUrl || userData?.photo || '/default_avatar.jpg'
+                            : userData?.photo || '/default_avatar.jpg'
+                        }
                         alt="User Avatar"
                         width={180}
                         height={180}
@@ -225,16 +241,12 @@ const ClientAccount = () => {
                         className="border border-green-500 font-semibold text-[9px] leading-6 p-1 mb-2 w-[11.2rem] "
                         disabled={!isEditingImage}
                       />
-
-
                     </div>
                   )}
 
                   <div className="text-center mb-5 ">
-
                     {userId === userData.slug && (
                       <>
-
                         {isEditingImage ? (
                           <button
                             className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 ml-1"
@@ -249,10 +261,8 @@ const ClientAccount = () => {
                           >
                             Изменить изображение
                           </button>
-
                         )}
                       </>
-
                     )}
 
                     {loadStatus && (
@@ -266,18 +276,8 @@ const ClientAccount = () => {
                       </p>
                     )}
                   </div>
-
-
-
-
-
-
                 </div>
-
-
-
-
-                <div className='flex ml-3 items-start'>
+                <div className="flex ml-3 items-start">
                   <div className="flex flex-col flex-grow profile-info">
                     <div className="flex justify-between items-center p-1 profile-info name">
                       <input
@@ -291,12 +291,9 @@ const ClientAccount = () => {
                     </div>
 
                     <div className="mb-5 w-full">
-
                       {userId === userData.slug && (
                         <>
-
                           {isEditingName ? (
-
                             <button
                               className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 ml-1"
                               onClick={changeNickName}
@@ -310,37 +307,21 @@ const ClientAccount = () => {
                             >
                               Изменить никнейм
                             </button>
-
                           )}
                         </>
-
-
-
-
                       )}
-
                     </div>
-
-
-
                   </div>
                 </div>
-
-
               </div>
-
-
-
-
-
-
-
             </div>
-            <div className="w-full p-3 mx-auto mt-[-3px] lg:mt-[-3px]  bg-white rounded-2xl shadow-2xl border xs:py-3 my-5 m-0 md:py-0 md:py-3-lg lg:py-3-md xl:py-3-2xl questions-lg questions-small questions-laptop questions-laptop-small ">
+            <div className="w-full p-3 mx-auto mt-[-3px] lg:mt-[-3px] bg-white rounded-2xl shadow-2xl border xs:py-3 my-5 m-0 md:py-0 md:py-3-lg lg:py-3-md xl:py-3-2xl questions-lg questions-small questions-laptop questions-laptop-small ">
               <div className="w-full p-1 ">
-                <p className='font-semibold  text-gray-800 leading-6 mt-3 mx-3'>Сохранненные вопросы:</p>
+                <p className="font-semibold text-gray-800 leading-6 mt-3 mx-3">
+                  Сохранненные психологи:
+                </p>
                 {/* {userData && userData.savedQuestions && (
-                  <ul className='text-gray-600 leading-6 mt-2 mx-3'>
+                  <ul className="text-gray-600 leading-6 mt-2 mx-3">
                     {userData.answeredQuestions.length > 0 ? (
                       userData.answeredQuestions.map((question: any, index: number) => (
                         <li
@@ -353,7 +334,6 @@ const ClientAccount = () => {
                         >
                           <hr /> {question.title}
                         </li>
-
                       ))
                     ) : (
                       <li>Пока нет сохраненных вопросов.</li>
@@ -362,7 +342,7 @@ const ClientAccount = () => {
                 )} */}
               </div>
             </div>
-            <br />
+            
             {!userData && (
               <div className="flex justify-center">
                 <Link href={HOME_ROUTE}>
@@ -372,19 +352,11 @@ const ClientAccount = () => {
                 </Link>
               </div>
             )}
-          </div >
-        </div >
-
-
-
-
-
+          </div>
+        </div>
       </>
     )
-
-
   );
 };
-
 
 export default ClientAccount;

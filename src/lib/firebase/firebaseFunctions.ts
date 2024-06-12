@@ -9,7 +9,6 @@ interface UserDataUpdate {
   comments?: Comments[];
 }
 
-
 export const getVideosById = async (userId: string) => {
   if (!userId) {
     console.error("No user ID provided");
@@ -33,7 +32,7 @@ export const getVideosById = async (userId: string) => {
   }
 };
 
-export const addVideoToCollection = async (videoUrl: string, userId: string,) => {
+export const addVideoToCollection = async (videoUrl: string, userId: string) => {
   const newVideoRef = doc(db, "users", userId);
   try {
     await updateDoc(newVideoRef, {
@@ -44,6 +43,7 @@ export const addVideoToCollection = async (videoUrl: string, userId: string,) =>
     throw new Error('Failed to add video');
   }
 };
+
 export const updateUserDataInFirebase = async (userId: string, data: object) => {
   const userRef = doc(db, "users", userId);
   try {
@@ -74,7 +74,6 @@ export const updateAnswerLikes = async (answerNum: number, updatedLikes: string[
     const question = questionData.data();
 
     const updatedAnswers = question.answers.map((answer: { num: number; likes: string[] }) => {
-
       if (answer.num === answerNum) {
         return { ...answer, likes: updatedLikes };
       }
@@ -87,7 +86,6 @@ export const updateAnswerLikes = async (answerNum: number, updatedLikes: string[
     console.log("Document does not exist!");
   }
 };
-
 
 export const updateQuestion = async (slug: string, data: any) => {
   try {
@@ -103,7 +101,6 @@ export const updateQuestion = async (slug: string, data: any) => {
   } catch (e) {
     console.log(e)
   }
-
 };
 
 export const updateComment = async (slug: string, data: any) => {
@@ -120,7 +117,6 @@ export const updateComment = async (slug: string, data: any) => {
   } catch (e) {
     console.log(e)
   }
-
 };
 
 export const updateUser = async (slug: string, data: UserDataUpdate) => {
@@ -165,8 +161,6 @@ export const getUserData = async (userId: string) => {
   }
 };
 
-
-
 export async function getUsersWithMatchingQuestions(topicQuestions: { question: string }[]): Promise<Users[]> {
   try {
     const usersCollection = collection(db, 'users');
@@ -185,3 +179,29 @@ export async function getUsersWithMatchingQuestions(topicQuestions: { question: 
     return [];
   }
 }
+
+export const saveVideoForUser = async (videoUrl: string, userId: string) => {
+  try {
+    const userRef = doc(db, 'users', userId);
+    await updateDoc(userRef, {
+      savedVideos: arrayUnion(videoUrl)
+    });
+    console.log('Video saved successfully');
+  } catch (error) {
+    console.error('Error saving video:', error);
+    throw error;
+  }
+};
+
+export const removeSavedVideoForUser = async (videoUrl: string, userId: string) => {
+  try {
+    const userRef = doc(db, 'users', userId);
+    await updateDoc(userRef, {
+      savedVideos: arrayRemove(videoUrl)
+    });
+    console.log('Saved video removed successfully');
+  } catch (error) {
+    console.error('Error removing saved video:', error);
+    throw error;
+  }
+};
