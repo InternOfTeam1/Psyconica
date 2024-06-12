@@ -20,6 +20,8 @@ import { FaPen } from "react-icons/fa";
 import { addDocumentWithSlug } from "@/lib/firebase/firebaseAdddoc";
 import { useRouter } from 'next/navigation';
 import { getUserData } from '@/lib/firebase/firebaseFunctions';
+import { FaBookmark } from 'react-icons/fa';
+
 
 function fetchQuestionData(slug: any) {
   return fetchDoc('questions', slug);
@@ -50,6 +52,7 @@ const QuestionDetail = (props: Props) => {
   const userName = useAppSelector((state) => state.auth.user?.name);
   const user = useAppSelector((state) => state.auth.user);
   const [userPhoto, setUserPhoto] = useState('/default_avatar.jpg');
+  const [isSaved, setIsSaved] = useState(false);
   const MAX_LIKES = 100;
   const dispatch: AppDispatch = useDispatch();
   const [userData, setUserData] = useState<any>(null);
@@ -384,6 +387,48 @@ const QuestionDetail = (props: Props) => {
     })
   }, [])
 
+
+
+
+
+
+  const saveQuestions = async () => {
+    try {
+      if (userRole === 'user') {
+        const userDocs = await fetchDoc('users', userId) as unknown as Users;
+
+        if (userDocs) {
+          const savedQuestions = userDocs.savedQuestions || [];
+          const questionTitle = questionData?.title;
+
+          if (questionTitle) {
+            const isAlreadySaved = savedQuestions.some((q: any) => q.title === questionTitle && q.slug === questionSlug);
+
+            let updatedSavedQuestions;
+            if (isAlreadySaved) {
+
+              updatedSavedQuestions = savedQuestions.filter((q: any) => q.title !== questionTitle || q.slug !== questionSlug);
+              setIsSaved(false);
+            } else {
+
+              updatedSavedQuestions = [...savedQuestions, { title: questionTitle, slug: questionSlug }];
+              setIsSaved(true);
+            }
+
+            const updatedUserDoc = {
+              ...userDocs,
+              savedQuestions: updatedSavedQuestions
+            };
+            await addDocumentWithSlug('users', updatedUserDoc, 'userId');
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Error saving the question:", error);
+    }
+  };
+
+
   const sortedAnswers = questionData?.answers?.sort((a, b) => b.likes.length - a.likes.length) || [];
 
   return (
@@ -395,8 +440,15 @@ const QuestionDetail = (props: Props) => {
         <div className="w-full mx-auto mb-5 lg:w-3/4 lg:ml-0 xl:ml-0 px-4 py-4 bg-white shadow-xl rounded-2xl" style={{ maxWidth: '850px' }}>
           {questionData && (
             <>
-              <h2 className="font-semibold bg-amber-300 text-gray-600 px-7 py-3 rounded-2xl leading-6 text-center xs:text-sm xs:px-3 sm:text-sm sm:px-4 md:text-base md:px-5 lg:text-lg lg:px-6 xl:text-xl xl:px-7">{questionData.title}</h2>
 
+              <h2 className="font-semibold bg-amber-300 text-gray-600 px-7 py-3 rounded-2xl leading-6 text-center xs:text-sm xs:px-3 sm:text-sm sm:px-4 md:text-base md:px-5 lg:text-lg lg:px-6 xl:text-xl xl:px-7">{questionData.title}</h2>
+              <div className="flex items-center justify-end mt-2 space-x-2">
+                <h2 className="font-semibold text-gray-950 text-sm cursor-pointer">Сохранить</h2>
+                <FaBookmark
+                  className={`cursor-pointer text-lg ${isSaved ? 'text-green-500' : 'text-gray-400'}`}
+                  onClick={saveQuestions}
+                />
+              </div>
               {userRole === 'psy' ? (
                 newAnswer ?
                   <>

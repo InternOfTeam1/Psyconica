@@ -155,8 +155,21 @@ const ClientAccount = () => {
     }
   };
 
-  console.log(userData, 'DDDD');
-  
+  const handleClick = async (url: string) => {
+
+
+    if (userData?.savedQuestions && userData.savedQuestions.length > 0) {
+      const questionSlugs = `/questions/${url}`;
+      try {
+        await router.push(questionSlugs);
+      } catch (error) {
+        console.error('Navigation error:', error);
+      }
+    }
+
+
+  };
+
 
   return (
     userData && userData?.role == 'user' && (
@@ -164,33 +177,33 @@ const ClientAccount = () => {
         <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px] justify-center ">
           <div className="flex flex-wrap -mx-1 lg:-mx-1 xs:mx-1 s:mx-2 md:mx-3 ">
             <div className="w-full p-3 mx-auto mt-[-3px] lg:mt-[-3px] bg-white rounded-2xl shadow-2xl border xs:py-3 my-5 m-0 md:py-0 md:py-3-lg lg:py-3-md xl:py-3-2xl questions-lg questions-small questions-laptop questions-laptop-small ">
-              <div className="w-full p-1 ">
+              {/* <div className="w-full p-1 ">
                 <p className="font-semibold text-gray-800 leading-6 mt-3 mx-3 ">
                   Сохраненные видео:
                 </p>
                 {userData && userData.savedVideos && (
                   <div className="flex flex-wrap justify-center gap-2">
-    {userData.savedVideos.length > 0 ? (
-      userData.savedVideos.map((video: any, index: number) => (
-        <div key={index} className="cursor-pointer border-2 rounded-2xl overflow-hidden pb-3 bg-gray-200 h-[150px]"
-                   style={{ boxShadow: '0 2px 6px rgba(0,0,0,0.4)' }}>
-          <iframe
-            width="100%"
-            height="100px"
-            src={video}
-            title={video.title}
-            className="w-full h-1 sm:h-56 md:h-64 lg:h-72 xl:h-[200px]"
-            allowFullScreen
-          ></iframe>
-          <p className="text-sm mt-2">{video.title}</p>
-        </div>
-      ))
-    ) : (
-      <p className="text-gray-600">Пока нет сохраненных видео.</p>
-    )}
-  </div>
-)}
-              </div>
+                    {userData.savedVideos.length > 0 ? (
+                      userData.savedVideos.map((video: any, index: number) => (
+                        <div key={index} className="cursor-pointer border-2 rounded-2xl overflow-hidden pb-3 bg-gray-200 h-[150px]"
+                          style={{ boxShadow: '0 2px 6px rgba(0,0,0,0.4)' }}>
+                          <iframe
+                            width="100%"
+                            height="100px"
+                            src={video}
+                            title={video.title}
+                            className="w-full h-1 sm:h-56 md:h-64 lg:h-72 xl:h-[200px]"
+                            allowFullScreen
+                          ></iframe>
+                          <p className="text-sm mt-2">{video.title}</p>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-gray-600">Пока нет сохраненных видео.</p>
+                    )}
+                  </div>
+                )}
+              </div> */}
             </div>
             <br />
             <div className="container  mx-auto mt-[-1px] md:ml-[20px]  lg:ml-[40px] xl:ml-0 sm:mx-2 md:mx-1 lg:mx-1 px-2 py-4 max-w-3xl bg-white shadow-xl rounded-2xl xs:container-min card-small xl:w-[600px] containerPsy-laptop containerPsy-laptop-small ">
@@ -311,6 +324,32 @@ const ClientAccount = () => {
                         </>
                       )}
                     </div>
+
+                    <div className="w-full p-1 ">
+                      <p className="font-semibold text-gray-800 leading-6 mt-3 mx-3">
+                        Сохранненные вопросы:
+                      </p>
+                      {userData && userData.savedQuestions && (
+                        <ul className="text-gray-600 leading-6 mt-2 mx-3">
+                          {userData.savedQuestions.length > 0 ? (
+                            userData.savedQuestions.map((question: any, index: number) => (
+                              <li
+                                key={index}
+                                onClick={(e: React.MouseEvent<HTMLLIElement, MouseEvent>) => handleClick(`${question.slug}`)}
+                                role="button"
+                                tabIndex={0}
+                                onKeyDown={(e: React.KeyboardEvent<HTMLLIElement>) => e.key === 'Enter' && handleClick(`${question.slug}`)}
+                                className="my-3"
+                              >
+                                <hr /> {question.title}
+                              </li>
+                            ))
+                          ) : (
+                            <li>Пока нет сохраненных вопросов.</li>
+                          )}
+                        </ul>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -320,29 +359,10 @@ const ClientAccount = () => {
                 <p className="font-semibold text-gray-800 leading-6 mt-3 mx-3">
                   Сохранненные психологи:
                 </p>
-                {/* {userData && userData.savedQuestions && (
-                  <ul className="text-gray-600 leading-6 mt-2 mx-3">
-                    {userData.answeredQuestions.length > 0 ? (
-                      userData.answeredQuestions.map((question: any, index: number) => (
-                        <li
-                          key={index}
-                          onClick={(e: React.MouseEvent<HTMLLIElement, MouseEvent>) => handleClick(`${question.slug}`)}
-                          role="button"
-                          tabIndex={0}
-                          onKeyDown={(e: React.KeyboardEvent<HTMLLIElement>) => e.key === 'Enter' && handleClick(`${question.slug}`)}
-                          className="my-3"
-                        >
-                          <hr /> {question.title}
-                        </li>
-                      ))
-                    ) : (
-                      <li>Пока нет сохраненных вопросов.</li>
-                    )}
-                  </ul>
-                )} */}
+
               </div>
             </div>
-            
+
             {!userData && (
               <div className="flex justify-center">
                 <Link href={HOME_ROUTE}>

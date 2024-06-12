@@ -60,6 +60,8 @@ export interface Users {
   articles?: string[];
   userId: any,
   answeredQuestions?: { question: string }[];
+  savedQuestions?: { question: string }[];
+  savedPsy?: { question: string }[];
   aboutUser?: any,
   contactUser?: any
   slogan?: string;

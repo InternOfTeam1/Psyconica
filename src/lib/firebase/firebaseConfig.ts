@@ -71,6 +71,8 @@ async function addUserDocument(user: User) {
     slug: user.displayName,
     userId: user.uid,
     answeredQuestions: [],
+    savedQuestions: [],
+    savedPsy: [],
     aboutUser: '',
     contactUser: '',
     video: [],

@@ -1,9 +1,9 @@
 'use client';
 import React, { useState, useEffect, Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBookmark as faSolidBookmark } from '@fortawesome/free-solid-svg-icons';
-import { faBookmark as faRegularBookmark } from '@fortawesome/free-regular-svg-icons';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faBookmark as faSolidBookmark } from '@fortawesome/free-solid-svg-icons';
+// import { faBookmark as faRegularBookmark } from '@fortawesome/free-regular-svg-icons';
 import { addVideoToCollection, removeVideoFromCollection, saveVideoForUser, removeSavedVideoForUser } from '@/lib/firebase/firebaseFunctions';
 import { fetchDataFromCollection } from '@/lib/firebase/firebaseGetDocs';
 import { useAppSelector } from '@/redux/hooks';
@@ -125,8 +125,8 @@ const PsychologistDashboard = () => {
           {users.map((url, index) => (
             <div key={index} className="p-1 w-full">
               <div className="cursor-pointer border-2 rounded-2xl overflow-hidden pb-3 bg-gray-200"
-                   style={{ boxShadow: '0 2px 6px rgba(0,0,0,0.4)' }}
-                   onClick={() => openModal(url)}>
+                style={{ boxShadow: '0 2px 6px rgba(0,0,0,0.4)' }}
+                onClick={() => openModal(url)}>
                 <iframe
                   width="100%"
                   height="150"
