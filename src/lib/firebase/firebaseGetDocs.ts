@@ -24,7 +24,8 @@ export const fetchDataFromCollection = async (collectionName: string): Promise<D
           photo: docData.photo,
           userId: docData.userId,
           url: docData.url,
-          video: docData.video || []
+          video: docData.video || [],
+          savedVideos: docData.savedVideos || []
         });
       } else if (collectionName === 'topics') {
         data.push({
@@ -34,7 +35,8 @@ export const fetchDataFromCollection = async (collectionName: string): Promise<D
           canonical: docData.canonical || "No canonical",
           questions: docData.questions,
           video: docData.video,
-          url: docData.url
+          url: docData.url,
+          savedVideos: docData.savedVideos || []
         });
       } else if (collectionName === 'articles') {
         data.push({
@@ -44,6 +46,7 @@ export const fetchDataFromCollection = async (collectionName: string): Promise<D
           comments: docData.comments,
           likes: docData.likes,
           url: docData.url,
+          savedVideos: docData.savedVideos || []
         });
       } else if (collectionName === 'questions') {
         data.push({
@@ -55,11 +58,13 @@ export const fetchDataFromCollection = async (collectionName: string): Promise<D
           likes: docData.likes,
           answers: docData.answers,
           video: docData.video,
-          url: docData.url
+          url: docData.url,
+          savedVideos: docData.savedVideos || []
         });
       } else {
         data.push({
           id: doc.id,
+          savedVideos: docData.savedVideos || [],
           url: docData.url,
           ...docData
         });
