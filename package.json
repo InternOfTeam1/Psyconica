@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "postbuild": "next-sitemap",
+    "postbuild": "next-sitemap --config ./next-sitemap.js",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

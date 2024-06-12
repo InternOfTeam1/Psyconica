@@ -177,7 +177,7 @@ const ClientAccount = () => {
         <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px] justify-center ">
           <div className="flex flex-wrap -mx-1 lg:-mx-1 xs:mx-1 s:mx-2 md:mx-3 ">
             <div className="w-full p-3 mx-auto mt-[-3px] lg:mt-[-3px] bg-white rounded-2xl shadow-2xl border xs:py-3 my-5 m-0 md:py-0 md:py-3-lg lg:py-3-md xl:py-3-2xl questions-lg questions-small questions-laptop questions-laptop-small ">
-              {/* <div className="w-full p-1 ">
+              <div className="w-full p-1 ">
                 <p className="font-semibold text-gray-800 leading-6 mt-3 mx-3 ">
                   Сохраненные видео:
                 </p>
@@ -203,7 +203,7 @@ const ClientAccount = () => {
                     )}
                   </div>
                 )}
-              </div> */}
+              </div> 
             </div>
             <br />
             <div className="container  mx-auto mt-[-1px] md:ml-[20px]  lg:ml-[40px] xl:ml-0 sm:mx-2 md:mx-1 lg:mx-1 px-2 py-4 max-w-3xl bg-white shadow-xl rounded-2xl xs:container-min card-small xl:w-[600px] containerPsy-laptop containerPsy-laptop-small ">

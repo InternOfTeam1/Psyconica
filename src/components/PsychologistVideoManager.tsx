@@ -1,9 +1,9 @@
 'use client';
 import React, { useState, useEffect, Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faBookmark as faSolidBookmark } from '@fortawesome/free-solid-svg-icons';
-// import { faBookmark as faRegularBookmark } from '@fortawesome/free-regular-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBookmark as faSolidBookmark } from '@fortawesome/free-solid-svg-icons';
+import { faBookmark as faRegularBookmark } from '@fortawesome/free-regular-svg-icons';
 import { addVideoToCollection, removeVideoFromCollection, saveVideoForUser, removeSavedVideoForUser } from '@/lib/firebase/firebaseFunctions';
 import { fetchDataFromCollection } from '@/lib/firebase/firebaseGetDocs';
 import { useAppSelector } from '@/redux/hooks';
