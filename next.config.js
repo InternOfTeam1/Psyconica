@@ -16,10 +16,10 @@ const nextConfig = {
     return [
       {
         source: '/sitemap.xml',
-        destination: '/sitemap',
+        destination: '/sitemap',  
       },
     ];
   },
 };
 
-export default nextConfig;
+module.exports = nextConfig;

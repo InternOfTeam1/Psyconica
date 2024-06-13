@@ -61,6 +61,8 @@ export interface Users {
   articles?: string[];
   userId: any,
   answeredQuestions?: { question: string }[];
+  savedQuestions?: { question: string }[];
+  savedPsy?: { question: string }[];
   aboutUser?: any,
   contactUser?: any
   slogan?: string;
@@ -135,7 +137,8 @@ export interface Data {
   answers?: string[];
   userId?: any;
   url: string[];
-  avtor?: string,
   article?: string;
+  avtor?: string;
+  savedVideos: string[];
 }
 <Video[]>([])

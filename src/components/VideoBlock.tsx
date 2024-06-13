@@ -1,5 +1,5 @@
 import { Dialog, Transition } from '@headlessui/react';
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { Video } from '@/interfaces/collections';
 
 interface VideoBlockProps {
@@ -12,53 +12,81 @@ export const VideoBlock = ({ videos }: VideoBlockProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedVideoUrl, setSelectedVideoUrl] = useState<string>('');
   const [displayCount, setDisplayCount] = useState(4);
+  const [flaggedVideos, setFlaggedVideos] = useState<string[]>([]);
 
+  useEffect(() => {
+    // Загружаем сохраненное состояние флажка из локального хранилища браузера
+    const flaggedVideosFromStorage = localStorage.getItem('flaggedVideos');
+    if (flaggedVideosFromStorage) {
+      setFlaggedVideos(JSON.parse(flaggedVideosFromStorage));
+    }
+  }, []);
 
   const openModal = (videoUrl: string): void => {
     setSelectedVideoUrl(videoUrl);
     setIsOpen(true);
   };
 
-  const renderIframe = (url: string, width: string, height: string) => (
-    <iframe
-      width={width}
-      height={height}
-      src={url}
-      title="YouTube video player"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowFullScreen
-      className="rounded-lg"
-    ></iframe>
-  );
-
   const closeModal = () => {
     setIsOpen(false);
   };
- const loadMoreVideos = () => {
-  setDisplayCount(prevDisplayCount => prevDisplayCount + 1);
-};
+
+  const loadMoreVideos = () => {
+    setDisplayCount(prevDisplayCount => prevDisplayCount + 1);
+  };
+
+  const toggleFlag = (videoUrl: string) => {
+    const updatedFlaggedVideos = flaggedVideos.includes(videoUrl)
+      ? flaggedVideos.filter(v => v !== videoUrl)
+      : [...flaggedVideos, videoUrl];
+    setFlaggedVideos(updatedFlaggedVideos);
+    localStorage.setItem('flaggedVideos', JSON.stringify(updatedFlaggedVideos));
+  };
+
 
   return (
-   <div className="p-3 m-4 bg-white rounded-2xl shadow-2xl border mt-[-1px]">
-    <div className="flex flex-wrap justify-center gap-2">
-      {videos.slice(0, displayCount).map((video, index) => video.video.map((url, urlIndex) => (
-        <div key={`${index}-${urlIndex}`} className="w-full p-1">
-          <div className="cursor-pointer border-2 pb-2 rounded-2xl overflow-hidden" onClick={() => openModal(url)}>
-            {renderIframe(url, "100%", "150")}
+    <div className="p-3 m-4 bg-white rounded-2xl shadow-2xl border mt-[-1px]">
+      <div className="flex flex-wrap justify-center gap-2">
+        {videos.slice(0, displayCount).map((video, index) => video.video.map((url, urlIndex) => (
+          <div key={`${index}-${urlIndex}`} className="w-full p-1">
+            <div className="cursor-pointer border-2 pb-2 rounded-2xl overflow-hidden" onClick={() => openModal(url)}>
+              <iframe
+                width="100%"
+                height="150"
+                src={url}
+                title="YouTube video player"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="rounded-lg"
+              ></iframe>
+              {flaggedVideos.includes(url) && (
+                <div className="absolute top-2 right-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 text-yellow-500"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    onClick={() => toggleFlag(url)}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-      )))}
-    </div>
-    <div className='flex justify-center'>
-      <button
-        type="button"
-        className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
-        onClick={loadMoreVideos}
-        disabled={displayCount >= videos.reduce((acc, curr) => acc + curr.video.length, 0)}
-      >
-        Еще
-      </button>
-    </div>
+        )))}
+      </div>
+      <div className='flex justify-center'>
+        <button
+          type="button"
+          className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
+          onClick={loadMoreVideos}
+          disabled={displayCount >= videos.reduce((acc, curr) => acc + curr.video.length, 0)}
+        >
+          Еще
+        </button>
+      </div>
       {isOpen && (
         <Transition.Root show={isOpen} as={Fragment}>
           <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={closeModal}>

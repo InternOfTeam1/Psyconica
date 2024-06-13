@@ -83,9 +83,9 @@ const RatingStars: React.FC<RatingStarsProps> = ({ userSlug, currentRating, setR
         ratings: userRatings,
         averageRating
       });
-      setRating(averageRating);  // обновление состояния currentRating
+      setRating(averageRating);  
       setUserHasRated(false);
-      setHoverRating(0);  // сброс состояния hoverRating
+      setHoverRating(0);  
       setShowRemoveRatingModal(false);
     } else {
       console.error("Document does not exist!");
