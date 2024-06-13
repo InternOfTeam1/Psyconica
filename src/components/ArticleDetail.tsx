@@ -18,12 +18,12 @@ const ArticleDetail: React.FC<Props> = ({ articleData }) => {
         <div className="w-full lg:w-1/4 px-1 mb-4 lg:mb-0 xs:mt-2 xs:mx-auto lg:mx-0 lg:mt-0">
           <VideoGallery />
         </div>
-        <div className="w-full mx-auto lg:w-3/4 lg:ml-0 xl:ml-0 mb-8 px-4 pb-3" style={{ maxWidth: '870px' }}>
+        <div className="container w-full mx-auto lg:w-3/4 lg:ml-0 xl:ml-0 mt-[-10px] mb-8 px-10 pb-3 shadow-xl rounded-2xl" style={{ maxWidth: '860px', maxHeight: '790px', overflowY: 'auto', paddingBottom: '10px' }}>
           <div className="flex flex-col space-y-4" style={{ maxHeight: '788px', overflowY: 'auto', paddingBottom: '10px' }}>
-          <h1 className="text-center text-3xl font-bold mb-4">{articleData.title}</h1>
-          <div className="prose mb-8">
-        <p>{articleData.article}</p> {/* Assuming articleData.content holds the article text */}
-      </div>
+            <h1 className="text-center text-xl font-bold mt-4 mb-4">{articleData.title}</h1>
+            <div className="prose mb-8">
+              <p className="w-full text-justify mb-3">{articleData.article}</p> {/* Assuming articleData.content holds the article text */}
+            </div>
           </div>
         </div>
       </div>
