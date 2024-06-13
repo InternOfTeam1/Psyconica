@@ -41,7 +41,7 @@ const ArticlePage: React.FC<{ params: { slug: string } }> = ({ params }) => {
 
   return (
     <div>
-      {article ? <ArticleDetails article={article} /> : <p>Article not found</p>}
+      {article ? <ArticleDetails articleData={article} /> : <p>Article not found</p>}
     </div>
   );
 };

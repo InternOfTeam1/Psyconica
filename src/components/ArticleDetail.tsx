@@ -1,29 +1,42 @@
-import { useEffect, useState } from 'react';
-import MetaData from '@/components/MetaData';
-import { fetchDoc } from '@/lib/firebase/firebaseGetDocs';
-import { Article } from '@/interfaces/collections';
-import  VideoGallery from "@/components/VideoGallery";
+"use client";
 
-const ArticleDetails: React.FC<{ article: Article }> = ({ article }) => {
-    return (
-      <div>
-        <MetaData title={article.title} description={article.article} />
-        <div className="container mx-auto max-w-7xl px-4 py-6 mt-[-40px]">
-      <div className="flex flex-wrap -mx-4 xs:flex-col-reverse xs:px-5 sm:px-5 md:px-5 lg:px-5 lg:flex-row xl:px-5">
-        <div className="w-full lg:w-1/4 px-1 lg:mb-0">
-          <VideoGallery />
-        </div>
-        <div className="w-full mx-auto mb-5 lg:w-3/4 lg:ml-0 xl:ml-0 px-4 py-4 bg-white shadow-xl rounded-2xl" style={{ maxWidth: '850px' }}>
-        <h1 className="font-semibold bg-amber-300 text-gray-600 px-7 py-3 rounded-2xl leading-6 text-center xs:text-sm xs:px-3 sm:text-sm sm:px-4 md:text-base md:px-5 lg:text-lg lg:px-6 xl:text-xl xl:px-7">{article.title}</h1>
-        <p className= "mt-5">{article.article}</p>
-        </div>
-      </div>
-      </div>
-      </div>
-    );
+import React from 'react';
+import { Article } from '@/interfaces/collections'; // Assuming this interface exists and matches your data structure
+import Link from 'next/link';
+import { HOME_ROUTE } from '@/constants/routes';
+import VideoGallery from "./VideoGallery";
+
+type Props = {
+  articleData: Article;
 };
 
-export default ArticleDetails;
+const ArticleDetail: React.FC<Props> = ({ articleData }) => {
+  console.log(articleData)
+  return (
+    <div className="container mx-auto max-w-7xl px-2 py-3 mt-[-50px]">
+      <div className="flex flex-wrap xs:flex-col-reverse lg:flex-row mt-10">
+        <div className="w-full lg:w-1/4 px-1 mb-4 lg:mb-0 xs:mt-2 xs:mx-auto lg:mx-0 lg:mt-0">
+          <VideoGallery />
+        </div>
+        <div className="w-full mx-auto lg:w-3/4 lg:ml-0 xl:ml-0 mb-8 px-4 pb-3" style={{ maxWidth: '870px' }}>
+          <div className="flex flex-col space-y-4" style={{ maxHeight: '788px', overflowY: 'auto', paddingBottom: '10px' }}>
+          <h1 className="text-center text-3xl font-bold mb-4">{articleData.title}</h1>
+          <div className="prose mb-8">
+        <p>{articleData.article}</p> {/* Assuming articleData.content holds the article text */}
+      </div>
+          </div>
+        </div>
+      </div>
+      <Link href={HOME_ROUTE}>
+        <button className="inline-block mt-4 mb-10 ml-5 px-6 py-2 text-sm font-medium leading-6 text-center text-white uppercase transition bg-blue-500 rounded-full shadow ripple hover:shadow-lg focus:outline-none hover:bg-blue-600">
+          Вернуться на главную
+        </button>
+      </Link>
+    </div>
+  );
+};
+
+export default ArticleDetail;
 
 
 
