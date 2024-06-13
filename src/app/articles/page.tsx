@@ -31,7 +31,7 @@ const Articles: React.FC = async () => {
   const videos = rawData as Video[];
   const shuffledVideos = shuffleAndTrimVideos(videos, 10); 
 
-  return <ArticlesComponent videos={shuffledVideos} />;
+  return <ArticlesComponent />;
 }
 
 export default Articles;

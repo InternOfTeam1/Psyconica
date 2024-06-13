@@ -1,32 +1,47 @@
-"use client";
+"use client"
 
 import { useAppSelector } from "@/redux/hooks";
 import React, { useEffect, useState } from 'react';
 import { fetchDataFromCollection } from '@/lib/firebase/firebaseGetDocs';
-import { Article, Video } from '@/interfaces/collections';
+import { Data } from '@/interfaces/collections';
 import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
 import { useRouter } from 'next/navigation';
 import VideoGallery from "./VideoGallery";
 
-type Props = {
-  videos: Video[]
+interface ArticleData {
+  id: string;
+  slug?: string;
+  title: string;
+  SEOTitle: string;
+  SEODesc: string;
+  canonical: string;
 }
 
-const ArticlesComponent: React.FC<Props> = ({ videos }) => {
+const ArticlesComponent: React.FC = () => {
   const userRole = useAppSelector((state) => state.auth.user?.role);
-  const [articles, setArticles] = useState<Article[]>([]);
+  const [articles, setArticles] = useState<ArticleData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
   const router = useRouter();
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedVideoUrl, setSelectedVideoUrl] = useState('');
 
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const articlesData = await fetchDataFromCollection('articles') as Article[];
-        setArticles(articlesData);
+        const articlesData = await fetchDataFromCollection('articles') as Data[];
+
+        const filteredAndTransformedArticles = articlesData
+          .filter(article => article.title !== undefined)
+          .map(article => ({
+            id: article.id,
+            slug: article.slug,
+            title: article.title as string,
+            SEOTitle: article.SEOTitle as string,
+            SEODesc: article.SEODesc as string,
+            canonical: article.canonical as string
+          }));
+
+        setArticles(filteredAndTransformedArticles);
         setLoading(false);
       } catch (error) {
         console.error('Ошибка загрузки статей: ', error);
@@ -37,10 +52,10 @@ const ArticlesComponent: React.FC<Props> = ({ videos }) => {
     fetchArticles();
   }, []);
 
-  const handleClick = async (url: string, e: React.MouseEvent<HTMLDivElement> | React.KeyboardEvent<HTMLDivElement>) => {
+  const handleClick = async (slug: string, e: React.MouseEvent<HTMLDivElement> | React.KeyboardEvent<HTMLDivElement>) => {
     e.preventDefault();
     try {
-      await router.push(url);
+      await router.push(`/articles/${slug}`);
     } catch (error) {
       console.error('Ошибка навигации:', error);
     }
@@ -64,13 +79,13 @@ const ArticlesComponent: React.FC<Props> = ({ videos }) => {
     <div className="container mx-auto max-w-7xl px-2 py-3 mt-[-50px]">
       <h1 className="text-2xl font-bold text-center mb-6">Статьи</h1>
       <div className="flex flex-wrap xs:flex-col-reverse lg:flex-row mt-10">
-        <div className="w-full lg:w-1/4 px-1 mb-4 lg:mb-0 xs:mt-2 xs:mx-auto lg:mx-0 lg:mt-0">
-          <VideoGallery />
+        <div className="w-full lg:w-1/4 px-1 mb-4 lg:mb-0  xs:mt-2 xs:mx-auto lg:mx-0 lg:mt-0">
+        <VideoGallery />
         </div>
         <div className="w-full mx-auto lg:w-3/4 lg:ml-0 xl:ml-0 mb-8 px-4 pb-3" style={{ maxWidth: '870px' }}>
           <div className="flex flex-col space-y-4" style={{ maxHeight: '788px', overflowY: 'auto', paddingBottom: '10px' }}>
             {articles.map((article) => (
-              <div key={article.slug} onClick={(e) => handleClick(`/articles/${article.slug}`, e)}
+              <div key={article.id} onClick={(e) => handleClick(article.slug || '', e)}
                 className="bg-white mx-2 p-5 rounded-lg shadow-md cursor-pointer hover:bg-gray-100 focus:bg-gray-100">
                 <h2 className="text-xl font-semibold leading-6">{article.title}</h2>
               </div>
@@ -88,4 +103,3 @@ const ArticlesComponent: React.FC<Props> = ({ videos }) => {
 }
 
 export default ArticlesComponent;
-

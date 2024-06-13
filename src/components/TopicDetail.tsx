@@ -84,7 +84,7 @@ const TopicDetail = () => {
         break;
       }
       case 'article': {
-        path = `/articles/`;
+        path = `/articles/${item.slug}`;
         break;
       }
       case 'profile': {
