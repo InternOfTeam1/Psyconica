@@ -10,7 +10,7 @@ type Props = {
   articleData: Article;
 };
 
-const ArticleDetail: React.FC<Props> = ({ articleData }) => {
+const TopicPage: React.FC<Props> = ({ articleData }) => {
   console.log(articleData)
   return (
     <div className="container mx-auto max-w-7xl px-2 py-3 mt-[-50px]">
@@ -18,11 +18,11 @@ const ArticleDetail: React.FC<Props> = ({ articleData }) => {
         <div className="w-full lg:w-1/4 px-1 mb-4 lg:mb-0 xs:mt-2 xs:mx-auto lg:mx-0 lg:mt-0">
           <VideoGallery />
         </div>
-        <div className="w-full mx-auto bg-white lg:w-3/4 lg:ml-0 xl:ml-0 px-5 pt-3 pb-3 shadow-xl rounded-2xl" style={{ maxWidth: '860px' }}>
-          <div className="flex flex-col space-y-4">
-            <h1 className="w-full font-semibold bg-amber-300 text-gray-600 px-7 py-3 rounded-2xl text-center xs:text-sm xs:px-3 sm:text-sm sm:px-4 md:text-base md:px-5 lg:text-lg lg:px-6 xl:text-xl xl:px-7">{articleData.title}</h1>
-            <div className="prose px-3">
-              <p className="w-full text-justify font-medium text-gray-800 xs:text-sm sm:text-sm md:text-base lg:text-base lg:leading-6 mt-2">{articleData.article}</p> {/* Assuming articleData.content holds the article text */}
+        <div className="container w-full bg-white mx-auto lg:w-3/4 lg:ml-0 xl:ml-0 mt-[-10px] mb-8 px-10 pb-3 shadow-xl rounded-2xl" style={{ maxWidth: '860px', maxHeight: '790px', overflowY: 'auto', paddingBottom: '10px' }}>
+          <div className="flex flex-col space-y-4" style={{ maxHeight: '788px', overflowY: 'auto', paddingBottom: '10px' }}>
+            <h1 className="text-center text-xl font-bold mt-4 mb-4">{articleData.title}</h1>
+            <div className="prose mb-8">
+              <p className="w-full text-justify mb-3">{articleData.article}</p> {/* Assuming articleData.content holds the article text */}
             </div>
           </div>
         </div>
@@ -36,7 +36,4 @@ const ArticleDetail: React.FC<Props> = ({ articleData }) => {
   );
 };
 
-export default ArticleDetail;
-
-
-
+export default TopicPage;

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import MetaData from '@/components/MetaData';
-import ArticleDetail from '@/components/ArticleDetail';
+import TopicPage from '@/components/TopicPage';
 import { fetchDoc } from '@/lib/firebase/firebaseGetDocs';
 
 const Article: React.FC<{ params: { slug: string, articleId: string } }> = ({ params }) => {
@@ -35,7 +35,7 @@ const Article: React.FC<{ params: { slug: string, articleId: string } }> = ({ pa
   return (
     <div>
       <MetaData title={title} description={description} />
-      <ArticleDetail articleData={article} />
+      <TopicPage articleData={article} />
     </div>
   );
 };

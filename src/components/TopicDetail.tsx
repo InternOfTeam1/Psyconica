@@ -153,13 +153,13 @@ const TopicDetail = () => {
             {topicData.articles.map((article: any, index: number) => (
               <div
                 key={`article-${index}`}
-                onClick={(e) => handleClickTopic(`/topics/${topicSlug}/articles/${article.slug}`, e)}
+                onClick={() => handleClick(article, 'article')}
                 role="button"
                 tabIndex={0}
-                onKeyDown={(e) => e.key === 'Enter' && handleClickTopic(`/topics/${topicSlug}/articles/${article.slug}`, e)}
+                onKeyDown={(e) => e.key === 'Enter' && handleClick(article.slug, 'article')}
                 className="bg-white mx-1 p-3 rounded-lg shadow-md cursor-pointer hover:bg-gray-100 focus:bg-gray-100"
               >
-                <h2 className="text-base font-semibold">{article.title.split('. ')[0] + '.'}</h2>
+                <h2 className="text-base font-semibold">{article.split('. ')[0] + '.'}</h2>
               </div>
             ))}
           </div>
