@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { Article } from '@/interfaces/collections'; // Assuming this interface exists and matches your data structure
+import { Article } from '@/interfaces/collections';
 import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
 import VideoGallery from "./VideoGallery";
@@ -22,7 +22,7 @@ const TopicPage: React.FC<Props> = ({ articleData }) => {
           <div className="flex flex-col space-y-4" style={{ maxHeight: '788px', overflowY: 'auto', paddingBottom: '10px' }}>
             <h1 className="text-center text-xl font-bold mt-4 mb-4">{articleData.title}</h1>
             <div className="prose mb-8">
-              <p className="w-full text-justify mb-3">{articleData.article}</p> {/* Assuming articleData.content holds the article text */}
+              <p className="w-full bg-slate-300 text-justify mb-3">{articleData.article}</p>
             </div>
           </div>
         </div>
