@@ -9,6 +9,13 @@ interface UserDataUpdate {
   comments?: Comments[];
 }
 
+
+interface Psychologist {
+  userId: string;
+  name: string;
+  photo: string;
+}
+
 export const getVideosById = async (userId: string) => {
   if (!userId) {
     console.error("No user ID provided");
@@ -202,6 +209,32 @@ export const removeSavedVideoForUser = async (videoUrl: string, userId: string) 
     console.log('Saved video removed successfully');
   } catch (error) {
     console.error('Error removing saved video:', error);
+    throw error;
+  }
+};
+
+export const savePsychologistForUser = async (psychologist: Psychologist, userId: string) => {
+  try {
+    const userRef = doc(db, 'users', userId);
+    await updateDoc(userRef, {
+      savedPsy: arrayUnion(psychologist)
+    });
+    console.log('Психолог успешно сохранен');
+  } catch (error) {
+    console.error('Ошибка сохранения психолога:', error);
+    throw error;
+  }
+};
+
+export const removeSavedPsychologistForUser = async (psychologist: Psychologist, userId: string) => {
+  try {
+    const userRef = doc(db, 'users', userId);
+    await updateDoc(userRef, {
+      savedPsy: arrayRemove(psychologist)
+    });
+    console.log('Сохраненный психолог успешно удален');
+  } catch (error) {
+    console.error('Ошибка удаления сохраненного психолога:', error);
     throw error;
   }
 };

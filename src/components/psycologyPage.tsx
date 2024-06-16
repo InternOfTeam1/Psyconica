@@ -1,6 +1,6 @@
 "use client";
 import { fetchAllUsers, fetchDoc } from '@/lib/firebase/firebaseGetDocs';
-import { getUserData, getVideosById, updateUser } from '@/lib/firebase/firebaseFunctions';
+import { getUserData, getVideosById, removeSavedPsychologistForUser, savePsychologistForUser, updateUser } from '@/lib/firebase/firebaseFunctions';
 import { Comments } from '@/interfaces/collections';
 import React, { ChangeEventHandler, useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -20,6 +20,10 @@ import { sendTelegramMessage } from '../app/script/telegram';
 import { AppDispatch } from '@/redux/store';
 import { useDispatch } from 'react-redux';
 import { falseToggle, trueToggle } from '@/redux/slices/toggleSlice';
+import { faBookmark as faSolidBookmark } from '@fortawesome/free-solid-svg-icons';
+import { faBookmark as faRegularBookmark } from '@fortawesome/free-regular-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 interface User {
   id: string;
   photo?: string;
@@ -60,8 +64,13 @@ const PsyAccount = () => {
   const [loadStatus, setLoadStatus] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [filePreview, setFilePreview] = useState<string | ArrayBuffer | null>(null);
+   const [savedPsychologists, setSavedPsychologists] = useState<string[]>([]); 
+  const [psychologistData, setPsychologistData] = useState<any>(null);
+   const [isSaved, setIsSaved] = useState(false);
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const dispatch = useDispatch<AppDispatch>();
+  const { slug } = useParams<{ slug: string }>()
+  
 
 
   useEffect(() => {
@@ -87,6 +96,7 @@ const PsyAccount = () => {
         setEditedSlogan(fetchedUserData.slogan || '');
         setEditedExpert(fetchedUserData.expert || '');
         setEditedName(fetchedUserData.name || '');
+        setSavedPsychologists(fetchedUserData.savedPsychologists || []);
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
@@ -282,7 +292,33 @@ const PsyAccount = () => {
     }
   };
 
+  const handleSavePsychologist = async () => {
+  if (userId && userSlug) {
+    try {
+      await savePsychologistForUser(userSlug, userId);
+      setSavedPsychologists([...savedPsychologists, userSlug]);
+      setIsSaved(true);
+    } catch (error) {
+      console.error('Ошибка сохранения психолога:', error);
+    }
+  } else {
+    console.error('Отсутствует userId или userSlug');
+  }
+};
 
+const handleRemoveSavedPsychologist = async () => {
+  if (userId && userSlug) {
+    try {
+      await removeSavedPsychologistForUser(userSlug, userId);
+      setSavedPsychologists(savedPsychologists.filter(slug => slug !== userSlug));
+      setIsSaved(false);
+    } catch (error) {
+      console.error('Ошибка удаления сохраненного психолога:', error);
+    }
+  } else {
+    console.error('Отсутствует userId или userSlug');
+  }
+};
 
 
   return (
@@ -305,10 +341,12 @@ const PsyAccount = () => {
               {userData && <PsychologistDashboard />}
             </div> 
             <div className="container  mx-auto mt-[-1px] md:ml-[20px]  lg:ml-[40px] xl:ml-0 sm:mx-2 md:mx-1 lg:mx-1 px-2 py-4 max-w-3xl bg-white shadow-xl rounded-2xl xs:container-min card-small xl:w-[600px] containerPsy-laptop containerPsy-laptop-small " >
+              
               {
                 userData && (
                   <>
                     <div className="text-center mb-5 w-full">
+                     
                       <p className=' flex items-center justify-start bg-amber-300 pl-6 py-1 rounded-2xl text-center text-gray-800 leading-6'>
                         <Image
                           src="/bigLogo.webp"
@@ -326,10 +364,12 @@ const PsyAccount = () => {
                           placeholder="Введите ваш девиз (не более 25 символов)"
                           disabled={!isEditing}
                         />
+                        
                       </p>
+                      
                       {userId === userData.slug && (
                         <>
-
+                          
                           {isEditing ? (
                             <button
                               className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 ml-1"
@@ -343,13 +383,24 @@ const PsyAccount = () => {
                               onClick={() => setIsEditing(!isEditing)}
                             >
                               Редактировать личный кабинет
-                            </button>
-
+                              </button>
+                              
                           )}
-
+                          
                         </>
-
+                        
                       )}
+                      {userRole !== 'psy' && (
+  <div className="flex items-center justify-end right-0 top-0 mr-4 mt-4">
+    <FontAwesomeIcon
+      icon={savedPsychologists.includes(userSlug) ? faSolidBookmark : faRegularBookmark}
+      className={`text-2xl cursor-pointer ${savedPsychologists.includes(userSlug) ? 'text-yellow-500' : 'text-gray-400'}`}
+      onClick={savedPsychologists.includes(userSlug) ? handleRemoveSavedPsychologist : handleSavePsychologist}
+    />
+  </div>
+)}
+
+
                       {loadStatus && (
                         <p className="text-gray-500 text-sm mt-2 flex items-center">
                           {loadStatus === 'Изображение загружается. Пожалуйста, подождите...' ? (
@@ -363,9 +414,12 @@ const PsyAccount = () => {
                     </div>
 
 
-                    <div className="flex items-start ml-5 photo-block">
+                    <div className="flex items-start ml-5 photo-block ">
+                      
                       <div className='relative mb-4'>
+                        
                         <div className="mt-2 mr-5 w-[180px] h-[180px] ">
+                          
                           {isLoading ? (
                             <div className="flex justify-center items-center w-full h-full">
                               <svg aria-hidden="true" className="inline w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -384,7 +438,8 @@ const PsyAccount = () => {
                             />
                           )}
                         </div>
-
+                         
+                        
                         {isEditing && (
                           <div className="flex flex-col">
                             <input
@@ -394,13 +449,12 @@ const PsyAccount = () => {
                               className="border border-green-500 font-semibold text-[9px] leading-6 p-1 mb-2 w-[11.2rem] "
                               disabled={!isEditing}
                             />
-
+                            
 
                           </div>
                         )}
                       </div>
-
-
+                      
                       <div className='flex ml-3 items-start'>
                         <div className="flex flex-col flex-grow profile-info">
                           <div className="flex justify-between items-center p-1 profile-info name">
@@ -412,7 +466,9 @@ const PsyAccount = () => {
                               disabled={!isEditing}
                               maxLength={20}
                             />
+                            
                           </div>
+                          
                           <input
                             type="text"
                             value={editedExpert}
@@ -421,9 +477,12 @@ const PsyAccount = () => {
                             disabled={!isEditing}
                             maxLength={30}
                           />
+                          
                           <div className='my-1 ml-2 xs:w-[90%]'>
                             <RatingStars userSlug={userSlug} currentRating={rating} setRating={setRating} userId={userId} />
+                             
                           </div>
+                          
                           {userId !== userData.slug && (
                             <button
                               onClick={() => handleSendMessage(userData?.name, userData?.email)}
@@ -636,3 +695,5 @@ const PsyAccount = () => {
 
 
 export default PsyAccount;
+
+

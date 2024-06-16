@@ -13,6 +13,9 @@ import { uploadImageToStorage } from '@/lib/firebase/firebaseConfig';
 import { AppDispatch } from '@/redux/store';
 import { useDispatch } from 'react-redux';
 import { falseToggle, trueToggle } from '@/redux/slices/toggleSlice';
+import { savePsychologistForUser, removeSavedPsychologistForUser } from '@/lib/firebase/firebaseFunctions';
+import { StaticImport } from 'next/dist/shared/lib/get-img-props';
+import icon from '../../public/iconPsy.png';
 
 interface User {
   id: string;
@@ -41,6 +44,7 @@ const ClientAccount = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [filePreview, setFilePreview] = useState<string | ArrayBuffer | null>(null);
   const dispatch = useDispatch<AppDispatch>();
+  
 
   useEffect(() => {
     async function fetchUserData(userId: any) {
@@ -155,21 +159,26 @@ const ClientAccount = () => {
     }
   };
 
-  const handleClick = async (url: string) => {
+ const handleClick = async (userId: string, type: string) => {
+  let path = '';
 
-
+  if (type === 'question') {
     if (userData?.savedQuestions && userData.savedQuestions.length > 0) {
-      const questionSlugs = `/questions/${url}`;
-      try {
-        await router.push(questionSlugs);
-      } catch (error) {
-        console.error('Navigation error:', error);
-      }
+      path = `/questions/${userId}`;
     }
+  } else if (type === 'profile') {
+    path = `/profile/${userId}`;
+  } else {
+    console.error('Неизвестный тип:', type);
+    return;
+  }
 
-
-  };
-
+  try {
+    await router.push(path);
+  } catch (error) {
+    console.error('Ошибка навигации:', error);
+  }
+};
 
   return (
     userData && userData?.role == 'user' && (
@@ -329,26 +338,37 @@ const ClientAccount = () => {
                       <p className="font-semibold text-gray-800 leading-6 mt-3 mx-3">
                         Сохранненные вопросы:
                       </p>
-                      {userData && userData.savedQuestions && (
-                        <ul className="text-gray-600 leading-6 mt-2 mx-3">
-                          {userData.savedQuestions.length > 0 ? (
-                            userData.savedQuestions.map((question: any, index: number) => (
-                              <li
-                                key={index}
-                                onClick={(e: React.MouseEvent<HTMLLIElement, MouseEvent>) => handleClick(`${question.slug}`)}
-                                role="button"
-                                tabIndex={0}
-                                onKeyDown={(e: React.KeyboardEvent<HTMLLIElement>) => e.key === 'Enter' && handleClick(`${question.slug}`)}
-                                className="my-3"
-                              >
-                                <hr /> {question.title}
-                              </li>
-                            ))
-                          ) : (
-                            <li>Пока нет сохраненных вопросов.</li>
-                          )}
-                        </ul>
-                      )}
+                      {userData && userData.savedPsy && (
+  <div className="flex flex-wrap justify-center gap-2">
+    {userData.savedPsy.length > 0 ? (
+      userData.savedPsy.map((user: any) => (
+        <div key={user.userId} className="text-center">
+          <div
+            onClick={() => handleClick(user.userId, 'profile')}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => e.key === 'Enter' && handleClick(user.userId, 'profile')}
+            className="flex items-center cursor-pointer"
+          >
+            <Image 
+              src={user.photo || '/defaultPhoto.jpg'} 
+              alt="Фотография пользователя" 
+              width={50} 
+              height={50} 
+              className="w-10 h-10 rounded-full object-cover mr-3" 
+            />
+            <p className="font-semibold text-black flex items-center bg-gray-200 rounded-2xl p-1">
+              {user.name}
+              <Image src={icon} alt="Иконка психолога" width={20} height={20} />
+            </p>
+          </div>
+        </div>
+      ))
+    ) : (
+      <p className="text-gray-600">Пока нет сохраненных психологов.</p>
+    )}
+  </div>
+)}
                     </div>
                   </div>
                 </div>
@@ -359,7 +379,31 @@ const ClientAccount = () => {
                 <p className="font-semibold text-gray-800 leading-6 mt-3 mx-3">
                   Сохранненные психологи:
                 </p>
-
+                {userData && userData.savedPsy && (
+  <div className="flex flex-wrap justify-center gap-2">
+    {userData.savedPsy.length > 0 ? (
+      userData.savedPsy.map((user: any) => (
+        <div key={user.userId} className="text-center">
+          <div
+            onClick={() => handleClick(user.userId, 'profile')}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => e.key === 'Enter' && handleClick(user.userId, 'profile')}
+            className="flex items-center cursor-pointer"
+          >
+            <Image src={user.photo || '/defaultPhoto.jpg'} alt="User Photo" width={50} height={50} className="w-10 h-10 rounded-full object-cover mr-3" />
+            <p className="font-semibold text-black flex items-center bg-gray-200 rounded-2xl p-1">
+              {user.name}
+               <Image src={icon} alt="Psy Icon" width={20} height={20} /></p>
+          </div>
+        </div>
+      ))
+    ) : (
+      <p className="text-gray-600">Пока нет сохраненных психологов.</p>
+    )}
+  </div>
+)}
+                
               </div>
             </div>
 
