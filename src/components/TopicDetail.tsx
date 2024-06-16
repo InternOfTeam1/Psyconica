@@ -84,7 +84,7 @@ const TopicDetail = () => {
         break;
       }
       case 'article': {
-        path = `/articles/`;
+        path = `/articles/${item.slug}`;
         break;
       }
       case 'profile': {
@@ -109,6 +109,17 @@ const TopicDetail = () => {
       console.error('Navigation error:', error);
     }
   };
+
+  const handleClickTopic = async (url: string, e: React.MouseEvent<HTMLDivElement> | React.KeyboardEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    try {
+      await router.push(url);
+    } catch (error) {
+      console.error('Ошибка навигации:', error);
+    }
+  };
+
+  console.log(topicData.articles)
 
 
 
@@ -142,13 +153,13 @@ const TopicDetail = () => {
             {topicData.articles.map((article: any, index: number) => (
               <div
                 key={`article-${index}`}
-                onClick={() => handleClick(article, 'article')}
+                onClick={(e) => handleClickTopic(`/articles/${article.slug}`, e)}
                 role="button"
                 tabIndex={0}
-                onKeyDown={(e) => e.key === 'Enter' && handleClick(article.slug, 'article')}
+                onKeyDown={(e) => e.key === 'Enter' && handleClickTopic(`/articles/${article.slug}`, e)}
                 className="bg-white mx-1 p-3 rounded-lg shadow-md cursor-pointer hover:bg-gray-100 focus:bg-gray-100"
               >
-                {/* <h2 className="text-base font-semibold">{article.split(' ')[0] + '.'}</h2> */}
+                <h2 className="text-base font-semibold">{article.title.split('. ')[0] + '.'}</h2>
               </div>
             ))}
           </div>

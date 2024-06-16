@@ -29,6 +29,7 @@ export interface Video {
 export interface Article {
   slug: string;
   comments: Comment[];
+  article: string;
   likes: string[];
   title: string;
   SEOTitle: string;
@@ -136,6 +137,7 @@ export interface Data {
   answers?: string[];
   userId?: any;
   url: string[];
+  article?: string;
   avtor?: string;
   savedVideos: string[];
 }

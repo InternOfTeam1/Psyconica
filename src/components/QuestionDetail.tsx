@@ -419,7 +419,8 @@ const QuestionDetail = (props: Props) => {
               ...userDocs,
               savedQuestions: updatedSavedQuestions
             };
-            await addDocumentWithSlug('users', updatedUserDoc, 'userId');
+            await updateUser(userId, { savedQuestions: updatedUserDoc.savedQuestions });
+
           }
         }
       }
@@ -442,13 +443,13 @@ const QuestionDetail = (props: Props) => {
             <>
 
               <h2 className="font-semibold bg-amber-300 text-gray-600 px-7 py-3 rounded-2xl leading-6 text-center xs:text-sm xs:px-3 sm:text-sm sm:px-4 md:text-base md:px-5 lg:text-lg lg:px-6 xl:text-xl xl:px-7">{questionData.title}</h2>
-              <div className="flex items-center justify-end mt-2 space-x-2">
-                <h2 className="font-semibold text-gray-950 text-sm cursor-pointer">Сохранить</h2>
+              {userRole === 'user' && (<div className="flex items-center justify-end mt-2 space-x-2">
+                <h2 className="font-semibold text-white-950 text-sm">Сохранить вопрос</h2>
                 <FaBookmark
-                  className={`cursor-pointer text-lg ${isSaved ? 'text-green-500' : 'text-gray-400'}`}
+                  className={`cursor-pointer text-lg ${isSaved ? 'text-black-500' : 'text-gray-400'}`}
                   onClick={saveQuestions}
                 />
-              </div>
+              </div>)}
               {userRole === 'psy' ? (
                 newAnswer ?
                   <>

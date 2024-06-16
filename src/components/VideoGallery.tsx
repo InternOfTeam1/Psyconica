@@ -138,13 +138,13 @@ const VideoGallery = () => {
                 ></iframe>
               </div>
               <div className="flex justify-between items-center mt-2">
-                 {role !== 'psy' && (
-                   <FontAwesomeIcon
+                {role !== 'psy' && (
+                  <FontAwesomeIcon
                     icon={savedVideos.includes(video.url) ? faSolidBookmark : faRegularBookmark}
                     className={`text-2xl cursor-pointer ${savedVideos.includes(video.url) ? 'text-yellow-500' : 'text-gray-400'}`}
                     onClick={() => savedVideos.includes(video.url) ? removeSavedVideo(video.url) : saveVideo(video.url)}
                   />
-                )} 
+                )}
               </div>
             </div>
           );

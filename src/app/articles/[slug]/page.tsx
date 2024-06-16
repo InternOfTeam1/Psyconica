@@ -2,41 +2,48 @@
 
 import { useEffect, useState } from 'react';
 import MetaData from '@/components/MetaData';
-// import ArticleDetail from '@/components/ArticleDetail';
+import ArticleDetails from '@/components/ArticleDetail';
 import { fetchDoc } from '@/lib/firebase/firebaseGetDocs';
+import { Article } from '@/interfaces/collections';
 
-const Article: React.FC<{ params: { slug: string } }> = ({ params }) => {
+const ArticlePage: React.FC<{ params: { slug: string } }> = ({ params }) => {
   const { slug } = params;
-  const [articleData, setArticleData] = useState<any>(null);
-  const [title, setTitle] = useState('Loading...');
-  const [description, setDescription] = useState('Loading article details...');
+  const [article, setArticle] = useState<Article | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>('');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data: any = await fetchDoc('articles', slug);
+        const data = await fetchDoc('articles', slug) as Article | null;
         if (data) {
-          setTitle(data.title || 'Article Title');
-          setDescription(data.SEODesc || 'Article Description');
-          setArticleData(data);
+          setArticle(data);
+        } else {
+          setError('Article not found');
         }
       } catch (error) {
         console.error('Error fetching data:', error);
+        setError('Error fetching article details');
+      } finally {
+        setLoading(false);
       }
     };
     fetchData();
   }, [slug]);
 
-  if (!articleData) {
+  if (loading) {
     return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
   }
 
   return (
     <div>
-      <MetaData title={title} description={description} />
-      {/* <ArticleDetail articleData={articleData} /> */}
+      {article ? <ArticleDetails articleData={article} /> : <p>Article not found</p>}
     </div>
   );
 };
 
-export default Article;
+export default ArticlePage;

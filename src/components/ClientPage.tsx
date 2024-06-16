@@ -31,6 +31,8 @@ const ClientAccount = () => {
   const [editedName, setEditedName] = useState<string>('');
   const [isEditingName, setIsEditingName] = useState(false);
   const [isEditingImage, setIsEditingImage] = useState(false);
+  const [editedRole, setEditedRole] = useState<string>('user');
+  const [isEditingRole, setIsEditingRole] = useState(false);
   const [image, setImage] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const userId = useAppSelector((state) => state.auth.user?.id);
@@ -135,6 +137,25 @@ const ClientAccount = () => {
     }
   };
 
+  const changeRole = async () => {
+    try {
+      const updatedUserData = {
+        role: editedRole,
+      };
+
+      await updateUser(userSlug, updatedUserData);
+
+      setUserData({
+        ...userData,
+        ...updatedUserData,
+      });
+      setIsEditingRole(false);
+      window.location.reload();
+    } catch (error) {
+      console.error('Error updating user data:', error);
+    }
+  };
+
   useEffect(() => {
     const handleResize = () => {
       const screenWidth = window.innerWidth;
@@ -212,7 +233,7 @@ const ClientAccount = () => {
                     )}
                   </div>
                 )}
-              </div> 
+              </div>
             </div>
             <br />
             <div className="container  mx-auto mt-[-1px] md:ml-[20px]  lg:ml-[40px] xl:ml-0 sm:mx-2 md:mx-1 lg:mx-1 px-2 py-4 max-w-3xl bg-white shadow-xl rounded-2xl xs:container-min card-small xl:w-[600px] containerPsy-laptop containerPsy-laptop-small ">
@@ -370,6 +391,62 @@ const ClientAccount = () => {
   </div>
 )}
                     </div>
+
+
+                    <div className="mb-5 w-full">
+                      {userId === userData.slug && (
+                        <>
+                          {isEditingRole ? (
+                            <button
+                              className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 ml-1"
+                              onClick={changeRole}
+                            >
+                              Сохранить изменения
+                            </button>
+                          ) : (
+                            <button
+                              className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 ml-1"
+                              onClick={() => setIsEditingRole(!isEditingRole)}
+                            >
+                              Изменить роль
+                            </button>
+                          )}
+                        </>
+                      )}
+                    </div>
+
+                    <div className="flex justify-between items-center mb-2">
+                      <label className="flex items-center">
+                        <input
+                          type="radio"
+                          value="psy"
+                          checked={editedRole === 'psy'}
+                          onChange={(e) => setEditedRole(e.target.value)}
+                          className={`form-radio text-blue-600 h-4 w-4 ${isEditingRole ? 'border-green-500' : ''}`}
+                          disabled={!isEditingRole}
+                        />
+                        <span className="ml-2">Психолог</span>
+                      </label>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <label className="flex items-center">
+                        <input
+                          type="radio"
+                          value="user"
+                          checked={editedRole === 'user'}
+                          onChange={(e) => setEditedRole(e.target.value)}
+                          className={`form-radio text-blue-600 h-4 w-4 ${isEditingRole ? 'border-green-500' : ''}`}
+                          disabled={!isEditingRole}
+                        />
+                        <span className="ml-2">Клиент</span>
+                      </label>
+                    </div>
+
+
+
+
+
+
                   </div>
                 </div>
               </div>

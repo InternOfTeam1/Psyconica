@@ -41,11 +41,15 @@ export const fetchDataFromCollection = async (collectionName: string): Promise<D
       } else if (collectionName === 'articles') {
         data.push({
           id: doc.id,
-          title: docData.title || "No Title",
-          canonical: docData.canonical || "No canonical",
-          comments: docData.comments,
-          likes: docData.likes,
           url: docData.url,
+          slug: docData.slug,
+          comments: docData.comments || [],
+          article: docData.article || "",
+          likes: docData.likes || [],
+          title: docData.title || "No Title",
+          SEOTitle: docData.SEOTitle || "",
+          SEODesc: docData.SEODesc || "",
+          canonical: docData.canonical || "No canonical",
           savedVideos: docData.savedVideos || []
         });
       } else if (collectionName === 'questions') {
