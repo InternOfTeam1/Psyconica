@@ -46,7 +46,7 @@ const ClientAccount = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [filePreview, setFilePreview] = useState<string | ArrayBuffer | null>(null);
   const dispatch = useDispatch<AppDispatch>();
-  
+
 
   useEffect(() => {
     async function fetchUserData(userId: any) {
@@ -180,26 +180,26 @@ const ClientAccount = () => {
     }
   };
 
- const handleClick = async (userId: string, type: string) => {
-  let path = '';
+  const handleClick = async (userId: string, type: string) => {
+    let path = '';
 
-  if (type === 'question') {
-    if (userData?.savedQuestions && userData.savedQuestions.length > 0) {
-      path = `/questions/${userId}`;
+    if (type === 'question') {
+      if (userData?.savedQuestions && userData.savedQuestions.length > 0) {
+        path = `/questions/${userId}`;
+      }
+    } else if (type === 'profile') {
+      path = `/profile/${userId}`;
+    } else {
+      console.error('Неизвестный тип:', type);
+      return;
     }
-  } else if (type === 'profile') {
-    path = `/profile/${userId}`;
-  } else {
-    console.error('Неизвестный тип:', type);
-    return;
-  }
 
-  try {
-    await router.push(path);
-  } catch (error) {
-    console.error('Ошибка навигации:', error);
-  }
-};
+    try {
+      await router.push(path);
+    } catch (error) {
+      console.error('Ошибка навигации:', error);
+    }
+  };
 
   return (
     userData && userData?.role == 'user' && (
@@ -360,88 +360,91 @@ const ClientAccount = () => {
                         Сохранненные вопросы:
                       </p>
                       {userData && userData.savedPsy && (
-  <div className="flex flex-wrap justify-center gap-2">
-    {userData.savedPsy.length > 0 ? (
-      userData.savedPsy.map((user: any) => (
-        <div key={user.userId} className="text-center">
-          <div
-            onClick={() => handleClick(user.userId, 'profile')}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => e.key === 'Enter' && handleClick(user.userId, 'profile')}
-            className="flex items-center cursor-pointer"
-          >
-            <Image 
-              src={user.photo || '/defaultPhoto.jpg'} 
-              alt="Фотография пользователя" 
-              width={50} 
-              height={50} 
-              className="w-10 h-10 rounded-full object-cover mr-3" 
-            />
-            <p className="font-semibold text-black flex items-center bg-gray-200 rounded-2xl p-1">
-              {user.name}
-              <Image src={icon} alt="Иконка психолога" width={20} height={20} />
-            </p>
-          </div>
-        </div>
-      ))
-    ) : (
-      <p className="text-gray-600">Пока нет сохраненных психологов.</p>
-    )}
-  </div>
-)}
-                    </div>
-
-
-                    <div className="mb-5 w-full">
-                      {userId === userData.slug && (
-                        <>
-                          {isEditingRole ? (
-                            <button
-                              className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 ml-1"
-                              onClick={changeRole}
-                            >
-                              Сохранить изменения
-                            </button>
+                        <div className="flex flex-wrap justify-center gap-2">
+                          {userData.savedPsy.length > 0 ? (
+                            userData.savedPsy.map((user: any) => (
+                              <div key={user.userId} className="text-center">
+                                <div
+                                  onClick={() => handleClick(user.userId, 'profile')}
+                                  role="button"
+                                  tabIndex={0}
+                                  onKeyDown={(e) => e.key === 'Enter' && handleClick(user.userId, 'profile')}
+                                  className="flex items-center cursor-pointer"
+                                >
+                                  <Image
+                                    src={user.photo || '/defaultPhoto.jpg'}
+                                    alt="Фотография пользователя"
+                                    width={50}
+                                    height={50}
+                                    className="w-10 h-10 rounded-full object-cover mr-3"
+                                  />
+                                  <p className="font-semibold text-black flex items-center bg-gray-200 rounded-2xl p-1">
+                                    {user.name}
+                                    <Image src={icon} alt="Иконка психолога" width={20} height={20} />
+                                  </p>
+                                </div>
+                              </div>
+                            ))
                           ) : (
-                            <button
-                              className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 ml-1"
-                              onClick={() => setIsEditingRole(!isEditingRole)}
-                            >
-                              Изменить роль
-                            </button>
+                            <p className="text-gray-600">Пока нет сохраненных психологов.</p>
                           )}
-                        </>
+                        </div>
                       )}
                     </div>
 
-                    <div className="flex justify-between items-center mb-2">
-                      <label className="flex items-center">
-                        <input
-                          type="radio"
-                          value="psy"
-                          checked={editedRole === 'psy'}
-                          onChange={(e) => setEditedRole(e.target.value)}
-                          className={`form-radio text-blue-600 h-4 w-4 ${isEditingRole ? 'border-green-500' : ''}`}
-                          disabled={!isEditingRole}
-                        />
-                        <span className="ml-2">Психолог</span>
-                      </label>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <label className="flex items-center">
-                        <input
-                          type="radio"
-                          value="user"
-                          checked={editedRole === 'user'}
-                          onChange={(e) => setEditedRole(e.target.value)}
-                          className={`form-radio text-blue-600 h-4 w-4 ${isEditingRole ? 'border-green-500' : ''}`}
-                          disabled={!isEditingRole}
-                        />
-                        <span className="ml-2">Клиент</span>
-                      </label>
-                    </div>
+                    {userId === userData.slug && (
+                      <>
+                        <div className="mb-5 w-full">
 
+                          <>
+                            {isEditingRole ? (
+                              <button
+                                className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 ml-1"
+                                onClick={changeRole}
+                              >
+                                Сохранить изменения
+                              </button>
+                            ) : (
+                              <button
+                                className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 ml-1"
+                                onClick={() => setIsEditingRole(!isEditingRole)}
+                              >
+                                Изменить роль
+                              </button>
+                            )}
+                          </>
+
+                        </div>
+
+                        <div className="flex justify-between items-center mb-2">
+                          <label className="flex items-center">
+                            <input
+                              type="radio"
+                              value="psy"
+                              checked={editedRole === 'psy'}
+                              onChange={(e) => setEditedRole(e.target.value)}
+                              className={`form-radio text-blue-600 h-4 w-4 ${isEditingRole ? 'border-green-500' : ''}`}
+                              disabled={!isEditingRole}
+                            />
+                            <span className="ml-2">Психолог</span>
+                          </label>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <label className="flex items-center">
+                            <input
+                              type="radio"
+                              value="user"
+                              checked={editedRole === 'user'}
+                              onChange={(e) => setEditedRole(e.target.value)}
+                              className={`form-radio text-blue-600 h-4 w-4 ${isEditingRole ? 'border-green-500' : ''}`}
+                              disabled={!isEditingRole}
+                            />
+                            <span className="ml-2">Клиент</span>
+                          </label>
+                        </div>
+                      </>
+
+                    )}
 
 
 
@@ -457,30 +460,30 @@ const ClientAccount = () => {
                   Сохранненные психологи:
                 </p>
                 {userData && userData.savedPsy && (
-  <div className="flex flex-wrap justify-center gap-2">
-    {userData.savedPsy.length > 0 ? (
-      userData.savedPsy.map((user: any) => (
-        <div key={user.userId} className="text-center">
-          <div
-            onClick={() => handleClick(user.userId, 'profile')}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => e.key === 'Enter' && handleClick(user.userId, 'profile')}
-            className="flex items-center cursor-pointer"
-          >
-            <Image src={user.photo || '/defaultPhoto.jpg'} alt="User Photo" width={50} height={50} className="w-10 h-10 rounded-full object-cover mr-3" />
-            <p className="font-semibold text-black flex items-center bg-gray-200 rounded-2xl p-1">
-              {user.name}
-               <Image src={icon} alt="Psy Icon" width={20} height={20} /></p>
-          </div>
-        </div>
-      ))
-    ) : (
-      <p className="text-gray-600">Пока нет сохраненных психологов.</p>
-    )}
-  </div>
-)}
-                
+                  <div className="flex flex-wrap justify-center gap-2">
+                    {userData.savedPsy.length > 0 ? (
+                      userData.savedPsy.map((user: any) => (
+                        <div key={user.userId} className="text-center">
+                          <div
+                            onClick={() => handleClick(user.userId, 'profile')}
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={(e) => e.key === 'Enter' && handleClick(user.userId, 'profile')}
+                            className="flex items-center cursor-pointer"
+                          >
+                            <Image src={user.photo || '/defaultPhoto.jpg'} alt="User Photo" width={50} height={50} className="w-10 h-10 rounded-full object-cover mr-3" />
+                            <p className="font-semibold text-black flex items-center bg-gray-200 rounded-2xl p-1">
+                              {user.name}
+                              <Image src={icon} alt="Psy Icon" width={20} height={20} /></p>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-gray-600">Пока нет сохраненных психологов.</p>
+                    )}
+                  </div>
+                )}
+
               </div>
             </div>
 
