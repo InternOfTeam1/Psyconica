@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 import PsychologistModal from './PsychologistCheckbox';
 import { openModal, closeModal } from '@/redux/slices/modalSlice';
-import { getVideosById, getUserData } from '@/lib/firebase/firebaseFunctions';
+import { getUserData } from '@/lib/firebase/firebaseFunctions';
 import { useAppSelector } from '../redux/hooks';
 import { PiListBold, PiXBold } from 'react-icons/pi';
 import { useRef } from 'react';
@@ -27,9 +27,11 @@ const Header: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const userId = user?.id;
   const [userPhoto, setUserPhoto] = useState<string | null>(null);
+  const [userID, setUserID] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(true);
   const isToggle = useSelector((state: RootState) => state.toggle.isToggle);
+
 
   const handleNav = () => {
     setMenuOpen(!menuOpen);
@@ -75,6 +77,7 @@ const Header: React.FC = () => {
     if (userId) {
       getUserData(userId).then((userData) => {
         setUserPhoto(userData.photo || '/defaultPhoto.jpg');
+        setUserID(userData.userId)
         setIsLoading(false);
       });
     }
@@ -97,7 +100,6 @@ const Header: React.FC = () => {
   const handleLogin = async (provider: 'google' | 'facebook') => {
     try {
       await dispatch(login(provider));
-      setIsModalOpenPsy(true);
     } catch (error) {
       console.error(error);
     } finally {
@@ -115,12 +117,21 @@ const Header: React.FC = () => {
     if (userCookie) {
       const userData = JSON.parse(userCookie);
       dispatch(setUserState({ isAuthenticated: true, user: userData }));
+      setIsModalOpenPsy(false);
+
     } else {
       dispatch(setUserState({ isAuthenticated: false, user: null }));
     }
   };
 
   useEffect(() => {
+
+    if (!userID) {
+      setIsModalOpenPsy(true); // Show the modal if userID does not exist
+    } else {
+      setIsModalOpenPsy(false); // Hide the modal if userID exists
+    }
+
     checkUserLoginStatus();
   }, []);
 
