@@ -417,7 +417,8 @@ const PsyAccount = () => {
                         </>
 
                       )}
-                      {userRole == 'psy' && (
+
+                      {editedRole == 'psy' && (
                         <div className="flex items-center justify-end right-0 top-0 mr-4 mt-4">
                           <FontAwesomeIcon
                             icon={savedPsychologists.includes(userSlug) ? faSolidBookmark : faRegularBookmark}
