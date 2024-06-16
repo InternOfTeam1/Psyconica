@@ -181,7 +181,7 @@ const PsyAccount = () => {
       const updatedUserData = {
         role: editedRole,
       };
-
+      dispatch(trueToggle());
       await updateUser(userSlug, updatedUserData);
 
       setUserData({
@@ -189,6 +189,8 @@ const PsyAccount = () => {
         ...updatedUserData,
       });
       window.location.reload();
+      dispatch(falseToggle());
+
       setIsEditingRole(false);
     } catch (error) {
       console.error('Error updating user data:', error);

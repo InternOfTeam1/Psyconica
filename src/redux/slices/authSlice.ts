@@ -48,8 +48,12 @@ export const updateUserProfile = createAsyncThunk(
   'auth/updateUserProfile',
   async ({ userId, isPsychologist }: { userId: string; isPsychologist: boolean }, thunkAPI) => {
     const role = isPsychologist ? 'psy' : 'user';
-    await updateUserDataInFirebase(userId, { role: isPsychologist ? 'psy' : 'user' });
-    thunkAPI.dispatch(setUserRole(role))
+    try {
+      await updateUserDataInFirebase(userId, { role });
+      thunkAPI.dispatch(setUserRole(role));
+    } catch (error) {
+      return thunkAPI.rejectWithValue({ error: error.message });
+    }
   }
 );
 
