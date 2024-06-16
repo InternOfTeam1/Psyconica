@@ -322,7 +322,7 @@ const PsyAccount = () => {
   const handleSavePsychologist = async () => {
     if (userId && userSlug) {
       try {
-        await savePsychologistForUser(userSlug, userId);
+        await savePsychologistForUser(editedName, userId);
         setSavedPsychologists([...savedPsychologists, userSlug]);
         setIsSaved(true);
       } catch (error) {
@@ -336,7 +336,7 @@ const PsyAccount = () => {
   const handleRemoveSavedPsychologist = async () => {
     if (userId && userSlug) {
       try {
-        await removeSavedPsychologistForUser(userSlug, userId);
+        await removeSavedPsychologistForUser(editedName, userId);
         setSavedPsychologists(savedPsychologists.filter(slug => slug !== userSlug));
         setIsSaved(false);
       } catch (error) {
@@ -417,7 +417,7 @@ const PsyAccount = () => {
                         </>
 
                       )}
-                      {userRole !== 'psy' && (
+                      {userRole == 'psy' && (
                         <div className="flex items-center justify-end right-0 top-0 mr-4 mt-4">
                           <FontAwesomeIcon
                             icon={savedPsychologists.includes(userSlug) ? faSolidBookmark : faRegularBookmark}

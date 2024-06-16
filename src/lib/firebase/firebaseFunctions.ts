@@ -213,7 +213,7 @@ export const removeSavedVideoForUser = async (videoUrl: string, userId: string) 
   }
 };
 
-export const savePsychologistForUser = async (psychologist: Psychologist, userId: string) => {
+export const savePsychologistForUser = async (psychologist: string, userId: string) => {
   try {
     const userRef = doc(db, 'users', userId);
     await updateDoc(userRef, {
@@ -226,7 +226,7 @@ export const savePsychologistForUser = async (psychologist: Psychologist, userId
   }
 };
 
-export const removeSavedPsychologistForUser = async (psychologist: Psychologist, userId: string) => {
+export const removeSavedPsychologistForUser = async (psychologist: string, userId: string) => {
   try {
     const userRef = doc(db, 'users', userId);
     await updateDoc(userRef, {

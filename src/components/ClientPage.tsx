@@ -446,18 +446,18 @@ const ClientAccount = () => {
                 {userData && userData.savedPsy && (
                   <div className="flex flex-wrap justify-center gap-2">
                     {userData.savedPsy.length > 0 ? (
-                      userData.savedPsy.map((user: any) => (
-                        <div key={user.userId} className="text-center">
+                      userData.savedPsy.map((user: any, index: number) => (
+                        <div key={index} className="text-center">
                           <div
-                            onClick={() => handleClick(user.userId, 'profile')}
-                            role="button"
-                            tabIndex={0}
-                            onKeyDown={(e) => e.key === 'Enter' && handleClick(user.userId, 'profile')}
+                            // onClick={() => handleClick(user.userId, 'profile')}
+                            // role="button"
+                            // tabIndex={0}
+                            // onKeyDown={(e) => e.key === 'Enter' && handleClick(user.userId, 'profile')}
                             className="flex items-center cursor-pointer"
                           >
-                            <Image src={user.photo || '/defaultPhoto.jpg'} alt="User Photo" width={50} height={50} className="w-10 h-10 rounded-full object-cover mr-3" />
+                            {/* <Image src={user.photo || '/defaultPhoto.jpg'} alt="User Photo" width={50} height={50} className="w-10 h-10 rounded-full object-cover mr-3" /> */}
                             <p className="font-semibold text-black flex items-center bg-gray-200 rounded-2xl p-1">
-                              {user.name}
+                              {user}
                               <Image src={icon} alt="Psy Icon" width={20} height={20} /></p>
                           </div>
                         </div>
