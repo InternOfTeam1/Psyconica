@@ -48,11 +48,11 @@ const QuestionDetail = (props: Props) => {
   const params = useParams();
   const questionSlug: any = params.slug;
   const userId = useAppSelector((state) => state.auth.user?.id);
-  // const userRole = useAppSelector((state) => state.auth.user?.role);
+  const userRole = useAppSelector((state) => state.auth.user?.role);
   const userName = useAppSelector((state) => state.auth.user?.name);
   const user = useAppSelector((state) => state.auth.user);
   const [userPhoto, setUserPhoto] = useState('/default_avatar.jpg');
-  const [userRole, setUserRole] = useState('');
+  const [role, setRole] = useState('');
   const [isSaved, setIsSaved] = useState(false);
   const MAX_LIKES = 100;
   const dispatch: AppDispatch = useDispatch();
@@ -76,7 +76,7 @@ const QuestionDetail = (props: Props) => {
   useEffect(() => {
     if (userId) {
       getUserData(userId).then((userData) => {
-        setUserRole(userData.role)
+        setRole(userData.role)
       });
     }
   }, [userId, isToggle]);
@@ -209,12 +209,12 @@ const QuestionDetail = (props: Props) => {
     try {
       const answers: any = questionData?.answers;
 
-      const nameToAdd = userRole === 'psy' ? userName : 'Psy';
+      const nameToAdd = role === 'psy' ? userName : 'Psy';
 
       const updatedNewAnswer = {
         ...newAnswer,
         name: nameToAdd,
-        psyPhoto: userRole === 'psy' ? userPhoto : '/psy_avatar.jpg',
+        psyPhoto: role === 'psy' ? userPhoto : '/psy_avatar.jpg',
       };
 
       const newQuestionData = {
@@ -227,7 +227,7 @@ const QuestionDetail = (props: Props) => {
       await updateQuestion(questionSlug, newQuestionData);
 
 
-      if (userRole === 'psy') {
+      if (role === 'psy') {
         const userDocs = await fetchDoc('users', userId) as unknown as Users;
 
         if (userDocs) {
@@ -403,7 +403,7 @@ const QuestionDetail = (props: Props) => {
 
   const saveQuestions = async () => {
     try {
-      if (userRole === 'user') {
+      if (role === 'user') {
         const userDocs = await fetchDoc('users', userId) as unknown as Users;
 
         if (userDocs) {
@@ -452,14 +452,14 @@ const QuestionDetail = (props: Props) => {
             <>
 
               <h2 className="font-semibold bg-amber-300 text-gray-600 px-7 py-3 rounded-2xl leading-6 text-center xs:text-sm xs:px-3 sm:text-sm sm:px-4 md:text-base md:px-5 lg:text-lg lg:px-6 xl:text-xl xl:px-7">{questionData.title}</h2>
-              {userRole === 'user' && (<div className="flex items-center justify-end mt-2 space-x-2">
+              {role === 'user' && (<div className="flex items-center justify-end mt-2 space-x-2">
                 <h2 className="font-semibold text-white-950 text-sm">Сохранить вопрос</h2>
                 <FaBookmark
                   className={`cursor-pointer text-lg ${isSaved ? 'text-black-500' : 'text-gray-400'}`}
                   onClick={saveQuestions}
                 />
               </div>)}
-              {userRole === 'psy' ? (
+              {role === 'psy' ? (
                 newAnswer ?
                   <>
                     <input
@@ -537,7 +537,7 @@ const QuestionDetail = (props: Props) => {
                           <h3 className="font-semibold text-gray-600 leading-6 sm:text-md md:text-lg lg:text-xl mt-2">
                             {answer.title}
                           </h3>
-                          {((userRole === 'psy' && answer.userId === userId) || (userRole !== 'psy' && answer.userId === userId)) && (
+                          {((role === 'psy' && answer.userId === userId) || (role !== 'psy' && answer.userId === userId)) && (
                             <>
                               <FaPen
                                 className="cursor-pointer mt-1 mr-3 ml-auto"
@@ -601,7 +601,7 @@ const QuestionDetail = (props: Props) => {
                                       <p className="text-xs font-semibold text-gray-800">{comment?.userId === userId ? 'Вы' : comment?.name}</p>
                                       <p className="text-md text-gray-600 mt-1">{comment.content}</p>
                                     </div>
-                                    {((userRole === 'psy' && comment.userId === userId) || (userRole !== 'psy' && comment.userId === userId)) && (
+                                    {((role === 'psy' && comment.userId === userId) || (role !== 'psy' && comment.userId === userId)) && (
                                       <>
                                         <FaPen
                                           className='cursor-pointer mr-3'
