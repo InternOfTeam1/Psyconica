@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
 import { useParams } from 'next/navigation';
 import { useAppSelector } from '../redux/hooks';
-import { updateAnswerLikes, updateQuestion, updateComment, updateUser, getVideosById } from '@/lib/firebase/firebaseFunctions';
+import { updateAnswerLikes, updateQuestion, updateComment, updateUser } from '@/lib/firebase/firebaseFunctions';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store';
 import { openModal } from '@/redux/slices/modalSlice';
@@ -50,7 +50,6 @@ const QuestionDetail = (props: Props) => {
   const userId = useAppSelector((state) => state.auth.user?.id);
   const userRole = useAppSelector((state) => state.auth.user?.role);
   const userName = useAppSelector((state) => state.auth.user?.name);
-  const user = useAppSelector((state) => state.auth.user);
   const [userPhoto, setUserPhoto] = useState('/default_avatar.jpg');
   const [role, setRole] = useState('');
   const [isSaved, setIsSaved] = useState(false);

@@ -415,15 +415,17 @@ const PsyAccount = () => {
                         </>
 
                       )}
-                      {editedRole === 'psy' && (
-  <div className="flex items-center justify-end right-0 top-0 mr-4 mt-4">
-    <FontAwesomeIcon
-      icon={savedPsychologists.includes(userSlug) ? faSolidBookmark : faRegularBookmark}
-      className={`text-2xl cursor-pointer ${savedPsychologists.includes(userSlug) ? 'text-yellow-500' : 'text-gray-400'}`}
-      onClick={savedPsychologists.includes(userSlug) ? handleRemoveSavedPsychologist : handleSavePsychologist}
-    />
-  </div>
-)}
+
+
+                      {editedRole === 'psy' && userId !== userData.slug && (
+                        <div className="flex items-center justify-end right-0 top-0 mr-4 mt-4">
+                          <FontAwesomeIcon
+                            icon={savedPsychologists.includes(userSlug) ? faSolidBookmark : faRegularBookmark}
+                            className={`text-2xl cursor-pointer ${savedPsychologists.includes(userSlug) ? 'text-yellow-500' : 'text-gray-400'}`}
+                            onClick={savedPsychologists.includes(userSlug) ? handleRemoveSavedPsychologist : handleSavePsychologist}
+                          />
+                        </div>
+                      )}
 
 
                       {loadStatus && (
@@ -534,7 +536,7 @@ const PsyAccount = () => {
                           {isSmallScreen && (
                             <button
                               onClick={() => setShowAbout(!showAbout)}
-                              className="text-gray-600 hover:text-blue-500 focus:outline-none px-3 py-1 mr-0 ml-auto text-lg ml-3 lg:text-sm md:text-sm xs:text-xs sm:text-sm mx-5 flex items-center"
+                              className="text-gray-600 hover:text-blue-500 focus:outline-none px-3 py-1 mr-0 ml-auto text-lg lg:text-sm md:text-sm xs:text-xs sm:text-sm mx-5 flex items-center"
                             >
                               {showAbout ? 'Скрыть' : 'Показать '}
                               {showAbout ? <AiFillCaretUp className="ml-1" /> : <AiFillCaretDown className="ml-1" />}
