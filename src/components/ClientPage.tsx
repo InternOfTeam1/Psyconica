@@ -181,9 +181,7 @@ const ClientAccount = () => {
     }
   };
 
-  const handleClick = async (url: string) => {
-
-
+  const handleClick = async(url: string) => {
     if (userData?.savedQuestions && userData.savedQuestions.length > 0) {
       const questionSlugs = `/questions/${url}`;
       try {
@@ -192,32 +190,43 @@ const ClientAccount = () => {
         console.error('Navigation error:', error);
       }
     }
+  };
 
-
+  const handlePsyClick = async (slug: string) => {
+    if (userData) {
+      const psyProfileUrl = `/profile/${slug}`;
+      try {
+        await router.push(psyProfileUrl);
+      } catch (error) {
+        console.error('Navigation error:', error);
+      }
+    } else {
+      console.error('No userData available');
+    }
   };
 
   return (
     userData && userData?.role == 'user' && (
       <>
-        <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px] justify-center ">
+        <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px] justify-center">
           <div className="flex flex-wrap -mx-1 lg:-mx-1 xs:mx-1 s:mx-2 md:mx-3 ">
             <div className="w-full p-3 mx-auto mt-[-3px] lg:mt-[-3px] bg-white rounded-2xl shadow-2xl border xs:py-3 my-5 m-0 md:py-0 md:py-3-lg lg:py-3-md xl:py-3-2xl questions-lg questions-small questions-laptop questions-laptop-small ">
               <div className="w-full p-1 ">
-                <p className="font-semibold text-gray-800 leading-6 mt-3 mx-3 ">
+                <p className="font-semibold text-gray-800 leading-6  ">
                   Сохраненные видео:
                 </p>
                 {userData && userData.savedVideos && (
-                  <div className="flex flex-wrap justify-center gap-2">
+                  <div className="flex flex-wrap justify-center gap-2 ">
                     {userData.savedVideos.length > 0 ? (
                       userData.savedVideos.map((video: any, index: number) => (
-                        <div key={index} className="cursor-pointer border-2 rounded-2xl overflow-hidden pb-3 bg-gray-200 h-[150px]"
+                        <div key={index} className="cursor-pointer border-2 rounded-2xl overflow-hidden pb-3 bg-gray-200 xs:h-[200px] s:h-[200px]  md:h-[180px] xl:h-[180px]"
                           style={{ boxShadow: '0 2px 6px rgba(0,0,0,0.4)' }}>
                           <iframe
                             width="100%"
                             height="100px"
                             src={video}
                             title={video.title}
-                            className="w-full h-1 sm:h-56 md:h-64 lg:h-72 xl:h-[200px]"
+                            className="w-full h-1 sm:h-56 lg:h-72 s:h-[200px] xs:h-[200px] md:h-[200px] xl:h-[200px]"
                             allowFullScreen
                           ></iframe>
                           <p className="text-sm mt-2">{video.title}</p>
@@ -230,9 +239,9 @@ const ClientAccount = () => {
                 )}
               </div>
             </div>
-            <br />
-            <div className="container  mx-auto mt-[-1px] md:ml-[20px]  lg:ml-[40px] xl:ml-0 sm:mx-2 md:mx-1 lg:mx-1 px-2 py-4 max-w-3xl bg-white shadow-xl rounded-2xl xs:container-min card-small xl:w-[600px] containerPsy-laptop containerPsy-laptop-small ">
-              <div className="flex items-start ml-5 photo-block">
+        
+            <div className="container mt-[-1px] md:ml-[20px]  lg:ml-[40px] xl:ml-0 sm:mx-2 px-2 py-4 max-w-3xl bg-white shadow-xl rounded-2xl xs:container-min card-small xl:w-[600px] containerPsy-laptop containerPsy-laptop-small ">
+              <div className=" flex justify-center items-start ml-5 photo-block">
                 <div className="relative mb-4">
                   <div className="mt-2 mr-5 w-[180px] h-[180px]">
                     {isLoading ? (
@@ -350,7 +359,7 @@ const ClientAccount = () => {
                       )}
                     </div>
 
-                    <div className="w-full p-1 ">
+                    <div className=" p-1 lg:w-[300px] md:w-[300px] ">
                       <p className="font-semibold text-gray-800 leading-6 mt-3 mx-3">
                         Сохранненные вопросы:
                       </p>
@@ -438,35 +447,39 @@ const ClientAccount = () => {
                 </div>
               </div>
             </div>
-            <div className="w-full p-3 mx-auto mt-[-3px] lg:mt-[-3px] bg-white rounded-2xl shadow-2xl border xs:py-3 my-5 m-0 md:py-0 md:py-3-lg lg:py-3-md xl:py-3-2xl questions-lg questions-small questions-laptop questions-laptop-small ">
+            <div className="w-full p-3 mx-auto mt-[3px] lg:mt-[3px] bg-white rounded-2xl shadow-2xl border xs:py-3 my-5 m-0 md:py-0 md:py-3-lg lg:py-3-md xl:py-3-2xl questions-lg questions-small questions-laptop questions-laptop-small ">
               <div className="w-full p-1 ">
                 <p className="font-semibold text-gray-800 leading-6 mt-3 mx-3">
                   Сохранненные психологи:
                 </p>
-                {userData && userData.savedPsy && (
-                  <div className="flex flex-wrap justify-center gap-2">
-                    {userData.savedPsy.length > 0 ? (
-                      userData.savedPsy.map((user: any, index: number) => (
-                        <div key={index} className="text-center">
-                          <div
-                            // onClick={() => handleClick(user.userId, 'profile')}
-                            // role="button"
-                            // tabIndex={0}
-                            // onKeyDown={(e) => e.key === 'Enter' && handleClick(user.userId, 'profile')}
-                            className="flex items-center cursor-pointer"
-                          >
-                            {/* <Image src={user.photo || '/defaultPhoto.jpg'} alt="User Photo" width={50} height={50} className="w-10 h-10 rounded-full object-cover mr-3" /> */}
-                            <p className="font-semibold text-black flex items-center bg-gray-200 rounded-2xl p-1">
-                              {user}
-                              <Image src={icon} alt="Psy Icon" width={20} height={20} /></p>
-                          </div>
-                        </div>
-                      ))
-                    ) : (
-                      <p className="text-gray-600">Пока нет сохраненных психологов.</p>
-                    )}
-                  </div>
-                )}
+                 {userData.savedPsy.length > 0 ? (
+        userData.savedPsy.map((psy: any, index: number) => (
+          <div key={index} className="text-center cursor-pointer">
+             <div
+              onClick={() => handlePsyClick(psy.psySlug)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => e.key === 'Enter' && handlePsyClick(psy.psySlug)}
+              className="flex items-center cursor-pointer"
+            >
+              <Image
+                src={psy.psyPhoto || '/defaultPhoto.jpg'}
+                alt="Psy Photo"
+                width={50}
+                height={50}
+                className="w-10 h-10 rounded-full object-cover mr-3"
+              />
+              <p className="font-semibold text-black flex items-center bg-gray-200 rounded-2xl p-1">
+                {psy.psyName}
+                <Image src={icon} alt="Psy Icon" width={20} height={20} className="ml-1" />
+              </p>
+            </div>
+          </div>
+        ))
+      ) : (
+        <p className="text-gray-600">Пока нет сохраненных психологов.</p>
+      )}
+
 
               </div>
             </div>

@@ -67,13 +67,11 @@ const PsyAccount = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [filePreview, setFilePreview] = useState<string | ArrayBuffer | null>(null);
   const [savedPsychologists, setSavedPsychologists] = useState<string[]>([]);
-  const [psychologistData, setPsychologistData] = useState<any>(null);
+  const [editedPhotoUrl, setEditedPhotoUrl] = useState<string>('');
   const [isSaved, setIsSaved] = useState(false);
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const dispatch = useDispatch<AppDispatch>();
-  const { slug } = useParams<{ slug: string }>()
-
-
+  const { slug } = useParams<{ slug: string }>();
 
   useEffect(() => {
     fetchAllUsers().then((usersData) => {
@@ -85,13 +83,12 @@ const PsyAccount = () => {
     return allUsers.find((item) => item.id.toLowerCase() === commentUserId.toLowerCase())?.photo;
   };
 
-
   useEffect(() => {
     async function fetchUserData(userId: any) {
       try {
         const fetchedUserData: any = await fetchDoc('users', userSlug);
         setUserData(fetchedUserData);
-        setComments(fetchedUserData?.comments ?? [])
+        setComments(fetchedUserData?.comments ?? []);
         setRating(fetchedUserData.averageRating || 0);
         setEditedAbout(fetchedUserData.aboutUser || '');
         setEditedContact(fetchedUserData.contactUser || '');
@@ -99,7 +96,16 @@ const PsyAccount = () => {
         setEditedExpert(fetchedUserData.expert || '');
         setEditedName(fetchedUserData.name || '');
         setEditedRole(fetchedUserData.role || '');
-        setSavedPsychologists(fetchedUserData.savedPsychologists || []);
+        setEditedPhotoUrl(fetchedUserData.photo || '');
+        const savedPsychologistsFromStorage = localStorage.getItem('savedPsychologists');
+        if (savedPsychologistsFromStorage) {
+          const savedPsychologistsArray = JSON.parse(savedPsychologistsFromStorage);
+          setSavedPsychologists(savedPsychologistsArray);
+          setIsSaved(savedPsychologistsArray.includes(userSlug));
+        } else {
+          setSavedPsychologists(fetchedUserData.savedPsychologists || []);
+          setIsSaved(fetchedUserData.savedPsychologists?.includes(userSlug) || false);
+        }
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
@@ -108,7 +114,6 @@ const PsyAccount = () => {
     if (userSlug) {
       fetchUserData(userSlug);
     }
-
   }, [userSlug]);
 
   useEffect(() => {
@@ -147,9 +152,8 @@ const PsyAccount = () => {
           }
         } catch (error) {
           console.error('Ошибка при обновлении фотографии:', error);
-          return
+          return;
         }
-
       }
       const updatedUserData = {
         aboutUser: editedAbout,
@@ -175,7 +179,6 @@ const PsyAccount = () => {
     }
   };
 
-
   const changeRole = async () => {
     try {
       const updatedUserData = {
@@ -196,7 +199,6 @@ const PsyAccount = () => {
       console.error('Error updating user data:', error);
     }
   };
-
 
   useEffect(() => {
     const handleResize = () => {
@@ -222,16 +224,15 @@ const PsyAccount = () => {
       photo: userPhoto || '/default_avatar.jpg',
       userId,
     };
-    const newCommentsArray = [...comments, newComment]
+    const newCommentsArray = [...comments, newComment];
 
     setComments(newCommentsArray);
     setCommentText('');
     await updateUser(userSlug, {
       ...userData,
       comments: newCommentsArray
-    })
+    });
   };
-
 
   const handleEditComment = async () => {
     if (!editedCommentText.trim() || !editCommentId) return;
@@ -249,7 +250,7 @@ const PsyAccount = () => {
     await updateUser(userSlug, {
       ...userData,
       comments: updatedComments
-    })
+    });
   };
 
   const handleDeleteComment = async (id: string) => {
@@ -272,10 +273,7 @@ const PsyAccount = () => {
     setComments(updatedComments);
   }
 
-
   const handleClick = async (url: string) => {
-
-
     if (userData?.answeredQuestions && userData.answeredQuestions.length > 0) {
       const questionSlugs = `/questions/${url}`;
       try {
@@ -284,8 +282,6 @@ const PsyAccount = () => {
         console.error('Navigation error:', error);
       }
     }
-
-
   };
 
   const handleUpdateRating = async (newRating: number) => {
@@ -296,7 +292,6 @@ const PsyAccount = () => {
       console.error('Error updating rating:', error);
     }
   };
-
 
   const handleSendMessage = async (psyName: any, email: any) => {
     try {
@@ -322,8 +317,10 @@ const PsyAccount = () => {
   const handleSavePsychologist = async () => {
     if (userId && userSlug) {
       try {
-        await savePsychologistForUser(editedName, userId);
-        setSavedPsychologists([...savedPsychologists, userSlug]);
+        await savePsychologistForUser(editedName, userSlug, editedPhotoUrl, userId);
+        const updatedSavedPsychologists = [...savedPsychologists, userSlug];
+        setSavedPsychologists(updatedSavedPsychologists);
+        localStorage.setItem('savedPsychologists', JSON.stringify(updatedSavedPsychologists));
         setIsSaved(true);
       } catch (error) {
         console.error('Ошибка сохранения психолога:', error);
@@ -337,7 +334,9 @@ const PsyAccount = () => {
     if (userId && userSlug) {
       try {
         await removeSavedPsychologistForUser(editedName, userId);
-        setSavedPsychologists(savedPsychologists.filter(slug => slug !== userSlug));
+        const updatedSavedPsychologists = savedPsychologists.filter(slug => slug !== userSlug);
+        setSavedPsychologists(updatedSavedPsychologists);
+        localStorage.setItem('savedPsychologists', JSON.stringify(updatedSavedPsychologists));
         setIsSaved(false);
       } catch (error) {
         console.error('Ошибка удаления сохраненного психолога:', error);
@@ -346,7 +345,6 @@ const PsyAccount = () => {
       console.error('Отсутствует userId или userSlug');
     }
   };
-
 
   return (
 
@@ -417,16 +415,15 @@ const PsyAccount = () => {
                         </>
 
                       )}
-
-                      {editedRole == 'psy' && (
-                        <div className="flex items-center justify-end right-0 top-0 mr-4 mt-4">
-                          <FontAwesomeIcon
-                            icon={savedPsychologists.includes(userSlug) ? faSolidBookmark : faRegularBookmark}
-                            className={`text-2xl cursor-pointer ${savedPsychologists.includes(userSlug) ? 'text-yellow-500' : 'text-gray-400'}`}
-                            onClick={savedPsychologists.includes(userSlug) ? handleRemoveSavedPsychologist : handleSavePsychologist}
-                          />
-                        </div>
-                      )}
+                      {editedRole === 'psy' && (
+  <div className="flex items-center justify-end right-0 top-0 mr-4 mt-4">
+    <FontAwesomeIcon
+      icon={savedPsychologists.includes(userSlug) ? faSolidBookmark : faRegularBookmark}
+      className={`text-2xl cursor-pointer ${savedPsychologists.includes(userSlug) ? 'text-yellow-500' : 'text-gray-400'}`}
+      onClick={savedPsychologists.includes(userSlug) ? handleRemoveSavedPsychologist : handleSavePsychologist}
+    />
+  </div>
+)}
 
 
                       {loadStatus && (

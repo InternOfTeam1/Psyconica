@@ -213,18 +213,24 @@ export const removeSavedVideoForUser = async (videoUrl: string, userId: string) 
   }
 };
 
-export const savePsychologistForUser = async (psychologist: string, userId: string) => {
+export const savePsychologistForUser = async (psyName: string, psySlug: string, psyPhoto: string | null, userId: string) => {
   try {
     const userRef = doc(db, 'users', userId);
     await updateDoc(userRef, {
-      savedPsy: arrayUnion(psychologist)
+      savedPsy: arrayUnion({
+        psyName: psyName,
+        psySlug: psySlug,
+        psyPhoto: psyPhoto || '' 
+      })
     });
+    
     console.log('Психолог успешно сохранен');
   } catch (error) {
     console.error('Ошибка сохранения психолога:', error);
     throw error;
   }
 };
+
 
 export const removeSavedPsychologistForUser = async (psychologist: string, userId: string) => {
   try {

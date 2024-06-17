@@ -35,7 +35,7 @@ type Props = {
 
 
 const QuestionDetail = (props: Props) => {
-  const { rawData } = props
+  const { rawData } = props;
   const [questionData, setQuestionData] = useState<QuestionData | null>(null);
   const [answerForComments, setAnswerForComments] = useState<any>(null);
   const [newAnswer, setNewAnswer] = useState<any>(null);
@@ -44,7 +44,7 @@ const QuestionDetail = (props: Props) => {
   const [editedAnswer, setEditedAnswer] = useState<string>('');
   const [editingCommentNum, setEditingCommentNum] = useState<string | null>(null);
   const [editedComment, setEditedComment] = useState<string>('');
-  const [videos, setVideos] = useState([] as Video[]);
+  const [videos, setVideos] = useState<Video[]>([]);
   const params = useParams();
   const questionSlug: any = params.slug;
   const userId = useAppSelector((state) => state.auth.user?.id);
@@ -76,11 +76,10 @@ const QuestionDetail = (props: Props) => {
   useEffect(() => {
     if (userId) {
       getUserData(userId).then((userData) => {
-        setRole(userData.role)
+        setRole(userData.role);
       });
     }
   }, [userId, isToggle]);
-
 
   useEffect(() => {
     async function fetchPhoto() {
@@ -94,8 +93,6 @@ const QuestionDetail = (props: Props) => {
     }
     fetchPhoto();
   }, [userPhoto]);
-
-
 
   function updateExistingData(photo: string, name: string) {
     if (!questionData) return;
@@ -114,23 +111,19 @@ const QuestionDetail = (props: Props) => {
     updateQuestion(questionSlug, updatedQuestionData);
   }
 
-
-
   const handleLikeClick = async (answerNum: any, answerLikes: string[]) => {
     const isLiked = answerLikes.includes(userId);
 
     let updatedLikes;
 
     if (!userId) {
-      handleOpenModal()
-
+      handleOpenModal();
       console.error("User ID is undefined.");
       return;
     }
 
     if (isLiked) {
       updatedLikes = answerLikes.filter(id => id !== userId);
-
     } else {
       updatedLikes = [...answerLikes, userId];
     }
@@ -148,13 +141,11 @@ const QuestionDetail = (props: Props) => {
     }
   };
 
-
   const handleClick = async (user: string, e: React.MouseEvent<HTMLDivElement> | React.KeyboardEvent<HTMLDivElement>) => {
     e.preventDefault();
 
     if (!userId) {
-      handleOpenModal()
-
+      handleOpenModal();
       console.error("User ID is undefined.");
       return;
     }
@@ -163,7 +154,6 @@ const QuestionDetail = (props: Props) => {
       const fetchedUserData = await fetchDoc('users', user);
       setUserData(fetchedUserData);
       await router.push(`/profile/${user}`);
-
     } catch (error) {
       console.error('Ошибка навигации:', error);
     }
@@ -177,14 +167,11 @@ const QuestionDetail = (props: Props) => {
       }
     };
     fetchData();
-
-
   }, [questionSlug]);
 
   useEffect(() => {
     document.title = `${questionData?.title}`;
-  }, [questionData])
-
+  }, [questionData]);
 
   const onAnswerAdd = () => {
     setNewAnswer({
@@ -193,17 +180,16 @@ const QuestionDetail = (props: Props) => {
       num: nanoid(),
       title: '',
       userId,
-    })
-  }
+    });
+  };
 
   const onNewAnswerChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
     const newValue = e.target.value;
     setNewAnswer({
       ...newAnswer,
       title: newValue
-    })
-  }
-
+    });
+  };
 
   const onNewAnswerSave = async () => {
     try {
@@ -220,12 +206,11 @@ const QuestionDetail = (props: Props) => {
       const newQuestionData = {
         ...questionData,
         answers: [...answers, updatedNewAnswer]
-      }
+      };
 
-      setQuestionData(newQuestionData)
-      setNewAnswer(null)
+      setQuestionData(newQuestionData);
+      setNewAnswer(null);
       await updateQuestion(questionSlug, newQuestionData);
-
 
       if (role === 'psy') {
         const userDocs = await fetchDoc('users', userId) as unknown as Users;
@@ -233,7 +218,6 @@ const QuestionDetail = (props: Props) => {
         if (userDocs) {
           const answeredQuestions = userDocs.answeredQuestions || [];
           const questionTitle = questionData?.title;
-
 
           if (
             questionTitle &&
@@ -243,47 +227,41 @@ const QuestionDetail = (props: Props) => {
             const updatedUserDoc = {
               ...userDocs,
               answeredQuestions: [...answeredQuestions, { title: questionTitle, slug: questionSlug }]
-            }
+            };
             await addDocumentWithSlug('users', updatedUserDoc, 'userId');
           }
-        };
+        }
       }
     } catch (error) {
       console.error("Error saving new answer:", error);
-
     }
   };
 
   const onAnswerDelete = async (answerNum: number) => {
     const answers: any = questionData?.answers;
 
-    const newAnswers = answers?.filter((answer: { num: number; }) => answer.num !== answerNum)
+    const newAnswers = answers?.filter((answer: { num: number; }) => answer.num !== answerNum);
     const newQuestionData = {
       ...questionData,
       answers: newAnswers
-    }
+    };
 
-    setQuestionData(newQuestionData)
+    setQuestionData(newQuestionData);
     await updateQuestion(questionSlug, newQuestionData);
 
     const userDocs = await fetchDoc('users', userId) as unknown as Users;
 
     if (userDocs) {
-
       const answeredQuestions = userDocs.answeredQuestions || [];
-
       const updatedAnsweredQuestions = answeredQuestions.filter((question: any) => {
-        return !(question.slug === questionSlug && question.title === newQuestionData.title)
-      })
+        return !(question.slug === questionSlug && question.title === newQuestionData.title);
+      });
 
-      await updateUser(userId, { answeredQuestions: updatedAnsweredQuestions })
-
+      await updateUser(userId, { answeredQuestions: updatedAnsweredQuestions });
+    } else {
+      console.error('user document not found');
     }
-    else {
-      console.error('user document not found')
-    }
-
-  }
+  };
 
   const onAnswerEdit = (answerNum: number) => {
     setEditingAnswerNum(answerNum);
@@ -300,7 +278,7 @@ const QuestionDetail = (props: Props) => {
     const newQuestionData = {
       ...questionData,
       answers: updatedAnswers || []
-    }
+    };
 
     setQuestionData(newQuestionData);
     setEditingAnswerNum(null);
@@ -313,25 +291,21 @@ const QuestionDetail = (props: Props) => {
   };
 
   const onCommentAdd = (answerIndex: number) => {
-
     if (userId) {
-      setAnswerForComments(answerIndex)
+      setAnswerForComments(answerIndex);
       const commentId = nanoid();
-      setLastCommentId(commentId)
+      setLastCommentId(commentId);
     } else {
-      handleOpenModal()
+      handleOpenModal();
     }
-  }
-
+  };
 
   const onCommentEdit = (commentNum: string, commentText: string) => {
     setEditingCommentNum(commentNum);
-
     setEditedComment(commentText);
   };
 
   const onCommentSend = async (commentNum: string) => {
-
     const updatedComments = questionData?.comments?.map(comment =>
       comment.num === commentNum ? { ...comment, content: editedComment } : comment
     );
@@ -341,10 +315,10 @@ const QuestionDetail = (props: Props) => {
       comments: updatedComments || []
     };
 
-    setQuestionData(newQuestionData as QuestionData)
+    setQuestionData(newQuestionData as QuestionData);
     setEditingCommentNum(null);
 
-    await updateComment(questionSlug, newQuestionData)
+    await updateComment(questionSlug, newQuestionData);
   };
 
   const onCommentCreate = async (answerNum: string) => {
@@ -355,20 +329,20 @@ const QuestionDetail = (props: Props) => {
       name: userName,
       photo: userPhoto,
       userId,
-    }
+    };
 
     const newQuestionData = {
       ...questionData,
       comments: questionData?.comments?.length ? [...questionData?.comments, newComment] : [newComment]
     };
 
-    setQuestionData(newQuestionData as QuestionData)
+    setQuestionData(newQuestionData as QuestionData);
     setEditingCommentNum(null);
-    setEditedComment('')
-    setAnswerForComments(null)
-    setLastCommentId(null)
+    setEditedComment('');
+    setAnswerForComments(null);
+    setLastCommentId(null);
 
-    await updateComment(questionSlug, newQuestionData)
+    await updateComment(questionSlug, newQuestionData);
   };
 
   const onCommentChange = (e: ChangeEvent<HTMLInputElement>, commentNum: string) => {
@@ -378,28 +352,23 @@ const QuestionDetail = (props: Props) => {
   const onCommentDelete = async (commentNum: any) => {
     const comments: any = questionData?.comments;
 
-    const newComments = comments?.filter((comment: { num: any }) => comment.num !== commentNum)
+    const newComments = comments?.filter((comment: { num: any }) => comment.num !== commentNum);
 
     const updatedQuestion = {
       ...questionData,
       answers: questionData?.answers ?? [],
       comments: newComments
-    }
+    };
 
-    setQuestionData(updatedQuestion)
-    await updateComment(questionSlug, updatedQuestion)
-  }
+    setQuestionData(updatedQuestion);
+    await updateComment(questionSlug, updatedQuestion);
+  };
 
   const addVideo = useCallback((newVideo: Video) => {
     setVideos((prevState) => {
-      return [...prevState, newVideo]
-    })
-  }, [])
-
-
-
-
-
+      return [...prevState, newVideo];
+    });
+  }, []);
 
   const saveQuestions = async () => {
     try {
@@ -415,11 +384,9 @@ const QuestionDetail = (props: Props) => {
 
             let updatedSavedQuestions;
             if (isAlreadySaved) {
-
               updatedSavedQuestions = savedQuestions.filter((q: any) => q.title !== questionTitle || q.slug !== questionSlug);
               setIsSaved(false);
             } else {
-
               updatedSavedQuestions = [...savedQuestions, { title: questionTitle, slug: questionSlug }];
               setIsSaved(true);
             }
@@ -430,6 +397,7 @@ const QuestionDetail = (props: Props) => {
             };
             await updateUser(userId, { savedQuestions: updatedUserDoc.savedQuestions });
 
+            localStorage.setItem('savedQuestions', JSON.stringify(updatedSavedQuestions));
           }
         }
       }
@@ -438,6 +406,14 @@ const QuestionDetail = (props: Props) => {
     }
   };
 
+  useEffect(() => {
+    const savedQuestions = localStorage.getItem('savedQuestions');
+    if (savedQuestions) {
+      const parsedSavedQuestions = JSON.parse(savedQuestions);
+      const isQuestionSaved = parsedSavedQuestions.some((q: any) => q.slug === questionSlug);
+      setIsSaved(isQuestionSaved);
+    }
+  }, [questionSlug]);
 
   const sortedAnswers = questionData?.answers?.sort((a, b) => b.likes.length - a.likes.length) || [];
 
