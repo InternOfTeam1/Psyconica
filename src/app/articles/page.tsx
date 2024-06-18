@@ -3,12 +3,12 @@ import { Video } from "@/interfaces/collections";
 import { fetchDataFromCollection } from "@/lib/firebase/firebaseGetDocs";
 import { Metadata } from "next";
 
-export async function generateMetadata(): Promise<Metadata> {
-  return {
-    title: 'Articles Page',
-    description: 'Page showing a list of articles',
-  };
-}
+// export async function generateMetadata(): Promise<Metadata> {
+//   return {
+//     title: 'Articles Page',
+//     description: 'Page showing a list of articles',
+//   };
+// }
 
 function shuffleAndTrimVideos(videos: Video[], maxLength: number): Video[] {
   let shuffledVideos = videos.slice();
@@ -29,7 +29,7 @@ const Articles: React.FC = async () => {
   }
 
   const videos = rawData as Video[];
-  const shuffledVideos = shuffleAndTrimVideos(videos, 10); 
+  const shuffledVideos = shuffleAndTrimVideos(videos, 10);
 
   return <ArticlesComponent />;
 }

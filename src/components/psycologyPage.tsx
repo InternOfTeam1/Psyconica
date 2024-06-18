@@ -132,6 +132,8 @@ const PsyAccount = () => {
       if (image) {
         try {
           dispatch(trueToggle());
+          setShowAbout(true)
+          setShowContact(true)
           setLoadStatus('Изображение загружается. Пожалуйста, подождите...');
           const imageUrl = await uploadImageToStorage(image);
           if (imageUrl) {
@@ -144,6 +146,8 @@ const PsyAccount = () => {
 
             setImageUrl(imageUrl);
             dispatch(falseToggle());
+            setShowAbout(false)
+            setShowContact(false)
             setLoadStatus('Изображение загружено.');
 
             setTimeout(() => {
@@ -547,7 +551,6 @@ const PsyAccount = () => {
                           <textarea
                             value={editedAbout}
                             onChange={(e) => setEditedAbout(e.target.value)}
-                            onClick={(e) => e.stopPropagation()}
                             className={`border ${isEditing ? 'border-green-500' : 'border-none'} text-gray-600 mt-2 p-2 rounded-md resize-none xs:w-[100%] sm:w-[100%] md:w-[100%] lg:w-[100%] xl:w-[100%]`}
                             disabled={!isEditing}
                             rows={8}
