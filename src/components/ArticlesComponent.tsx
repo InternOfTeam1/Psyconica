@@ -21,6 +21,7 @@ interface ArticleData {
 const ArticlesComponent: React.FC = () => {
   const userRole = useAppSelector((state) => state.auth.user?.role);
   const [articles, setArticles] = useState<ArticleData[]>([]);
+  const [originalArticle, setOriginalArticle] = useState<ArticleData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
   const router = useRouter();
@@ -44,6 +45,7 @@ const ArticlesComponent: React.FC = () => {
           }));
 
         setArticles(filteredAndTransformedArticles);
+        setOriginalArticle(filteredAndTransformedArticles);
         setLoading(false);
       } catch (error) {
         console.error('Ошибка загрузки статей: ', error);
@@ -54,31 +56,22 @@ const ArticlesComponent: React.FC = () => {
     fetchArticles();
   }, []);
 
-  const handleSearch = async () => {
-    setLoading(true);
-    setError('');
-    try {
-      const articlesData = await fetchDataFromCollection('articles') as Data[];
 
-      const filteredArticles = articlesData
-        .filter(article =>
-          article.title !== undefined &&
+  useEffect(() => {
+    const filterArticles = () => {
+      if (searchTerm.trim() === '') {
+        setArticles(originalArticle);
+      } else {
+        const filteredArticles = articles.filter(article =>
           article.title.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-        .map(article => ({
-          id: article.id,
-          slug: article.slug,
-          title: article.title as string
-        }));
+        );
+        setArticles(filteredArticles);
+      }
+    };
 
-      setArticles(filteredArticles);
-      setLoading(false);
-    } catch (error) {
-      console.error('Ошибка загрузки вопросов: ', error);
-      setError('Не удалось загрузить вопросы.');
-      setLoading(false);
-    }
-  };
+    filterArticles();
+  }, [searchTerm, articles]);
+
 
   const handleClick = async (slug: string, e: React.MouseEvent<HTMLDivElement> | React.KeyboardEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -114,9 +107,7 @@ const ArticlesComponent: React.FC = () => {
           placeholder="Введите текст для поиска"
           className="p-2 border border-gray-300 rounded-md mr-2 focus:outline-none focus:ring focus:border-blue-500"
         />
-        <button onClick={handleSearch} className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-500">
-          Поиск
-        </button>
+
       </div>
 
       <div className="flex flex-wrap xs:flex-col-reverse lg:flex-row mt-10">

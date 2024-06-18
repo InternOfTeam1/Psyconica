@@ -27,6 +27,8 @@ const QuestionsComponent: React.FC<Props> = ({ videos }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedVideoUrl, setSelectedVideoUrl] = useState('');
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [originalQuestions, setOriginalQuestions] = useState<QuestionData[]>([]);
+
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -41,6 +43,7 @@ const QuestionsComponent: React.FC<Props> = ({ videos }) => {
             title: question.title as string
           }));
         setQuestions(filteredAndTransformedQuestions);
+        setOriginalQuestions(filteredAndTransformedQuestions);
         setLoading(false);
       } catch (error) {
         console.error('Ошибка загрузки вопросов: ', error);
@@ -51,32 +54,20 @@ const QuestionsComponent: React.FC<Props> = ({ videos }) => {
     fetchQuestions();
   }, []);
 
-
-  const handleSearch = async () => {
-    setLoading(true);
-    setError('');
-    try {
-      const questionsData = await fetchDataFromCollection('questions') as Data[];
-
-      const filteredQuestions = questionsData
-        .filter(question =>
-          question.title !== undefined &&
+  useEffect(() => {
+    const filterQuestions = () => {
+      if (searchTerm.trim() === '') {
+        setQuestions(originalQuestions);
+      } else {
+        const filteredQuestions = questions.filter(question =>
           question.title.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-        .map(question => ({
-          id: question.id,
-          slug: question.slug,
-          title: question.title as string
-        }));
+        );
+        setQuestions(filteredQuestions);
+      }
+    };
 
-      setQuestions(filteredQuestions);
-      setLoading(false);
-    } catch (error) {
-      console.error('Ошибка загрузки вопросов: ', error);
-      setError('Не удалось загрузить вопросы.');
-      setLoading(false);
-    }
-  };
+    filterQuestions();
+  }, [searchTerm, questions]);
 
 
   const handleClick = async (url: string, e: React.MouseEvent<HTMLDivElement> | React.KeyboardEvent<HTMLDivElement>) => {
@@ -130,9 +121,7 @@ const QuestionsComponent: React.FC<Props> = ({ videos }) => {
           placeholder="Введите текст для поиска"
           className="p-2 border border-gray-300 rounded-md mr-2 focus:outline-none focus:ring focus:border-blue-500"
         />
-        <button onClick={handleSearch} className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-500">
-          Поиск
-        </button>
+
       </div>
 
       <div className="flex flex-wrap xs:flex-col-reverse lg:flex-row mt-10">
