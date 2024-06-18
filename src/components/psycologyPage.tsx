@@ -547,6 +547,7 @@ const PsyAccount = () => {
                           <textarea
                             value={editedAbout}
                             onChange={(e) => setEditedAbout(e.target.value)}
+                            onClick={(e) => e.stopPropagation()}
                             className={`border ${isEditing ? 'border-green-500' : 'border-none'} text-gray-600 mt-2 p-2 rounded-md resize-none xs:w-[100%] sm:w-[100%] md:w-[100%] lg:w-[100%] xl:w-[100%]`}
                             disabled={!isEditing}
                             rows={8}
@@ -562,7 +563,7 @@ const PsyAccount = () => {
                           {isSmallScreen && (
                             <button
                               onClick={() => setShowContact(!showContact)}
-                              className="text-gray-600 hover:text-blue-500 focus:outline-none px-3 py-1 mr-0 ml-auto text-lg ml-3 lg:text-sm md:text-sm xs:text-xs sm:text-sm mx-5 flex items-center"
+                              className="text-gray-600 hover:text-blue-500 focus:outline-none px-3 py-1 mr-0 ml-auto text-lg lg:text-sm md:text-sm xs:text-xs sm:text-sm mx-5 flex items-center"
                             >
                               {showContact ? 'Скрыть' : 'Показать'}
                               {showContact ? <AiFillCaretUp className="ml-1" /> : <AiFillCaretDown className="ml-1" />}
@@ -573,6 +574,7 @@ const PsyAccount = () => {
                           <textarea
                             value={editedContact}
                             onChange={(e) => setEditedContact(e.target.value)}
+                            onClick={(e) => e.stopPropagation()}
                             className={`border ${isEditing ? 'border-green-500' : 'border-none'} text-gray-600 leading-6 w-full mt-2 p-2 rounded-md resize-none s:w-[100%] xs:w-[100%] md:w-[100%]`}
                             disabled={!isEditing}
                             rows={3}

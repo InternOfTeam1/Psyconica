@@ -7,12 +7,20 @@ import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
 import { useRouter } from 'next/navigation';
 import VideoGallery from "./VideoGallery";
-
+import Head from 'next/head';
 interface QuestionData {
+  SEOTitle?: string;
+  SEODesc?: string;
+  canonical?: string;
   id: string;
   slug?: string;
   title: string;
 }
+
+
+
+
+
 
 type Props = {
   videos: Video[]
@@ -40,7 +48,10 @@ const QuestionsComponent: React.FC<Props> = ({ videos }) => {
           .map(question => ({
             id: question.id,
             slug: question.slug,
-            title: question.title as string
+            title: question.title as string,
+            SEOTitle: question.SEOTitle as string,
+            SEODesc: question.SEODesc as string,
+            canonical: question.canonical as string
           }));
         setQuestions(filteredAndTransformedQuestions);
         setOriginalQuestions(filteredAndTransformedQuestions);
@@ -93,6 +104,17 @@ const QuestionsComponent: React.FC<Props> = ({ videos }) => {
     return <div>Ошибка: {error}</div>;
   }
 
+  const generateMetaTags = (question: QuestionData) => {
+    return (
+      <Head key={question.id}>
+        <title>{question.SEOTitle || question.title}</title>
+        <meta name="description" content={question.SEODesc || ''} />
+        {question.canonical && <link rel="canonical" href={question.canonical} />}
+      </Head>
+    );
+  };
+
+
   const renderIframe = (url: string, width: string, height: string) => (
     <iframe
       width={width}
@@ -133,6 +155,8 @@ const QuestionsComponent: React.FC<Props> = ({ videos }) => {
             {questions.map((question) => (
               <div key={question.id} onClick={(e) => handleClick(`/questions/${question.slug || question.id}`, e)}
                 className="bg-white mx-2 p-5 rounded-lg shadow-md cursor-pointer hover:bg-gray-100 focus:bg-gray-100">
+
+                {generateMetaTags(question)}
                 <h2 className="text-xl font-semibold leading-6">{question.title}</h2>
               </div>
             ))}
