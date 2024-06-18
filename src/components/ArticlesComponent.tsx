@@ -13,9 +13,9 @@ interface ArticleData {
   id: string;
   slug?: string;
   title: string;
-  SEOTitle: string;
-  SEODesc: string;
-  canonical: string;
+  SEOTitle?: string;
+  SEODesc?: string;
+  canonical?: string;
 }
 
 const ArticlesComponent: React.FC = () => {
@@ -24,6 +24,8 @@ const ArticlesComponent: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
   const router = useRouter();
+  const [searchTerm, setSearchTerm] = useState<string>('');
+
 
   useEffect(() => {
     const fetchArticles = async () => {
@@ -52,6 +54,32 @@ const ArticlesComponent: React.FC = () => {
     fetchArticles();
   }, []);
 
+  const handleSearch = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const articlesData = await fetchDataFromCollection('articles') as Data[];
+
+      const filteredArticles = articlesData
+        .filter(article =>
+          article.title !== undefined &&
+          article.title.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+        .map(article => ({
+          id: article.id,
+          slug: article.slug,
+          title: article.title as string
+        }));
+
+      setArticles(filteredArticles);
+      setLoading(false);
+    } catch (error) {
+      console.error('Ошибка загрузки вопросов: ', error);
+      setError('Не удалось загрузить вопросы.');
+      setLoading(false);
+    }
+  };
+
   const handleClick = async (slug: string, e: React.MouseEvent<HTMLDivElement> | React.KeyboardEvent<HTMLDivElement>) => {
     e.preventDefault();
     try {
@@ -78,9 +106,22 @@ const ArticlesComponent: React.FC = () => {
   return (
     <div className="container mx-auto max-w-7xl px-2 py-3 mt-[-50px]">
       <h1 className="text-2xl font-bold text-center mb-6">Статьи</h1>
+      <div className="mb-4 flex items-center">
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Введите текст для поиска"
+          className="p-2 border border-gray-300 rounded-md mr-2 focus:outline-none focus:ring focus:border-blue-500"
+        />
+        <button onClick={handleSearch} className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-500">
+          Поиск
+        </button>
+      </div>
+
       <div className="flex flex-wrap xs:flex-col-reverse lg:flex-row mt-10">
         <div className="w-full lg:w-1/4 px-1 mb-4 lg:mb-0  xs:mt-2 xs:mx-auto lg:mx-0 lg:mt-0">
-        <VideoGallery />
+          <VideoGallery />
         </div>
         <div className="w-full mx-auto lg:w-3/4 lg:ml-0 xl:ml-0 mb-8 px-4 pb-3" style={{ maxWidth: '870px' }}>
           <div className="flex flex-col space-y-4" style={{ maxHeight: '788px', overflowY: 'auto', paddingBottom: '10px' }}>

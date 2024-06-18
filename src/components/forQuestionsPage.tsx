@@ -26,7 +26,7 @@ const QuestionsComponent: React.FC<Props> = ({ videos }) => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedVideoUrl, setSelectedVideoUrl] = useState('');
-
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -50,6 +50,34 @@ const QuestionsComponent: React.FC<Props> = ({ videos }) => {
     };
     fetchQuestions();
   }, []);
+
+
+  const handleSearch = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const questionsData = await fetchDataFromCollection('questions') as Data[];
+
+      const filteredQuestions = questionsData
+        .filter(question =>
+          question.title !== undefined &&
+          question.title.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+        .map(question => ({
+          id: question.id,
+          slug: question.slug,
+          title: question.title as string
+        }));
+
+      setQuestions(filteredQuestions);
+      setLoading(false);
+    } catch (error) {
+      console.error('Ошибка загрузки вопросов: ', error);
+      setError('Не удалось загрузить вопросы.');
+      setLoading(false);
+    }
+  };
+
 
   const handleClick = async (url: string, e: React.MouseEvent<HTMLDivElement> | React.KeyboardEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -93,6 +121,20 @@ const QuestionsComponent: React.FC<Props> = ({ videos }) => {
   return (
     <div className="container mx-auto max-w-7xl px-2 py-3 mt-[-50px]">
       <h1 className="text-2xl font-bold text-center mb-6">Вопросы</h1>
+
+      <div className="mb-4 flex items-center">
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Введите текст для поиска"
+          className="p-2 border border-gray-300 rounded-md mr-2 focus:outline-none focus:ring focus:border-blue-500"
+        />
+        <button onClick={handleSearch} className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-500">
+          Поиск
+        </button>
+      </div>
+
       <div className="flex flex-wrap xs:flex-col-reverse lg:flex-row mt-10">
         <div className="w-full lg:w-1/4 px-1 mb-4 lg:mb-0  xs:mt-2 xs:mx-auto lg:mx-0 lg:mt-0">
           <VideoGallery />
