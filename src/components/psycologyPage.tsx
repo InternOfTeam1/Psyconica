@@ -132,6 +132,8 @@ const PsyAccount = () => {
       if (image) {
         try {
           dispatch(trueToggle());
+          setShowAbout(true)
+          setShowContact(true)
           setLoadStatus('Изображение загружается. Пожалуйста, подождите...');
           const imageUrl = await uploadImageToStorage(image);
           if (imageUrl) {
@@ -144,6 +146,8 @@ const PsyAccount = () => {
 
             setImageUrl(imageUrl);
             dispatch(falseToggle());
+            setShowAbout(false)
+            setShowContact(false)
             setLoadStatus('Изображение загружено.');
 
             setTimeout(() => {
@@ -422,15 +426,17 @@ const PsyAccount = () => {
                         </>
 
                       )}
-                      {userRole === 'user' && (
-        <div className="flex items-center justify-end right-0 top-0 mr-4 mt-4">
-          <FontAwesomeIcon
-            icon={savedPsychologists.includes(userSlug) ? faSolidBookmark : faRegularBookmark}
-            className={`text-2xl cursor-pointer ${savedPsychologists.includes(userSlug) ? 'text-yellow-500' : 'text-gray-400'}`}
-            onClick={savedPsychologists.includes(userSlug) ? handleRemoveSavedPsychologist : handleSavePsychologist}
-          />
-        </div>
-      )}
+
+
+                      {userRole === 'user' && userId !== userData.slug && (
+                              <div className="flex items-center justify-end right-0 top-0 mr-4 mt-4">
+                                <FontAwesomeIcon
+                                  icon={savedPsychologists.includes(userSlug) ? faSolidBookmark : faRegularBookmark}
+                                  className={`text-2xl cursor-pointer ${savedPsychologists.includes(userSlug) ? 'text-yellow-500' : 'text-gray-400'}`}
+                                  onClick={savedPsychologists.includes(userSlug) ? handleRemoveSavedPsychologist : handleSavePsychologist}
+                                />
+                              </div>
+                            )}
 
 
                       {loadStatus && (
@@ -541,7 +547,7 @@ const PsyAccount = () => {
                           {isSmallScreen && (
                             <button
                               onClick={() => setShowAbout(!showAbout)}
-                              className="text-gray-600 hover:text-blue-500 focus:outline-none px-3 py-1 mr-0 ml-auto text-lg ml-3 lg:text-sm md:text-sm xs:text-xs sm:text-sm mx-5 flex items-center"
+                              className="text-gray-600 hover:text-blue-500 focus:outline-none px-3 py-1 mr-0 ml-auto text-lg lg:text-sm md:text-sm xs:text-xs sm:text-sm mx-5 flex items-center"
                             >
                               {showAbout ? 'Скрыть' : 'Показать '}
                               {showAbout ? <AiFillCaretUp className="ml-1" /> : <AiFillCaretDown className="ml-1" />}
@@ -567,7 +573,7 @@ const PsyAccount = () => {
                           {isSmallScreen && (
                             <button
                               onClick={() => setShowContact(!showContact)}
-                              className="text-gray-600 hover:text-blue-500 focus:outline-none px-3 py-1 mr-0 ml-auto text-lg ml-3 lg:text-sm md:text-sm xs:text-xs sm:text-sm mx-5 flex items-center"
+                              className="text-gray-600 hover:text-blue-500 focus:outline-none px-3 py-1 mr-0 ml-auto text-lg lg:text-sm md:text-sm xs:text-xs sm:text-sm mx-5 flex items-center"
                             >
                               {showContact ? 'Скрыть' : 'Показать'}
                               {showContact ? <AiFillCaretUp className="ml-1" /> : <AiFillCaretDown className="ml-1" />}
@@ -578,6 +584,7 @@ const PsyAccount = () => {
                           <textarea
                             value={editedContact}
                             onChange={(e) => setEditedContact(e.target.value)}
+                            onClick={(e) => e.stopPropagation()}
                             className={`border ${isEditing ? 'border-green-500' : 'border-none'} text-gray-600 leading-6 w-full mt-2 p-2 rounded-md resize-none s:w-[100%] xs:w-[100%] md:w-[100%]`}
                             disabled={!isEditing}
                             rows={3}

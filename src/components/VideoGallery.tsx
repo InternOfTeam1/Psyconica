@@ -140,6 +140,7 @@ const VideoGallery = () => {
     <div className="p-3 m-4 bg-white rounded-2xl shadow-2xl border mt-[-3px]">
       <div className="flex flex-wrap justify-center gap-2">
         {videos.slice(0, displayCount).map((video, index) => {
+
           return (
             <div key={index} className="w-full p-1">
               <div className="cursor-pointer border-2 pb-2 rounded-2xl overflow-hidden" onClick={() => openModal(video.url)}>

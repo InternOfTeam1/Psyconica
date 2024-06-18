@@ -8,22 +8,26 @@ import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
 import { useRouter } from 'next/navigation';
 import VideoGallery from "./VideoGallery";
+import Head from 'next/head';
 
 interface ArticleData {
   id: string;
   slug?: string;
   title: string;
-  SEOTitle: string;
-  SEODesc: string;
-  canonical: string;
+  SEOTitle?: string;
+  SEODesc?: string;
+  canonical?: string;
 }
 
 const ArticlesComponent: React.FC = () => {
   const userRole = useAppSelector((state) => state.auth.user?.role);
   const [articles, setArticles] = useState<ArticleData[]>([]);
+  const [originalArticle, setOriginalArticle] = useState<ArticleData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
   const router = useRouter();
+  const [searchTerm, setSearchTerm] = useState<string>('');
+
 
   useEffect(() => {
     const fetchArticles = async () => {
@@ -42,6 +46,7 @@ const ArticlesComponent: React.FC = () => {
           }));
 
         setArticles(filteredAndTransformedArticles);
+        setOriginalArticle(filteredAndTransformedArticles);
         setLoading(false);
       } catch (error) {
         console.error('Ошибка загрузки статей: ', error);
@@ -51,6 +56,32 @@ const ArticlesComponent: React.FC = () => {
     };
     fetchArticles();
   }, []);
+
+
+  useEffect(() => {
+    const filterArticles = () => {
+      if (searchTerm.trim() === '') {
+        setArticles(originalArticle);
+      } else {
+        const filteredArticles = articles.filter(article =>
+          article.title.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        setArticles(filteredArticles);
+      }
+    };
+
+    filterArticles();
+  }, [searchTerm, articles]);
+
+  const generateMetaTags = (article: ArticleData) => {
+    return (
+      <Head key={article.id}>
+        <title>{article.SEOTitle || article.title}</title>
+        <meta name="description" content={article.SEODesc || ''} />
+        {article.canonical && <link rel="canonical" href={article.canonical} />}
+      </Head>
+    );
+  };
 
   const handleClick = async (slug: string, e: React.MouseEvent<HTMLDivElement> | React.KeyboardEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -78,15 +109,27 @@ const ArticlesComponent: React.FC = () => {
   return (
     <div className="container mx-auto max-w-7xl px-2 py-3 mt-[-50px]">
       <h1 className="text-2xl font-bold text-center mb-6">Статьи</h1>
+      <div className="mb-4 flex items-center">
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Введите текст для поиска"
+          className="p-2 border border-gray-300 rounded-md mr-2 focus:outline-none focus:ring focus:border-blue-500"
+        />
+
+      </div>
+
       <div className="flex flex-wrap xs:flex-col-reverse lg:flex-row mt-10">
         <div className="w-full lg:w-1/4 px-1 mb-4 lg:mb-0  xs:mt-2 xs:mx-auto lg:mx-0 lg:mt-0">
-        <VideoGallery />
+          <VideoGallery />
         </div>
         <div className="w-full mx-auto lg:w-3/4 lg:ml-0 xl:ml-0 mb-8 px-4 pb-3" style={{ maxWidth: '870px' }}>
           <div className="flex flex-col space-y-4" style={{ maxHeight: '788px', overflowY: 'auto', paddingBottom: '10px' }}>
             {articles.map((article) => (
               <div key={article.id} onClick={(e) => handleClick(article.slug || '', e)}
                 className="bg-white mx-2 p-5 rounded-lg shadow-md cursor-pointer hover:bg-gray-100 focus:bg-gray-100">
+                {generateMetaTags(article)}
                 <h2 className="text-xl font-semibold leading-6">{article.title}</h2>
               </div>
             ))}

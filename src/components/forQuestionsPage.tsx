@@ -7,12 +7,20 @@ import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
 import { useRouter } from 'next/navigation';
 import VideoGallery from "./VideoGallery";
-
+import Head from 'next/head';
 interface QuestionData {
+  SEOTitle?: string;
+  SEODesc?: string;
+  canonical?: string;
   id: string;
   slug?: string;
   title: string;
 }
+
+
+
+
+
 
 type Props = {
   videos: Video[]
@@ -26,6 +34,8 @@ const QuestionsComponent: React.FC<Props> = ({ videos }) => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedVideoUrl, setSelectedVideoUrl] = useState('');
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [originalQuestions, setOriginalQuestions] = useState<QuestionData[]>([]);
 
 
   useEffect(() => {
@@ -38,9 +48,13 @@ const QuestionsComponent: React.FC<Props> = ({ videos }) => {
           .map(question => ({
             id: question.id,
             slug: question.slug,
-            title: question.title as string
+            title: question.title as string,
+            SEOTitle: question.SEOTitle as string,
+            SEODesc: question.SEODesc as string,
+            canonical: question.canonical as string
           }));
         setQuestions(filteredAndTransformedQuestions);
+        setOriginalQuestions(filteredAndTransformedQuestions);
         setLoading(false);
       } catch (error) {
         console.error('Ошибка загрузки вопросов: ', error);
@@ -50,6 +64,22 @@ const QuestionsComponent: React.FC<Props> = ({ videos }) => {
     };
     fetchQuestions();
   }, []);
+
+  useEffect(() => {
+    const filterQuestions = () => {
+      if (searchTerm.trim() === '') {
+        setQuestions(originalQuestions);
+      } else {
+        const filteredQuestions = questions.filter(question =>
+          question.title.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        setQuestions(filteredQuestions);
+      }
+    };
+
+    filterQuestions();
+  }, [searchTerm, questions]);
+
 
   const handleClick = async (url: string, e: React.MouseEvent<HTMLDivElement> | React.KeyboardEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -74,6 +104,17 @@ const QuestionsComponent: React.FC<Props> = ({ videos }) => {
     return <div>Ошибка: {error}</div>;
   }
 
+  const generateMetaTags = (question: QuestionData) => {
+    return (
+      <Head key={question.id}>
+        <title>{question.SEOTitle || question.title}</title>
+        <meta name="description" content={question.SEODesc || ''} />
+        {question.canonical && <link rel="canonical" href={question.canonical} />}
+      </Head>
+    );
+  };
+
+
   const renderIframe = (url: string, width: string, height: string) => (
     <iframe
       width={width}
@@ -93,6 +134,18 @@ const QuestionsComponent: React.FC<Props> = ({ videos }) => {
   return (
     <div className="container mx-auto max-w-7xl px-2 py-3 mt-[-50px]">
       <h1 className="text-2xl font-bold text-center mb-6">Вопросы</h1>
+
+      <div className="mb-4 flex items-center">
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Введите текст для поиска"
+          className="p-2 border border-gray-300 rounded-md mr-2 focus:outline-none focus:ring focus:border-blue-500"
+        />
+
+      </div>
+
       <div className="flex flex-wrap xs:flex-col-reverse lg:flex-row mt-10">
         <div className="w-full lg:w-1/4 px-1 mb-4 lg:mb-0  xs:mt-2 xs:mx-auto lg:mx-0 lg:mt-0">
           <VideoGallery />
@@ -102,6 +155,8 @@ const QuestionsComponent: React.FC<Props> = ({ videos }) => {
             {questions.map((question) => (
               <div key={question.id} onClick={(e) => handleClick(`/questions/${question.slug || question.id}`, e)}
                 className="bg-white mx-2 p-5 rounded-lg shadow-md cursor-pointer hover:bg-gray-100 focus:bg-gray-100">
+
+                {generateMetaTags(question)}
                 <h2 className="text-xl font-semibold leading-6">{question.title}</h2>
               </div>
             ))}

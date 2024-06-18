@@ -3,12 +3,12 @@ import { Video } from "@/interfaces/collections";
 import { fetchDataFromCollection } from "@/lib/firebase/firebaseGetDocs";
 import { Metadata } from "next";
 
-export async function generateMetadata(): Promise<Metadata> {
-  return {
-    title: 'Questions Page',
-    description: 'Page showing a list of questions',
-  };
-}
+// export async function generateMetadata(): Promise<Metadata> {
+//   return {
+//     title: 'Questions Page',
+//     description: 'Page showing a list of questions',
+//   };
+// }
 
 function shuffleAndTrimVideos(videos: Video[], maxLength: number): Video[] {
   let shuffledVideos = videos.slice();

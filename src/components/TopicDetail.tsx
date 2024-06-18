@@ -159,7 +159,7 @@ const TopicDetail = () => {
                 onKeyDown={(e) => e.key === 'Enter' && handleClickTopic(`/articles/${article.slug}`, e)}
                 className="bg-white mx-1 p-3 rounded-lg shadow-md cursor-pointer hover:bg-gray-100 focus:bg-gray-100"
               >
-                <h2 className="text-base font-semibold">{article.title.split('. ')[0] + '.'}</h2>
+                <h2 className="text-base font-semibold">{article.title.split('. ')[0]}</h2>
               </div>
             ))}
           </div>
