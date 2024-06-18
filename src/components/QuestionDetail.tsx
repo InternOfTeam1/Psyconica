@@ -27,6 +27,10 @@ function fetchQuestionData(slug: any) {
   return fetchDoc('questions', slug);
 }
 
+interface UserData {
+  id: string;
+  savedQuestions?: { title: string; slug: string }[];
+}
 
 type Props = {
   rawData: any
@@ -373,28 +377,24 @@ const QuestionDetail = (props: Props) => {
   const saveQuestions = async () => {
     try {
       if (role === 'user') {
-        const userDocs = await fetchDoc('users', userId) as unknown as Users;
-
+        const userDocs = await fetchDoc('users', userId) as UserData;
         if (userDocs) {
           const savedQuestions = userDocs.savedQuestions || [];
           const questionTitle = questionData?.title;
 
           if (questionTitle) {
-            const isAlreadySaved = savedQuestions.some((q: any) => q.title === questionTitle && q.slug === questionSlug);
-
+            const isAlreadySaved = savedQuestions.some((q: { title: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | React.PromiseLikeOfReactNode; slug: any; }) => q.title === questionTitle && q.slug === questionSlug);
             let updatedSavedQuestions;
+
             if (isAlreadySaved) {
-              updatedSavedQuestions = savedQuestions.filter((q: any) => q.title !== questionTitle || q.slug !== questionSlug);
+              updatedSavedQuestions = savedQuestions.filter((q: { title: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | React.PromiseLikeOfReactNode; slug: any; }) => q.title !== questionTitle || q.slug !== questionSlug);
               setIsSaved(false);
             } else {
               updatedSavedQuestions = [...savedQuestions, { title: questionTitle, slug: questionSlug }];
               setIsSaved(true);
             }
 
-            const updatedUserDoc = {
-              ...userDocs,
-              savedQuestions: updatedSavedQuestions
-            };
+            const updatedUserDoc = { ...userDocs, savedQuestions: updatedSavedQuestions };
             await updateUser(userId, { savedQuestions: updatedUserDoc.savedQuestions });
 
             localStorage.setItem('savedQuestions', JSON.stringify(updatedSavedQuestions));
@@ -428,13 +428,15 @@ const QuestionDetail = (props: Props) => {
             <>
 
               <h2 className="font-semibold bg-amber-300 text-gray-600 px-7 py-3 rounded-2xl leading-6 text-center xs:text-sm xs:px-3 sm:text-sm sm:px-4 md:text-base md:px-5 lg:text-lg lg:px-6 xl:text-xl xl:px-7">{questionData.title}</h2>
-              {role === 'user' && (<div className="flex items-center justify-end mt-2 space-x-2">
-                <h2 className="font-semibold text-white-950 text-sm">Сохранить вопрос</h2>
-                <FaBookmark
-                  className={`cursor-pointer text-lg ${isSaved ? 'text-black-500' : 'text-gray-400'}`}
-                  onClick={saveQuestions}
-                />
-              </div>)}
+              {role === 'user' && (
+        <div className="flex items-center justify-end mt-2 space-x-2">
+          <h2 className="font-semibold text-white-950 text-sm">Сохранить вопрос</h2>
+          <FaBookmark
+            className={`cursor-pointer text-lg ${isSaved ? 'text-black-500' : 'text-gray-400'}`}
+            onClick={saveQuestions}
+          />
+        </div>
+      )}
               {role === 'psy' ? (
                 newAnswer ?
                   <>

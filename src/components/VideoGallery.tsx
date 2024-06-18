@@ -3,9 +3,11 @@ import { Dialog, Transition } from '@headlessui/react';
 import { saveVideoForUser, removeSavedVideoForUser } from '@/lib/firebase/firebaseFunctions';
 import { fetchDataFromCollection } from '@/lib/firebase/firebaseGetDocs';
 import { useAppSelector } from '@/redux/hooks';
+import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookmark as faSolidBookmark } from '@fortawesome/free-solid-svg-icons';
 import { faBookmark as faRegularBookmark } from '@fortawesome/free-regular-svg-icons';
+import { updateUser } from '@/lib/firebase/firebaseFunctions';
 
 interface Video {
   url: string;
@@ -28,6 +30,16 @@ const VideoGallery = () => {
   const [savedVideos, setSavedVideos] = useState<string[]>([]);
   const userId = useAppSelector(state => state.auth.user?.id);
   const role = useAppSelector(state => state.auth.user?.role);
+  const dispatch = useDispatch();
+
+  const loadSavedVideos = () => {
+    const saved = localStorage.getItem('savedVideos');
+    if (saved) {
+      setSavedVideos(JSON.parse(saved));
+    } else {
+      setSavedVideos([]);
+    }
+  };
 
   useEffect(() => {
     const loadVideos = async () => {
@@ -51,10 +63,7 @@ const VideoGallery = () => {
         const shuffledVideos = shuffleArray(videosData);
         setVideos(shuffledVideos);
 
-        const savedVideosFromStorage = localStorage.getItem('savedVideos');
-        if (savedVideosFromStorage) {
-          setSavedVideos(JSON.parse(savedVideosFromStorage));
-        }
+        loadSavedVideos();
 
       } catch (error) {
         console.error('Error loading videos:', error);
@@ -62,7 +71,7 @@ const VideoGallery = () => {
     };
 
     loadVideos();
-  }, []);
+  }, [userId]);
 
   useEffect(() => {
     if (displayCount >= videos.length) {
@@ -71,6 +80,10 @@ const VideoGallery = () => {
       setIsExpanded(false);
     }
   }, [displayCount, videos.length]);
+
+  useEffect(() => {
+    loadSavedVideos();
+  }, [role]);
 
   const openModal = (videoUrl: string): void => {
     setSelectedVideoUrl(videoUrl);
@@ -116,15 +129,17 @@ const VideoGallery = () => {
     }
   };
 
+  useEffect(() => {
+    console.log("Role changed:", role);
+    console.log("Saved videos:", savedVideos);
+  }, [role, savedVideos]);
+
+
+
   return (
     <div className="p-3 m-4 bg-white rounded-2xl shadow-2xl border mt-[-3px]">
       <div className="flex flex-wrap justify-center gap-2">
         {videos.slice(0, displayCount).map((video, index) => {
-          if (video) {
-            console.log(video.url);
-          } else {
-            console.log("Video data is not loaded yet");
-          }
           return (
             <div key={index} className="w-full p-1">
               <div className="cursor-pointer border-2 pb-2 rounded-2xl overflow-hidden" onClick={() => openModal(video.url)}>

@@ -15,7 +15,6 @@ export const VideoBlock = ({ videos }: VideoBlockProps) => {
   const [flaggedVideos, setFlaggedVideos] = useState<string[]>([]);
 
   useEffect(() => {
-    // Загружаем сохраненное состояние флажка из локального хранилища браузера
     const flaggedVideosFromStorage = localStorage.getItem('flaggedVideos');
     if (flaggedVideosFromStorage) {
       setFlaggedVideos(JSON.parse(flaggedVideosFromStorage));

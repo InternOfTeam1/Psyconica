@@ -45,7 +45,8 @@ const PsyAccount = () => {
   const [editedSlogan, setEditedSlogan] = useState<string>('');
   const [editedExpert, setEditedExpert] = useState<string>('');
   const [editedName, setEditedName] = useState<string>('');
-  const [editedRole, setEditedRole] = useState<string>('psy');
+  const userRole = useAppSelector(state => state.auth.user?.role);  
+  const [editedRole, setEditedRole] = useState('psy');
   const [isEditingRole, setIsEditingRole] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [image, setImage] = useState<File | null>(null);
@@ -53,7 +54,6 @@ const PsyAccount = () => {
   const userId = useAppSelector((state) => state.auth.user?.id);
   const userName = useAppSelector((state) => state.auth.user?.name);
   const [userPhoto, setUserPhoto] = useState('/default_avatar.jpg');
-  const userRole = useAppSelector((state) => state.auth.user?.role);
   const userEmail = useAppSelector((state) => state.auth.user?.mail);
   const params = useParams();
   const userSlug: any = params.slug;
@@ -314,6 +314,13 @@ const PsyAccount = () => {
     }
   };
 
+   useEffect(() => {
+    const saved = localStorage.getItem('savedPsychologists');
+    if (saved) {
+      setSavedPsychologists(JSON.parse(saved));
+    }
+  }, []);
+
   const handleSavePsychologist = async () => {
     if (userId && userSlug) {
       try {
@@ -415,15 +422,15 @@ const PsyAccount = () => {
                         </>
 
                       )}
-                      {editedRole === 'psy' && (
-  <div className="flex items-center justify-end right-0 top-0 mr-4 mt-4">
-    <FontAwesomeIcon
-      icon={savedPsychologists.includes(userSlug) ? faSolidBookmark : faRegularBookmark}
-      className={`text-2xl cursor-pointer ${savedPsychologists.includes(userSlug) ? 'text-yellow-500' : 'text-gray-400'}`}
-      onClick={savedPsychologists.includes(userSlug) ? handleRemoveSavedPsychologist : handleSavePsychologist}
-    />
-  </div>
-)}
+                      {userRole === 'user' && (
+        <div className="flex items-center justify-end right-0 top-0 mr-4 mt-4">
+          <FontAwesomeIcon
+            icon={savedPsychologists.includes(userSlug) ? faSolidBookmark : faRegularBookmark}
+            className={`text-2xl cursor-pointer ${savedPsychologists.includes(userSlug) ? 'text-yellow-500' : 'text-gray-400'}`}
+            onClick={savedPsychologists.includes(userSlug) ? handleRemoveSavedPsychologist : handleSavePsychologist}
+          />
+        </div>
+      )}
 
 
                       {loadStatus && (
