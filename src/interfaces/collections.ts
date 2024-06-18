@@ -35,6 +35,7 @@ export interface Article {
   SEOTitle: string;
   SEODesc: string;
   canonical?: string;
+  image: string;
 }
 
 export interface Topic {
