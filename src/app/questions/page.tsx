@@ -3,12 +3,21 @@ import { Video } from "@/interfaces/collections";
 import { fetchDataFromCollection } from "@/lib/firebase/firebaseGetDocs";
 import { Metadata } from "next";
 
+<<<<<<< HEAD
 // export async function generateMetadata(): Promise<Metadata> {
 //   return {
 //     title: 'Questions Page',
 //     description: 'Page showing a list of questions',
 //   };
 // }
+=======
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: 'Вопросы и Ответы Психологов',
+    description: 'Список вопросов и ответов от психологов. Найдите ответы на интересующие вас вопросы и получите профессиональные советы от опытных психологов.',
+  };
+}
+>>>>>>> ca7bd57a0f8c66d10ebc46e74886ef31a15edf58
 
 function shuffleAndTrimVideos(videos: Video[], maxLength: number): Video[] {
   let shuffledVideos = videos.slice();
