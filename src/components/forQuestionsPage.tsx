@@ -123,18 +123,19 @@ const QuestionsComponent: React.FC<Props> = ({ videos }) => {
   };
 
   return (
-    <div className="container mx-auto max-w-7xl px-2 py-3 mt-[-50px]">
-      <h1 className="text-2xl font-bold text-center mb-6">Вопросы</h1>
+    <div className="container mx-auto max-w-7xl px-2 py-3">
+      <div className="flex xs:flex-col sm:flex-col md:flex-col lg:flex-col">
+        <h1 className="mx-auto text-2xl font-bold text-center sm:mt-0 sm:mb-[-30px] md:mb-[-30px] lg:mb-[-30px] xl:mb-[-30px]">Вопросы</h1>
 
-      <div className="mb-4 flex items-center">
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Введите текст для поиска"
-          className="p-2 border border-gray-300 rounded-md mr-2 focus:outline-none focus:ring focus:border-blue-500"
-        />
-
+        <div className="mx-auto ml-15 mb-[-10px] flex items-center xs:mt-5 sm:mt-10 sm:items-center sm:ml-15 md:mt-15 md:ml-auto md:text-center md:items-center lg:mt-0 lg:ml-5 xl:ml-10">
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Введите текст для поиска"
+            className="p-2 border border-gray-300 rounded-md mr-2 focus:outline-none focus:ring focus:border-blue-500 md:text-center md:items-center"
+          />
+        </div>
       </div>
 
       <div className="flex flex-wrap xs:flex-col-reverse lg:flex-row mt-10">

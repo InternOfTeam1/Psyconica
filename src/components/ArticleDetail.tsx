@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Article } from '@/interfaces/collections';
 import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
@@ -11,7 +11,22 @@ type Props = {
 };
 
 const ArticleDetail: React.FC<Props> = ({ articleData }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [showButton, setShowButton] = useState(false);
+  const articleRef = useRef<HTMLDivElement>(null);
+  const MAX_HEIGHT = 310;
   console.log(articleData)
+
+  useEffect(() => {
+    if (articleRef.current && articleRef.current.scrollHeight > MAX_HEIGHT) {
+      setShowButton(true);
+    }
+  }, []);
+
+  const handleExpand = () => {
+    setIsExpanded(true);
+  };
+
   return (
     <div className="container mx-auto max-w-7xl px-5 py-3 mt-[-50px]">
       <div className="flex flex-wrap xs:flex-col-reverse lg:flex-row mt-10">
@@ -22,7 +37,23 @@ const ArticleDetail: React.FC<Props> = ({ articleData }) => {
           <div className="flex flex-col space-y-4">
             <h1 className="w-full font-semibold bg-amber-300 text-gray-600 px-7 py-3 rounded-2xl text-center xs:text-sm xs:px-3 sm:text-sm sm:px-4 md:text-base md:px-5 lg:text-lg lg:px-6 xl:text-xl xl:px-7">{articleData.title}</h1>
             <div className="prose px-3">
-              <p className="w-full text-justify font-medium text-gray-800 xs:text-sm sm:text-sm md:text-base lg:text-base lg:leading-6 mt-2">{articleData.article}</p>
+              <div
+                ref={articleRef}
+                className={`w-full text-justify font-medium text-gray-800 xs:text-sm sm:text-sm md:text-base lg:text-base lg:leading-6 mt-2 ${!isExpanded ? 'max-h-[310px] overflow-hidden' : ''}`}
+                style={{ transition: 'max-height 0.3s ease' }}
+              >
+                <p>{articleData.article}</p>
+              </div>
+              {showButton && !isExpanded && (
+                <div className="flex justify-end mt-2">
+                  <button
+                    onClick={handleExpand}
+                    className="bg-gray-500 text-white font-bold py-1 px-2 rounded hover:bg-gray-700 mt-2"
+                  >
+                    Еще
+                  </button>
+                </div>
+              )}
             </div>
             {articleData.image ? (
               <div className="w-full flex justify-center mt-4 py-3" style={{ maxHeight: '350px' }}>
