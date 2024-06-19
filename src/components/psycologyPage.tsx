@@ -2,7 +2,7 @@
 import { fetchAllUsers, fetchDoc } from '@/lib/firebase/firebaseGetDocs';
 import { getUserData, getVideosById, removeSavedPsychologistForUser, savePsychologistForUser, updateUser } from '@/lib/firebase/firebaseFunctions';
 import { Comments } from '@/interfaces/collections';
-import React, { ChangeEventHandler, useEffect, useState, useRef } from 'react';
+import React, { ChangeEventHandler, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
 import { useParams } from 'next/navigation';
@@ -72,7 +72,7 @@ const PsyAccount = () => {
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const dispatch = useDispatch<AppDispatch>();
   const { slug } = useParams<{ slug: string }>();
-  const prevWidthRef = useRef(window.innerWidth);
+  const [prevWidth, setPrevWidth] = useState(window.innerWidth);
 
   useEffect(() => {
     fetchAllUsers().then((usersData) => {
@@ -202,26 +202,28 @@ const PsyAccount = () => {
   };
 
   useEffect(() => {
+
+    const screenWidth = window.innerWidth;
     const handleResize = () => {
-      const screenWidth = window.innerWidth;
-      if (screenWidth !== prevWidthRef.current) {
+
+      if (screenWidth !== prevWidth) {
         setIsSmallScreen(screenWidth <= 768);
-        if (screenWidth <= 640) {
-          setShowAbout(false);
-          setShowContact(false);
-        } else {
-          setShowAbout(true);
-          setShowContact(true);
-        }
-        prevWidthRef.current = screenWidth;
+        setShowAbout(screenWidth > 640);
+        setShowContact(screenWidth > 640);
+        setPrevWidth(screenWidth);
       }
     };
 
     window.addEventListener('resize', handleResize);
-    handleResize();
 
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+    setIsSmallScreen(screenWidth <= 768);
+    setShowAbout(window.innerWidth > 640);
+    setShowContact(window.innerWidth > 640);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [prevWidth]);
 
   const handleComment = async () => {
     if (!commentText.trim()) return;
