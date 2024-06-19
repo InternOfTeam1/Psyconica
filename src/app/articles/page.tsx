@@ -5,8 +5,8 @@ import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: 'Articles Page',
-    description: 'Page showing a list of articles',
+    title: 'Статьи по Психологии',
+    description: 'Страница со списком статей на различные психологические темы. Читайте статьи от экспертов и узнайте больше о психологии.',
   };
 }
 
@@ -29,7 +29,7 @@ const Articles: React.FC = async () => {
   }
 
   const videos = rawData as Video[];
-  const shuffledVideos = shuffleAndTrimVideos(videos, 10); 
+  const shuffledVideos = shuffleAndTrimVideos(videos, 10);
 
   return <ArticlesComponent />;
 }

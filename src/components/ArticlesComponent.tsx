@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
 import { useRouter } from 'next/navigation';
 import VideoGallery from "./VideoGallery";
-import Head from 'next/head';
+
 
 interface ArticleData {
   id: string;
@@ -73,15 +73,6 @@ const ArticlesComponent: React.FC = () => {
     filterArticles();
   }, [searchTerm, articles]);
 
-  const generateMetaTags = (article: ArticleData) => {
-    return (
-      <Head key={article.id}>
-        <title>{article.SEOTitle || article.title}</title>
-        <meta name="description" content={article.SEODesc || ''} />
-        {article.canonical && <link rel="canonical" href={article.canonical} />}
-      </Head>
-    );
-  };
 
   const handleClick = async (slug: string, e: React.MouseEvent<HTMLDivElement> | React.KeyboardEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -129,7 +120,7 @@ const ArticlesComponent: React.FC = () => {
             {articles.map((article) => (
               <div key={article.id} onClick={(e) => handleClick(article.slug || '', e)}
                 className="bg-white mx-2 p-5 rounded-lg shadow-md cursor-pointer hover:bg-gray-100 focus:bg-gray-100">
-                {generateMetaTags(article)}
+
                 <h2 className="text-xl font-semibold leading-6">{article.title}</h2>
               </div>
             ))}

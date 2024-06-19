@@ -5,8 +5,8 @@ import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: 'Questions Page',
-    description: 'Page showing a list of questions',
+    title: 'Вопросы и Ответы Психологов',
+    description: 'Список вопросов и ответов от психологов. Найдите ответы на интересующие вас вопросы и получите профессиональные советы от опытных психологов.',
   };
 }
 

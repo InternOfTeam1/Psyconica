@@ -104,15 +104,6 @@ const QuestionsComponent: React.FC<Props> = ({ videos }) => {
     return <div>Ошибка: {error}</div>;
   }
 
-  const generateMetaTags = (question: QuestionData) => {
-    return (
-      <Head key={question.id}>
-        <title>{question.SEOTitle || question.title}</title>
-        <meta name="description" content={question.SEODesc || ''} />
-        {question.canonical && <link rel="canonical" href={question.canonical} />}
-      </Head>
-    );
-  };
 
 
   const renderIframe = (url: string, width: string, height: string) => (
@@ -156,7 +147,7 @@ const QuestionsComponent: React.FC<Props> = ({ videos }) => {
               <div key={question.id} onClick={(e) => handleClick(`/questions/${question.slug || question.id}`, e)}
                 className="bg-white mx-2 p-5 rounded-lg shadow-md cursor-pointer hover:bg-gray-100 focus:bg-gray-100">
 
-                {generateMetaTags(question)}
+
                 <h2 className="text-xl font-semibold leading-6">{question.title}</h2>
               </div>
             ))}

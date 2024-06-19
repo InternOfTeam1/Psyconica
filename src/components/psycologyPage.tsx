@@ -2,7 +2,7 @@
 import { fetchAllUsers, fetchDoc } from '@/lib/firebase/firebaseGetDocs';
 import { getUserData, getVideosById, removeSavedPsychologistForUser, savePsychologistForUser, updateUser } from '@/lib/firebase/firebaseFunctions';
 import { Comments } from '@/interfaces/collections';
-import React, { ChangeEventHandler, useEffect, useState } from 'react';
+import React, { ChangeEventHandler, useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
 import { useParams } from 'next/navigation';
@@ -72,6 +72,7 @@ const PsyAccount = () => {
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const dispatch = useDispatch<AppDispatch>();
   const { slug } = useParams<{ slug: string }>();
+  const prevWidthRef = useRef(window.innerWidth);
 
   useEffect(() => {
     fetchAllUsers().then((usersData) => {
@@ -203,9 +204,17 @@ const PsyAccount = () => {
   useEffect(() => {
     const handleResize = () => {
       const screenWidth = window.innerWidth;
-      setIsSmallScreen(screenWidth <= 768);
-      setShowAbout(screenWidth > 640);
-      setShowContact(screenWidth > 640);
+      if (screenWidth !== prevWidthRef.current) {
+        setIsSmallScreen(screenWidth <= 768);
+        if (screenWidth <= 640) {
+          setShowAbout(false);
+          setShowContact(false);
+        } else {
+          setShowAbout(true);
+          setShowContact(true);
+        }
+        prevWidthRef.current = screenWidth;
+      }
     };
 
     window.addEventListener('resize', handleResize);
@@ -284,14 +293,14 @@ const PsyAccount = () => {
     }
   };
 
-  const handleUpdateRating = async (newRating: number) => {
-    try {
-      const ratingId = new Date().toISOString();
-      await updateUser(userSlug, { ratings: { [ratingId]: newRating } });
-    } catch (error) {
-      console.error('Error updating rating:', error);
-    }
-  };
+  // const handleUpdateRating = async (newRating: number) => {
+  //   try {
+  //     const ratingId = new Date().toISOString();
+  //     await updateUser(userSlug, { ratings: { [ratingId]: newRating } });
+  //   } catch (error) {
+  //     console.error('Error updating rating:', error);
+  //   }
+  // };
 
   const handleSendMessage = async (psyName: any, email: any) => {
     try {
@@ -650,7 +659,7 @@ const PsyAccount = () => {
                 <div className="flex w-full items-center justify-between">
                   <p className='text-lg font-bold ml-5 lg:text-lg md:text-lg xs:text-xs sm:text-sm mx-5'>Комментарии</p>
                   <button
-                    className="text-gray-600 hover:text-blue-500 focus:outline-none border border-gray-300 rounded-2xl px-3 py-1 mr-5 text-lg ml-2 lg:text-sm md:text-sm xs:text-xs sm:text-sm mx-5 ml-auto"
+                    className="text-gray-600 hover:text-blue-500 focus:outline-none border border-gray-300 rounded-2xl px-3 py-1 mr-5 text-lg lg:text-sm md:text-sm xs:text-xs sm:text-sm mx-5 ml-auto"
                     onClick={() => setIsCommenting(!isCommenting)}
                   >
                     {isCommenting ? 'Скрыть комментарии' : 'Показать комментарии'}
@@ -700,7 +709,7 @@ const PsyAccount = () => {
                                 />
                                 <button
                                   className="text-white bg-gray-500 hover:bg-blue-500 focus:ring-4 focus:ring-blue-300 font-semibold rounded-2xl text-sm py-1 px-2 text-center mt-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase shadow-lg ml-3"
-                                  onClick={handleEditComment}>Сохранить</button>
+                                  onClick={handleEditComment}>Отправить</button>
                               </div>
                             ) : (
                               <div className="flex w-full justify-between">
