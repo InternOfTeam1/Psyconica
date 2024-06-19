@@ -3,11 +3,13 @@ import { Dialog, Transition } from '@headlessui/react';
 import { saveVideoForUser, removeSavedVideoForUser } from '@/lib/firebase/firebaseFunctions';
 import { fetchDataFromCollection } from '@/lib/firebase/firebaseGetDocs';
 import { useAppSelector } from '@/redux/hooks';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookmark as faSolidBookmark } from '@fortawesome/free-solid-svg-icons';
 import { faBookmark as faRegularBookmark } from '@fortawesome/free-regular-svg-icons';
 import { updateUser } from '@/lib/firebase/firebaseFunctions';
+import { RootState } from '@/redux/store';
+import { getUserData } from '@/lib/firebase/firebaseFunctions';
 
 interface Video {
   url: string;
@@ -29,8 +31,9 @@ const VideoGallery = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [savedVideos, setSavedVideos] = useState<string[]>([]);
   const userId = useAppSelector(state => state.auth.user?.id);
-  const role = useAppSelector(state => state.auth.user?.role);
+  const [role, setRole] = useState('');
   const dispatch = useDispatch();
+  const isToggle = useSelector((state: RootState) => state.toggle.isToggle);
 
   const loadSavedVideos = () => {
     const saved = localStorage.getItem('savedVideos');
@@ -107,8 +110,10 @@ const VideoGallery = () => {
     setIsExpanded(false);
   };
 
+  
+
   const saveVideo = async (url: string) => {
-    try {
+    try { 
       await saveVideoForUser(url, userId);
       const updatedSavedVideos = [...savedVideos, url];
       setSavedVideos(updatedSavedVideos);
@@ -134,13 +139,19 @@ const VideoGallery = () => {
     console.log("Saved videos:", savedVideos);
   }, [role, savedVideos]);
 
+  useEffect(() => {
+    if (userId) {
+      getUserData(userId).then((userData) => {
+        setRole(userData.role);
+      });
+    }
+  }, [userId, isToggle]);
 
 
   return (
     <div className="p-3 m-4 bg-white rounded-2xl shadow-2xl border mt-[-3px]">
       <div className="flex flex-wrap justify-center gap-2">
         {videos.slice(0, displayCount).map((video, index) => {
-
           return (
             <div key={index} className="w-full p-1">
               <div className="cursor-pointer border-2 pb-2 rounded-2xl overflow-hidden" onClick={() => openModal(video.url)}>

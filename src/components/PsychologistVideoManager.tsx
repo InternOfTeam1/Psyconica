@@ -9,6 +9,9 @@ import { fetchDataFromCollection } from '@/lib/firebase/firebaseGetDocs';
 import { useAppSelector } from '@/redux/hooks';
 import { transformYouTubeUrl } from '@/helpers/transformYouTubeUrl';
 import { useParams } from 'next/navigation';
+import { RootState } from '@/redux/store';
+import { getUserData } from '@/lib/firebase/firebaseFunctions';
+import { useSelector } from 'react-redux';
 
 const PsychologistDashboard = () => {
   const [videoUrl, setVideoUrl] = useState<string>('');
@@ -17,9 +20,10 @@ const PsychologistDashboard = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedVideoUrl, setSelectedVideoUrl] = useState<string>('');
   const userId = useAppSelector(state => state.auth.user?.id);
-  const role = useAppSelector(state => state.auth.user?.role);
   const params = useParams();
   const userSlug: any = params.slug;
+  const [role, setRole] = useState('');
+  const isToggle = useSelector((state: RootState) => state.toggle.isToggle);
 
   useEffect(() => {
     async function loadVideos() {
@@ -69,10 +73,11 @@ const PsychologistDashboard = () => {
   };
 
   const saveVideo = async (url: string) => {
-    try {
+    try { 
       await saveVideoForUser(url, userId);
-      setSavedVideos(prevSavedVideos => [...prevSavedVideos, url]);
-      localStorage.setItem('savedVideos', JSON.stringify([...savedVideos, url]));
+      const updatedSavedVideos = [...savedVideos, url];
+      setSavedVideos(updatedSavedVideos);
+      localStorage.setItem('savedVideos', JSON.stringify(updatedSavedVideos));
     } catch (error) {
       console.error('Не удалось сохранить видео:', error);
     }
@@ -81,12 +86,26 @@ const PsychologistDashboard = () => {
   const removeSavedVideo = async (url: string) => {
     try {
       await removeSavedVideoForUser(url, userId);
-      setSavedVideos(savedVideos.filter(u => u !== url));
-      localStorage.setItem('savedVideos', JSON.stringify(savedVideos.filter(u => u !== url)));
+      const updatedSavedVideos = savedVideos.filter(u => u !== url);
+      setSavedVideos(updatedSavedVideos);
+      localStorage.setItem('savedVideos', JSON.stringify(updatedSavedVideos));
     } catch (error) {
       console.error('Не удалось удалить сохранённое видео:', error);
     }
   };
+
+  useEffect(() => {
+    console.log("Role changed:", role);
+    console.log("Saved videos:", savedVideos);
+  }, [role, savedVideos]);
+
+  useEffect(() => {
+    if (userId) {
+      getUserData(userId).then((userData) => {
+        setRole(userData.role);
+      });
+    }
+  }, [userId, isToggle]);
 
   const openModal = (url: string) => {
     setSelectedVideoUrl(url);

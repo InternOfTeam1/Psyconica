@@ -1,6 +1,10 @@
 import { Dialog, Transition } from '@headlessui/react';
 import React, { Fragment, useState, useEffect } from 'react';
 import { Video } from '@/interfaces/collections';
+import { RootState } from '@/redux/store';
+import { getUserData } from '@/lib/firebase/firebaseFunctions';
+import { useSelector } from 'react-redux';
+import { saveVideoForUser, removeSavedVideoForUser } from '@/lib/firebase/firebaseFunctions';
 
 interface VideoBlockProps {
   videos: Video[];
@@ -13,11 +17,22 @@ export const VideoBlock = ({ videos }: VideoBlockProps) => {
   const [selectedVideoUrl, setSelectedVideoUrl] = useState<string>('');
   const [displayCount, setDisplayCount] = useState(4);
   const [flaggedVideos, setFlaggedVideos] = useState<string[]>([]);
+  const [role, setRole] = useState('');
+  const isToggle = useSelector((state: RootState) => state.toggle.isToggle);
+  const [savedVideos, setSavedVideos] = useState<string[]>([]);
+  const userId = useSelector((state: RootState) => state.auth.user?.id);
 
   useEffect(() => {
     const flaggedVideosFromStorage = localStorage.getItem('flaggedVideos');
     if (flaggedVideosFromStorage) {
       setFlaggedVideos(JSON.parse(flaggedVideosFromStorage));
+    }
+  }, []);
+
+  useEffect(() => {
+    const savedVideosFromStorage = localStorage.getItem('savedVideos');
+    if (savedVideosFromStorage) {
+      setSavedVideos(JSON.parse(savedVideosFromStorage));
     }
   }, []);
 
@@ -42,39 +57,94 @@ export const VideoBlock = ({ videos }: VideoBlockProps) => {
     localStorage.setItem('flaggedVideos', JSON.stringify(updatedFlaggedVideos));
   };
 
+  const saveVideo = async (url: string) => {
+    try { 
+      await saveVideoForUser(url, userId);
+      const updatedSavedVideos = [...savedVideos, url];
+      setSavedVideos(updatedSavedVideos);
+      localStorage.setItem('savedVideos', JSON.stringify(updatedSavedVideos));
+    } catch (error) {
+      console.error('Не удалось сохранить видео:', error);
+    }
+  };
+
+  const removeSavedVideo = async (url: string) => {
+    try {
+      await removeSavedVideoForUser(url, userId);
+      const updatedSavedVideos = savedVideos.filter(u => u !== url);
+      setSavedVideos(updatedSavedVideos);
+      localStorage.setItem('savedVideos', JSON.stringify(updatedSavedVideos));
+    } catch (error) {
+      console.error('Не удалось удалить сохранённое видео:', error);
+    }
+  };
+
+  useEffect(() => {
+    console.log("Role changed:", role);
+    console.log("Saved videos:", savedVideos);
+  }, [role, savedVideos]);
+
+  useEffect(() => {
+    if (userId) {
+      getUserData(userId).then((userData) => {
+        setRole(userData.role);
+      });
+    }
+  }, [userId, isToggle]);
 
   return (
     <div className="p-3 m-4 bg-white rounded-2xl shadow-2xl border mt-[-1px]">
       <div className="flex flex-wrap justify-center gap-2">
-        {videos.slice(0, displayCount).map((video, index) => video.video.map((url, urlIndex) => (
-          <div key={`${index}-${urlIndex}`} className="w-full p-1">
-            <div className="cursor-pointer border-2 pb-2 rounded-2xl overflow-hidden" onClick={() => openModal(url)}>
-              <iframe
-                width="100%"
-                height="150"
-                src={url}
-                title="YouTube video player"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="rounded-lg"
-              ></iframe>
-              {flaggedVideos.includes(url) && (
-                <div className="absolute top-2 right-2">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 text-yellow-500"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    onClick={() => toggleFlag(url)}
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
+        {videos.slice(0, displayCount).map((videoGroup, index) => (
+          <Fragment key={index}>
+            {videoGroup.video.map((url, urlIndex) => (
+              <div key={`${index}-${urlIndex}`} className="w-full p-1">
+                <div className="cursor-pointer border-2 pb-2 rounded-2xl overflow-hidden" onClick={() => openModal(url)}>
+                  <iframe
+                    width="100%"
+                    height="150"
+                    src={url}
+                    title="YouTube video player"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="rounded-lg"
+                  ></iframe>
+                  {flaggedVideos.includes(url) && (
+                    <div className="absolute top-2 right-2">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-6 w-6 text-yellow-500"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        onClick={() => toggleFlag(url)}
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </div>
+                  )}
+                  <div className="flex justify-end mt-2">
+                    {savedVideos.includes(url) ? (
+                      <button
+                        className="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600"
+                        onClick={() => removeSavedVideo(url)}
+                      >
+                        Удалить из сохраненных
+                      </button>
+                    ) : (
+                      <button
+                        className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600"
+                        onClick={() => saveVideo(url)}
+                      >
+                        Сохранить
+                      </button>
+                    )}
+                  </div>
                 </div>
-              )}
-            </div>
-          </div>
-        )))}
+              </div>
+            ))}
+          </Fragment>
+        ))}
       </div>
       <div className='flex justify-center'>
         <button

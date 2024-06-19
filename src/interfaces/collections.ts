@@ -12,6 +12,7 @@ export interface Comment {
 }
 
 export interface Video {
+  url(url: any): void;
   id: string;
   video: string[];
   title?: string;

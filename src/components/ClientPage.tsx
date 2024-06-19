@@ -137,7 +137,7 @@ const ClientAccount = () => {
     }
   };
 
-  const changeRole = async () => {
+ const changeRole = async () => {
     try {
       const updatedUserData = {
         role: editedRole,

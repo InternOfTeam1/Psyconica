@@ -18,11 +18,12 @@ import RatingStars from './Rating';
 import { uploadImageToStorage } from '@/lib/firebase/firebaseConfig';
 import { sendTelegramMessage } from '../app/script/telegram';
 import { AppDispatch } from '@/redux/store';
-import { useDispatch } from 'react-redux';
 import { falseToggle, trueToggle } from '@/redux/slices/toggleSlice';
 import { faBookmark as faSolidBookmark } from '@fortawesome/free-solid-svg-icons';
 import { faBookmark as faRegularBookmark } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { RootState } from '@/redux/store';
+import { useDispatch, useSelector } from 'react-redux';
 
 interface User {
   id: string;
@@ -73,6 +74,9 @@ const PsyAccount = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { slug } = useParams<{ slug: string }>();
   const [prevWidth, setPrevWidth] = useState(window.innerWidth);
+  const isToggle = useSelector((state: RootState) => state.toggle.isToggle);
+  const [role, setRole] = useState('');
+
 
   useEffect(() => {
     fetchAllUsers().then((usersData) => {
@@ -329,18 +333,25 @@ const PsyAccount = () => {
     }
   };
 
-   useEffect(() => {
-    const saved = localStorage.getItem('savedPsychologists');
-    if (saved) {
-      setSavedPsychologists(JSON.parse(saved));
-    }
-  }, []);
 
+   useEffect(() => {
+    if (userId) {
+      getUserData(userId).then((userData) => {
+        setRole(userData.role);
+      });
+    }
+   }, [userId, isToggle]);
+  useEffect(() => {
+     
+    console.log("Role changed:", role);
+    console.log("Saved videos:", savedPsychologists);
+  }, [role, savedPsychologists]);
+  
   const handleSavePsychologist = async () => {
-    if (userId && userSlug) {
+    if (userId && slug) {
       try {
-        await savePsychologistForUser(editedName, userSlug, editedPhotoUrl, userId);
-        const updatedSavedPsychologists = [...savedPsychologists, userSlug];
+        await savePsychologistForUser(editedName, slug, editedPhotoUrl, userId);
+        const updatedSavedPsychologists = [...savedPsychologists, slug];
         setSavedPsychologists(updatedSavedPsychologists);
         localStorage.setItem('savedPsychologists', JSON.stringify(updatedSavedPsychologists));
         setIsSaved(true);
@@ -353,10 +364,10 @@ const PsyAccount = () => {
   };
 
   const handleRemoveSavedPsychologist = async () => {
-    if (userId && userSlug) {
+    if (userId && slug) {
       try {
         await removeSavedPsychologistForUser(editedName, userId);
-        const updatedSavedPsychologists = savedPsychologists.filter(slug => slug !== userSlug);
+        const updatedSavedPsychologists = savedPsychologists.filter((slugItem) => slugItem !== slug);
         setSavedPsychologists(updatedSavedPsychologists);
         localStorage.setItem('savedPsychologists', JSON.stringify(updatedSavedPsychologists));
         setIsSaved(false);
@@ -439,7 +450,7 @@ const PsyAccount = () => {
                       )}
 
 
-                      {userRole === 'user' && userId !== userData.slug && (
+                      { role === 'user' && userId !== userData.slug && (
                               <div className="flex items-center justify-end right-0 top-0 mr-4 mt-4">
                                 <FontAwesomeIcon
                                   icon={savedPsychologists.includes(userSlug) ? faSolidBookmark : faRegularBookmark}
