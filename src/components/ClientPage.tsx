@@ -17,6 +17,7 @@ import { savePsychologistForUser, removeSavedPsychologistForUser } from '@/lib/f
 import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 import icon from '../../public/iconPsy.png';
 
+
 interface User {
   id: string;
   photo?: string;
@@ -137,7 +138,7 @@ const ClientAccount = () => {
     }
   };
 
- const changeRole = async () => {
+  const changeRole = async () => {
     try {
       const updatedUserData = {
         role: editedRole,
@@ -181,7 +182,7 @@ const ClientAccount = () => {
     }
   };
 
-  const handleClick = async(url: string) => {
+  const handleClick = async (url: string) => {
     if (userData?.savedQuestions && userData.savedQuestions.length > 0) {
       const questionSlugs = `/questions/${url}`;
       try {
@@ -205,21 +206,22 @@ const ClientAccount = () => {
     }
   };
 
+  
   return (
     userData && userData?.role == 'user' && (
       <>
         <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px] justify-center">
-          <div className="flex flex-wrap -mx-1 lg:-mx-1 xs:mx-1 s:mx-2 md:mx-3 ">
-            <div className="w-full p-3 mx-auto mt-[-3px] lg:mt-[-3px] bg-white rounded-2xl shadow-2xl border xs:py-3 my-5 m-0 md:py-0 md:py-3-lg lg:py-3-md xl:py-3-2xl questions-lg questions-small questions-laptop questions-laptop-small ">
+          <div className="flex flex-wrap -mx-5 lg:-mx-1 xs:mx-1 s:mx-2 md:mx-3  ">
+            <div className="w-full p-3 m-5  mt-[-10px] lg:mt-[-3px] md:mt-[-3px] md:pl-[-20px] md:ml-[-5px] bg-white rounded-2xl shadow-2xl border xs:py-3 my-5  md:py-0 md:py-3-lg lg:py-3-md xl:py-3-2xl questions-lg questions-small questions-laptop questions-laptop-small ">
               <div className="w-full p-1 ">
-                <p className="font-semibold text-gray-800 leading-6  ">
+                <p className="font-semibold text-gray-800 leading-6 mt-5 mb-3 text-xl ">
                   Сохраненные видео:
                 </p>
                 {userData && userData.savedVideos && (
-                  <div className="flex flex-wrap justify-center gap-2 ">
+                  <div className="flex flex-col justify-center gap-2 ">
                     {userData.savedVideos.length > 0 ? (
                       userData.savedVideos.map((video: any, index: number) => (
-                        <div key={index} className="cursor-pointer border-2 rounded-2xl overflow-hidden pb-3 bg-gray-200 xs:h-[200px] s:h-[200px]  md:h-[180px] xl:h-[180px]"
+                        <div key={index} className="cursor-pointer border-2 rounded-2xl mb-1 overflow-hidden pb-3 bg-gray-200 xs:h-[200px] s:h-[200px]  md:h-[180px] xl:h-[180px]"
                           style={{ boxShadow: '0 2px 6px rgba(0,0,0,0.4)' }}>
                           <iframe
                             width="100%"
@@ -239,13 +241,13 @@ const ClientAccount = () => {
                 )}
               </div>
             </div>
-        
-            <div className="container mt-[-1px] md:ml-[20px]  lg:ml-[40px] xl:ml-0 sm:mx-2 px-2 py-4 max-w-3xl bg-white shadow-xl rounded-2xl xs:container-min card-small xl:w-[600px] containerPsy-laptop containerPsy-laptop-small ">
-              <div className=" flex justify-center items-start ml-5 photo-block">
-                <div className="relative mb-4">
-                  <div className="mt-2 mr-5 w-[180px] h-[180px]">
+
+            <div className="container justify-center m-5 mt-[-3px] md:pl-[20px]  lg:ml-[7px] xl:ml-0 sm:mx-2 px-2 py-4 max-w-3xl bg-white shadow-xl rounded-2xl  xl:w-[600px] lg:w-[500px] md:w-[420px] containerPsy-laptop-small containerClient-laptop ">
+              <div className=" flex justify-center items-start ml-5 photo-block mt-5 md:pl-[20px] ">
+                <div className="relative mb-4  ">
+                  <div className=" mr-0 w-[200px] h-[200px] ">
                     {isLoading ? (
-                      <div className="flex justify-center items-center w-full h-full">
+                      <div className="flex mt-[-5px] items-center w-full h-full ">
                         <svg
                           aria-hidden="true"
                           className="inline w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
@@ -274,7 +276,7 @@ const ClientAccount = () => {
                         alt="User Avatar"
                         width={180}
                         height={180}
-                        className="object-cover w-full h-full"
+                          className="w-full h-full mt-2 mx-auto "
                       />
                     )}
                   </div>
@@ -324,32 +326,36 @@ const ClientAccount = () => {
                     )}
                   </div>
                 </div>
-                <div className="flex ml-3 items-start">
-                  <div className="flex flex-col flex-grow profile-info">
-                    <div className="flex justify-between items-center p-1 profile-info name">
+                
+                <div className="flex ml-3 items-start w-full">
+                  <div className="flex flex-col flex-grow profile-info break-words w-full">
+                    <div className="flex justify-between items-center p-1 profile-info name  w-full xs:mt-[-20px] s:mt-[-20px] sm:mt-[-4px] md:mt-[-4px] lg:mt-[-4px] xl:mt-[-4px]">
+                      
                       <input
                         type="text"
                         value={editedName}
                         onChange={(e) => setEditedName(e.target.value)}
-                        className={`border ${isEditingName ? 'border-green-500 ml-[3px]' : 'border-none'} font-semibold text-gray-800 p-1 bg-white xs:w-[90%] xs:text-base sm:text-lg md:text-lg lg:text-lg `}
+                        className={`border ${isEditingName ? 'border-green-500 ml-[3px]' : 'border-none'}  break-words font-semibold text-gray-800 p-1 bg-white w-full xs:w-[90%] xs:text-lg sm:text-2xl md:text-lg lg:text-lg `}
                         disabled={!isEditingName}
-                        maxLength={20}
-                      />
+                        maxLength={1}
+                          style={{ width: `${editedName.length + 1}ch`, minWidth: '48px' }}
+                        />
+                     
                     </div>
 
-                    <div className="mb-5 w-full">
+                    <div className="mb-5 w-full mt-[-10px]">
                       {userId === userData.slug && (
                         <>
                           {isEditingName ? (
                             <button
-                              className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 ml-1"
+                              className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase  xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 ml-1"
                               onClick={changeNickName}
                             >
                               Сохранить изменения
                             </button>
                           ) : (
                             <button
-                              className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 ml-1"
+                              className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl   xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 ml-1"
                               onClick={() => setIsEditingName(!isEditingName)}
                             >
                               Изменить никнейм
@@ -359,35 +365,13 @@ const ClientAccount = () => {
                       )}
                     </div>
 
-                    <div className=" p-1 lg:w-[300px] md:w-[300px] ">
-                      <p className="font-semibold text-gray-800 leading-6 mt-3 mx-3">
-                        Сохранненные вопросы:
-                      </p>
-                      {userData && userData.savedQuestions && (
-                        <ul className="text-gray-600 leading-6 mt-2 mx-3">
-                          {userData.savedQuestions.length > 0 ? (
-                            userData.savedQuestions.map((question: any, index: number) => (
-                              <li
-                                key={index}
-                                onClick={(e: React.MouseEvent<HTMLLIElement, MouseEvent>) => handleClick(`${question.slug}`)}
-                                role="button"
-                                tabIndex={0}
-                                onKeyDown={(e: React.KeyboardEvent<HTMLLIElement>) => e.key === 'Enter' && handleClick(`${question.slug}`)}
-                                className="my-3"
-                              >
-                                <hr /> {question.title}
-                              </li>
-                            ))
-                          ) : (
-                            <li>Пока нет сохраненных вопросов.</li>
-                          )}
-                        </ul>
-                      )}
-                    </div>
+                    
 
+                    
+                    
                     {userId === userData.slug && (
                       <>
-                        <div className="mb-5 w-full">
+                        <div className="mb-5 w-full mt-[-10px]">
 
                           <>
                             {isEditingRole ? (
@@ -399,7 +383,7 @@ const ClientAccount = () => {
                               </button>
                             ) : (
                               <button
-                                className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 ml-1"
+                                className="text-white  bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl   xs:text-xs sm:text-sm md:text-sm lg:text-sm ml-1"
                                 onClick={() => setIsEditingRole(!isEditingRole)}
                               >
                                 Изменить роль
@@ -436,51 +420,71 @@ const ClientAccount = () => {
                           </label>
                         </div>
                       </>
-
                     )}
-
-
-
-
-
                   </div>
+                  
                 </div>
+                
+              </div>
+              <div className=" w-full p-1  ">
+                <p className="font-semibold text-gray-800 leading-6 mt-3 mx-3">
+                  Сохранненные вопросы:
+                </p>
+                {userData && userData.savedQuestions && (
+                  <ul className="text-gray-600 leading-6 mt-2 mx-3">
+                    {userData.savedQuestions.length > 0 ? (
+                      userData.savedQuestions.map((question: any, index: number) => (
+                        <li
+                          key={index}
+                          onClick={(e: React.MouseEvent<HTMLLIElement, MouseEvent>) => handleClick(`${question.slug}`)}
+                          role="button"
+                          tabIndex={0}
+                          onKeyDown={(e: React.KeyboardEvent<HTMLLIElement>) => e.key === 'Enter' && handleClick(`${question.slug}`)}
+                          className="my-3"
+                        >
+                          <hr /> {question.title}
+                        </li>
+                      ))
+                    ) : (
+                      <li>Пока нет сохраненных вопросов.</li>
+                    )}
+                  </ul>
+                )}
               </div>
             </div>
-            <div className="w-full p-3 mx-auto mt-[3px] lg:mt-[3px] bg-white rounded-2xl shadow-2xl border xs:py-3 my-5 m-0 md:py-0 md:py-3-lg lg:py-3-md xl:py-3-2xl questions-lg questions-small questions-laptop questions-laptop-small ">
+
+            <div className="w-full  p-3 md:mt-[-3px] mt-[3px] lg:mt-[3px] xl:mt-[-2px] m-3 bg-white rounded-2xl shadow-2xl border xs:py-3 my-5 md:py-0 md:py-3-lg lg:py-3-md xl:py-3-2xl md:w-[200px] xl:w-[300px] questions-lg questions-small questions-laptop questions-laptop-small ">
               <div className="w-full p-1 ">
-                <p className="font-semibold text-gray-800 leading-6 mt-3 mx-3">
+                <p className="font-semibold mt-5 mb-3 text-gray-800 leading-6 text-lg mx-3">
                   Сохранненные психологи:
                 </p>
-                 {userData.savedPsy.length > 0 ? (
-        userData.savedPsy.map((psy: any, index: number) => (
-          <div key={index} className="text-center cursor-pointer">
-             <div
-              onClick={() => handlePsyClick(psy.psySlug)}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => e.key === 'Enter' && handlePsyClick(psy.psySlug)}
-              className="flex items-center cursor-pointer"
-            >
-              <Image
-                src={psy.psyPhoto || '/defaultPhoto.jpg'}
-                alt="Psy Photo"
-                width={50}
-                height={50}
-                className="w-10 h-10 rounded-full object-cover mr-3"
-              />
-              <p className="font-semibold text-black flex items-center bg-gray-200 rounded-2xl p-1">
-                {psy.psyName}
-                <Image src={icon} alt="Psy Icon" width={20} height={20} className="ml-1" />
-              </p>
-            </div>
-          </div>
-        ))
-      ) : (
-        <p className="text-gray-600">Пока нет сохраненных психологов.</p>
-      )}
-
-
+                {userData.savedPsy.length > 0 ? (
+                  userData.savedPsy.map((psy: any, index: number) => (
+                    <div key={index} className="text-center cursor-pointer s:mb-3 sm:mb-3 md:mb-3 lg:mb-3 xl:mb-1">
+                      <div
+                        onClick={() => handlePsyClick(psy.psySlug)}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => e.key === 'Enter' && handlePsyClick(psy.psySlug)}
+                        className="flex items-center cursor-pointer"
+                      >
+                        <Image
+                          src={psy.psyPhoto || '/defaultPhoto.jpg'}
+                          alt="Psy Photo"
+                          width={50}
+                          height={50}
+                          className="w-10 h-10 rounded-full object-cover mr-3"
+                        />
+                        <p className="font-semibold text-black flex items-center bg-gray-200 rounded-2xl p-1">
+                          {psy.psyName}
+                          <Image src={icon} alt="Psy Icon" width={20} height={20} className="ml-1" />
+                        </p>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-gray-600">Пока нет сохраненных психологов.</p>
+                )}
               </div>
             </div>
 

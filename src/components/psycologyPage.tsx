@@ -678,7 +678,7 @@ const PsyAccount = () => {
 
 
               <hr className="mt-10 my-4 border-gray-400 xs:mt-0 sm:mt-0 md:mt-5 lg:mt-5" />
-              <div className="w-full mt-5 px-3 xs:mt-0 sm:mt-0 md:mt-0">
+              <div className="w-full mt-5 px-3 xs:mt-0 sm:mt-0 md:mt-0 lg:w-[200px]md:w-[200px] w-300px ">
                 <div className="flex w-full items-center justify-between">
                   <p className='text-lg font-bold ml-5 lg:text-lg md:text-lg xs:text-xs sm:text-sm mx-5'>Комментарии</p>
                   <button
