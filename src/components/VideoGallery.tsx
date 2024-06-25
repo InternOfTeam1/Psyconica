@@ -23,7 +23,7 @@ const shuffleArray = (array: any) => {
   return array;
 };
 
-const VideoGallery = () => {
+const VideoGallery = ({topicVideos}: any) => {
   const [videos, setVideos] = useState<Video[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedVideoUrl, setSelectedVideoUrl] = useState('');
@@ -151,7 +151,7 @@ const VideoGallery = () => {
   return (
     <div className="p-3 m-4 bg-white rounded-2xl shadow-2xl border mt-[-3px]">
       <div className="flex flex-wrap justify-center gap-2">
-        {videos.slice(0, displayCount).map((video, index) => {
+        {(topicVideos || videos).slice(0, displayCount).map((video: any, index: number) => {
           return (
             <div key={index} className="w-full p-1">
               <div className="cursor-pointer border-2 pb-2 rounded-2xl overflow-hidden" onClick={() => openModal(video.url)}>
