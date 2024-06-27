@@ -304,3 +304,21 @@ overflow-y: auto;
   max-width: 100%;
   }
 }
+
+@keyframes shine {
+  0% {
+    background-position: -500px;
+  }
+  100% {
+    background-position: 500px;
+  }
+}
+
+.shining-text {
+  background: linear-gradient(90deg, #3b82f6, #b669ff, #3b82f6);
+  background-size: 200% 200%;
+  animation: shine 3s linear infinite;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
