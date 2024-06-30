@@ -120,11 +120,16 @@ const ArticlesComponent: React.FC = () => {
         <div className="w-full mx-auto lg:w-3/4 lg:ml-0 xl:ml-0 mb-8 px-4 pb-3" style={{ maxWidth: '870px' }}>
           <div className="flex flex-col space-y-4" style={{ maxHeight: '788px', overflowY: 'auto', paddingBottom: '10px' }}>
             {articles.map((article) => (
-              <div key={article.id} onClick={(e) => handleClick(article.slug || '', e)}
-                className="bg-white mx-2 p-5 rounded-lg shadow-md cursor-pointer hover:bg-gray-100 focus:bg-gray-100">
+              <Link key={article.slug || article.id} href={`/articles/${article.slug || article.id}`}>
+                <div key={article.id} onClick={(e) => handleClick(article.slug || '', e)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => e.key === 'Enter' && handleClick(`/articles/${article.slug || article.id}`, e)}
+                  className="bg-white mx-2 p-5 rounded-lg shadow-md cursor-pointer hover:bg-gray-100 focus:bg-gray-100">
 
-                <h2 className="text-xl font-semibold leading-6">{article.title}</h2>
-              </div>
+                  <h2 className="text-xl font-semibold leading-6">{article.title}</h2>
+                </div>
+              </Link>
             ))}
           </div>
         </div>
