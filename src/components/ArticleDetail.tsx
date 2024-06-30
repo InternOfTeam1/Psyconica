@@ -1,16 +1,17 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Article } from '@/interfaces/collections';
+import { Article, Video } from '@/interfaces/collections';
 import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
 import VideoGallery from "./VideoGallery";
 
 type Props = {
   articleData: Article;
+  videos: Video[]
 };
 
-const ArticleDetail: React.FC<Props> = ({ articleData }) => {
+const ArticleDetail: React.FC<Props> = ({ articleData, videos }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showButton, setShowButton] = useState(false);
   const articleRef = useRef<HTMLDivElement>(null);
@@ -31,7 +32,7 @@ const ArticleDetail: React.FC<Props> = ({ articleData }) => {
     <div className="container mx-auto max-w-7xl px-5 py-3 mt-[-50px]">
       <div className="flex flex-wrap xs:flex-col-reverse lg:flex-row mt-10">
         <div className="w-full lg:w-1/4 px-1 mb-4 lg:mb-0 xs:mt-2 xs:mx-auto lg:mx-0 lg:mt-0">
-          <VideoGallery />
+          <VideoGallery videosData={videos} />
         </div>
         <div className="w-full mx-auto bg-white lg:w-3/4 lg:ml-0 xl:ml-0 mb-3 px-5 pt-3 pb-3 shadow-xl rounded-2xl" style={{ maxWidth: '860px' }}>
           <div className="flex flex-col space-y-4">

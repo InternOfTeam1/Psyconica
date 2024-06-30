@@ -1,6 +1,7 @@
 import { Comments, Users } from '@/interfaces/collections';
 import { db } from './firebaseConfig';
 import { doc, updateDoc, getDoc, arrayUnion, arrayRemove, collection, getDocs } from 'firebase/firestore';
+import { cache } from 'react';
 
 interface UserDataUpdate {
   [key: string]: any;
@@ -168,7 +169,7 @@ export const getUserData = async (userId: string) => {
   }
 };
 
-export async function getUsersWithMatchingQuestions(topicQuestions: { question: string }[]): Promise<Users[]> {
+export const getUsersWithMatchingQuestions = cache(async (topicQuestions: { question: string }[]): Promise<Users[]> => {
   try {
     const usersCollection = collection(db, 'users');
     const usersDocs = await getDocs(usersCollection);
@@ -185,7 +186,7 @@ export async function getUsersWithMatchingQuestions(topicQuestions: { question: 
     console.error('Ошибка получения пользователей:', error);
     return [];
   }
-}
+})
 
 export const saveVideoForUser = async (videoUrl: string, userId: string) => {
   try {
@@ -213,17 +214,17 @@ export const removeSavedVideoForUser = async (videoUrl: string, userId: string) 
   }
 };
 
-export const savePsychologistForUser = async (psyName: string, psySlug: string, psyPhoto: string | null, userId: string) => {
+export const savePsychologistForUser = async (psyName: string, psySlug: string, psyPhoto: string, userId: string) => {
   try {
     const userRef = doc(db, 'users', userId);
     await updateDoc(userRef, {
       savedPsy: arrayUnion({
         psyName: psyName,
         psySlug: psySlug,
-        psyPhoto: psyPhoto || '' 
+        psyPhoto: psyPhoto || ''
       })
     });
-    
+
     console.log('Психолог успешно сохранен');
   } catch (error) {
     console.error('Ошибка сохранения психолога:', error);
@@ -231,14 +232,24 @@ export const savePsychologistForUser = async (psyName: string, psySlug: string, 
   }
 };
 
-
-export const removeSavedPsychologistForUser = async (psychologist: string, userId: string) => {
+export const removeSavedPsychologistForUser = async (psySlug: string, userId: string) => {
   try {
     const userRef = doc(db, 'users', userId);
-    await updateDoc(userRef, {
-      savedPsy: arrayRemove(psychologist)
-    });
-    console.log('Сохраненный психолог успешно удален');
+    const userDoc = await getDoc(userRef);
+
+    if (userDoc.exists()) {
+      const savedPsyArray = userDoc.data().savedPsy || [];
+      const psychologistToRemove = savedPsyArray.find((psy: { psySlug: string; }) => psy.psySlug === psySlug);
+
+      if (psychologistToRemove) {
+        await updateDoc(userRef, {
+          savedPsy: arrayRemove(psychologistToRemove)
+        });
+        console.log('Сохраненный психолог успешно удален');
+      } else {
+        console.error('Психолог не найден в сохраненных');
+      }
+    }
   } catch (error) {
     console.error('Ошибка удаления сохраненного психолога:', error);
     throw error;

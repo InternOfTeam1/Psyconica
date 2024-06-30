@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { fetchDataFromCollection, fetchDoc } from '@/lib/firebase/firebaseGetDocs';
-import { Topic, Users } from '@/interfaces/collections';
+import { Topic, Users, Video } from '@/interfaces/collections';
 import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
 import { useParams, useRouter } from 'next/navigation';
@@ -12,7 +12,13 @@ import Image from 'next/image';
 import icon from '../../public/iconPsy.png';
 import { Data } from '@/interfaces/collections';
 
-const TopicDetail = () => {
+type Props = {
+  videos: Video[]
+  topicsData: Topic;
+  usersWithMatchingQuestions: any;
+}
+
+const TopicDetail: React.FC<Props> = ({ videos }) => {
   const [topicData, setTopicData] = useState<Topic | null>(null);
   const [matchingUsers, setMatchingUsers] = useState<Users[]>([]);
   const params = useParams<{ slug: string }>();
@@ -127,7 +133,7 @@ const TopicDetail = () => {
     <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px] justify-center">
       <div className="flex flex-wrap -mx-1 lg:-mx-1 xs:mx-1 s:mx-2 md:mx-3">
         <div className="w-full mt-3 md:mt-3 xl:mt-0 lg:w-4/4 xl:w-1/4 px-1 lg:mb-0 order-last tablet:order-last xl:order-first">
-          <VideoGallery topicVideos={topicData.video.map(video => ({url: video}))}/>
+          <VideoGallery topicVideos={topicData.video.map(video => ({url: video}))}  videosData={videos}/>
         </div>
 
         <div className="container w-full mx-auto mt-[-10px] xs:w-full xs:mx-auto sm:w-full sm:mx-auto md:w-full md:mx-auto md:mx-5 lg:w-2/3 lg:mx-auto xl:ml-0 px-2 py-4 shadow-xl rounded-2xl xs:container-min card-small xl:w-[600px] containerPsy-laptop containerPsy-laptop-small" style={{ maxHeight: '790px' }}>

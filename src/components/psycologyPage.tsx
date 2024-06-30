@@ -46,7 +46,6 @@ const PsyAccount = () => {
   const [editedSlogan, setEditedSlogan] = useState<string>('');
   const [editedExpert, setEditedExpert] = useState<string>('');
   const [editedName, setEditedName] = useState<string>('');
-  const userRole = useAppSelector(state => state.auth.user?.role);  
   const [editedRole, setEditedRole] = useState('psy');
   const [isEditingRole, setIsEditingRole] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -334,26 +333,28 @@ const PsyAccount = () => {
   };
 
 
-   useEffect(() => {
+  useEffect(() => {
     if (userId) {
       getUserData(userId).then((userData) => {
         setRole(userData.role);
       });
     }
-   }, [userId, isToggle]);
+  }, [userId, isToggle]);
+
   useEffect(() => {
-     
     console.log("Role changed:", role);
     console.log("Saved videos:", savedPsychologists);
   }, [role, savedPsychologists]);
-  
+
   const handleSavePsychologist = async () => {
     if (userId && slug) {
       try {
         await savePsychologistForUser(editedName, slug, editedPhotoUrl, userId);
-        const updatedSavedPsychologists = [...savedPsychologists, slug];
-        setSavedPsychologists(updatedSavedPsychologists);
-        localStorage.setItem('savedPsychologists', JSON.stringify(updatedSavedPsychologists));
+        setSavedPsychologists(prevSavedPsychologists => {
+          const updatedSavedPsychologists = [...prevSavedPsychologists, slug];
+          localStorage.setItem('savedPsychologists', JSON.stringify(updatedSavedPsychologists));
+          return updatedSavedPsychologists;
+        });
         setIsSaved(true);
       } catch (error) {
         console.error('Ошибка сохранения психолога:', error);
@@ -366,10 +367,12 @@ const PsyAccount = () => {
   const handleRemoveSavedPsychologist = async () => {
     if (userId && slug) {
       try {
-        await removeSavedPsychologistForUser(editedName, userId);
-        const updatedSavedPsychologists = savedPsychologists.filter((slugItem) => slugItem !== slug);
-        setSavedPsychologists(updatedSavedPsychologists);
-        localStorage.setItem('savedPsychologists', JSON.stringify(updatedSavedPsychologists));
+        await removeSavedPsychologistForUser(slug, userId);
+        setSavedPsychologists(prevSavedPsychologists => {
+          const updatedSavedPsychologists = prevSavedPsychologists.filter((slugItem) => slugItem !== slug);
+          localStorage.setItem('savedPsychologists', JSON.stringify(updatedSavedPsychologists));
+          return updatedSavedPsychologists;
+        });
         setIsSaved(false);
       } catch (error) {
         console.error('Ошибка удаления сохраненного психолога:', error);
@@ -450,16 +453,15 @@ const PsyAccount = () => {
                       )}
 
 
-                      { role === 'user' && userId !== userData.slug && (
-                              <div className="flex items-center justify-end right-0 top-0 mr-4 mt-4">
-                                <FontAwesomeIcon
-                                  icon={savedPsychologists.includes(userSlug) ? faSolidBookmark : faRegularBookmark}
-                                  className={`text-2xl cursor-pointer ${savedPsychologists.includes(userSlug) ? 'text-yellow-500' : 'text-gray-400'}`}
-                                  onClick={savedPsychologists.includes(userSlug) ? handleRemoveSavedPsychologist : handleSavePsychologist}
-                                />
-                              </div>
-                            )}
-
+                      {role === 'user' && userId !== userData.slug && (
+                        <div className="flex items-center justify-end right-0 top-0 mr-4 mt-4">
+                          <FontAwesomeIcon
+                            icon={savedPsychologists.includes(userSlug) ? faSolidBookmark : faRegularBookmark}
+                            className={`text-2xl cursor-pointer ${savedPsychologists.includes(userSlug) ? 'text-yellow-500' : 'text-gray-400'}`}
+                            onClick={savedPsychologists.includes(userSlug) ? handleRemoveSavedPsychologist : handleSavePsychologist}
+                          />
+                        </div>
+                      )}
 
                       {loadStatus && (
                         <p className="text-gray-500 text-sm mt-2 flex items-center">

@@ -459,32 +459,32 @@ const ClientAccount = () => {
                   Сохранненные психологи:
                 </p>
                 {userData.savedPsy.length > 0 ? (
-                  userData.savedPsy.map((psy: any, index: number) => (
-                    <div key={index} className="text-center cursor-pointer s:mb-3 sm:mb-3 md:mb-3 lg:mb-3 xl:mb-1">
-                      <div
-                        onClick={() => handlePsyClick(psy.psySlug)}
-                        role="button"
-                        tabIndex={0}
-                        onKeyDown={(e) => e.key === 'Enter' && handlePsyClick(psy.psySlug)}
-                        className="flex items-center cursor-pointer"
-                      >
-                        <Image
-                          src={psy.psyPhoto || '/defaultPhoto.jpg'}
-                          alt="Psy Photo"
-                          width={50}
-                          height={50}
-                          className="w-10 h-10 rounded-full object-cover mr-3"
-                        />
-                        <p className="font-semibold text-black flex items-center bg-gray-200 rounded-2xl p-1">
-                          {psy.psyName}
-                          <Image src={icon} alt="Psy Icon" width={20} height={20} className="ml-1" />
-                        </p>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-gray-600">Пока нет сохраненных психологов.</p>
-                )}
+  userData.savedPsy.map((psy: any, index: number) => (
+    <div key={index} className="text-center cursor-pointer s:mb-3 sm:mb-3 md:mb-3 lg:mb-3 xl:mb-1">
+      <div
+        onClick={() => handlePsyClick(psy.psySlug)}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => e.key === 'Enter' && handlePsyClick(psy.psySlug)}
+        className="flex items-center cursor-pointer"
+      >
+        <Image
+          src={psy.psyPhoto || '/defaultPhoto.jpg'}
+          alt="Psy Photo"
+          width={50}
+          height={50}
+          className="w-10 h-10 rounded-full object-cover mr-3"
+        />
+        <p className="font-semibold text-black flex items-center bg-gray-200 rounded-2xl p-1">
+          {psy.psyName}
+          <Image src={icon} alt="Psy Icon" width={20} height={20} className="ml-1" />
+        </p>
+      </div>
+    </div>
+  ))
+) : (
+  <p className="text-gray-600">Пока нет сохраненных психологов.</p>
+)}
               </div>
             </div>
 

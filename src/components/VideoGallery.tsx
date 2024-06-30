@@ -7,24 +7,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookmark as faSolidBookmark } from '@fortawesome/free-solid-svg-icons';
 import { faBookmark as faRegularBookmark } from '@fortawesome/free-regular-svg-icons';
-import { updateUser } from '@/lib/firebase/firebaseFunctions';
 import { RootState } from '@/redux/store';
 import { getUserData } from '@/lib/firebase/firebaseFunctions';
+import ReactPlayer from 'react-player'
 
 interface Video {
   url: string;
 }
+type Props= {
+  videosData: Video[]
+}
 
-const shuffleArray = (array: any) => {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
-};
 
-const VideoGallery = ({topicVideos}: any) => {
-  const [videos, setVideos] = useState<Video[]>([]);
+const VideoGallery = ({videosData, topicVideos}: any) => {
+  const [videos, setVideos] = useState<Video[]>(() => videosData);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedVideoUrl, setSelectedVideoUrl] = useState('');
   const [displayCount, setDisplayCount] = useState(4);
@@ -46,31 +42,7 @@ const VideoGallery = ({topicVideos}: any) => {
 
   useEffect(() => {
     const loadVideos = async () => {
-      try {
-        const usersData = await fetchDataFromCollection('users');
-        let videosData: Video[] = [];
-
-        usersData.forEach((user: any) => {
-          if (user.video && user.video.length > 0) {
-            user.video.forEach((videoUrl: string) => {
-              videosData.push({ url: videoUrl });
-            });
-          }
-        });
-
-        if (!videosData.length) {
-          console.log("No videos found");
-          return;
-        }
-
-        const shuffledVideos = shuffleArray(videosData);
-        setVideos(shuffledVideos);
-
-        loadSavedVideos();
-
-      } catch (error) {
-        console.error('Error loading videos:', error);
-      }
+      loadSavedVideos();
     };
 
     loadVideos();
@@ -109,8 +81,6 @@ const VideoGallery = ({topicVideos}: any) => {
     setDisplayCount(4);
     setIsExpanded(false);
   };
-
-  
 
   const saveVideo = async (url: string) => {
     try { 
@@ -155,14 +125,16 @@ const VideoGallery = ({topicVideos}: any) => {
           return (
             <div key={index} className="w-full p-1">
               <div className="cursor-pointer border-2 pb-2 rounded-2xl overflow-hidden" onClick={() => openModal(video.url)}>
-                <iframe
+                <ReactPlayer
+                  light
+                  url={video.url}
                   width="100%"
-                  height="150"
-                  src={video.url}
+                  height="150px"
                   title="YouTube video player"
-                  allowFullScreen
                   className="rounded-lg"
-                ></iframe>
+                  allowFullScreen
+                  playing
+                />
               </div>
               <div className="flex justify-between items-center mt-2">
                 {role !== 'psy' && (

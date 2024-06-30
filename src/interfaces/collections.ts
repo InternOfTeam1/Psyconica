@@ -1,18 +1,19 @@
 import { ReactNode } from "react";
 
+// Define your interfaces
 export interface Comment {
   slug?: string;
   content: string;
   date?: string;
-  num: Number | string,
-  answerId: Number
+  num: number | string;
+  answerId: number;
   userId?: string;
   name?: string;
   photo?: string;
 }
 
 export interface Video {
-  url(url: any): void;
+  url: string;
   id: string;
   video: string[];
   title?: string;
@@ -39,10 +40,19 @@ export interface Article {
   image: string;
 }
 
+export interface ArticleData {
+  SEOTitle?: string;
+  SEODesc?: string;
+  canonical?: string;
+  id: string;
+  slug?: string;
+  title: string;
+}
+
 export interface Topic {
-  map(arg0: (question: any) => import("react").JSX.Element): ReactNode;
+  id: string;
   slug: string;
-  questions: string[];
+  questions: { question: string; title?: string; slug?: string }[];
   articles: string[];
   video: string[];
   title: string;
@@ -61,30 +71,42 @@ export interface Users {
   desc?: string;
   video?: string[];
   articles?: string[];
-  userId: any,
-  answeredQuestions?: { question: string }[];
+  userId: any;
+  answeredQuestions?: { question: string; title?: string; slug?: string }[];
   savedQuestions?: { question: string }[];
   savedPsy?: { question: string }[];
-  aboutUser?: any,
-  contactUser?: any
+  aboutUser?: any;
+  contactUser?: any;
   slogan?: string;
   expert: string;
   comments: Comment[];
   telegramUserID?: any;
-
 }
+
+type Answer = {
+  num: number;
+  userId: string;
+  title: string;
+  likes: string[];
+  psyPhoto?: string;
+  name?: string;
+  photo?: string;
+  userData?: string;
+  slug: string;
+  content?: any;
+};
 
 export interface Answers {
   photo: string;
   userData: any;
   slug: string;
-  content: string,
-  num: number,
-  title: string,
-  likes: string[],
-  psyPhoto: any,
-  name: any,
-  userId: string
+  content: string;
+  num: number;
+  title: string;
+  likes: string[];
+  psyPhoto: any;
+  name: any;
+  userId: string;
 }
 
 export interface Question {
@@ -99,12 +121,15 @@ export interface Question {
   canonical?: string;
 }
 
-
 export interface QuestionData {
-  title?: ReactNode;
-  answers: Answers[];
-  comments?: Comment[];
-
+  SEOTitle?: string;
+  SEODesc?: string;
+  canonical?: string;
+  id: string;
+  slug?: string;
+  title: string;
+  answers: Answer[];
+  comments: Comment[];
 }
 
 export interface Comments {
@@ -138,9 +163,8 @@ export interface Data {
   comments?: Comment[];
   answers?: string[];
   userId?: any;
-  url: string[];
+  url?: string[];
   article?: string;
   avtor?: string;
-  savedVideos: string[];
+  savedVideos?: string[];
 }
-<Video[]>([])

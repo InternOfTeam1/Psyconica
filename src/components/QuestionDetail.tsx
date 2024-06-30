@@ -196,32 +196,39 @@ const QuestionDetail = (props: Props) => {
 
   const onNewAnswerSave = async () => {
     try {
+      if (!userId || !questionData?.id) {
+        handleOpenModal();
+        console.error("User ID or question ID is undefined.");
+        return;
+      }
+  
       const answers: any = questionData?.answers;
-
+  
       const nameToAdd = role === 'psy' ? userName : 'Psy';
-
+  
       const updatedNewAnswer = {
         ...newAnswer,
         name: nameToAdd,
         psyPhoto: role === 'psy' ? userPhoto : '/psy_avatar.jpg',
       };
-
-      const newQuestionData = {
+  
+      const newQuestionData: QuestionData = {
         ...questionData,
+        id: questionData.id, 
         answers: [...answers, updatedNewAnswer]
       };
-
+  
       setQuestionData(newQuestionData);
       setNewAnswer(null);
       await updateQuestion(questionSlug, newQuestionData);
-
+  
       if (role === 'psy') {
         const userDocs = await fetchDoc('users', userId) as unknown as Users;
-
+  
         if (userDocs) {
           const answeredQuestions = userDocs.answeredQuestions || [];
           const questionTitle = questionData?.title;
-
+  
           if (
             questionTitle &&
             questionSlug &&
@@ -241,30 +248,33 @@ const QuestionDetail = (props: Props) => {
   };
 
   const onAnswerDelete = async (answerNum: number) => {
-    const answers: any = questionData?.answers;
-
-    const newAnswers = answers?.filter((answer: { num: number; }) => answer.num !== answerNum);
-    const newQuestionData = {
+    if (!questionData) return;
+  
+    const newAnswers = questionData.answers.filter(answer => answer.num !== answerNum);
+    const newQuestionData: QuestionData = {
       ...questionData,
-      answers: newAnswers
+      answers: newAnswers,
+      id: questionData.id || '', 
     };
-
+  
     setQuestionData(newQuestionData);
     await updateQuestion(questionSlug, newQuestionData);
-
+  
     const userDocs = await fetchDoc('users', userId) as unknown as Users;
-
+  
     if (userDocs) {
       const answeredQuestions = userDocs.answeredQuestions || [];
-      const updatedAnsweredQuestions = answeredQuestions.filter((question: any) => {
+      const updatedAnsweredQuestions = answeredQuestions.filter(question => {
         return !(question.slug === questionSlug && question.title === newQuestionData.title);
       });
-
+  
       await updateUser(userId, { answeredQuestions: updatedAnsweredQuestions });
     } else {
       console.error('user document not found');
     }
   };
+  
+  
 
   const onAnswerEdit = (answerNum: number) => {
     setEditingAnswerNum(answerNum);
@@ -275,20 +285,23 @@ const QuestionDetail = (props: Props) => {
   };
 
   const onAnswerSave = async (answerNum: number) => {
-    const updatedAnswers = questionData?.answers?.map(answer =>
+    if (!questionData) return;
+  
+    const updatedAnswers = questionData.answers.map(answer =>
       answer.num === answerNum ? { ...answer, title: editedAnswer } : answer
     );
-    const newQuestionData = {
+    const newQuestionData: QuestionData = {
       ...questionData,
-      answers: updatedAnswers || []
+      answers: updatedAnswers,
+      id: questionData.id || '', 
     };
-
+  
     setQuestionData(newQuestionData);
     setEditingAnswerNum(null);
-
+  
     await updateQuestion(questionSlug, newQuestionData);
   };
-
+  
   const onAnswerChange = (e: ChangeEvent<HTMLInputElement>, answerNumber: number) => {
     setEditedAnswer(e.target.value);
   };
@@ -353,16 +366,16 @@ const QuestionDetail = (props: Props) => {
   };
 
   const onCommentDelete = async (commentNum: any) => {
-    const comments: any = questionData?.comments;
-
-    const newComments = comments?.filter((comment: { num: any }) => comment.num !== commentNum);
-
-    const updatedQuestion = {
+    if (!questionData) return;
+  
+    const newComments = questionData.comments?.filter(comment => comment.num !== commentNum) || [];
+    const updatedQuestion: QuestionData = {
       ...questionData,
-      answers: questionData?.answers ?? [],
-      comments: newComments
+      answers: questionData.answers ?? [],
+      comments: newComments,
+      id: questionData.id || '',
     };
-
+  
     setQuestionData(updatedQuestion);
     await updateComment(questionSlug, updatedQuestion);
   };
@@ -461,8 +474,8 @@ const QuestionDetail = (props: Props) => {
                     onClick={onAnswerAdd}>ответить</button>)
               ) : null}
 
-              {sortedAnswers.map((answer: Answers, index: number) => {
-                const progressWidth = (answer.likes.length / MAX_LIKES) * 100;
+{sortedAnswers.map((answer, index: number) => {
+  const progressWidth = (answer.likes.length / MAX_LIKES) * 100;
 
                 return (
                   <div key={index} className="mt-4 w-full ">

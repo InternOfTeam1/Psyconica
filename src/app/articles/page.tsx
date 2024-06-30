@@ -1,7 +1,14 @@
 import ArticlesComponent from '@/components/ArticlesComponent';
-import { Video } from "@/interfaces/collections";
+import { Data, ArticleData } from "@/interfaces/collections";
 import { fetchDataFromCollection } from "@/lib/firebase/firebaseGetDocs";
 import { Metadata } from "next";
+import { notFound } from 'next/navigation';
+import { shuffleAndTrimVideos, shuffleArray } from '../questions/page'; 
+
+interface Video {
+  url: string;
+}
+
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -10,28 +17,46 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-function shuffleAndTrimVideos(videos: Video[], maxLength: number): Video[] {
-  let shuffledVideos = videos.slice();
-
-  for (let i = shuffledVideos.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffledVideos[i], shuffledVideos[j]] = [shuffledVideos[j], shuffledVideos[i]];
-  }
-  return shuffledVideos.filter(v => v.video).slice(0, maxLength);
-}
-
 const Articles: React.FC = async () => {
-  const rawData = await fetchDataFromCollection('videos');
-  const articlesData = await fetchDataFromCollection('articles');
 
-  if (!rawData || !articlesData) {
-    return null;
+  const [rawData, articlesData, usersData] = await Promise.all([fetchDataFromCollection('videos'), fetchDataFromCollection('articles'), fetchDataFromCollection('users') as unknown as Data[]])
+
+  if (!rawData || !articlesData || !usersData) {
+    notFound();
   }
 
-  const videos = rawData as unknown as Video[];
-  const shuffledVideos = shuffleAndTrimVideos(videos, 10);
+  let videosData: Video[] = [];
 
-  return <ArticlesComponent />;
+  usersData.forEach((user: any) => {
+    if (user.video && user.video.length > 0) {
+      user.video.forEach((videoUrl: string) => {
+        videosData.push({ url: videoUrl });
+      });
+    }
+  });
+
+  
+  
+  if (!videosData.length) {
+    console.log("No videos found");
+    notFound();
+  }
+
+  const filteredAndTransformedArticles: ArticleData[] = articlesData
+  .filter(article => article.title !== undefined)
+  .map(article => ({
+    id: article.id,
+    slug: article.slug,
+    title: article.title as string, 
+    SEOTitle: article.SEOTitle || '',
+    SEODesc: article.SEODesc || '',
+    canonical: article.canonical || ''
+  }));
+
+  const shuffledVideos = shuffleArray(videosData);
+
+
+  return <ArticlesComponent articlesData={filteredAndTransformedArticles} videos={shuffledVideos} originalArticles={filteredAndTransformedArticles} />;
 }
 
 export default Articles;

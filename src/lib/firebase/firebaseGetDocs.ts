@@ -1,13 +1,14 @@
 import { db } from './firebaseConfig';
 import { collection, getDocs, getDoc, doc } from 'firebase/firestore';
 import { Data } from '@/interfaces/collections'
+import { cache } from 'react';
 
 export interface Video {
   url: string;
 }
 
 
-export const fetchDataFromCollection = async (collectionName: string): Promise<Data[]> => {
+export const fetchDataFromCollection = cache(async (collectionName: string): Promise<Data[]> => {
   try {
     const querySnapshot = await getDocs(collection(db, collectionName));
     const data: Data[] = [];
@@ -79,10 +80,10 @@ export const fetchDataFromCollection = async (collectionName: string): Promise<D
     console.error("Error fetching documents: ", e);
     throw new Error("Failed to fetch data from collection");
   }
-};
+});
 
 
-export const fetchDoc = async (collectionName: string, slug: any) => {
+export const fetchDoc = cache (async (collectionName: string, slug: any) => {
   try {
     const docRef = doc(db, collectionName, slug);
 
@@ -98,7 +99,7 @@ export const fetchDoc = async (collectionName: string, slug: any) => {
     console.error("Error fetching document:", error);
     throw error;
   }
-};
+});
 
 export const fetchAllUsers = async () => {
   try {
