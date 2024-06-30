@@ -11,7 +11,7 @@ type Props = {
 };
 
 const TopicPage: React.FC<Props> = ({ articleData }) => {
-  console.log(articleData)
+
   return (
     <div className="container mx-auto max-w-7xl px-2 py-3 mt-[-50px]">
       <div className="flex flex-wrap xs:flex-col-reverse lg:flex-row mt-10">

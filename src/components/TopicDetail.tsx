@@ -30,9 +30,7 @@ const TopicDetail: React.FC<Props> = ({ videos }) => {
     if (topicSlug) {
       const fetchData = async () => {
         try {
-          console.log('Fetching data for slug:', topicSlug);
           const data: any = await fetchDoc('topics', topicSlug);
-          console.log('Fetched data:', data);
           setTopicData(data);
           if (data && data.questions) {
             const users: any = await getUsersWithMatchingQuestions(data.questions);
@@ -76,15 +74,16 @@ const TopicDetail: React.FC<Props> = ({ videos }) => {
     );
   }
 
-  const handleClick = async (item: any, type: string) => {
+  const handleClick = async (item: any, type: string, event?: React.MouseEvent<HTMLDivElement>) => {
     let path: any;
-
+    event?.preventDefault();
     switch (type) {
       case 'question': {
         const questionsData = await fetchDataFromCollection('questions') as Data[];
-        const foundQuestion = questionsData
+        const foundQuestion: any = questionsData
           .filter(question => question.title !== undefined)
           .find((question) => item.includes(question.title));
+
 
         path = `/questions/${foundQuestion?.slug}`;
         break;
@@ -110,13 +109,21 @@ const TopicDetail: React.FC<Props> = ({ videos }) => {
     }
 
     try {
-      await router.push(path);
+      if (event?.button === 1) {
+        event.preventDefault();
+        window.open(path, '_blank', 'noopener noreferrer');
+      } else {
+        await router.push(path);
+      }
+
     } catch (error) {
       console.error('Navigation error:', error);
     }
   };
 
-  const handleClickTopic = async (url: string, e: React.MouseEvent<HTMLDivElement> | React.KeyboardEvent<HTMLDivElement>) => {
+  const handleClickTopic = async (url: string, e: React.MouseEvent<HTMLDivElement> | React.KeyboardEvent<HTMLDivElement>
+
+  ) => {
     e.preventDefault();
     try {
       await router.push(url);
@@ -125,53 +132,63 @@ const TopicDetail: React.FC<Props> = ({ videos }) => {
     }
   };
 
-  console.log(topicData.articles)
-
-
-
   return (
-    <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px] justify-center">
-      <div className="flex flex-wrap -mx-1 lg:-mx-1 xs:mx-1 s:mx-2 md:mx-3">
-        <div className="w-full mt-3 md:mt-3 xl:mt-0 lg:w-4/4 xl:w-1/4 px-1 lg:mb-0 order-last tablet:order-last xl:order-first">
-          <VideoGallery topicVideos={topicData.video.map(video => ({url: video}))}  videosData={videos}/>
+    <div className="container mx-auto px-5 py-4 max-w-[1200px] mt-[-40px] justify-center">
+      <div className="flex flex-wrap -mx-1 md:justify-center">
+        <div className="w-full mt-3 md:mt-3 xl:mt-0 lg:w-full lg:order-3 lg:ml-0 xl:w-1/4 xl:ml-[-30px] px-1 lg:mb-0 order-last tablet:order-last xl:order-first">
+          <VideoGallery topicVideos={topicData.video.map(video => ({ url: video }))}  videosData={videos} />
         </div>
 
-        <div className="container w-full mx-auto mt-[-10px] xs:w-full xs:mx-auto sm:w-full sm:mx-auto md:w-full md:mx-auto md:mx-5 lg:w-2/3 lg:mx-auto xl:ml-0 px-2 py-4 shadow-xl rounded-2xl xs:container-min card-small xl:w-[600px] containerPsy-laptop containerPsy-laptop-small" style={{ maxHeight: '790px' }}>
+        <div className="container w-full mx-auto mt-[-10px] xs:w-full sm:w-full md:w-full lg:w-2/3 lg:order-1 xl:w-[580px] xl:ml-0 px-2 py-4 shadow-xl rounded-2xl xs:container-min card-small containerPsy-laptop containerPsy-laptop-small" style={{ maxHeight: '790px' }}>
           <h2 className="w-full font-semibold bg-amber-300 text-gray-600 text-base px-7 py-3 rounded-2xl leading-6 text-center">{topicData.title}</h2>
           <h1 className="font-bold text-black-600 text-lg text-center mt-5 mb-5">Вопросы</h1>
           <div className="flex flex-col space-y-4" style={{ maxHeight: '290px', overflowY: 'auto', paddingBottom: '10px' }}>
             {topicData.questions.map((question: any, index: number) => (
+
               <div
                 key={`question-${index}`}
-                onClick={() => handleClick(question, 'question')}
+                onClick={(e) => handleClick(question, 'question', e)}
+
                 role="button"
                 tabIndex={0}
-                onKeyDown={(e) => e.key === 'Enter' && handleClick(question.slug, 'question')}
+                onKeyDown={(e) => e.key === 'Enter' && handleClick(question, 'question')}
+
+                onMouseDown={(e) => {
+                  if (e.button === 1) {
+                    e.preventDefault();
+                    handleClick(question, 'question', e);
+                  }
+                }}
+
+
                 className="bg-white mx-1 p-3 rounded-lg shadow-md cursor-pointer hover:bg-gray-100 focus:bg-gray-100"
               >
                 <h2 className="text-base font-semibold">{question}</h2>
               </div>
+
             ))}
           </div>
 
           <h1 className="font-bold text-black-600 text-lg text-center mt-5 mb-6">Статьи</h1>
           <div className="flex flex-col space-y-4" style={{ maxHeight: '290px', overflowY: 'auto', paddingBottom: '10px' }}>
             {topicData.articles.map((article: any, index: number) => (
-              <div
-                key={`article-${index}`}
-                onClick={(e) => handleClickTopic(`/articles/${article.slug}`, e)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => e.key === 'Enter' && handleClickTopic(`/articles/${article.slug}`, e)}
-                className="bg-white mx-1 p-3 rounded-lg shadow-md cursor-pointer hover:bg-gray-100 focus:bg-gray-100"
-              >
-                <h2 className="text-base font-semibold">{article.title.split('. ')[0]}</h2>
-              </div>
+              <Link key={article.slug || article.id} href={`/articles/${article.slug || article.id}`}>
+                <div
+                  key={`article-${index}`}
+                  onClick={(e) => handleClickTopic(`/articles/${article.slug}`, e)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => e.key === 'Enter' && handleClickTopic(`/articles/${article.slug}`, e)}
+                  className="bg-white mx-1 p-3 rounded-lg shadow-md cursor-pointer hover:bg-gray-100 focus:bg-gray-100"
+                >
+                  <h2 className="text-base font-semibold">{article.title.split('. ')[0]}</h2>
+                </div>
+              </Link>
             ))}
           </div>
         </div>
 
-        <div className="w-full p-5 mx-auto mt-3 lg:mt-[-3px] bg-white rounded-2xl shadow-2xl border xs:py-3 m-0 md:w-full md:mx-auto md:mx-5 md:pb-5 md:py-0 md:py-3-lg lg:w-1/4 lg:mx-auto lg:py-3-md xl:py-3-2xl questions-lg questions-small questions-laptop questions-laptop-small" style={{ minWidth: '250px', maxHeight: '785px' }}>
+        <div className="w-full px-4 py-5 mx-auto mt-3 lg:mt-[-3px] bg-white rounded-2xl shadow-2xl border xs:py-3 m-0 md:w-full md:pb-5 md:py-0 md:py-3-lg lg:w-1/4 lg:order-2 lg:py-3-md xl:w-[300px] xl:py-3-2xl questions-lg questions-small questions-laptop questions-laptop-small" style={{ minWidth: '300px', maxHeight: '785px' }}>
           <p className='font-bold text-center text-gray-800 leading-6 mt-3 mx-3 pb-4'>Блок психологов</p>
           <div className='w-full flex flex-col space-y-2'>
             {matchingUsers.map((user) => (
@@ -199,7 +216,7 @@ const TopicDetail: React.FC<Props> = ({ videos }) => {
           </button>
         </Link>
       </div>
-    </div>
+    </div >
   );
 };
 

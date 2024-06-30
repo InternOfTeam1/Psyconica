@@ -344,7 +344,7 @@ const QuestionDetail = (props: Props) => {
       content: editedComment,
       name: userName,
       photo: userPhoto,
-      userId,
+      userId
     };
 
     const newQuestionData = {
@@ -428,7 +428,6 @@ const QuestionDetail = (props: Props) => {
   }, [questionSlug]);
 
   const sortedAnswers = questionData?.answers?.sort((a, b) => b.likes.length - a.likes.length) || [];
-
   return (
     <div className="container mx-auto max-w-7xl px-4 py-6 mt-[-40px]">
       <div className="flex flex-wrap -mx-4 xs:flex-col-reverse xs:px-5 sm:px-5 md:px-5 lg:px-5 lg:flex-row xl:px-5">
@@ -441,14 +440,14 @@ const QuestionDetail = (props: Props) => {
 
               <h2 className="font-semibold bg-amber-300 text-gray-600 px-7 py-3 rounded-2xl leading-6 text-center xs:text-sm xs:px-3 sm:text-sm sm:px-4 md:text-base md:px-5 lg:text-lg lg:px-6 xl:text-xl xl:px-7">{questionData.title}</h2>
               {role === 'user' && (
-        <div className="flex items-center justify-end mt-2 space-x-2">
-          <h2 className="font-semibold text-white-950 text-sm">Сохранить вопрос</h2>
-          <FaBookmark
-            className={`cursor-pointer text-lg ${isSaved ? 'text-black-500' : 'text-gray-400'}`}
-            onClick={saveQuestions}
-          />
-        </div>
-      )}
+                <div className="flex items-center justify-end mt-2 space-x-2">
+                  <h2 className="font-semibold text-white-950 text-sm">Сохранить вопрос</h2>
+                  <FaBookmark
+                    className={`cursor-pointer text-lg ${isSaved ? 'text-black-500' : 'text-gray-400'}`}
+                    onClick={saveQuestions}
+                  />
+                </div>
+              )}
               {role === 'psy' ? (
                 newAnswer ?
                   <>
@@ -586,11 +585,17 @@ const QuestionDetail = (props: Props) => {
                                   </>
                                 ) : (
                                   <>
-                                    <img src={comment.photo || '/default_avatar.jpg'} alt="User Avatar" className="w-10 h-10 rounded-full object-cover" />
-                                    <div className="flex flex-col flex-grow">
-                                      <p className="text-xs font-semibold text-gray-800">{comment?.userId === userId ? 'Вы' : comment?.name}</p>
-                                      <p className="text-md text-gray-600 mt-1">{comment.content}</p>
+                                    <div onClick={role === 'psy' ? (e) => handleClick(comment?.userId, e) : undefined} className={role === 'psy' ? 'cursor-pointer' : ''}>
+
+                                      <div className="flex items-center">
+                                        <img src={comment.photo || '/default_avatar.jpg'} alt="User Avatar" className="w-10 h-10 rounded-full object-cover  mr-3" />
+                                        <div className="flex flex-col flex-grow">
+                                          <p className="text-xs font-semibold text-gray-800">{comment?.userId === userId ? 'Вы' : comment?.name}</p>
+                                          <p className="text-md text-gray-600 mt-1">{comment.content}</p>
+                                        </div>
+                                      </div>
                                     </div>
+
                                     {((role === 'psy' && comment.userId === userId) || (role !== 'psy' && comment.userId === userId)) && (
                                       <>
                                         <FaPen
@@ -653,7 +658,7 @@ const QuestionDetail = (props: Props) => {
           </Link>
         </div >
       </div>
-    </div>
+    </div >
 
   );
 };

@@ -76,14 +76,21 @@ const QuestionsComponent: React.FC<Props> = ({ videos, questionsData, originalQu
           <VideoGallery videosData={videos}  />
         </div>
         <div className="w-full mx-auto lg:w-3/4 lg:ml-0 xl:ml-0 mb-8 px-4 pb-3" style={{ maxWidth: '870px' }}>
+
           <div className="flex flex-col space-y-4" style={{ maxHeight: '788px', overflowY: 'auto', paddingBottom: '10px' }}>
             {questions.map((question) => (
-              <div key={question.id} onClick={(e) => handleClick(`/questions/${question.slug || question.id}`, e)}
-                className="bg-white mx-2 p-5 rounded-lg shadow-md cursor-pointer hover:bg-gray-100 focus:bg-gray-100">
+              <Link key={question.slug || question.id} href={`/questions/${question.slug || question.id}`}>
+                <div key={question.id} onClick={(e) => handleClick(`/questions/${question.slug || question.id}`, e)}
+
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => e.key === 'Enter' && handleClick(`/questions/${question.slug || question.id}`, e)}
+                  className="bg-white mx-2 p-5 rounded-lg shadow-md cursor-pointer hover:bg-gray-100 focus:bg-gray-100">
 
 
-                <h2 className="text-xl font-semibold leading-6">{question.title}</h2>
-              </div>
+                  <h2 className="text-xl font-semibold leading-6">{question.title}</h2>
+                </div>
+              </Link>
             ))}
           </div>
         </div>
