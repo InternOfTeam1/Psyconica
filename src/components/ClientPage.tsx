@@ -206,15 +206,15 @@ const ClientAccount = () => {
     }
   };
 
-  
+
   return (
     userData && userData?.role == 'user' && (
       <>
-        <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px] justify-center">
-          <div className="flex flex-wrap -mx-5 lg:-mx-1 xs:mx-1 s:mx-2 md:mx-3  ">
-            <div className="w-full p-3 m-5  mt-[-10px] lg:mt-[-3px] md:mt-[-3px] md:pl-[-20px] md:ml-[-5px] bg-white rounded-2xl shadow-2xl border xs:py-3 my-5  md:py-0 md:py-3-lg lg:py-3-md xl:py-3-2xl questions-lg questions-small questions-laptop questions-laptop-small ">
+        <div className="container mx-auto px-5 py-4 max-w-[1200px] mt-[-40px] justify-center">
+          <div className="flex flex-wrap -mx-1 justify-center ">
+            <div className="w-full bg-white rounded-2xl shadow-2xl justify-center mt-3 xs:mx-4 sm:mx-4 md:mx-4 md:mt-3 lg:m-10/12 xl:mt-0 lg:order-3 lg:ml-0 xl:max-w-[250px] xl:mx-0 xl:ml-[-15px] px-1 lg:mb-0 order-last tablet:order-last xl:order-first">
               <div className="w-full p-1 ">
-                <p className="font-semibold text-gray-800 leading-6 mt-5 mb-3 text-xl ">
+                <p className="font-semibold text-gray-800 leading-6 mt-5 mb-3 text-lg text-center justify-center">
                   Сохраненные видео:
                 </p>
                 {userData && userData.savedVideos && (
@@ -242,7 +242,7 @@ const ClientAccount = () => {
               </div>
             </div>
 
-            <div className="container justify-center m-5 mt-[-3px] md:pl-[20px]  lg:ml-[7px] xl:ml-0 sm:mx-2 px-2 py-4 max-w-3xl bg-white shadow-xl rounded-2xl  xl:w-[600px] lg:w-[500px] md:w-[420px] containerPsy-laptop-small containerClient-laptop ">
+            <div className="container w-full mx-auto bg-white xs:w-full sm:w-full md:w-full lg:w-2/3 lg:order-1 xl:w-[580px] xl:mx-5 xl:mt-[-2px] px-2 py-4 shadow-xl rounded-2xl xs:container-min card-small containerPsy-laptop containerPsy-laptop-small" style={{ maxHeight: '790px' }}>
               <div className=" flex justify-center items-start ml-5 photo-block mt-5 md:pl-[20px] ">
                 <div className="relative mb-4  ">
                   <div className=" mr-0 w-[200px] h-[200px] ">
@@ -276,7 +276,7 @@ const ClientAccount = () => {
                         alt="User Avatar"
                         width={180}
                         height={180}
-                          className="w-full h-full mt-2 mx-auto "
+                        className="w-full h-full mt-2 mx-auto "
                       />
                     )}
                   </div>
@@ -326,11 +326,11 @@ const ClientAccount = () => {
                     )}
                   </div>
                 </div>
-                
+
                 <div className="flex ml-3 items-start w-full">
                   <div className="flex flex-col flex-grow profile-info break-words w-full">
                     <div className="flex justify-between items-center p-1 profile-info name  w-full xs:mt-[-20px] s:mt-[-20px] sm:mt-[-4px] md:mt-[-4px] lg:mt-[-4px] xl:mt-[-4px]">
-                      
+
                       <input
                         type="text"
                         value={editedName}
@@ -338,9 +338,9 @@ const ClientAccount = () => {
                         className={`border ${isEditingName ? 'border-green-500 ml-[3px]' : 'border-none'}  break-words font-semibold text-gray-800 p-1 bg-white w-full xs:w-[90%] xs:text-lg sm:text-2xl md:text-lg lg:text-lg `}
                         disabled={!isEditingName}
                         maxLength={1}
-                          style={{ width: `${editedName.length + 1}ch`, minWidth: '48px' }}
-                        />
-                     
+                        style={{ width: `${editedName.length + 1}ch`, minWidth: '48px' }}
+                      />
+
                     </div>
 
                     <div className="mb-5 w-full mt-[-10px]">
@@ -365,10 +365,10 @@ const ClientAccount = () => {
                       )}
                     </div>
 
-                    
 
-                    
-                    
+
+
+
                     {userId === userData.slug && (
                       <>
                         <div className="mb-5 w-full mt-[-10px]">
@@ -422,9 +422,9 @@ const ClientAccount = () => {
                       </>
                     )}
                   </div>
-                  
+
                 </div>
-                
+
               </div>
               <div className=" w-full p-1  ">
                 <p className="font-semibold text-gray-800 leading-6 mt-3 mx-3">
@@ -453,38 +453,38 @@ const ClientAccount = () => {
               </div>
             </div>
 
-            <div className="w-full  p-3 md:mt-[-3px] mt-[3px] lg:mt-[3px] xl:mt-[-2px] m-3 bg-white rounded-2xl shadow-2xl border xs:py-3 my-5 md:py-0 md:py-3-lg lg:py-3-md xl:py-3-2xl md:w-[200px] xl:w-[300px] questions-lg questions-small questions-laptop questions-laptop-small ">
+            <div className="w-full px-3 py-5 mx-auto mt-3 lg:mt-[-3px] bg-white rounded-2xl shadow-2xl justify-center xs:py-3 m-0 md:w-full md:pb-5 md:py-0 md:py-3-lg lg:w-1/4 lg:order-2 lg:py-3-md xl:w-[250px] xl:py-3-2xl questions-lg questions-small questions-laptop questions-laptop-small" style={{ minWidth: '300px', maxHeight: '785px' }}>
               <div className="w-full p-1 ">
-                <p className="font-semibold mt-5 mb-3 text-gray-800 leading-6 text-lg mx-3">
+                <p className="font-semibold mt-5 mb-3 text-gray-800 leading-6 text-lg text-center justify-center mx-3">
                   Сохранненные психологи:
                 </p>
                 {userData.savedPsy.length > 0 ? (
-  userData.savedPsy.map((psy: any, index: number) => (
-    <div key={index} className="text-center cursor-pointer s:mb-3 sm:mb-3 md:mb-3 lg:mb-3 xl:mb-1">
-      <div
-        onClick={() => handlePsyClick(psy.psySlug)}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => e.key === 'Enter' && handlePsyClick(psy.psySlug)}
-        className="flex items-center cursor-pointer"
-      >
-        <Image
-          src={psy.psyPhoto || '/defaultPhoto.jpg'}
-          alt="Psy Photo"
-          width={50}
-          height={50}
-          className="w-10 h-10 rounded-full object-cover mr-3"
-        />
-        <p className="font-semibold text-black flex items-center bg-gray-200 rounded-2xl p-1">
-          {psy.psyName}
-          <Image src={icon} alt="Psy Icon" width={20} height={20} className="ml-1" />
-        </p>
-      </div>
-    </div>
-  ))
-) : (
-  <p className="text-gray-600">Пока нет сохраненных психологов.</p>
-)}
+                  userData.savedPsy.map((psy: any, index: number) => (
+                    <div key={index} className="text-center cursor-pointer s:mb-3 sm:mb-3 md:mb-3 lg:mb-3 xl:mb-1">
+                      <div
+                        onClick={() => handlePsyClick(psy.psySlug)}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => e.key === 'Enter' && handlePsyClick(psy.psySlug)}
+                        className="flex items-center cursor-pointer"
+                      >
+                        <Image
+                          src={psy.psyPhoto || '/defaultPhoto.jpg'}
+                          alt="Psy Photo"
+                          width={50}
+                          height={50}
+                          className="w-10 h-10 rounded-full object-cover mr-3"
+                        />
+                        <p className="font-semibold text-black flex items-center bg-gray-200 rounded-2xl p-1">
+                          {psy.psyName}
+                          <Image src={icon} alt="Psy Icon" width={20} height={20} className="ml-1" />
+                        </p>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-gray-600 px-5">Пока нет сохраненных психологов.</p>
+                )}
               </div>
             </div>
 
