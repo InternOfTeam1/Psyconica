@@ -106,7 +106,7 @@ const QuestionDetail = (props: Props) => {
         answer.userId === userId ? { ...answer, psyPhoto: photo, name: name } : answer
       ),
       comments: questionData?.comments?.map((comment) =>
-        comment.userId === userId ? { ...comment, photo: photo, userRole } : comment
+        comment.userId === userId ? { ...comment, photo: photo, role } : comment
       ),
     };
 
@@ -324,7 +324,7 @@ const QuestionDetail = (props: Props) => {
 
   const onCommentSend = async (commentNum: string) => {
     const updatedComments = questionData?.comments?.map(comment =>
-      comment.num === commentNum ? { ...comment, content: editedComment, userRole } : comment
+      comment.num === commentNum ? { ...comment, content: editedComment, role } : comment
     );
 
     const newQuestionData = {
@@ -345,7 +345,7 @@ const QuestionDetail = (props: Props) => {
       content: editedComment,
       name: userName,
       photo: userPhoto,
-      userRole,
+      role,
       userId
     };
 
@@ -588,14 +588,14 @@ const QuestionDetail = (props: Props) => {
                                 ) : (
                                   <>
                                     <div className="flex w-full justify-between bg-white">
-                                      <div onClick={comment.userRole === 'psy' ? (e) => handleClick(comment?.userId, e) : undefined} className={comment.userRole === 'psy' ? 'cursor-pointer' : ''}>
+                                      <div onClick={comment.role === 'psy' ? (e) => handleClick(comment?.userId, e) : undefined} className={comment.role === 'psy' ? 'cursor-pointer' : ''}>
 
                                         <div className="flex items-center">
                                           <img src={comment.photo || '/default_avatar.jpg'} alt="User Avatar" className="w-10 h-10 rounded-full object-cover  mr-3" />
                                           <div className="flex flex-col flex-grow">
                                             <p className="font-semibold text-black flex items-center bg-gray-200 rounded-2xl p-1 max-w-max">
                                               <span className="mr-1">{comment?.userId === userId ? 'Вы' : comment?.name}</span>
-                                              {comment.userRole === 'psy' && (
+                                              {comment.role === 'psy' && (
                                                 <Image src={icon} alt="Psy Icon" width={20} height={20} className="ml-1" />
                                               )}
                                             </p>
