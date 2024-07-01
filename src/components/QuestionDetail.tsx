@@ -588,7 +588,7 @@ const QuestionDetail = (props: Props) => {
                                 ) : (
                                   <>
                                     <div className="flex w-full justify-between bg-white">
-                                      <div onClick={role === 'psy' ? (e) => handleClick(comment?.userId, e) : undefined} className={role === 'psy' ? 'cursor-pointer' : ''}>
+                                      <div onClick={comment.userRole === 'psy' ? (e) => handleClick(comment?.userId, e) : undefined} className={comment.userRole === 'psy' ? 'cursor-pointer' : ''}>
 
                                         <div className="flex items-center">
                                           <img src={comment.photo || '/default_avatar.jpg'} alt="User Avatar" className="w-10 h-10 rounded-full object-cover  mr-3" />
