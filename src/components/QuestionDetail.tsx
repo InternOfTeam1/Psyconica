@@ -106,7 +106,7 @@ const QuestionDetail = (props: Props) => {
         answer.userId === userId ? { ...answer, psyPhoto: photo, name: name } : answer
       ),
       comments: questionData?.comments?.map((comment) =>
-        comment.userId === userId ? { ...comment, photo: photo } : comment
+        comment.userId === userId ? { ...comment, photo: photo, userRole } : comment
       ),
     };
 
@@ -201,34 +201,35 @@ const QuestionDetail = (props: Props) => {
         console.error("User ID or question ID is undefined.");
         return;
       }
-  
+
       const answers: any = questionData?.answers;
-  
+
       const nameToAdd = role === 'psy' ? userName : 'Psy';
-  
+
       const updatedNewAnswer = {
         ...newAnswer,
         name: nameToAdd,
+        userRole,
         psyPhoto: role === 'psy' ? userPhoto : '/psy_avatar.jpg',
       };
-  
+
       const newQuestionData: QuestionData = {
         ...questionData,
-        id: questionData.id, 
+        id: questionData.id,
         answers: [...answers, updatedNewAnswer]
       };
-  
+
       setQuestionData(newQuestionData);
       setNewAnswer(null);
       await updateQuestion(questionSlug, newQuestionData);
-  
+
       if (role === 'psy') {
         const userDocs = await fetchDoc('users', userId) as unknown as Users;
-  
+
         if (userDocs) {
           const answeredQuestions = userDocs.answeredQuestions || [];
           const questionTitle = questionData?.title;
-  
+
           if (
             questionTitle &&
             questionSlug &&
@@ -249,32 +250,32 @@ const QuestionDetail = (props: Props) => {
 
   const onAnswerDelete = async (answerNum: number) => {
     if (!questionData) return;
-  
+
     const newAnswers = questionData.answers.filter(answer => answer.num !== answerNum);
     const newQuestionData: QuestionData = {
       ...questionData,
       answers: newAnswers,
-      id: questionData.id || '', 
+      id: questionData.id || '',
     };
-  
+
     setQuestionData(newQuestionData);
     await updateQuestion(questionSlug, newQuestionData);
-  
+
     const userDocs = await fetchDoc('users', userId) as unknown as Users;
-  
+
     if (userDocs) {
       const answeredQuestions = userDocs.answeredQuestions || [];
       const updatedAnsweredQuestions = answeredQuestions.filter(question => {
         return !(question.slug === questionSlug && question.title === newQuestionData.title);
       });
-  
+
       await updateUser(userId, { answeredQuestions: updatedAnsweredQuestions });
     } else {
       console.error('user document not found');
     }
   };
-  
-  
+
+
 
   const onAnswerEdit = (answerNum: number) => {
     setEditingAnswerNum(answerNum);
@@ -286,22 +287,22 @@ const QuestionDetail = (props: Props) => {
 
   const onAnswerSave = async (answerNum: number) => {
     if (!questionData) return;
-  
+
     const updatedAnswers = questionData.answers.map(answer =>
       answer.num === answerNum ? { ...answer, title: editedAnswer } : answer
     );
     const newQuestionData: QuestionData = {
       ...questionData,
       answers: updatedAnswers,
-      id: questionData.id || '', 
+      id: questionData.id || '',
     };
-  
+
     setQuestionData(newQuestionData);
     setEditingAnswerNum(null);
-  
+
     await updateQuestion(questionSlug, newQuestionData);
   };
-  
+
   const onAnswerChange = (e: ChangeEvent<HTMLInputElement>, answerNumber: number) => {
     setEditedAnswer(e.target.value);
   };
@@ -323,7 +324,7 @@ const QuestionDetail = (props: Props) => {
 
   const onCommentSend = async (commentNum: string) => {
     const updatedComments = questionData?.comments?.map(comment =>
-      comment.num === commentNum ? { ...comment, content: editedComment } : comment
+      comment.num === commentNum ? { ...comment, content: editedComment, userRole } : comment
     );
 
     const newQuestionData = {
@@ -344,6 +345,7 @@ const QuestionDetail = (props: Props) => {
       content: editedComment,
       name: userName,
       photo: userPhoto,
+      userRole,
       userId
     };
 
@@ -367,7 +369,7 @@ const QuestionDetail = (props: Props) => {
 
   const onCommentDelete = async (commentNum: any) => {
     if (!questionData) return;
-  
+
     const newComments = questionData.comments?.filter(comment => comment.num !== commentNum) || [];
     const updatedQuestion: QuestionData = {
       ...questionData,
@@ -375,7 +377,7 @@ const QuestionDetail = (props: Props) => {
       comments: newComments,
       id: questionData.id || '',
     };
-  
+
     setQuestionData(updatedQuestion);
     await updateComment(questionSlug, updatedQuestion);
   };
@@ -473,8 +475,8 @@ const QuestionDetail = (props: Props) => {
                     onClick={onAnswerAdd}>ответить</button>)
               ) : null}
 
-{sortedAnswers.map((answer, index: number) => {
-  const progressWidth = (answer.likes.length / MAX_LIKES) * 100;
+              {sortedAnswers.map((answer, index: number) => {
+                const progressWidth = (answer.likes.length / MAX_LIKES) * 100;
 
                 return (
                   <div key={index} className="mt-4 w-full ">
@@ -585,28 +587,37 @@ const QuestionDetail = (props: Props) => {
                                   </>
                                 ) : (
                                   <>
-                                    <div onClick={role === 'psy' ? (e) => handleClick(comment?.userId, e) : undefined} className={role === 'psy' ? 'cursor-pointer' : ''}>
+                                    <div className="flex w-full justify-between bg-white">
+                                      <div onClick={role === 'psy' ? (e) => handleClick(comment?.userId, e) : undefined} className={role === 'psy' ? 'cursor-pointer' : ''}>
 
-                                      <div className="flex items-center">
-                                        <img src={comment.photo || '/default_avatar.jpg'} alt="User Avatar" className="w-10 h-10 rounded-full object-cover  mr-3" />
-                                        <div className="flex flex-col flex-grow">
-                                          <p className="text-xs font-semibold text-gray-800">{comment?.userId === userId ? 'Вы' : comment?.name}</p>
-                                          <p className="text-md text-gray-600 mt-1">{comment.content}</p>
+                                        <div className="flex items-center">
+                                          <img src={comment.photo || '/default_avatar.jpg'} alt="User Avatar" className="w-10 h-10 rounded-full object-cover  mr-3" />
+                                          <div className="flex flex-col flex-grow">
+                                            <p className="font-semibold text-black flex items-center bg-gray-200 rounded-2xl p-1 max-w-max">
+                                              <span className="mr-1">{comment?.userId === userId ? 'Вы' : comment?.name}</span>
+                                              {comment.userRole === 'psy' && (
+                                                <Image src={icon} alt="Psy Icon" width={20} height={20} className="ml-1" />
+                                              )}
+                                            </p>
+                                            <p className="text-md text-gray-600 mt-1">{comment.content}</p>
+                                          </div>
                                         </div>
                                       </div>
-                                    </div>
 
-                                    {((role === 'psy' && comment.userId === userId) || (role !== 'psy' && comment.userId === userId)) && (
-                                      <>
-                                        <FaPen
-                                          className='cursor-pointer mr-3'
-                                          onClick={() => onCommentEdit(comment.num, comment.content)}
-                                        />
-                                        <div className='cursor-pointer mt-1 mr-5' onClick={() => onCommentDelete(comment.num)}>
-                                          <MdClose />
-                                        </div>
-                                      </>
-                                    )}
+                                      {((role === 'psy' && comment.userId === userId) || (role !== 'psy' && comment.userId === userId)) && (
+                                        <>
+                                          <div className="flex ml-auto">
+                                            <FaPen
+                                              className='cursor-pointer mt-5 mr-3'
+                                              onClick={() => onCommentEdit(comment.num, comment.content)}
+                                            />
+                                            <div className='cursor-pointer mt-5 mr-5' onClick={() => onCommentDelete(comment.num)}>
+                                              <MdClose />
+                                            </div>
+                                          </div>
+                                        </>
+                                      )}
+                                    </div>
                                   </>
                                 )}
                               </div>
