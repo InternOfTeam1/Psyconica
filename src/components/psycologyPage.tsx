@@ -768,7 +768,7 @@ const PsyAccount = () => {
                 )}
               </div>
             </div>
-            <div className="w-full p-5 mx-auto mt-3 lg:mt-[-3px] bg-white rounded-2xl shadow-2xl border xs:py-3 m-0 md:w-full md:mx-auto md:mx-6 md:pb-5 md:py-0 md:py-3-lg lg:w-1/4 lg:mx-auto lg:py-3-md xl:py-3-2xl questions-lg questions-small questions-laptop questions-laptop-small" style={{ minWidth: '250px' }}>
+            <div className="w-full p-5 mx-auto mt-3 lg:mt-[-3px] bg-white rounded-2xl shadow-2xl border xs:py-3 m-0 md:w-full md:mx-auto md:mx-6 md:pb-5 md:py-0 md:py-3-lg lg:w-1/4 lg:mx-auto lg:py-3-md xl:py-3-2xl questions-lg questions-small questions-laptop questions-laptop-small" style={{ minWidth: '250px', maxHeight: '930px' }}>
               <div className="w-full p-1 ">
                 <p className='font-semibold  text-gray-800 leading-6 mt-3 mx-3'>Вопросы, на которые ответил психолог:</p>
                 {userData && userData.answeredQuestions && (
