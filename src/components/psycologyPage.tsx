@@ -2,7 +2,7 @@
 import { fetchAllUsers, fetchDoc } from '@/lib/firebase/firebaseGetDocs';
 import { getUserData, getVideosById, removeSavedPsychologistForUser, savePsychologistForUser, updateUser } from '@/lib/firebase/firebaseFunctions';
 import { Comments } from '@/interfaces/collections';
-import React, { ChangeEventHandler, useEffect, useState } from 'react';
+import React, { ChangeEventHandler, useEffect, useState, ChangeEvent  } from 'react';
 import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
 import { useParams } from 'next/navigation';
@@ -75,7 +75,17 @@ const PsyAccount = () => {
   const [prevWidth, setPrevWidth] = useState(window.innerWidth);
   const isToggle = useSelector((state: RootState) => state.toggle.isToggle);
   const [role, setRole] = useState('');
+  const [text, setText] = useState("Initial text");
 
+  const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
+    setText(e.target.value.slice(0, 40)); 
+  };
+
+  const formatText = (inputText: string) => {
+    return inputText.match(/.{1,20}/g)?.join('\n') || '';
+  };
+
+  
 
   useEffect(() => {
     fetchAllUsers().then((usersData) => {
@@ -382,6 +392,8 @@ const PsyAccount = () => {
     }
   };
 
+  
+  
   return (
 
     userData && userData?.role == 'psy' && (
@@ -421,7 +433,7 @@ const PsyAccount = () => {
                           value={editedSlogan}
                           onChange={(e) => setEditedSlogan(e.target.value)}
                           className={`border ${isEditing ? 'border-green-500' : 'border-none'} block xl:w-[470px] w-full  font-semibold italic text-gray-800 bg-transparent text-center ml-[-3px]`}
-                          maxLength={40}
+                          maxLength={25}
                           placeholder="Введите ваш девиз (не более 25 символов)"
                           disabled={!isEditing}
                         />
@@ -520,15 +532,16 @@ const PsyAccount = () => {
                       <div className='flex ml-3 items-start'>
                         <div className="flex flex-col flex-grow profile-info">
                           <div className="flex justify-between items-center p-1 profile-info name">
-                            <input
-                              type="text"
-                              value={editedName}
+                          <textarea
+                              // type="text"
+                              value={formatText(editedName)}
                               onChange={(e) => setEditedName(e.target.value)}
-                              className={`border ${isEditing ? 'border-green-500 ml-[3px]' : 'border-none'} font-semibold text-gray-800 p-1 bg-white xs:w-[90%] xs:text-base sm:text-lg md:text-lg lg:text-lg `}
+                              className={`border ${isEditing ? 'border-green-500 ml-[3px]' : 'border-none'} font-semibold text-gray-800 p-1 bg-white xs:w-[90%] xs:text-base sm:text-lg md:text-lg lg:text-lg whitespace-pre-wrap`}
                               disabled={!isEditing}
-                              maxLength={20}
+                              maxLength={40}
+                              rows={2}
+                              style={{ resize: 'none', overflow: 'hidden' }}
                             />
-
                           </div>
 
                           <input
@@ -650,7 +663,7 @@ const PsyAccount = () => {
                               value="psy"
                               checked={editedRole === 'psy'}
                               onChange={(e) => setEditedRole(e.target.value)}
-                              className={`border ${isEditingRole ? 'border-green-500 ml-[3px]' : 'border-none'} font-semibold text-gray-800 p-1 bg-white xs:w-[90%] xs:text-base sm:text-lg md:text-lg lg:text-lg`}
+                              className={`border ${isEditingRole ? 'border-green-500' : 'border-none'} font-semibold text-gray-800 p-1 bg-white xs:w-[90%] xs:text-base sm:text-lg md:text-lg lg:text-lg`}
                               disabled={!isEditingRole}
                             />
                             <span className="ml-2">Психолог</span>
@@ -663,7 +676,7 @@ const PsyAccount = () => {
                               value="user"
                               checked={editedRole === 'user'}
                               onChange={(e) => setEditedRole(e.target.value)}
-                              className={`border ${isEditingRole ? 'border-green-500 ml-[3px]' : 'border-none'} font-semibold text-gray-800 p-1 bg-white xs:w-[90%] xs:text-base sm:text-lg md:text-lg lg:text-lg`}
+                              className={`border ${isEditingRole ? 'border-green-500 ml-[3px]' : 'border-none'} font-semibold text-gray-800 p-1 bg-white xs:w-[90%] xs:text-base sm:text-lg md:text-lg lg:text-lg client`}
                               disabled={!isEditingRole}
                             />
                             <span className="ml-2">Клиент</span>
