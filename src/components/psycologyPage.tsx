@@ -629,10 +629,10 @@ const PsyAccount = () => {
                           />
                         )}
                       </div>
-                    </div>
+                    
                     {userId === userData.slug && (
 
-                      <>
+                      <div className="ml-6">
                         <div className="mb-5 w-full">
 
                           <>
@@ -676,16 +676,16 @@ const PsyAccount = () => {
                               value="user"
                               checked={editedRole === 'user'}
                               onChange={(e) => setEditedRole(e.target.value)}
-                              className={`border ${isEditingRole ? 'border-green-500 ml-[3px]' : 'border-none'} font-semibold text-gray-800 p-1 bg-white xs:w-[90%] xs:text-base sm:text-lg md:text-lg lg:text-lg client`}
+                              className={`border ${isEditingRole ? 'border-green-500 ml-[3px]' : 'border-none'} font-semibold text-gray-800 p-1 bg-white xs:w-[90%] xs:text-base sm:text-lg md:text-lg lg:text-lg`}
                               disabled={!isEditingRole}
                             />
                             <span className="ml-2">Клиент</span>
                           </label>
                         </div>
-                      </>
-
+                      </div>
+                      
                     )}
-
+                    </div>
 
                   </>
                 )
