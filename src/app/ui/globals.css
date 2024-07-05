@@ -208,11 +208,6 @@
 
 }
 
-@media (max-width: 900px) and (min-width: 360px) {
-  .client {
-  margin-left: -0.80rem;
-}
-}
 
 
 @media (min-width: 300px) and (max-width: 640px) {
