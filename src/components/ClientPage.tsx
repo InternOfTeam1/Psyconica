@@ -210,9 +210,9 @@ const ClientAccount = () => {
   return (
     userData && userData?.role == 'user' && (
       <>
-        <div className="container mx-auto px-5 py-4 max-w-[1200px] mt-[-40px] justify-center">
-          <div className="flex flex-wrap -mx-1 justify-center ">
-            <div className="w-full bg-white rounded-2xl shadow-2xl justify-center mt-3 xs:mx-4 sm:mx-4 md:mx-4 md:mt-3 lg:m-10/12 xl:mt-0 lg:order-3 lg:ml-0 xl:max-w-[250px] xl:mx-0 xl:ml-[-15px] px-1 lg:mb-0 order-last tablet:order-last xl:order-first">
+        <div className="container w-full mx-auto px-5 py-4 max-w-[1200px] justify-center">
+          <div className="grid grid-cols-1 gap-4 ml-0 xs:ml-0 md:grid-cols-12 md:gap-4 md:ml-[-20px] md:pl-8 lg:pl-6 xl:gap-4 mx-3 xl:ml-[-40px]">
+            <div className="col-span-12 order-3 px-3 xs:col-span-12 xs:order-3 sm:col-span-12 sm:order-3 md:col-span-8 md:order-3 lg:col-span-3 lg:order-1 xl:col-span-3 xl:order-1 bg-white rounded-lg shadow-xl" style={{ maxHeight: '785px' }}>
               <div className="w-full p-1 ">
                 <p className="font-semibold text-gray-800 leading-6 mt-5 mb-3 text-lg text-center justify-center">
                   Сохраненные видео:
@@ -242,8 +242,8 @@ const ClientAccount = () => {
               </div>
             </div>
 
-            <div className="container w-full mx-auto bg-white xs:w-full sm:w-full md:w-full lg:w-2/3 lg:order-1 xl:w-[580px] xl:mx-5 xl:mt-[-2px] px-2 py-4 shadow-xl rounded-2xl xs:container-min card-small containerPsy-laptop containerPsy-laptop-small" style={{ maxHeight: '790px' }}>
-              <div className=" flex justify-center items-start ml-5 photo-block mt-5 md:pl-[20px] ">
+            <div className="col-span-12 order-2 xs:col-span-12 xs:order-1 sm:col-span-12 md:col-span-8 md:order-2 lg:col-span-6 xl:col-span-6 bg-white p-6 rounded-lg shadow-xl" style={{ maxHeight: '790px' }}>
+              <div className=" flex justify-center items-start ml-5 photo-block mt-5 ">
                 <div className="relative mb-4  ">
                   <div className=" mr-0 w-[200px] h-[200px] ">
                     {isLoading ? (
@@ -453,7 +453,7 @@ const ClientAccount = () => {
               </div>
             </div>
 
-            <div className="w-full px-3 py-5 mx-auto mt-3 lg:mt-[-3px] bg-white rounded-2xl shadow-2xl justify-center xs:py-3 m-0 md:w-full md:pb-5 md:py-0 md:py-3-lg lg:w-1/4 lg:order-2 lg:py-3-md xl:w-[250px] xl:py-3-2xl questions-lg questions-small questions-laptop questions-laptop-small" style={{ minWidth: '300px', maxHeight: '785px' }}>
+            <div className="col-span-12 order-3 xs:col-span-12 sm:col-span-12 sm:order-2 md:col-span-4 md:order-2 lg:col-span-3 xl:col-span-3 bg-white p-5 rounded-lg shadow-xl" style={{ maxHeight: '785px' }}>
               <div className="w-full p-1 ">
                 <p className="font-semibold mt-5 mb-3 text-gray-800 leading-6 text-lg text-center justify-center mx-3">
                   Сохранненные психологи:

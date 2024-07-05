@@ -134,12 +134,12 @@ const TopicDetail: React.FC<Props> = ({ videos }) => {
 
   return (
     <div className="container mx-auto px-5 py-4 max-w-[1200px] mt-[-40px] justify-center">
-      <div className="flex flex-wrap -mx-1 md:justify-center">
-        <div className="w-full mt-3 md:mt-3 xl:mt-0 lg:w-full lg:order-3 lg:ml-0 xl:w-1/4 xl:ml-[-30px] px-1 lg:mb-0 order-last tablet:order-last xl:order-first">
+      <div className="grid grid-cols-1 md:grid-cols-12 md:mx-auto gap-4 xs:ml-0 sm:ml-0 md:ml-[-20px] md:px-5 lg:ml-[-30px] lg:px-5 xl:ml-[-40px]">
+        <div className="order-last pt-3 xs:col-span-12 xs:order-last sm:col-span-12 sm:order-3 md:col-span-8 md:order-last lg:col-span-3 lg:order-first xl:col-span-3 xl:order-first bg-white rounded-lg shadow-lg" style={{ maxHeight: '785px' }}>
           <VideoGallery topicVideos={topicData.video.map(video => ({ url: video }))}  videosData={videos} />
         </div>
 
-        <div className="container w-full mx-auto mt-[-10px] xs:w-full sm:w-full md:w-full lg:w-2/3 lg:order-1 xl:w-[580px] xl:ml-0 px-2 py-4 shadow-xl rounded-2xl xs:container-min card-small containerPsy-laptop containerPsy-laptop-small" style={{ maxHeight: '790px' }}>
+        <div className="xs:col-span-12 xs:pb-5 sm:col-span-12 sm:order-1 sm:mx-auto sm:pb-5 md:col-span-8 md:order-1 lg:col-span-6 xl:col-span-6  bg-white p-6 rounded-lg shadow-lg overflow-hidden" style={{ maxHeight: '790px' }}>
           <h2 className="w-full font-semibold bg-amber-300 text-gray-600 text-base px-7 py-3 rounded-2xl leading-6 text-center">{topicData.title}</h2>
           <h1 className="font-bold text-black-600 text-lg text-center mt-5 mb-5">Вопросы</h1>
           <div className="flex flex-col space-y-4" style={{ maxHeight: '290px', overflowY: 'auto', paddingBottom: '10px' }}>
@@ -188,7 +188,7 @@ const TopicDetail: React.FC<Props> = ({ videos }) => {
           </div>
         </div>
 
-        <div className="w-full px-4 py-5 mx-auto mt-3 lg:mt-[-3px] bg-white rounded-2xl shadow-2xl border xs:py-3 m-0 md:w-full md:pb-5 md:py-0 md:py-3-lg lg:w-1/4 lg:order-2 lg:py-3-md xl:w-[300px] xl:py-3-2xl questions-lg questions-small questions-laptop questions-laptop-small" style={{ minWidth: '300px', maxHeight: '785px' }}>
+        <div className="xs:col-span-12 sm:col-span-12 sm:order-2 md:col-span-4 md:order-2 lg:col-span-3 xl:col-span-3 bg-white p-4 rounded-lg shadow-lg" style={{ maxHeight: '785px' }}>
           <p className='font-bold text-center text-gray-800 leading-6 mt-3 mx-3 pb-4'>Блок психологов</p>
           <div className='w-full flex flex-col space-y-2'>
             {matchingUsers.map((user) => (

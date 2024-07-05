@@ -408,12 +408,12 @@ const PsyAccount = () => {
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:image" content={imageUrl || userData?.photo || '/opengraph-image.png'} />
         </Head>
-        <div className="container mx-auto px-4 py-4 max-w-7xl mt-[-40px] justify-center ">
-          <div className="flex flex-wrap -mx-1 lg:-mx-1 xs:mx-1 s:mx-2 md:mx-3 ">
-            <div className="w-full mt-3 md:mt-3 xl:mt-0 lg:w-4/4 xl:w-1/4 px-1 lg:mb-0 order-last tablet:order-last xl:order-first">
+        <div className="container w-full mx-auto px-5 py-4 max-w-[1200px] justify-center">
+          <div className="grid grid-cols-1 gap-4 xs:ml-0 md:grid-cols-12 xl:gap-4 xl:pl-5 xl:ml-[-40px] ">
+            <div className="order-3 px-3 pt-3 col-span-12 xs:col-span-12 xs:order-3 sm:col-span-12 sm:order-2 md:col-span-8 md:order-3 lg:col-span-2 lg:order-1 lg:ml-[-85px] lg:p-0 xl:col-span-2 xl:order-1 xl:ml-[-90px] ml-0 bg-white rounded-lg shadow-xl">
               {userData && <PsychologistDashboard />}
             </div>
-            <div className="container bg-white w-full mx-auto mt-[-3px] xs:w-full xs:mx-auto sm:w-full sm:mx-auto md:w-full md:mx-auto md:mx-5 lg:w-2/3 lg:mx-auto xl:ml-0 px-2 py-4 shadow-xl rounded-2xl xs:container-min card-small xl:w-[600px] containerPsy-laptop containerPsy-laptop-small" >
+            <div className="col-span-12 order-1 xs:col-span-12 xs:order-1 sm:col-span-12 sm:order-1 md:col-span-7 md:order-2 md:ml-[-70px] lg:col-span-6 lg:order-2 lg:ml-0 xl:col-span-6 xl:order-2 bg-white p-4 rounded-lg shadow-xl" >
 
               {
                 userData && (
@@ -781,9 +781,9 @@ const PsyAccount = () => {
                 )}
               </div>
             </div>
-            <div className="w-full p-5 mx-auto mt-3 lg:mt-[-3px] bg-white rounded-2xl shadow-2xl border xs:py-3 m-0 md:w-full md:mx-auto md:mx-6 md:pb-5 md:py-0 md:py-3-lg lg:w-1/4 lg:mx-auto lg:py-3-md xl:py-3-2xl questions-lg questions-small questions-laptop questions-laptop-small" style={{ minWidth: '250px', maxHeight: '930px' }}>
+            <div className="col-span-12 px-5 pb-3 order-2 xs:col-span-12 xs:order-2 sm:col-span-12 sm:order-3 md:col-span-4 md:order-2 lg:col-span-3 lg:order-3 xl:col-span-3 xl:order-3 bg-white rounded-lg shadow-xl">
               <div className="w-full p-1 ">
-                <p className='font-semibold  text-gray-800 leading-6 mt-3 mx-3'>Вопросы, на которые ответил психолог:</p>
+                <p className='font-semibold text-center text-gray-800 leading-6 mt-3 mx-3'>Вопросы, на которые ответил психолог:</p>
                 {userData && userData.answeredQuestions && (
                   <ul className='text-gray-600 leading-6 mt-2 mx-3'>
                     {userData.answeredQuestions.length > 0 ? (
