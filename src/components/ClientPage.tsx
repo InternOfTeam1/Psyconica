@@ -212,7 +212,7 @@ const ClientAccount = () => {
       <>
         <div className="container w-full mx-auto px-5 py-4 max-w-[1200px] justify-center">
           <div className="grid grid-cols-1 gap-4 ml-0 xs:ml-0 md:grid-cols-12 md:gap-4 md:ml-[-20px] md:pl-8 lg:pl-6 xl:gap-4 mx-3 xl:ml-[-40px]">
-            <div className="col-span-12 order-3 px-3 xs:col-span-12 xs:order-3 sm:col-span-12 sm:order-3 md:col-span-8 md:order-3 lg:col-span-3 lg:order-1 xl:col-span-3 xl:order-1 bg-white rounded-lg shadow-xl" style={{ maxHeight: '785px' }}>
+            <div className="col-span-12 order-3 px-3 xs:col-span-12 xs:order-3 sm:col-span-12 sm:order-3 md:col-span-8 md:order-3 lg:col-span-3 lg:order-1 xl:col-span-3 xl:order-1 bg-white p-5 rounded-lg shadow-xl" style={{ maxHeight: '785px' }}>
               <div className="w-full p-1 ">
                 <p className="font-semibold text-gray-800 leading-6 mt-5 mb-3 text-lg text-center justify-center">
                   Сохраненные видео:
@@ -235,7 +235,7 @@ const ClientAccount = () => {
                         </div>
                       ))
                     ) : (
-                      <p className="text-gray-600">Пока нет сохраненных видео.</p>
+                      <p className="text-gray-600 px-5">Пока нет сохраненных видео.</p>
                     )}
                   </div>
                 )}
