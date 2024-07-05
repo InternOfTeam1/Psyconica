@@ -133,7 +133,7 @@ const TopicDetail: React.FC<Props> = ({ videos }) => {
   };
 
   return (
-    <div className="container mx-auto px-5 py-4 max-w-[1200px] mt-[-40px] justify-center">
+    <div className="container mx-auto px-5 py-4 max-w-[1200px] mt-[-20px] justify-center">
       <div className="grid grid-cols-1 md:grid-cols-12 md:mx-auto gap-4 xs:ml-0 sm:ml-0 md:ml-[-20px] md:px-5 lg:ml-[-30px] lg:px-5 xl:ml-[-40px]">
         <div className="order-last pt-3 xs:col-span-12 xs:order-last sm:col-span-12 sm:order-3 md:col-span-8 md:order-last lg:col-span-3 lg:order-first xl:col-span-3 xl:order-first bg-white rounded-lg shadow-lg" style={{ maxHeight: '785px' }}>
           <VideoGallery topicVideos={topicData.video.map(video => ({ url: video }))}  videosData={videos} />
@@ -209,7 +209,7 @@ const TopicDetail: React.FC<Props> = ({ videos }) => {
           </div>
         </div>
       </div>
-      <div className='text-center'>
+      <div className='text-center mt-5'>
         <Link href={HOME_ROUTE}>
           <button className="inline-block mt-4 mb-10 px-6 py-2 text-sm font-medium leading-6 text-center text-white uppercase transition bg-blue-500 rounded-full shadow ripple hover:shadow-lg focus:outline-none hover:bg-blue-600">
             Вернуться на главную

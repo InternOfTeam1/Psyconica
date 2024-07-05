@@ -408,7 +408,7 @@ const PsyAccount = () => {
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:image" content={imageUrl || userData?.photo || '/opengraph-image.png'} />
         </Head>
-        <div className="container w-full mx-auto px-5 py-4 max-w-[1200px] justify-center">
+        <div className="container w-full mx-auto px-5 py-4 max-w-[1200px] sm:mt-[-50px] md:mt-0 lg:mt-0 xl:mt-0 justify-center">
           <div className="grid grid-cols-1 gap-4 xs:ml-0 md:grid-cols-12 xl:gap-4 xl:pl-5 xl:ml-[-40px] ">
             <div className="order-3 px-3 pt-3 col-span-12 xs:col-span-12 xs:order-3 sm:col-span-12 sm:order-2 md:col-span-8 md:order-3 lg:col-span-2 lg:order-1 lg:ml-[-85px] lg:p-0 xl:col-span-2 xl:order-1 xl:ml-[-90px] ml-0 bg-white rounded-lg shadow-xl">
               {userData && <PsychologistDashboard />}
