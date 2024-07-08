@@ -16,7 +16,6 @@ const ArticleDetail: React.FC<Props> = ({ articleData, videos }) => {
   const [showButton, setShowButton] = useState(false);
   const articleRef = useRef<HTMLDivElement>(null);
   const MAX_HEIGHT = 310;
-  console.log(articleData)
 
   useEffect(() => {
     if (articleRef.current && articleRef.current.scrollHeight > MAX_HEIGHT) {

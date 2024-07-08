@@ -1,8 +1,6 @@
 "use client"
-import { useAppSelector } from "@/redux/hooks";
 import React, { useEffect, useState } from 'react';
-import { fetchDataFromCollection } from '@/lib/firebase/firebaseGetDocs';
-import { Data, Video } from '@/interfaces/collections';
+import { Video } from '@/interfaces/collections';
 import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
 import { useRouter } from 'next/navigation';
@@ -43,7 +41,7 @@ const QuestionsComponent: React.FC<Props> = ({ videos, questionsData, originalQu
     };
 
     filterQuestions();
-  }, [searchTerm, questions]);
+  }, [searchTerm, originalQuestionsData]);
 
 
   const handleClick = async (url: string, e: React.MouseEvent<HTMLDivElement> | React.KeyboardEvent<HTMLDivElement>) => {
@@ -73,7 +71,7 @@ const QuestionsComponent: React.FC<Props> = ({ videos, questionsData, originalQu
 
       <div className="flex flex-wrap xs:flex-col-reverse lg:flex-row mt-10">
         <div className="w-full lg:w-1/4 px-1 mb-4 lg:mb-0  xs:mt-2 xs:mx-auto lg:mx-0 lg:mt-0">
-          <VideoGallery videosData={videos}  />
+          <VideoGallery videosData={videos} />
         </div>
         <div className="w-full mx-auto lg:w-3/4 lg:ml-0 xl:ml-0 mb-8 px-4 pb-3" style={{ maxWidth: '870px' }}>
 
