@@ -27,12 +27,19 @@ const ArticlesComponent: React.FC<Props> = ({ videos, articlesData, originalArti
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState<string>('');
 
+
+
+  useEffect(() => {
+    setArticles(originalArticles);
+  }, [originalArticles]);
+
+
   useEffect(() => {
     const filterArticles = () => {
       if (searchTerm.trim() === '') {
         setArticles(originalArticles);
       } else {
-        const filteredArticles = articles.filter(article =>
+        const filteredArticles = originalArticles.filter(article =>
           article.title.toLowerCase().includes(searchTerm.toLowerCase())
         );
         setArticles(filteredArticles);

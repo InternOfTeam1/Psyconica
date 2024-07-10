@@ -24,16 +24,22 @@ type Props = {
 }
 
 const QuestionsComponent: React.FC<Props> = ({ videos, questionsData, originalQuestionsData, usersData }) => {
-  const [questions, setQuestions] = useState<QuestionData[]>(() => questionsData);
+  const [questions, setQuestions] = useState<QuestionData[]>(questionsData);
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState<string>('');
+
+
+  useEffect(() => {
+    setQuestions(originalQuestionsData);
+  }, [originalQuestionsData]);
+
 
   useEffect(() => {
     const filterQuestions = () => {
       if (searchTerm.trim() === '') {
         setQuestions(originalQuestionsData);
       } else {
-        const filteredQuestions = questions.filter(question =>
+        const filteredQuestions = originalQuestionsData.filter(question =>
           question.title.toLowerCase().includes(searchTerm.toLowerCase())
         );
         setQuestions(filteredQuestions);
