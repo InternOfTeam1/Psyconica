@@ -460,7 +460,7 @@ const ClientAccount = () => {
                 </p>
                 {userData.savedPsy.length > 0 ? (
                   userData.savedPsy.map((psy: any, index: number) => (
-                    <div key={index} className="text-center cursor-pointer s:mb-3 sm:mb-3 md:mb-3 lg:mb-3 xl:mb-1">
+                    <div key={index} className="text-center cursor-pointer s:mb-3 sm:mb-3 md:mb-3 lg:mb-3 xl:mb-1 text-sm">
                       <div
                         onClick={() => handlePsyClick(psy.psySlug)}
                         role="button"
@@ -475,7 +475,7 @@ const ClientAccount = () => {
                           height={50}
                           className="w-10 h-10 rounded-full object-cover mr-3"
                         />
-                        <p className="font-semibold text-black flex items-center bg-gray-200 rounded-2xl p-1">
+                        <p className="font-semibold text-black flex items-center bg-gray-200 rounded-2xl p-1" style={{ wordWrap: 'break-word', overflowWrap: 'break-word' }}>
                           {psy.psyName}
                           <Image src={icon} alt="Psy Icon" width={20} height={20} className="ml-1" />
                         </p>
