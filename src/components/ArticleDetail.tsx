@@ -15,7 +15,7 @@ const ArticleDetail: React.FC<Props> = ({ articleData, videos }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showButton, setShowButton] = useState(false);
   const articleRef = useRef<HTMLDivElement>(null);
-  const MAX_HEIGHT = 310;
+  const MAX_HEIGHT = 405;
 
   useEffect(() => {
     if (articleRef.current && articleRef.current.scrollHeight > MAX_HEIGHT) {
@@ -39,7 +39,7 @@ const ArticleDetail: React.FC<Props> = ({ articleData, videos }) => {
             <div className="prose px-3">
               <div
                 ref={articleRef}
-                className={`w-full text-justify font-medium text-gray-800 xs:text-sm sm:text-sm md:text-base lg:text-base lg:leading-6 mt-2 ${!isExpanded ? 'max-h-[310px] overflow-hidden' : ''}`}
+                className={`w-full text-justify font-medium text-gray-800 xs:text-sm sm:text-sm md:text-base lg:text-base lg:leading-6 mt-2 ${!isExpanded ? 'max-h-[405px] overflow-hidden' : ''}`}
                 style={{ transition: 'max-height 0.3s ease' }}
               >
                 <p>{articleData.article}</p>
