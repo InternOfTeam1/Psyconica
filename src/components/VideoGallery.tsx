@@ -1,7 +1,8 @@
+"use client"
+
 import React, { useEffect, useState, Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { saveVideoForUser, removeSavedVideoForUser } from '@/lib/firebase/firebaseFunctions';
-import { fetchDataFromCollection } from '@/lib/firebase/firebaseGetDocs';
 import { useAppSelector } from '@/redux/hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,17 +10,16 @@ import { faBookmark as faSolidBookmark } from '@fortawesome/free-solid-svg-icons
 import { faBookmark as faRegularBookmark } from '@fortawesome/free-regular-svg-icons';
 import { RootState } from '@/redux/store';
 import { getUserData } from '@/lib/firebase/firebaseFunctions';
-import ReactPlayer from 'react-player'
+import ReactPlayer from 'react-player';
 
 interface Video {
   url: string;
 }
-type Props= {
+type Props = {
   videosData: Video[]
 }
 
-
-const VideoGallery = ({videosData, topicVideos}: any) => {
+const VideoGallery = ({ videosData, topicVideos }: any) => {
   const [videos, setVideos] = useState<Video[]>(() => videosData);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedVideoUrl, setSelectedVideoUrl] = useState('');
@@ -83,7 +83,7 @@ const VideoGallery = ({videosData, topicVideos}: any) => {
   };
 
   const saveVideo = async (url: string) => {
-    try { 
+    try {
       await saveVideoForUser(url, userId);
       const updatedSavedVideos = [...savedVideos, url];
       setSavedVideos(updatedSavedVideos);
@@ -117,7 +117,6 @@ const VideoGallery = ({videosData, topicVideos}: any) => {
     }
   }, [userId, isToggle]);
 
-
   return (
     <div className="p-3 m-4 bg-white rounded-2xl shadow-2xl border mt-[-3px]">
       <div className="flex flex-wrap justify-center gap-2">
@@ -149,26 +148,28 @@ const VideoGallery = ({videosData, topicVideos}: any) => {
           );
         })}
       </div>
-      <div className='flex justify-center mt-2 mb-2'>
-        {isExpanded ? (
-          <button
-            type="button"
-            className="bg-gray-500 text-white font-bold py-2 px-4 rounded hover:bg-gray-700"
-            onClick={collapseVideos}
-          >
-            Свернуть
-          </button>
-        ) : (
-          <button
-            type="button"
-            className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
-            onClick={loadMoreVideos}
-            disabled={displayCount >= videos.length}
-          >
-            Еще
-          </button>
-        )}
-      </div>
+      {(videos.length > 4) && (
+        <div className='flex justify-center mt-2 mb-2'>
+          {isExpanded ? (
+            <button
+              type="button"
+              className="bg-gray-500 text-white font-bold py-2 px-4 rounded hover:bg-gray-700"
+              onClick={collapseVideos}
+            >
+              Свернуть
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
+              onClick={loadMoreVideos}
+              disabled={displayCount >= videos.length}
+            >
+              Еще
+            </button>
+          )}
+        </div>
+      )}
       {isOpen && (
         <Transition.Root show={isOpen} as={Fragment}>
           <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={closeModal}>

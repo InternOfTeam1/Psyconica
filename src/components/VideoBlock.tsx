@@ -1,3 +1,5 @@
+"use client"
+
 import { Dialog, Transition } from '@headlessui/react';
 import React, { Fragment, useState, useEffect } from 'react';
 import { Video } from '@/interfaces/collections';
@@ -49,6 +51,10 @@ export const VideoBlock = ({ videos }: VideoBlockProps) => {
     setDisplayCount(prevDisplayCount => prevDisplayCount + 1);
   };
 
+  const collapseVideos = () => {
+    setDisplayCount(4);
+  };
+
   const toggleFlag = (videoUrl: string) => {
     const updatedFlaggedVideos = flaggedVideos.includes(videoUrl)
       ? flaggedVideos.filter(v => v !== videoUrl)
@@ -58,7 +64,7 @@ export const VideoBlock = ({ videos }: VideoBlockProps) => {
   };
 
   const saveVideo = async (url: string) => {
-    try { 
+    try {
       await saveVideoForUser(url, userId);
       const updatedSavedVideos = [...savedVideos, url];
       setSavedVideos(updatedSavedVideos);
@@ -146,16 +152,27 @@ export const VideoBlock = ({ videos }: VideoBlockProps) => {
           </Fragment>
         ))}
       </div>
-      <div className='flex justify-center'>
-        <button
-          type="button"
-          className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
-          onClick={loadMoreVideos}
-          disabled={displayCount >= videos.reduce((acc, curr) => acc + curr.video.length, 0)}
-        >
-          Еще
-        </button>
-      </div>
+      {videos.reduce((acc, curr) => acc + curr.video.length, 0) > 4 && (
+        <div className="flex justify-center mt-4">
+          {displayCount < videos.reduce((acc, curr) => acc + curr.video.length, 0) ? (
+            <button
+              type="button"
+              className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
+              onClick={loadMoreVideos}
+            >
+              Еще
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-700"
+              onClick={collapseVideos}
+            >
+              Свернуть
+            </button>
+          )}
+        </div>
+      )}
       {isOpen && (
         <Transition.Root show={isOpen} as={Fragment}>
           <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={closeModal}>
