@@ -41,11 +41,7 @@ const VideoGallery = ({ videosData, topicVideos }: any) => {
   };
 
   useEffect(() => {
-    const loadVideos = async () => {
-      loadSavedVideos();
-    };
-
-    loadVideos();
+    loadSavedVideos();
   }, [userId]);
 
   useEffect(() => {
@@ -84,7 +80,7 @@ const VideoGallery = ({ videosData, topicVideos }: any) => {
 
   const saveVideo = async (url: string) => {
     try {
-      await saveVideoForUser(url, userId);
+      await saveVideoForUser(url, userId!);
       const updatedSavedVideos = [...savedVideos, url];
       setSavedVideos(updatedSavedVideos);
       localStorage.setItem('savedVideos', JSON.stringify(updatedSavedVideos));
@@ -92,10 +88,10 @@ const VideoGallery = ({ videosData, topicVideos }: any) => {
       console.error('Не удалось сохранить видео:', error);
     }
   };
-
+  
   const removeSavedVideo = async (url: string) => {
     try {
-      await removeSavedVideoForUser(url, userId);
+      await removeSavedVideoForUser(url, userId!);
       const updatedSavedVideos = savedVideos.filter(u => u !== url);
       setSavedVideos(updatedSavedVideos);
       localStorage.setItem('savedVideos', JSON.stringify(updatedSavedVideos));
@@ -136,7 +132,7 @@ const VideoGallery = ({ videosData, topicVideos }: any) => {
                 />
               </div>
               <div className="flex justify-between items-center mt-2">
-                {role !== 'psy' && (
+                {userId && role !== 'psy' && (
                   <FontAwesomeIcon
                     icon={savedVideos.includes(video.url) ? faSolidBookmark : faRegularBookmark}
                     className={`text-2xl cursor-pointer ${savedVideos.includes(video.url) ? 'text-yellow-500' : 'text-gray-400'}`}

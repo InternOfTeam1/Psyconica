@@ -7,6 +7,9 @@ import { RootState } from '@/redux/store';
 import { getUserData } from '@/lib/firebase/firebaseFunctions';
 import { useSelector } from 'react-redux';
 import { saveVideoForUser, removeSavedVideoForUser } from '@/lib/firebase/firebaseFunctions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBookmark as faSolidBookmark } from '@fortawesome/free-solid-svg-icons';
+import { faBookmark as faRegularBookmark } from '@fortawesome/free-regular-svg-icons';
 
 interface VideoBlockProps {
   videos: Video[];
@@ -65,7 +68,7 @@ export const VideoBlock = ({ videos }: VideoBlockProps) => {
 
   const saveVideo = async (url: string) => {
     try {
-      await saveVideoForUser(url, userId);
+      await saveVideoForUser(url, userId!);
       const updatedSavedVideos = [...savedVideos, url];
       setSavedVideos(updatedSavedVideos);
       localStorage.setItem('savedVideos', JSON.stringify(updatedSavedVideos));
@@ -76,7 +79,7 @@ export const VideoBlock = ({ videos }: VideoBlockProps) => {
 
   const removeSavedVideo = async (url: string) => {
     try {
-      await removeSavedVideoForUser(url, userId);
+      await removeSavedVideoForUser(url, userId!);
       const updatedSavedVideos = savedVideos.filter(u => u !== url);
       setSavedVideos(updatedSavedVideos);
       localStorage.setItem('savedVideos', JSON.stringify(updatedSavedVideos));
@@ -105,7 +108,7 @@ export const VideoBlock = ({ videos }: VideoBlockProps) => {
           <Fragment key={index}>
             {videoGroup.video.map((url, urlIndex) => (
               <div key={`${index}-${urlIndex}`} className="w-full p-1">
-                <div className="cursor-pointer border-2 pb-2 rounded-2xl overflow-hidden" onClick={() => openModal(url)}>
+                <div className="cursor-pointer border-2 pb-2 rounded-2xl overflow-hidden relative" onClick={() => openModal(url)}>
                   <iframe
                     width="100%"
                     height="150"
@@ -129,24 +132,16 @@ export const VideoBlock = ({ videos }: VideoBlockProps) => {
                       </svg>
                     </div>
                   )}
-                  <div className="flex justify-end mt-2">
-                    {savedVideos.includes(url) ? (
-                      <button
-                        className="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600"
-                        onClick={() => removeSavedVideo(url)}
-                      >
-                        Удалить из сохраненных
-                      </button>
-                    ) : (
-                      <button
-                        className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600"
-                        onClick={() => saveVideo(url)}
-                      >
-                        Сохранить
-                      </button>
-                    )}
+                  <div className="flex justify-end mt-2 absolute bottom-2 right-2">
                   </div>
                 </div>
+                {userId && (
+                      <FontAwesomeIcon
+                        icon={savedVideos.includes(url) ? faSolidBookmark : faRegularBookmark}
+                        className={`text-2xl cursor-pointer ${savedVideos.includes(url) ? 'text-yellow-500' : 'text-gray-400'}`}
+                        onClick={() => savedVideos.includes(url) ? removeSavedVideo(url) : saveVideo(url)}
+                      />
+                    )}
               </div>
             ))}
           </Fragment>
