@@ -337,7 +337,6 @@ const ClientAccount = () => {
                         onChange={(e) => setEditedName(e.target.value)}
                         className={`border ${isEditingName ? 'border-green-500 ml-[3px]' : 'border-none'}  break-words font-semibold text-gray-800 p-1 bg-white w-full xs:w-[90%] xs:text-lg sm:text-2xl md:text-lg lg:text-lg `}
                         disabled={!isEditingName}
-                        maxLength={1}
                         style={{ width: `${editedName.length + 1}ch`, minWidth: '48px' }}
                       />
 

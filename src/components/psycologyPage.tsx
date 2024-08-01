@@ -2,7 +2,7 @@
 import { fetchAllUsers, fetchDoc } from '@/lib/firebase/firebaseGetDocs';
 import { getUserData, getVideosById, removeSavedPsychologistForUser, savePsychologistForUser, updateUser } from '@/lib/firebase/firebaseFunctions';
 import { Comments } from '@/interfaces/collections';
-import React, { ChangeEventHandler, useEffect, useState, ChangeEvent  } from 'react';
+import React, { ChangeEventHandler, useEffect, useState, ChangeEvent } from 'react';
 import Link from 'next/link';
 import { HOME_ROUTE } from '@/constants/routes';
 import { useParams } from 'next/navigation';
@@ -78,14 +78,14 @@ const PsyAccount = () => {
   const [text, setText] = useState("Initial text");
 
   const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
-    setText(e.target.value.slice(0, 40)); 
+    setText(e.target.value.slice(0, 40));
   };
 
   const formatText = (inputText: string) => {
     return inputText.match(/.{1,20}/g)?.join('\n') || '';
   };
 
-  
+
 
   useEffect(() => {
     fetchAllUsers().then((usersData) => {
@@ -392,8 +392,8 @@ const PsyAccount = () => {
     }
   };
 
-  
-  
+
+
   return (
 
     userData && userData?.role == 'psy' && (
@@ -434,7 +434,7 @@ const PsyAccount = () => {
                           onChange={(e) => setEditedSlogan(e.target.value)}
                           className={`border ${isEditing ? 'border-green-500' : 'border-none'} block xl:w-[470px] w-full  font-semibold italic text-gray-800 bg-transparent text-center ml-[-3px]`}
                           maxLength={25}
-                          placeholder="Введите ваш девиз (не более 25 символов)"
+                          placeholder={userId === userData.slug ? "Введите ваш девиз (не более 25 символов)" : ""}
                           disabled={!isEditing}
                         />
 
@@ -532,7 +532,7 @@ const PsyAccount = () => {
                       <div className='flex ml-3 items-start'>
                         <div className="flex flex-col flex-grow profile-info">
                           <div className="flex justify-between items-center p-1 profile-info name">
-                          <textarea
+                            <textarea
                               // type="text"
                               value={formatText(editedName)}
                               onChange={(e) => setEditedName(e.target.value)}
@@ -599,7 +599,7 @@ const PsyAccount = () => {
                             disabled={!isEditing}
                             rows={8}
                             maxLength={500}
-                            placeholder="Введите информацию о себе... (не более 570 символов)"
+                            placeholder={userId === userData.slug ? "Введите информацию о себе... (не более 570 символов)" : ""}
                           />
                         )}
                       </div>
@@ -629,62 +629,62 @@ const PsyAccount = () => {
                           />
                         )}
                       </div>
-                    
-                    {userId === userData.slug && (
 
-                      <div className="ml-6">
-                        <div className="mb-5 w-full">
+                      {userId === userData.slug && (
 
-                          <>
-                            {isEditingRole ? (
-                              <button
-                                className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 ml-1"
-                                onClick={changeRole}
-                              >
-                                Сохранить изменения
-                              </button>
-                            ) : (
-                              <button
-                                className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 ml-1"
-                                onClick={() => setIsEditingRole(!isEditingRole)}
-                              >
-                                Изменить роль
-                              </button>
-                            )}
-                          </>
+                        <div className="ml-6">
+                          <div className="mb-5 w-full">
+
+                            <>
+                              {isEditingRole ? (
+                                <button
+                                  className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 ml-1"
+                                  onClick={changeRole}
+                                >
+                                  Сохранить изменения
+                                </button>
+                              ) : (
+                                <button
+                                  className="text-white bg-gray-500 hover:bg-blue-500 py-1 px-2 rounded-2xl uppercase font-semibold xs:text-xs sm:text-sm md:text-sm lg:text-sm mt-5 ml-1"
+                                  onClick={() => setIsEditingRole(!isEditingRole)}
+                                >
+                                  Изменить роль
+                                </button>
+                              )}
+                            </>
 
 
+                          </div>
+
+                          <div className="flex justify-between items-center mb-2">
+                            <label className="flex items-center">
+                              <input
+                                type="radio"
+                                value="psy"
+                                checked={editedRole === 'psy'}
+                                onChange={(e) => setEditedRole(e.target.value)}
+                                className={`border ${isEditingRole ? 'border-green-500' : 'border-none'} font-semibold text-gray-800 p-1 bg-white xs:w-[90%] xs:text-base sm:text-lg md:text-lg lg:text-lg`}
+                                disabled={!isEditingRole}
+                              />
+                              <span className="ml-2">Психолог</span>
+                            </label>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <label className="flex items-center">
+                              <input
+                                type="radio"
+                                value="user"
+                                checked={editedRole === 'user'}
+                                onChange={(e) => setEditedRole(e.target.value)}
+                                className={`border ${isEditingRole ? 'border-green-500 ml-[3px]' : 'border-none'} font-semibold text-gray-800 p-1 bg-white xs:w-[90%] xs:text-base sm:text-lg md:text-lg lg:text-lg`}
+                                disabled={!isEditingRole}
+                              />
+                              <span className="ml-2">Клиент</span>
+                            </label>
+                          </div>
                         </div>
 
-                        <div className="flex justify-between items-center mb-2">
-                          <label className="flex items-center">
-                            <input
-                              type="radio"
-                              value="psy"
-                              checked={editedRole === 'psy'}
-                              onChange={(e) => setEditedRole(e.target.value)}
-                              className={`border ${isEditingRole ? 'border-green-500' : 'border-none'} font-semibold text-gray-800 p-1 bg-white xs:w-[90%] xs:text-base sm:text-lg md:text-lg lg:text-lg`}
-                              disabled={!isEditingRole}
-                            />
-                            <span className="ml-2">Психолог</span>
-                          </label>
-                        </div>
-                        <div className="flex justify-between items-center">
-                          <label className="flex items-center">
-                            <input
-                              type="radio"
-                              value="user"
-                              checked={editedRole === 'user'}
-                              onChange={(e) => setEditedRole(e.target.value)}
-                              className={`border ${isEditingRole ? 'border-green-500 ml-[3px]' : 'border-none'} font-semibold text-gray-800 p-1 bg-white xs:w-[90%] xs:text-base sm:text-lg md:text-lg lg:text-lg`}
-                              disabled={!isEditingRole}
-                            />
-                            <span className="ml-2">Клиент</span>
-                          </label>
-                        </div>
-                      </div>
-                      
-                    )}
+                      )}
                     </div>
 
                   </>
