@@ -135,13 +135,14 @@ export const VideoBlock = ({ videos }: VideoBlockProps) => {
                   <div className="flex justify-end mt-2 absolute bottom-2 right-2">
                   </div>
                 </div>
-                {userId && (
-                      <FontAwesomeIcon
-                        icon={savedVideos.includes(url) ? faSolidBookmark : faRegularBookmark}
-                        className={`text-2xl cursor-pointer ${savedVideos.includes(url) ? 'text-yellow-500' : 'text-gray-400'}`}
-                        onClick={() => savedVideos.includes(url) ? removeSavedVideo(url) : saveVideo(url)}
-                      />
-                    )}
+
+                {(userId && role === 'user') && (
+                  <FontAwesomeIcon
+                    icon={savedVideos.includes(url) ? faSolidBookmark : faRegularBookmark}
+                    className={`text-2xl cursor-pointer ${savedVideos.includes(url) ? 'text-yellow-500' : 'text-gray-400'}`}
+                    onClick={() => savedVideos.includes(url) ? removeSavedVideo(url) : saveVideo(url)}
+                  />
+                )}
               </div>
             ))}
           </Fragment>
